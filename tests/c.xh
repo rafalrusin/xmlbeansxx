@@ -1,0 +1,7 @@
+%%class com::p4::mind::mytest::CdataString
+    public:
+    virtual std::string exchangeEntities(const std::string &from) const {
+        return xmlbeansxx::TextUtils::exchangeEntitiesWithCDATA(from);
+    }
+%%
+

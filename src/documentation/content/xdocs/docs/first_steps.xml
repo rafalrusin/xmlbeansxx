@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
+<document>
+  <header>
+    <title>First steps with xmlbeansxx</title>
+    <notice/>
+    <abstract/>
+    <meta name="keywords">xmlbeans,xmlbeans port to C++, XML, XML Schema, code generator, XML Manipulation, xmlbeansc, xmlbeans++ xmlbeansc++, xmlbeansxx, xmlbeanscxx</meta>
+  </header>
+  <body>
+  <section>
+    <title>Prerequisites</title>
+<p><strong>xmlbeansxx</strong> is similar to Java <strong>XmlBeans</strong>. It is recommended to know
+<strong>XmlBeans</strong> before reading this document (and also <strong>boost</strong>
+library shared pointers, <em>boost::shared_ptr</em>, <em>boost::shared_array</em>, etc.).</p>
+
+<p>Suppose we have schema documents named <em>schema.xsd</em>, <em>schema2.xsd</em>.
+We assume that <em>schema.xsd</em> includes <em>schema2.xsd</em>, and
+that <em>schema.xsd</em> defines document element named <em>root</em>.</p>
+
+</section>
+<section>
+<title>Generate classes</title>
+<p>First, we have to install <strong>xmlbeansxx-gen</strong>
+and add <em>xmlbeansxx-gen/dist/bin</em> directory to execution path.
+Then we install <strong>xmlbeansxx</strong> library.</p>
+
+<p>Now we are ready to generate classes. We do this by command:</p>
+
+<p><em>scompxx schema.xsd schema2.xsd</em></p>
+
+<p>This script creates in current directory files <em>schema.h</em>,
+<em>schema.cpp</em>, <em>schema2.h</em>, <em>schema2.cpp,</em> containing
+generated classes from types defined in schemas. Each given <em>file.xsd</em>
+is compiled into <em>file.h</em> and <em>file.cpp</em>. Schema namespaces
+are translated into C++ namespaces, just like Java <strong>XmlBeans</strong>
+translates them into package names.</p>
+
+</section>
+<section>
+<title>Let's use them</title>
+<p>Now we are ready to parse, create and validate documents.</p>
+  <ol>
+	<li>Parsing and creating documents without validation.
+	<p>In files <em>schema.h</em> and <em>schema2.h</em> there are defined
+	classes, which derive from XmlObject. They have static methods
+	<em>parse()</em> and <em>fromString()</em>, which can be used to parse
+	document. Also there are virtual methods <em>serialize()</em> and
+	<em>toString()</em> on <em>XmlObject</em>, which can be used to
+	serialize. To see examples, look at directory <em>examples/simple</em>
+	in <strong>xmlbeansxx</strong>.</p></li>
+
+        <li>Parsing with validation.
+        <p>Validation in <strong>XmlBeans++</strong> is performed using
+        <strong>xerces-c</strong> schema
+	validator. To do this, we create <em>XmlParser</em> object.
+	Then, using <em>XmlParser::loadGrammar()</em> function, we load our
+	grammars (we can specify only <em>schema.xsd</em> file, because
+	<em>schema2.xsd</em> will be loaded automatically by <strong>xerces-c</strong>).
+	After this, we create <em>RootDocument</em> object and use
+	<em>XmlParser::parse()</em> method giving it our <em>RootDocument</em>
+	object. If there are errors, an exception of class <em>BeansException</em>
+	is thrown.<br/>
+        Validation is possible only on document types.</p></li>
+        
+	<li>Validating a document.
+        <p>It can be done by serializing document type to string and parsing it
+	with validation, as in 2.</p></li>
+
+	<li>Simple Types.
+	<p>We can get to simple content of element using
+	<em>XmlObject::getSimpleContent()</em> virtual method. (Note that
+	<em>XmlObject::toString()</em> virtual method used on simple type
+	object will return string containing xml document, not only
+	content).<br/>
+        There are implemented some builtin simple types, like
+	<em>XmlInteger</em>, <em>XmlDecimal</em>, <em>XmlString</em>, <em>XmlBoolean</em>
+	with specific operations.</p></li>
+
+    </ol>
+  </section>
+  </body>
+</document>

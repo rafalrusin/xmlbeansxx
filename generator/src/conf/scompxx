@@ -1,0 +1,146 @@
+#!/bin/bash
+
+#
+#    Copyright 2004-2005 TouK s.c.
+#    
+#    Licensed under the Apache License, Version 2.0 (the "License");
+#    you may not use this file except in compliance with the License.
+#    You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#    See the License for the specific language governing permissions and
+#    limitations under the License.
+#
+
+usage="\
+Generates C++ library from xsd files.
+
+Usage: $0 [file1.xsd file2.xsd ... ]
+
+files.xsd	- Type system schema files
+
+Report bugs to: <rr@touk.pl>
+Copyright (C) 2004 TouK"
+
+if test $# -eq 0; then
+  echo "$usage"; exit 1
+fi
+
+basefile=`readlink -f $0`
+BIN=`dirname $basefile`
+
+ARG_XSD="$@"
+
+rm -f xsd.txt
+if ! $BIN/xmlbeansxx-gen -Dincludes=xsd.txt $ARG_XSD; then exit 1; fi
+
+COMP_XSD="`cat xsd.txt`"
+for i in $COMP_XSD; do
+    COMP_H="$COMP_H `basename $i .xsd`.h"
+    COMP_CPP="$COMP_CPP `basename $i .xsd`.cpp"
+done
+
+## Creating default make files
+
+if ! [ -e m4/acx_pthread.m4 ]; then
+	if ! [ -e m4 ]; then mkdir m4 ; fi
+    cp $BIN/acx_pthread.m4 m4
+fi
+
+if ! [ -e configure.ac ]; then
+
+cat <<EOF >configure.ac
+AC_PREREQ(2.57)
+
+AC_INIT(XMLTYPES, 0.0, support@TouK.pl)
+# When changing version number make sure to change version-info argument in i
+#   Makefile.am 
+# according to libtool documentation
+
+AC_CONFIG_AUX_DIR([config])
+#AC_CONFIG_MACRO_DIR([m4])
+
+AC_CONFIG_HEADER([config.h])
+AM_INIT_AUTOMAKE([1.7])
+
+AC_PROG_CC
+AC_PROG_CXX
+AC_LANG(C++)
+
+AC_DISABLE_STATIC
+AC_LIB_LTDL
+AC_LIBLTDL_CONVENIENCE
+AC_SUBST(LTDLINCL)
+AC_SUBST(LIBLTDL)
+AC_LIBTOOL_DLOPEN
+AC_PROG_LIBTOOL
+
+ACX_PTHREAD([
+		LIBS="\$PTHREAD_LIBS \$LIBS"
+		CPPFLAGS="\$CPPFLAGS \$PTHREAD_CFLAGS"
+		CC="\$PTHREAD_CC"
+	],[
+		AC_MSG_WARN([Compiling without thread support])
+	])
+
+CXXFLAGS="-O0"
+
+AC_CHECK_HEADERS([boost/smart_ptr.hpp boost/any.hpp], , AC_MSG_ERROR([boost library is required]))
+
+AC_SUBST(ac_aux_dir)
+
+AC_CONFIG_FILES([Makefile])
+
+AC_OUTPUT
+EOF
+RUN_CONFIGURE=1
+fi
+
+if ! [ -e bootstrap ]; then
+    cat <<EOF >bootstrap
+#!/bin/sh
+set -x
+mkdir -p config m4 && aclocal -I m4 && autoheader && libtoolize --automake --copy && automake --foreign --add-missing --copy && autoconf
+EOF
+chmod +x bootstrap
+RUN_BOOTSTRAP=1
+fi
+#############################
+
+cat <<EOF >Makefile.am
+ACLOCAL = aclocal -I m4
+
+COMP_XSD=$COMP_XSD
+COMP_H=$COMP_H
+COMP_CPP=$COMP_CPP
+
+include_HEADERS = \$(COMP_H)
+
+lib_LTLIBRARIES = libxmltypes.la
+libxmltypes_la_LDFLAGS = -version-info 1:0:0 -lxmlbeansxx
+libxmltypes_la_SOURCES = \$(COMP_H) \$(COMP_CPP)
+
+\$(COMP_H) \$(COMP_CPP): $ARG_XSD
+	$BIN/xmlbeansxx-gen $ARG_XSD
+
+MOSTLYCLEANFILES = \$(COMP_H) \$(COMP_CPP)
+
+EOF
+
+## Launching makefiles generation ##
+if [ "$RUN_BOOTSTRAP" = 1 ]; then ./bootstrap || exit 1; fi
+if [ "$RUN_CONFIGURE" = 1 ]; then ./configure || exit 1; fi
+
+## Compilation ##
+make && cat <<EOF
+###########################################
+# Type:
+# make install
+# in order to install library into system
+###########################################
+EOF
+

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<purchase-order xmlns="http://xmlbeans.apache.org/samples/enumeration/schemaenum/easypo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlbeans.apache.org/samples/enumeration/schemaenum/easypo
+C:\work\EasyPO.xsd">
+	<customer>
+		<name>Jan Kowalski</name>
+		<address>ul. Marszalkowska, Warszawa</address>
+	</customer>
+	<date>2005-06-07T12:00:00</date>
+	<line-item>
+		<description>Book1</description>
+		<per-unit-ounces>10</per-unit-ounces>
+		<price>10.5</price>
+		<quantity>3</quantity>
+	</line-item>
+	<line-item>
+		<description>Book2</description>
+		<per-unit-ounces>20</per-unit-ounces>
+		<price>5.5</price>
+		<quantity>1</quantity>
+	</line-item>
+	<line-item>
+		<description>Book3</description>
+		<per-unit-ounces>50</per-unit-ounces>
+		<price>25.5</price>
+		<quantity>1</quantity>
+	</line-item>
+	<shipper>
+		<name>Local Shipper</name>
+		<per-ounce-rate>0.09</per-ounce-rate>
+	</shipper>
+</purchase-order>

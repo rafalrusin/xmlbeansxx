@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<content xmlns="http://mind.p4.com/mytest">
+  <employee age="10">
+    <firstname>Name1</firstname>
+    <lastname>Name2</lastname>
+    <dane>bleble</dane>
+    <def>myval</def>
+    <choice>
+      <b>20</b>
+    </choice>
+    <pattern>.</pattern>
+    <floatElement>10.55</floatElement>
+    <doubleElement>3.14</doubleElement>
+  </employee>
+</content>
+

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
+<document> 
+  <header> 
+    <title>C++ classes generated from user-derived schema types</title> 
+    <notice></notice>
+    <abstract></abstract>
+    <meta name="Keywords">xmlbeans,xmlbeans port to C++, XML, XML Schema, code generator, XML Manipulation, xmlbeansc, xmlbeans++ xmlbeansc++, xmlbeansxx, xmlbeanscxx</meta>
+  </header> 
+  <body> 
+  <note>
+ <strong>xmlbeansxx</strong> was inspired by <a href="http://xmlbeans.apache.org">Apache XMLBeans</a> (developed by
+                <a href="http://www.apache.org">The Apache XML Project</a>). Schema Type System is
+                strongly based on
+		<a href="http://xmlbeans.apache.org/docs/guide/conIntroToTheSchemaTypeSystem.html">XMLBeans Schema Type System</a>.
+</note>
+</body> 
+</document>
