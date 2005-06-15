@@ -41,7 +41,7 @@ int main() {
         //cout << "---------------------------------" << "\n";
         //cout << "total weight: " << totalWeight << "\n";
         cout << "Xml:\n" << purchaseOrderDoc->toString() << "\n";
-    } catch (BeansException ex) {
+    } catch (BeansException &ex) {
         cout<<"BeansException: "<<ex.getMessage()<<"\n";
     }
     return 0;
