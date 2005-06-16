@@ -18,7 +18,7 @@
 
 
 	
-		namespace xmlbeansxx {
+namespace xmlbeansxx {
 
 int XmlContext::getLink(std::string shortcut) {
     return nsLinks[shortcut]-1;
