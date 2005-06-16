@@ -3,6 +3,7 @@
 
 #include "log4cxx/logger.h"
 #include <xmlbeansxx/xmlbeansxx.h>
+#include <boost/shared_array.hpp>
 
 CPPUNIT_TEST_SUITE_REGISTRATION( BeansTest );
 
@@ -233,6 +234,20 @@ void namespaceTests() {
         CPPUNIT_ASSERT(b->getByteArrayValue()[0]=='a');
         CPPUNIT_ASSERT(b->getByteArrayValue()[1]=='b');
         CPPUNIT_ASSERT(b->getByteArrayValue()[2]=='c');
+    }
+    {
+        //xmlbeansxx::shared_array
+        shared_array<int> c = shared_array<int>();
+        
+        shared_array<int> b = shared_array<int>(3);
+        b[0] = 10;
+        b[1] = 11;
+        b[2] = 12;
+        
+        shared_array<int> a(b);
+        CPPUNIT_ASSERT(a[0] == 10);
+        CPPUNIT_ASSERT(a[1] == 11);
+        CPPUNIT_ASSERT(a[2] == 12);
     }
 }
 
