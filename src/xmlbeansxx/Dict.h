@@ -58,10 +58,8 @@ public:
     StringPtr find(std::string u) const;
     int count(std::string u) const;
     /** Duplicates u, but not v */
-    void add
-        (std::string u,T v);
-    void set
-        (std::string u,int pos,T v);
+    void add(std::string u,T v);
+    void set(std::string u,int pos,T v);
     int del(std::string u);
     void free();
 };
@@ -78,10 +76,8 @@ public:
     T find(std::string u,int nr) const;
     int count(std::string u) const;
     /** Duplicates u, but not v */
-    void add
-        (std::string u,T v);
-    void set
-        (std::string u,int pos,T v);
+    void add(std::string u,T v);
+    void set(std::string u,int pos,T v);
     int del(std::string u);
     void removeAt(std::string name,int index);
     void free();

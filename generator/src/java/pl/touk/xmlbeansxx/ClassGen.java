@@ -1359,6 +1359,7 @@ public class ClassGen {
 
 		out.enterNamespace(nsClassName(st));
 		currentType = st;
+        out.h.println("/** This generated class corresponds to xsd type of QName " + st.getName() + ". */");
 		out.h.print("class " + className(st));
 		if (bt != null)
 			out.h.println(": public " + fullClassName(bt) + " {");

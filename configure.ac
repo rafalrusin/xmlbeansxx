@@ -50,7 +50,7 @@ m4_ifdef([AM_PATH_CPPUNIT],[
     AM_CONDITIONAL(HAVE_CPPUNIT, test "$CPPUNIT_LIBS")
 ])
 
-#BB_ENABLE_DOXYGEN
+BB_ENABLE_DOXYGEN
 
 AC_SUBST(ac_aux_dir)
 AC_SUBST(xmlbeansxx_gen_dir)
@@ -64,6 +64,6 @@ AC_CHECK_LIB(boost_date_time,main,,AC_MSG_ERROR([boost_date_time library not fou
 AC_CHECK_LIB(boost_thread,main,,AC_MSG_ERROR([boost_thread library not found. Please install it.]))
 AC_CHECK_HEADERS([boost/shared_ptr.hpp boost/shared_array.hpp boost/date_time/gregorian/gregorian.hpp],,AC_MSG_ERROR([boost library headers not found. Please install boost library.]))
 
-AC_CONFIG_FILES([Makefile generator/Makefile src/Makefile src/xmlbeansxx/Makefile tests/Makefile examples/Makefile examples/small/Makefile])
+AC_CONFIG_FILES([Makefile generator/Makefile src/Makefile src/xmlbeansxx/Makefile tests/Makefile examples/Makefile examples/small/Makefile doc/Makefile doc/Doxyfile])
 
 AC_OUTPUT
