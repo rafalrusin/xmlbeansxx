@@ -13,9 +13,9 @@ int main() {
         PurchaseOrderDocumentPtr poDoc(PurchaseOrderDocument::Factory::parse(in));
 
         LineItemPtr newLineItem = poDoc->getPurchaseOrder()->addNewLineItem();
-	newLineItem->setDescription(string("new book"));
-        newLineItem->setPrice(11.5);
-        newLineItem->setQuantity(10);
+	newLineItem->setDescription(string("Calendar"));
+        newLineItem->setPrice(0);
+        newLineItem->setQuantity(1);
         newLineItem->setPerUnitOunces(10);
         
         xmlbeansxx::shared_array<LineItemPtr> arr = poDoc->getPurchaseOrder()->getLineItemArray();
