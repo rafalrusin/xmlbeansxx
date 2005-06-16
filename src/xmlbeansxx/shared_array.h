@@ -62,13 +62,13 @@ namespace xmlbeansxx {
         shared_array(int n): boost::shared_array<T>(new T[n]), p_size(n) {} 
         
         template<typename U>
-        shared_array(const shared_array<U> &b): boost::shared_array<T>(b), p_size(b.size) {}
+        shared_array(const shared_array<U> &b): boost::shared_array<T>(b), p_size(b.size()) {}
 
         int size() const { return p_size; }
 
         std::vector<T> toVector() const {
-            std::vector<T> v(size);
-            for(int i=0;i<size;i++) {
+            std::vector<T> v(p_size);
+            for(int i=0;i<p_size;i++) {
                 v.push_back(a[i]);
             }
             return v;
