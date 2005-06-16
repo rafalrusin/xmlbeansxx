@@ -26,17 +26,24 @@
 
 
 namespace xmlbeansxx {
-        
+    
+/**
+ * Provides context of xml namespace links. 
+ */    
 class XmlContext {
 private:
     std::map<std::string,int> nsLinks;
     std::stack<std::pair<std::string,int> > restoreLinks;
         
 public:
+    /** @return remembered shortcut mapping to namespace. */
     int getLink(std::string shortcut);
+    /** Adds new shortcut to a namespace ns. */
     void setLink(std::string shortcut,int ns);
 
+    /** @return current position. It can be used for restore. */
     int restorePosition();
+    /** Restores state of links to restorePosition */
     void restore(int restorePosition);
 };
 }

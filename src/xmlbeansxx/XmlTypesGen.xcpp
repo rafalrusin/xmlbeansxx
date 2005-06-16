@@ -67,14 +67,6 @@ log4cxx::LoggerPtr XmlObject::log = log4cxx::Logger::getLogger(std::string("xmlb
 XmlObject::~XmlObject() {
 }
 
-std::pair<std::string,std::string> XmlObject::getXpathToken(std::string xpath) const {
-    int p=xpath.find('/');
-    if (p==-1)
-        return std::pair<std::string,std::string>(xpath,std::string());
-    else
-        return std::pair<std::string,std::string>(xpath.substr(0,p),xpath.substr(p+1));
-}
-
 int XmlObject::documentElementNamespaceID() const { return -1; }
 
 std::string XmlObject::digest() {
@@ -87,74 +79,6 @@ bool XmlObject::setAnyElement(std::string elementName,std::string anyContent) {
     contents.setElem(elementName,obj);
     return true;
 }
-
-/*
-std::vector<XmlObjectPtr > XmlObject::getByName(const std::string name) const {
-    if (name.substr(0,1)=="@") {
-        return getAttrByName(name.substr(1));
-    } else {
-        return getElemByName(name);
-    }
-}
- 
-std::vector<XmlObjectPtr > XmlObject::getAttrByName(const std::string name) const {
-    VAL(a,contents.getAttr(name));
-    if (
-    XmlObjectPtr n(new XmlAnySimpleType());
-    n->setSimpleContent();
- 
-    std::vector<XmlObjectPtr > v;
-    v.push_back(n);
-    return v;
-}
- 
-std::vector<XmlObjectPtr > XmlObject::getElemByName(const std::string name) const {
-    return contents.getElemArray(name);
-}
- 
-std::vector<XmlObjectPtr > XmlObject::getXpath_array(const std::string xpath) const {
-    std::pair<std::string,std::string> p=getXpathToken(xpath);
-    vector<XmlObjectPtr > v(getByName(p.first));
-    vector<XmlObjectPtr > ret;
- 
-    if (p.second=="") {
-        return v;
-    } else {
-        FOREACH(it,v) {
-            if (*it!=NULL) {
-                VAL(x,(*it)->getXpath_array(p.second));
-                ret.insert(ret.end(),x.begin(),x.end());
-            }
-        }
-        return ret;
-    }
-}
-*/
-
-/*
-XmlObject::XmlObject() {
-    LOG4CXX_DEBUG(log,std::string("constructor - this=")+TextUtils::ptrToString(this));
-}
-
-XmlObject::~XmlObject() {
-    LOG4CXX_DEBUG(log,std::string("destructor - this=")+TextUtils::ptrToString(this));
-}
-*/
-
-/*
-XmlObjectPtr XmlObject::parse(std::istream &in,XmlOptionsPtr options) {
-    //parsing xml-fragment
-    definitions::XmlFragmentDocument doc;
-    XmlParser p(options);
-    p.parse(in,&doc);
-    return doc.getXmlFragment();
-}*/
-
-/*
-XmlObjectPtr XmlObject::fromString(const std::string str,XmlOptionsPtr options) {
-    istringstream in(str);
-    return parse(in,options);
-}*/
 
 void XmlObject::serialize(std::ostream &o,XmlOptionsPtr options) const {
     TRACER(log,"serialize");

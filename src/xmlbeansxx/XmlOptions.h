@@ -24,6 +24,7 @@
 
 namespace xmlbeansxx {
 
+/** This class is used to remember various xml options. It corresponds to Java XmlBeans XmlOptions class. */
 class XmlOptions {
     bool v,d,tp;
 public:
@@ -35,6 +36,7 @@ public:
     bool getValidation() {
         return v;
     }
+    /** Specifies serialization option which prints '<?xml ... ?>' at the beginning of document. */
     void setPrintXmlDeclaration(bool d) {
         XmlOptions::d=d;
     }
@@ -42,9 +44,17 @@ public:
         return d;
     }
 
+    /**
+     * @deprecated
+     */
     bool getTypedParsing() {
         return tp;
     }
+    
+    /** 
+     * @deprecated This option specifies that objects created during parsing of xml will have appropriate class.
+     * If it is not set, then all created objects are XmlObject.
+     */
     void setTypedParsing(bool v) {
         tp=v;
     }

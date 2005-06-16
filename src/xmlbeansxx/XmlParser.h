@@ -52,6 +52,7 @@ private:
 
 class XmlObject;
 
+/** This class is used for parsing of xml documents. It uses xerces xml parser and optionally can use xerces xml schema validator.  */
 class XmlParser {
 private:
     static log4cxx::LoggerPtr log;
@@ -89,6 +90,11 @@ public:
     XmlParser(boost::shared_ptr<XmlOptions> opts);
     virtual ~XmlParser();
 
+    /**
+     * Parses using xercesc parser an xml document from std::istream to some XmlDocument. 
+     * If XmlOptions validation is set, then uses xercesc schema validator
+     * (apropriate grammars should be loaded using eg. loadGrammar method).
+     */
     void parse(std::istream &in, XmlObject *documentRoot);
 
     boost::shared_ptr<XmlOptions> getXmlOptions() const {
@@ -98,11 +104,11 @@ public:
         opts=options;
     }
 
-    /** Loads grammars into memory from specified file names */
+    /** Loads grammars into xercesc parser from specified file names. */
     void loadGrammars(const std::vector<std::string> &fileNames);
-    /** Loads grammar into memory from specified file name */
+    /** Loads grammar into xercesc parser from specified file name. */
     void loadGrammar(const std::string fileName);
-    /** Unloads all grammars from memory */
+    /** Unloads all grammars from xercesc parser. */
     void unloadGrammars();
 
 private:

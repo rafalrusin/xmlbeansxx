@@ -29,6 +29,7 @@ namespace xmlbeansxx {
 
 namespace {
 
+
 char *duplicate(const char *str) {
     static log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger("xmlbeansxx.duplicate");
     //TRACER(logger,"duplicate");
@@ -40,6 +41,11 @@ char *duplicate(const char *str) {
     //LOG4CXX_DEBUG(logger,"duplicate:"<<str<<" ptr:"<<TextUtils::ptrToString(buf));
 
     if (!((((unsigned long)buf)&1)==0)) {
+        /* 
+         * A c_str string is remembered if and only if it's first bit in pointer is set to 1. 
+         * This method assumes that 'new' operator always returns even pointer. 
+         * This may cause portability problems.
+         */
         LOG4CXX_FATAL(logger,"Memory allocation using new operator returned odd pointer. This is not supported.");
         throw IllegalStateException();
     }

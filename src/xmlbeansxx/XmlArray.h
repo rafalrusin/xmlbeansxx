@@ -53,8 +53,11 @@ static SchemaType XmlArray_initSchemaType() {
       st.processContents=true;
       return st;
 }
-    
 
+
+/** 
+ * This is an array of XmlObjects, which is an XmlObject that one can serialize to xml and parse from xml. 
+ */
 template<class T>
 class XmlArray:public XmlObject {
     T elemObj;

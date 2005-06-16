@@ -24,13 +24,11 @@ libxmlbeansxx_la_SOURCES = \
 	XercesUtils.cpp\
 	XercesUtils.h\
 	defs.h\
-	geum_types.h\
 	xmlbeansxx.h\
 	TypeSystem.cpp\
 	BeansException.h\
 	BeansException.cpp\
 	XmlException.h\
-	XmlObjectXpaths.cpp\
 	XmlOptions.h\
 	XmlParser.cpp\
 	XmlParser.h\
@@ -69,7 +67,6 @@ libxmlbeansxxinclude_HEADERS = \
 	shared_array.h\
 	SchemaType.h\
 	XercesUtils.h\
-	geum_types.h\
 	xmlbeansxx.h\
 	BeansException.h\
 	XmlException.h\

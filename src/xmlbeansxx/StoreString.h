@@ -40,7 +40,7 @@ public:
     const char *c_str() const;
 };
 
-/** Immutable string without memory deallocation */
+/* Immutable string without memory deallocation */
 /*
 class CStr {
 private:
@@ -78,7 +78,7 @@ class CStrEqFn {
     }
 };
 
-/** String storage collection. Contains c_str's. */
+/** String storage remembers a collection of const char * strings. One can add some strings for further use. */
 class StringStorage {
 private:
     //std::set<CStr> contents;
@@ -93,13 +93,20 @@ public:
     std::vector<SSInfo> stored;
     
     StringStorage();
+    /** Remembers a string in global pool */
     void add(const std::string &str);
+    /** Checks whether given string is stored */
     bool isStored(const char *str);
+
+    /** Takes a stored representation of given string or 0 if the string is not stored. */
     unsigned long get(const char *str);
     ~StringStorage();
 };
 
-/** Immutable string with ability to remember globally some strings. User can use static method 'store' to remember some strings. */
+/** 
+ * Immutable string with ability to remember globally some strings. User can use static method 'store' to remember some strings. 
+ * Construction of StoreString(s) with not remembered s causes duplication of s.
+ */
 class StoreString {
 private:
     static log4cxx::LoggerPtr log;

@@ -24,6 +24,7 @@
 
 namespace xmlbeansxx {
 
+/** xmlbeansxx throw only exceptions of this kind (but some other exceptions may be thrown out of xmlbeansxx, eg. std::bad_alloc). */
 class BeansException: public std::exception {
 private:
     static log4cxx::LoggerPtr log;
@@ -40,51 +41,61 @@ public:
     virtual std::string getMessage() const;
 };
 
+/** Exception says that some feature was not implemented. */
 class NotImplementedException: public BeansException {
     public:
     NotImplementedException(const std::string msg);
 };
 
+/** Exception says that Xml error occured. */
 class XmlException: public BeansException {
 public:
     XmlException(const std::string msg);
 };
 
+/** Exception says that error occured during parsing of xml. */
 class XmlParseException: public XmlException {
 public:
     XmlParseException(const std::string msg);
 };
 
+/** Exception says that error occured during serializing of xml. */
 class XmlSerializeException: public XmlException {
 public:
     XmlSerializeException(const std::string msg);
 };
 
+/** Exception says that invalid value was set into some XmlObject (eg. "abc" into XmlInteger). */
 class XmlIllegalValueException:public XmlException {
     public:
     XmlIllegalValueException(std::string schemaTypeName,std::string setValue);
 };
 
+/** Exception says that exception occured during access to xml.*/
 class XmlSimpleTypeException: public XmlException {
     public:
     XmlSimpleTypeException(std::string message,std::string simpleContent);
 };
 
+/** Exception raises while java_cast did not succeed. */
 class ClassCastException:public BeansException {
     public:
     ClassCastException(std::string msg);
 };
 
+/** Exception raises during access to XmlObject contents */
 class IllegalArgumentsException:public BeansException {
     public:
     IllegalArgumentsException(std::string msg);
 };
 
+/** Exception says that internal error occured */
 class IllegalStateException:public BeansException {
     public:
     IllegalStateException(std::string msg=std::string());
 };
 
+/** Exception says that BOOST_ASSERT failed. */
 class AssertionFailedException:public BeansException {
     public:
     AssertionFailedException(std::string msg);

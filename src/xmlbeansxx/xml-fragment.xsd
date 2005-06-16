@@ -14,6 +14,10 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
+<!--
+    This schema is used to provide serialization and parsing 
+    of xml schema types without global element defined. 
+-->
 <xs:schema xmlns="http://xmlbeans.apache.org/definitions" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://xmlbeans.apache.org/definitions" elementFormDefault="qualified">
 	<xs:element name="xml-fragment">
 		<xs:complexType>

@@ -28,6 +28,9 @@
 
 namespace xmlbeansxx {
 
+/** 
+ * This class is used to remember a mapping of xml schema type names to SchemaType descriptions.
+ */
 class TypeSystem {
     static log4cxx::LoggerPtr log;
     
@@ -44,20 +47,31 @@ public:
     XmlObjectPtr createByName(const std::string &typeName,int namespace_nr);
     XmlObjectPtr createArrayByName(const std::string &typeName,int namespace_nr);
 
+    /** 
+     * Registers a namespace in a pool if it isn't registered yet.
+     * It returns a stored identifier of this namespace.
+     */
     int addNamespace(const std::string namespaceName);
+    /**
+     * Returns an identifier of given namespace or -1 if it isn't registered. 
+     */
     int getNamespace(const std::string namespaceName);
+    /** Returns count of all namespaces n. Namespace identifiers are between 0 and n-1. */
     int nrNamespaces();
     void addType(const SchemaType *st);
 
-    /** returns "" when not found */
+    /** returns "" while not found */
     std::string getNamespaceName(int namespaceID);
 
-    /** Schema namespace ID */
+    /** Schema namespace ID. */
     int xs_ns();
-    /** Schema instance namespace ID */
+    /** Schema instance namespace ID. */
     int xsi_ns();
 };
 
+/**
+ * Every generated class registers herself in this type system during static initialization. 
+ */
 TypeSystem *globalTypeSystem();
 
 }

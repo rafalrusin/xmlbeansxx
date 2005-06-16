@@ -36,6 +36,7 @@ namespace xmlbeansxx {
 
 class Transcoder;
 
+/** This is wrapper for xercesc::AttributeList to use UTF-8 std::strings instead of xerces internal string representation. */
 class LocalAttributeList {
     int len;
     boost::scoped_array<std::string> list;
@@ -47,6 +48,7 @@ public:
     ~LocalAttributeList() ;
 };
 
+/** Provides a xerces input stream to read from std::istream */
 class BinStdInputStream: public xercesc::BinInputStream {
     int p;
     std::istream &in;
@@ -56,6 +58,7 @@ public:
     unsigned int readBytes(XMLByte *const toFill,const unsigned int maxToRead);
 };
 
+/** Provides a xerces input source that uses std::istream reader */
 class StdInputSource: public xercesc::InputSource {
     std::istream &in;
 public:
@@ -63,6 +66,7 @@ public:
     xercesc::BinInputStream* makeStream() const;
 };
 
+/** Provides a xerces XMLFormatTarget that writes to std::string. */
 class StdStringFormatTarget: public xercesc::XMLFormatTarget {
     private:
     std::string s;
@@ -74,12 +78,16 @@ class StdStringFormatTarget: public xercesc::XMLFormatTarget {
     void reset();
 };
 
+/** Provides transcoding of xerces const XMLCh * string to std::string in given encoding. */
 class Transcoder {
     private:
     StdStringFormatTarget t;
     xercesc::XMLFormatter f;
     
     public:
+    /** 
+     * @param encoding is a name of destination encoding. Eg. 'UTF-8'.
+     */
     Transcoder(const char *encoding);
     std::string transcode(const XMLCh *s);
 };

@@ -23,7 +23,8 @@
 #include "macros.h"
 
 namespace xmlbeansxx {
-    
+
+    /** This is shared array of some type with constant size. This is similar to boost::shared_array, but is more flexible to use. */
     template<typename T>
     class shared_array: public boost::shared_array<T> {
         int p_size;
@@ -58,14 +59,20 @@ namespace xmlbeansxx {
             }
         };
         
+        /** Creates shared_array of size 0. */
         shared_array(): p_size(0) {}
+        
+        /** Creates shared_array of size n by allocating n elements. */
         shared_array(int n): boost::shared_array<T>(new T[n]), p_size(n) {} 
         
+        /** Copy constructor. */
         template<typename U>
         shared_array(const shared_array<U> &b): boost::shared_array<T>(b), p_size(b.size()) {}
 
+        /** @return size of this shared_array. */
         int size() const { return p_size; }
 
+        /** Converts this array to std::vector by creating new vector. */
         std::vector<T> toVector() const {
             std::vector<T> v(p_size);
             for(int i=0;i<p_size;i++) {
@@ -74,15 +81,14 @@ namespace xmlbeansxx {
             return v;
         }
         
-        /*
-        operator std::vector<T>() const {
-            return toVector();
-        }*/
-
+        /** Begin iterator. */
         iterator begin() { return iterator(0,*this); }
+        
+        /** End iterator. */
         iterator end() { return iterator(size(),*this); }
     };
 
+    /** Converts given std::vector to shared_array */
     template<typename T>
     shared_array<T> toSharedArray(const std::vector<T> &v) {
         shared_array<T> a(v.size());

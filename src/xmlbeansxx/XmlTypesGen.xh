@@ -27,7 +27,6 @@
 #include "CoreTypes.h"
 
 #include "XmlOptions.h"
-#include "geum_types.h"
 #include "macros.h"
 #include "Contents.h"
 #include "TypeSystem.h"
@@ -108,60 +107,73 @@ public:
     //virtual functions
     virtual int documentElementNamespaceID() const;
     
-    /** Serializes object to stream */
+    /** 
+     * Serializes XmlObject to output stream. 
+     * @param options specify some serialization options
+     */
     virtual void serialize(std::ostream &out,XmlOptionsPtr options=XmlOptionsPtr(new XmlOptions())) const;
-    /** Serializes object to string */
+
+    /** 
+     * Serializes XmlObject to string. 
+     * @param options specify some serialization options
+     */
     virtual std::string toString(XmlOptionsPtr options=XmlOptionsPtr(new XmlOptions())) const;
     
 #ifdef BOOST_HAS_THREADS
+    /**
+     * @return boost mutex for synchronizing with this XmlObject
+     */
     boost::recursive_mutex &mutex() const;
 #endif
 
+    /**
+     * @return deep copy of this XmlObject
+     */
     virtual XmlObjectPtr clone() const;
 
+    /** @return string content of this XmlObject (without subelements and attributes). */ 
     virtual std::string getSimpleContent() const;
+    /** Sets string content of this XmlObject (without modifying subelements and attributes). */
     virtual void setSimpleContent(const std::string &value);
 
-    /** Returns canonical simple content of XmlObject */
+    /** @return canonical string content of XmlObject. Eg. returns same value of two XmlDecimal objects with values '10.1' and '10.100'. */
     virtual std::string getCanonicalContent() const;
 
-    /** Selects first XmlObject that meets given criteria */
+    /** @deprecated Selects first XmlObject that meets given criteria. */
     virtual XmlObjectPtr query(std::string elementName,QueryNodePtr queryExpr) const;
+    /** @deprecated Selects first XmlObject that meets given criteria and creates object if it is not found. */
     virtual XmlObjectPtr cquery(std::string elementName,QueryNodePtr queryExpr,ObjectCreatorFn createFn);
     //----//
 
     //EWML extensions
+    /** @deprecated @return string serialized string representation of this XmlObject, which is equal for two XmlObjects with isomorphic content. */
     virtual std::string digest();
+    /** 
+     * @deprecated Adds some element of given name and string content to this XmlObject.
+     * @return always true. It has to return some value other than void for TouK reasons.
+     */
     bool setAnyElement(std::string elementName,std::string content);
     //~EWML extensions
     
 public:
+    /** 
+     * This method is used during serialization. It exchanges string UTF-8 content to xml content.
+     * It can be overriden.
+     */
     virtual std::string exchangeEntities(const std::string& str) const;
 
     /**
-     * Frees contents of whole subtree of this object.
-     * After this, object remains empty.
+     * @deprecated
+     * Frees contents of this XmlObject.
+     * After this, XmlObject remains empty.
      */
     void free();
 
-private:
-    std::pair<std::string,std::string> getXpathToken(std::string xpath) const;
-    /*
-    public:
-    virtual std::vector<XmlObjectPtr > getXpath_array(const std::string xpath) const;
-    virtual std::vector<XmlObjectPtr > getByName(const std::string name) const;
-    protected:
-    virtual std::vector<XmlObjectPtr > getAttrByName(const std::string name) const;
-    virtual std::vector<XmlObjectPtr > getElemByName(const std::string name) const;
-    */
-
-private:
-    XmlObject *walkXpath(const std::string xpath,std::string &lastName,bool createElems);
-    bool isAttr(const std::string name);
-    std::pair<std::string,int> decomposeElem(const std::string name);
-    void getXpathsLikeMapRec(XpathsMap &v,const std::string prefix);
-
 protected:
+    /**
+     * @deprecated
+     * @return new XmlObject with defaultText value if given value is NULL. Otherwise returns value
+     */
     template<class T>
     boost::shared_ptr<T> defaultValue(boost::shared_ptr<T> value,std::string defaultText) const {
         if (value==NULL) { 
@@ -171,6 +183,10 @@ protected:
         return value;
     }
     
+    /**
+     * @deprecated
+     * @return std::vector from array_value with NULL XmlObjects exchanged to new XmlObjects with defaultText values
+     */
     template<class T>
     std::vector<boost::shared_ptr<T> > &defaultArrayValue(std::vector<boost::shared_ptr<T> > &array_value,std::string defaultText) const {
         typename std::vector<boost::shared_ptr<T> >::iterator it;
@@ -183,143 +199,61 @@ protected:
         return array_value;
     }
 
-protected:
-
-    /**
-     * Finds xpath value.
-     * @param xpath containing xpath
-     * @return char* containing xpath value or NULL if not found
-     * @throws XpathException if xpath was not found or has invalid format.
-     * This exception is also thrown when xpath is not a leaf or attribute.
-     * 
-     */
-    std::string getXpathValue(const std::string xpath);
-
-    /**
-     * Returns vector of xpaths representing the same path. 
-     * <pre>
-    For example calling this method with xpath = /a/b/c for 
-    following xml :
-    <a>
-    <b>
-    <c>1</c>
-    <c>2</c>
-    <c>3</c>
-    </b>
-    <a>
-    will return list of xpaths : 
-    /a/b/c
-    /a/b/c[2]
-    /a/b/c[3]
-    </pre>
-     * @param std::string representing xpath 
-     * @return vector of xpaths collection 
-     * @throws XpathException if xpath was not found or has invalid format
-     */
-    std::vector<std::string>* getXpaths(const std::string xpath);
-
-    /**
-     * Returns vector of xpaths which begining match xpath string
-     * @param std::string representing begining of searching xpaths
-     * @return vector of xpaths collection
-     */
-    std::vector<std::string>* getXpathsLike(const std::string xpath);
-
-    /**
-     * Returns XpathsMap of xpaths which begining match xpath string
-     * @param std::string representing begining of searching xpaths
-     * @return Map of xpaths and their values 
-     */
-    XpathsMap* getXpathsLikeMap(const std::string xpath);
-
-    /**
-     * finds xpath values
-     * @param std::string representing xpath 
-     * @return vector of xpaths collection values 
-     * @throws XpathException if xpath was not found or has invalid format
-     * This exception is also thrown when xpath is not a leaf. You can not get
-     * attribute value with this method use getXpathValue instead.
-     */
-    std::vector<std::string>* getXpathsValues(const std::string xpath);
-
-    /**
-     * Sets xpath value.
-     * @param std::string containing xpath
-     * @param std::string containing xpath value
-     * @throws  XpathException if xpath was not found or has invalid format.
-     * This exception is also thrown when xpath is not a leaf or attribute.
-     * If there is list of xpath DON'T FORGET about [i] for specifing concrete
-     * list element.
-     */
-    void setXpathValue(const std::string xpath, const std::string value);
-
-    /**
-     * Removes xpath from current message.
-     * @param std::string containing xpath
-     * @throws  XpathException if xpath was not found or has invalid format.
-     * This exception is also thrown when xpath is not a leaf or attribute.
-     * If there is list of xpath DON'T FORGET about [i] for specifing concrete
-     * list element.
-     */
-    void removeXpath(const std::string xpath);
-
-    /**
-     * Add xpath to this xml. Xpath past to this method should have 
-     * all necessery information about orders in tag lists.
-     * For example you should past <i>/x/a[2]</i> as xpath if 
-     * you already have <i>/x/a</i> in this message. In case you
-     * already have <i>/x/a</i> and you add <i>/x/a</i> the old value
-     * will be replaced with its new value.
-     * @param xpath std::string representing xpath
-     * @param value std::string containing xpath value
-     */
-    void addXpath(const std::string xpath, const std::string value);
-
-    /**
-     * Add xpath with CDATA value to this xml.
-     * Work the same as addXpath, but encapsulates value in 
-     * <pre><![CDATA[ ... ]]></pre>
-     * @param xpath std::string representing xpath
-     * @param value std::string containing xpath value
-     */
-    void addCdataXpath(const std::string xpath, const std::string value);
-
 %%class xmlbeansxx::XmlAnySimpleType
+    /** Gets std::string content. */
     std::string getStringValue() const;
+    /** Sets std::string content. */
     void setStringValue(const std::string &v);
 
 %%class xmlbeansxx::XmlBoolean
 private:
     static log4cxx::LoggerPtr log;
 public:
+    /** @deprecated Constructors for XmlObjects are deprecated. Factory should be used instead. */
     XmlBoolean(bool value) { setBooleanValue(value); }
+    /** @deprecated Constructors for XmlObjects are deprecated. Factory should be used instead. */
     XmlBoolean(const char *value) {
         setSimpleContent(value);
     }
 
+    /** Gets bool content of this XmlObject. */
     bool getBooleanValue() const;
+    /** Sets bool content of this XmlObject. */
     void setBooleanValue(bool v);
 
     virtual std::string getCanonicalContent() const;
     
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended. */
     XmlBoolean operator==(const XmlBoolean &b) const;
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     XmlBoolean operator !() const;
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     XmlBoolean operator ||(const XmlBoolean &b) const;
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     XmlBoolean operator &&(const XmlBoolean &b) const;
 
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     operator bool() const;
 
 %%class xmlbeansxx::XmlString
 private:
     static log4cxx::LoggerPtr log;
 public:
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     operator std::string() const;
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator==(const XmlString &b) const;
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator!=(const XmlString &b) const;
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     XmlString operator+(const XmlString &b) const;
+    /** @deprecated This kind of methods are deprecated. get...Value() method is recommended. */
     XmlString substring(int beginIndex) const;
+    /** @deprecated This kind of methods are deprecated. get...Value() method is recommended. */
     XmlString substring(int beginIndex,int endIndex) const;
+    /** @deprecated This kind of methods are deprecated. get...Value() method is recommended. */
     bool endsWith(const XmlString &b) const;
+    /** @deprecated This kind of methods are deprecated. get...Value() method is recommended. */
     int length() const;
 
 %%class xmlbeansxx::XmlInteger
@@ -327,62 +261,81 @@ private:
     friend class XmlDecimal;
     static log4cxx::LoggerPtr log;
 public:
+    /** @deprecated Constructors for XmlObjects are deprecated. Factory should be used instead. */
     XmlInteger(const char *value) {
         setSimpleContent(value);
     }
+    /** @deprecated Constructors for XmlObjects are deprecated. Factory should be used instead. */
     XmlInteger(int v) { setSimpleContent(xmlbeansxx::TextUtils::intToString(v)); }
+    /** @deprecated Constructors for XmlObjects are deprecated. Factory should be used instead. */
     XmlInteger(const mpz_class &v) { setMpzValue(v); }
 
     virtual void setSimpleContent(const std::string &value);
 
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     operator int() const;
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     operator mpz_class() const;
 
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     XmlInteger operator+(const XmlInteger &b) const {
         return XmlInteger(getMpzValue()+b.getMpzValue());
     }
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     XmlInteger operator-(const XmlInteger &b) const {
         return XmlInteger(getMpzValue()-b.getMpzValue());
     }
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     XmlInteger operator*(const XmlInteger &b) const {
         return XmlInteger(getMpzValue()*b.getMpzValue());
     }
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     XmlInteger operator/(const XmlInteger &b) const {
         return XmlInteger(getMpzValue()/b.getMpzValue());
     }
 
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     XmlInteger operator+=(const XmlInteger &b) {
         setMpzValue(getMpzValue()+b.getMpzValue());
         return *this;
     }
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     XmlInteger operator-=(const XmlInteger &b) {
         setMpzValue(getMpzValue()-b.getMpzValue());
         return *this;
     }
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     XmlInteger operator*=(const XmlInteger &b) {
         setMpzValue(getMpzValue()*b.getMpzValue());
         return *this;
     }
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     XmlInteger operator/=(const XmlInteger &b) {
         setMpzValue(getMpzValue()/b.getMpzValue());
         return *this;
     }
 
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator==(const XmlInteger &b) const {
         return getMpzValue()==b.getMpzValue();
     }
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator!=(const XmlInteger &b) const {
         return getMpzValue()!=b.getMpzValue();
     }
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator<=(const XmlInteger &b) const {
         return getMpzValue()<=b.getMpzValue();
     }
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator>=(const XmlInteger &b) const {
         return getMpzValue()>=b.getMpzValue();
     }
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator<(const XmlInteger &b) const {
         return getMpzValue()<b.getMpzValue();
     }
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator>(const XmlInteger &b) const {
         return getMpzValue()>b.getMpzValue();
     }
@@ -391,141 +344,224 @@ public:
 private:
     static log4cxx::LoggerPtr log;
 public:
+    /** @deprecated Constructors for XmlObjects are deprecated. Factory should be used instead. */
     XmlDecimal(const char *value) {
         setSimpleContent(value);
     }
+    /** @deprecated Constructors for XmlObjects are deprecated. Factory should be used instead. */
     XmlDecimal(double v) { setMpfValue(v); }
+    /** @deprecated Constructors for XmlObjects are deprecated. Factory should be used instead. */
     XmlDecimal(const mpf_class &v) { setMpfValue(v); }
 
+    /** @return gmpxx mpf_class content of this XmlObject. */
     mpf_class getMpfValue() const;
+    
+    /** Sets gmpxx mpf_class content for this XmlObject. */
     void setMpfValue(const mpf_class &v);
-    mpz_class getMpzValue() const;
+    
+    /** @return gmpxx mpz_class content of this XmlObject. */
+    mpz_class getMpzValue() const;  
+ 
+    /** Sets gmpxx mpz_class content for this XmlObject. */
     void setMpzValue(const mpz_class &v);
+    
+    /** @return int content of this XmlObject. */
     virtual int getIntValue() const;
+    
+    /** Sets int content for this XmlObject. */
     virtual void setIntValue(int v);
+    
+    /** @return xml schema long content of this XmlObject. */
     virtual mpz_class getLongValue() const;
+    
+    /** Sets xml schema long content for this XmlObject. */
     virtual void setLongValue(mpz_class v);
+    
+    /** @return short content of this XmlObject. */
     virtual short getShortValue() const;
+    
+    /** Sets short content for this XmlObject. */
     virtual void setShortValue(short v);
+    
+    /** @return unsigned char content of this XmlObject. */
     virtual unsigned char getByteValue() const;
+    
+    /** Sets unsigned char content for this XmlObject. */
     virtual void setByteValue(unsigned char v);
 
     virtual void setSimpleContent(const std::string &value);
 
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     operator mpf_class() const;
 
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     XmlDecimal operator+(const XmlDecimal &b) const {
         return XmlDecimal(getMpfValue()+b.getMpfValue());
     }
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     XmlDecimal operator-(const XmlDecimal &b) const {
         return XmlDecimal(getMpfValue()-b.getMpfValue());
     }
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     XmlDecimal operator*(const XmlDecimal &b) const {
         return XmlDecimal(getMpfValue()*b.getMpfValue());
     }
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     XmlDecimal operator/(const XmlDecimal &b) const {
         return XmlDecimal(getMpfValue()/b.getMpfValue());
     }
 
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     XmlDecimal operator+=(const XmlDecimal &b) {
         setMpfValue(getMpfValue()+b.getMpfValue());
         return *this;
     }
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     XmlDecimal operator-=(const XmlDecimal &b) {
         setMpfValue(getMpfValue()-b.getMpfValue());
         return *this;
     }
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     XmlDecimal operator*=(const XmlDecimal &b) {
         setMpfValue(getMpfValue()*b.getMpfValue());
         return *this;
     }
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     XmlDecimal operator/=(const XmlDecimal &b) {
         setMpfValue(getMpfValue()/b.getMpfValue());
         return *this;
     }
 
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator==(const XmlDecimal &b) const {
         return getMpfValue()==b.getMpfValue();
     }
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator!=(const XmlDecimal &b) const {
         return getMpfValue()!=b.getMpfValue();
     }
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator<=(const XmlDecimal &b) const {
         return getMpfValue()<=b.getMpfValue();
     }
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator>=(const XmlDecimal &b) const {
         return getMpfValue()>=b.getMpfValue();
     }
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator<(const XmlDecimal &b) const {
         return getMpfValue()<b.getMpfValue();
     }
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator>(const XmlDecimal &b) const {
         return getMpfValue()>b.getMpfValue();
     }
 
 %%class xmlbeansxx::XmlLong
 public:
+    /** @deprecated Constructors for XmlObjects are deprecated. Factory should be used instead. */
     XmlLong(const char *value) {
         setSimpleContent(value);
     }
+    /** @deprecated Constructors for XmlObjects are deprecated. Factory should be used instead. */
     XmlLong(mpz_class v) { setMpzValue(v); }
 
 %%class xmlbeansxx::XmlInt
+    /** @deprecated Constructors for XmlObjects are deprecated. Factory should be used instead. */
     XmlInt(const char *value) {
         setSimpleContent(value);
     }
+    /** @deprecated Constructors for XmlObjects are deprecated. Factory should be used instead. */
     XmlInt(int v) { setSimpleContent(xmlbeansxx::TextUtils::intToString(v)); }
     
 %%class xmlbeansxx::XmlDateTime
 public:
     //operators
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator==(const XmlDateTime &b) const;
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator!=(const XmlDateTime &b) const;
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator<=(const XmlDateTime &b) const;
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator>=(const XmlDateTime &b) const;
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator>(const XmlDateTime &b) const;
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator<(const XmlDateTime &b) const;
     //---------------------------------
     //specific methods
 private:
     static log4cxx::LoggerPtr log;
 public:
+    /** @deprecated This kind of methods are deprecated. get...Value() method is recommended. */
     XmlTime timePart() const;
+    /** @deprecated This kind of methods are deprecated. get...Value() method is recommended. */
     XmlDate datePart() const;
+
+
+    /** @return xmlbeansxx::Calendar content of this XmlObject */
     virtual boost::shared_ptr<xmlbeansxx::Calendar> getCalendarValue() const;
+    /** Sets xmlbeansxx::Calendar content for this XmlObject */
     virtual void setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v);
 
 %%class xmlbeansxx::XmlTime
 public:
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator==(const XmlTime &b) const;
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator!=(const XmlTime &b) const;
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator<=(const XmlTime &b) const;
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator>=(const XmlTime &b) const;
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator>(const XmlTime &b) const;
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator<(const XmlTime &b) const;
     //----------------------------
+    
+    /** @return xmlbeansxx::Calendar content of this XmlObject */
     virtual boost::shared_ptr<xmlbeansxx::Calendar> getCalendarValue() const;
+    
+    /** Sets xmlbeansxx::Calendar content for this XmlObject */
     virtual void setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v);
+    
 private:
     static log4cxx::LoggerPtr log;
 
 %%class xmlbeansxx::XmlDate
 public:
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     operator boost::gregorian::date() const;
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator==(const XmlDate &b) const;
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator!=(const XmlDate &b) const;
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator<=(const XmlDate &b) const;
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator>=(const XmlDate &b) const;
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator>(const XmlDate &b) const;
+    /** @deprecated Operators for XmlObjects are deprecated. get...Value() method is recommended.*/
     bool operator<(const XmlDate &b) const;
     //----------------------------
     //specific methods
+    
+    /** @return boost date content of this XmlObject */
     boost::gregorian::date getDateValue() const;
+    
+    /** Sets boost date content for this XmlObject */
     void setDateValue(const boost::gregorian::date &d);
     
+    /** @return xmlbeansxx::Calendar content of this XmlObject */
     virtual CalendarPtr getCalendarValue() const;
+    
+    /** Sets xmlbeansxx::Calendar content for this XmlObject */
     virtual void setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v);
     
+    /** @deprecated This kind of methods are deprecated. get...Value() method is recommended. */
     XmlInteger daysFrom(const XmlDate &from) const;
 
 private:
@@ -553,23 +589,37 @@ private:
     virtual void setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v);
     
 %%class xmlbeansxx::XmlBase64Binary
+    /** @return base64 decoded byte array content of this XmlObject */
     virtual xmlbeansxx::shared_array<unsigned char> getByteArrayValue() const;
+    /** Sets base64 decoded content for this XmlObject. It will be encoded to base64. */
     virtual void setByteArrayValue(xmlbeansxx::shared_array<unsigned char> v);
     
 %%class xmlbeansxx::XmlHexBinary
+    /** @return byte array content of this XmlObject */
     virtual xmlbeansxx::shared_array<unsigned char> getByteArrayValue() const;
+    
+    /** Sets byte array content for this XmlObject */
     virtual void setByteArrayValue(xmlbeansxx::shared_array<unsigned char> v);
     
 %%class xmlbeansxx::XmlQName
+    /** @return QName content of this XmlObject */
     virtual boost::shared_ptr<xmlbeansxx::QName> getQNameValue() const;
+    
+    /** Sets QName content for this XmlObject */
     virtual void setQNameValue(boost::shared_ptr<xmlbeansxx::QName> v);
 
 %%class xmlbeansxx::XmlFloat
+    /** @return float content of this XmlObject */
     virtual float getFloatValue() const;
+
+    /** Sets float content for this XmlObject */
     virtual void setFloatValue(float v);
 
 %%class xmlbeansxx::XmlDouble
+    /** @return double content of this XmlObject */
     virtual double getDoubleValue() const;
+    
+    /** Sets double content for this XmlObject */
     virtual void setDoubleValue(double v);
     
 %%

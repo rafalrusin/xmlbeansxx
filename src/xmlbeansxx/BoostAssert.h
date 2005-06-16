@@ -21,6 +21,7 @@
 #include <boost/assert.hpp>
 
 namespace boost {
+    /** Boost assert handler. */
     void assertion_failed(char const * expr, char const * function, char const * file, long line);
 }
 
