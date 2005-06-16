@@ -12,11 +12,11 @@ int main() {
         fstream in("easypo.xml", ios::in);
         PurchaseOrderDocumentPtr poDoc(PurchaseOrderDocument::Factory::parse(in));
 
-        LineItemPtr newLineItem = poDoc->getPurchaseOrder()->addNewLineItem();
-	newLineItem->setDescription(string("Calendar"));
-        newLineItem->setPrice(0);
-        newLineItem->setQuantity(1);
-        newLineItem->setPerUnitOunces(10);
+        LineItemPtr giftLineItem = poDoc->getPurchaseOrder()->addNewLineItem();
+	giftLineItem->setDescription(string("Calendar"));
+        giftLineItem->setPrice(0);
+        giftLineItem->setQuantity(1);
+        giftLineItem->setPerUnitOunces(10);
         
         xmlbeansxx::shared_array<LineItemPtr> arr = poDoc->getPurchaseOrder()->getLineItemArray();
         for(int i=0; i < arr.size() ; i++) {
