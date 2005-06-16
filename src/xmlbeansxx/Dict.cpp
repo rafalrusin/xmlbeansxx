@@ -19,7 +19,7 @@
 //------------------------------------------------------------------------------------
 
 	
-		namespace xmlbeansxx {
+namespace xmlbeansxx {
 
 
 //Dicts Impl
