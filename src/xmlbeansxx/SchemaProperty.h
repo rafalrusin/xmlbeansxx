@@ -30,10 +30,17 @@ DECLARE_PTR(SchemaProperty,SchemaPropertyPtr,constSchemaPropertyPtr)
 typedef boost::shared_ptr<std::string> StringPtr;
 class SchemaType;
 
+/** 
+ * Corresponds to org.apache.xmlbeans.Schemaproperty Java class. 
+ * Contains information about a property of some SchemaType.
+ */
 class SchemaProperty {
 public:
+    /** Position of property used in serialization */
     int order;
+    /** Pointer to SchemaType of this property */
     const SchemaType *schemaType;
+    /** This is not NULL if this property is a singleton (not array) and has default value */
     StringPtr singletonDefault;
 
     SchemaProperty(int order,const SchemaType *type, StringPtr singletonDefault);

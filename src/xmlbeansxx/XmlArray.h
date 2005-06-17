@@ -56,6 +56,7 @@ static SchemaType XmlArray_initSchemaType() {
 
 
 /** 
+ * @deprecated
  * This is an array of XmlObjects, which is an XmlObject that one can serialize to xml and parse from xml. 
  */
 template<class T>

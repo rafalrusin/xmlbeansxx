@@ -24,7 +24,7 @@
 
 namespace xmlbeansxx {
 /**
- * Contains some utility functions for strings.
+ * Contains some utility functions on strings.
  */
 class TextUtils {
 private:

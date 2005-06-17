@@ -24,7 +24,7 @@
 
 namespace xmlbeansxx {
 
-/** This class is used to remember various xml options. It corresponds to Java XmlBeans XmlOptions class. */
+/** This class is used to remember various xml options. It corresponds to Java org.apache.xmlbeans.XmlOptions class. */
 class XmlOptions {
     bool v,d,tp;
 public:

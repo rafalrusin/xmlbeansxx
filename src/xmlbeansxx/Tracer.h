@@ -35,6 +35,7 @@
 
 namespace xmlbeansxx {
 
+/** Provides tracing method calls. */
 class Tracer {
 public:
     Tracer(log4cxx::LoggerPtr logger, const std::string &text) : logger(logger), text(text) {

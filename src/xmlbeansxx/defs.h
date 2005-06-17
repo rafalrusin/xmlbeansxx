@@ -17,7 +17,7 @@
 #ifndef _DEFS_H__
 #define _DEFS_H__
 
-//Additional language definitions
+//Additional C++ language definitions
 #define FOREACH(it,c) for(__typeof((c).begin()) it=(c).begin(); it!=(c).end(); ++it)
 #define FOR(i,n) for(int i=0;i<(n);++i)
 #define VAL(i,v) __typeof(v) i=(v)

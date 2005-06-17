@@ -24,6 +24,9 @@
 
 namespace xmlbeansxx {
 
+/** 
+ * Class with behaviour of NULL shared pointer. Converts to boost::shared_ptr of any type.
+ */
 class NullPtr: public boost::shared_ptr<void> {
 public:
     template <class T>

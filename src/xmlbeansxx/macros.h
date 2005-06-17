@@ -23,72 +23,20 @@
 #include <typeinfo>
 #include "BeansException.h"
 
-//Common templeate definitions
-/*
-typedef boost::shared_ptr<std::string> StringPtr;
-typedef boost::shared_ptr<const std::string> constStringPtr;
-typedef std::map<std::string,int> Map_String_Int;
-*/
-/*
-#include <boost/shared_ptr.hpp>
- 
- 
-#define DECLARE_PTR(name,name_ptr,const_name_ptr) \
-struct name_ptr: boost::shared_ptr<name> { \
-    name_ptr(); \
-    name_ptr(const name_ptr &b); \
-    name_ptr(name *b); \
-};\
-struct const_name_ptr: boost::shared_ptr<const name> { \
-    const_name_ptr(); \
-    const_name_ptr(const const_name_ptr &b); \
-    const_name_ptr(const name *b); \
-};
- 
-#define DECLARE_PTR_CODE(name,name_ptr,const_name_ptr) \
-name_ptr::name_ptr() {} \
-name_ptr::name_ptr(const name_ptr &b): boost::shared_ptr<name>(b) {} \
-name_ptr::name_ptr(name *b): boost::shared_ptr<name>(b) {} \
-\
-const_name_ptr::const_name_ptr() {} \
-const_name_ptr::const_name_ptr(const const_name_ptr &b): boost::shared_ptr<const name>(b) {} \
-const_name_ptr::const_name_ptr(const name *b): boost::shared_ptr<const name>(b) {} \
-*/
-
-
-//#define DECLARE_PTR(name,name_ptr,const_name_ptr) 
-//    typedef boost::shared_ptr<name> name_ptr;
-//    typedef boost::shared_ptr<const name> const_name_ptr;
 
 #define DECLARE_PTR(name,name_ptr,const_name_ptr) typedef boost::shared_ptr<name> name_ptr;
 #define DECLARE_PTR_CODE(name,name_ptr,const_name_ptr)
 
-
-
-
 namespace xmlbeansxx {
 
-/*
-template<class T2,class T>
-std::vector<boost::shared_ptr<T2> > dynamic_vector_ptr_cast(const std::vector<boost::shared_ptr<T> > &a) {
-    std::vector<boost::shared_ptr<T2> > ret;
-    typename std::vector<boost::shared_ptr<T> >::const_iterator it=a.begin();
-    for(;it!=a.end();it++) {
-        ret.push_back(boost::dynamic_pointer_cast<T2>(*it));
-    }
-    return ret;
-}
-
-template<class T2,class T>
-std::vector<boost::shared_ptr<T2> > static_vector_ptr_cast(const std::vector<boost::shared_ptr<T> > &a) {
-    std::vector<boost::shared_ptr<T2> > ret;
-    typename std::vector<boost::shared_ptr<T> >::const_iterator it=a.begin();
-    for(;it!=a.end();it++) {
-        ret.push_back(boost::static_pointer_cast<T2>(*it));
-    }
-    return ret;
-}*/
-
+/** 
+ * Casting of boost::shared_ptr similar to java casting.
+ * Eg. C++ expression:
+ * java_cast<ToType>(fromVariable)
+ * is similar to Java expression:
+ * (ToType) fromVariable
+ * It throws xmlbeansxx::ClassCastException when cast fails.
+ */
 template<class T2,class T>
 boost::shared_ptr<T2> java_cast(const boost::shared_ptr<T> &a) {
     if (a==NULL) return boost::shared_ptr<T2>();
@@ -98,18 +46,6 @@ boost::shared_ptr<T2> java_cast(const boost::shared_ptr<T> &a) {
         return b;
     }
 }
-
-/*
-template<class T2,class T>
-std::vector<boost::shared_ptr<T2> > vector_java_cast(const std::vector<boost::shared_ptr<T> > &a) {
-    std::vector<boost::shared_ptr<T2> > ret;
-    typename std::vector<boost::shared_ptr<T> >::const_iterator it=a.begin();
-    for(;it!=a.end();it++) {
-        ret.push_back(java_cast<T2>(*it));
-    }
-    return ret;
-}*/
-
 }
 
 

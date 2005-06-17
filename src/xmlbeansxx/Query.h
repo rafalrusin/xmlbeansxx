@@ -24,6 +24,11 @@
 #include <log4cxx/logger.h>
 #include "macros.h"
 
+/*
+ * This file contains classes used for xpath evaluation. 
+ * Implementation is not completed. 
+ * TODO: Implementation of xpath queries.
+ */
 
 	
 namespace xmlbeansxx {

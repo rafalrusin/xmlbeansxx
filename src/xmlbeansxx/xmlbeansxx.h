@@ -17,6 +17,7 @@
 #ifndef _XMLBEANSXX_H__
 #define _XMLBEANSXX_H__
 
+// Includes all necessary headers.
 #include <xmlbeansxx/XmlException.h>
 #include <xmlbeansxx/XmlTypesGen.h>
 #include <xmlbeansxx/XmlArray.h>

@@ -19,6 +19,7 @@
 
 #include "xmlbeans.h"
 
+//TouK extensions
 namespace wml {
 typedef org::apache::xmlbeans::XmlInteger Integer;
 typedef org::apache::xmlbeans::XmlDecimal Decimal;
