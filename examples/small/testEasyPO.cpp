@@ -10,8 +10,12 @@ int main() {
 
     try {
         fstream in("easypo.xml", ios::in);
-        PurchaseOrderDocumentPtr poDoc(PurchaseOrderDocument::Factory::parse(in));
+        //PurchaseOrderDocumentPtr poDoc(PurchaseOrderDocument::Factory::parse(in));
 
+	XmlOptionsPtr opts(new XmlOptions());
+	opts->setValidation(true);
+	PurchaseOrderDocumentPtr poDoc(PurchaseOrderDocument::Factory::parse(in, opts));
+	
         LineItemPtr giftLineItem = poDoc->getPurchaseOrder()->addNewLineItem();
 	giftLineItem->setDescription(string("Calendar"));
         giftLineItem->setPrice(0);

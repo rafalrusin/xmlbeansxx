@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<purchase-order xmlns="http://xmlbeans.apache.org/samples/enumeration/schemaenum/easypo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlbeans.apache.org/samples/enumeration/schemaenum/easypo
-C:\work\EasyPO.xsd">
+<purchase-order xmlns="http://xmlbeans.apache.org/samples/enumeration/schemaenum/easypo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlbeans.apache.org/samples/enumeration/schemaenum/easypo EasyPO.xsd">
 	<customer>
 		<name>Jan Kowalski</name>
 		<address>ul. Marszalkowska, Warszawa</address>
