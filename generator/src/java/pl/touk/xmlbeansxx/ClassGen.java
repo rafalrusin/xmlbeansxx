@@ -1859,12 +1859,14 @@ public class ClassGen {
 			if (s!=null) {
 				out.h.println(CUSTOM_CODE_STR);
 				out.h.print(s);
+				out.h.println(CUSTOM_CODE_END_STR);
 			}
 
 			s=in.getCppGap("preamble");
 			if (s!=null) {
 				out.cpp.println(CUSTOM_CODE_STR);
 				out.cpp.print(s);
+				out.cpp.println(CUSTOM_CODE_END_STR);
 			}
 		}
 
@@ -1915,7 +1917,25 @@ public class ClassGen {
 			out.cpp.println("static TypesExistence te;");
 			out.leaveNamespace();
 		}
+        
+        out.enterNamespace("");
 
+		{
+			//print ending from .xh and .xcpp
+			String s=in.getHGap("ending");
+			if (s!=null) {
+				out.h.println(CUSTOM_CODE_STR);
+				out.h.print(s);
+				out.h.println(CUSTOM_CODE_END_STR);
+			}
+
+			s=in.getCppGap("ending");
+			if (s!=null) {
+				out.cpp.println(CUSTOM_CODE_STR);
+				out.cpp.print(s);
+				out.cpp.println(CUSTOM_CODE_END_STR);
+			}
+		}
 		out.close();
 	}
 

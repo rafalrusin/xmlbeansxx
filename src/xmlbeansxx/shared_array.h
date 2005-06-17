@@ -76,7 +76,7 @@ namespace xmlbeansxx {
         std::vector<T> toVector() const {
             std::vector<T> v(p_size);
             for(int i=0;i<p_size;i++) {
-                v.push_back(a[i]);
+                v.push_back((*this)[i]);
             }
             return v;
         }
