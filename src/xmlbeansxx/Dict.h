@@ -33,9 +33,11 @@ DECLARE_PTR(std::string,StringPtr,constStringPtr)
 class XmlObject;
 DECLARE_PTR(XmlObject,XmlObjectPtr,constXmlObjectPtr)
 
+/**
+ * Represents dictionary element.
+ */
 template<class T>
 struct DictEl {
-    //std::string name;
     StoreString name;
     T value;
 
@@ -44,46 +46,77 @@ struct DictEl {
     name(name),value(value) {}
 };
 
-//slownik mapujacy u->v (v jest typu T), pamietajacy kolejnosc elementow
-//dziala tak, ze kasujac jakis element nie zwalniamy value, tylko wymazujemy;
-//name za to zwalniamy.
-//natomiast free() zwalnia name i value.
+/**
+ * This is xml attributes dictionary used by Contents.
+ */
 struct AttrDict {
     typedef std::string T;
     std::vector<DictEl<T> > contents;
 
 public:
+    /** @return number of elements in dictionary. */
     int size() const;
+    /** @return true if dictionary has no content. */
     bool hasEmptyContent() const;
+    /** @return NULL if element was not found otherwise it's value. */
     StringPtr find(std::string u) const;
+    /** @return number of elements given name. */
     int count(std::string u) const;
-    /** Duplicates u, but not v */
+    /** Appends specified element. */
     void add(std::string u,T v);
+    /** 
+     * Sets specified element at given position. 
+     * For attribute dictionary only position 0 is possible.
+     */
     void set(std::string u,int pos,T v);
+    /**
+     * Removes specified element.
+     */
     int del(std::string u);
+    /**
+     * Clears contents of dictionary.
+     */
     void free();
 };
 
-
+/**
+ * This is xml elements dicrionary used by Contents.
+ */
 struct ElemDict {
     typedef XmlObjectPtr T;
     std::vector<DictEl<T> > contents;
 
 public:
 
+    /** @return number of elements in dictionary. */
     int size() const;
+    /** @return true if dictionary has no content. */
     bool hasEmptyContent() const;
-    T find(std::string u,int nr) const;
+    /** @return NULL if element at specified index was not found otherwise it's value. */
+    T find(std::string u,int index) const;
+    /** @return number of elements given name. */
     int count(std::string u) const;
-    /** Duplicates u, but not v */
+    /** Appends specified element to end of list. */
     void add(std::string u,T v);
+    /** 
+     * Sets specified element at given position. If position is out of bounds, then adds some NULL elements.
+     */
     void set(std::string u,int pos,T v);
+    /**
+     * Removes all elements of specified name.
+     */
     int del(std::string u);
+    /**
+     * Removes element of given name at specified index (by cutting it off).
+     */
     void removeAt(std::string name,int index);
+    /**
+     * Clears contents of dictionary.
+     */
     void free();
 };
 }
 
 
-#endif //XMLBEANSPP_DICT_H_
+#endif //XMLBEANSXX_DICT_H_
 

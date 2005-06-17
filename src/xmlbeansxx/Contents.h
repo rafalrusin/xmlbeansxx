@@ -179,5 +179,5 @@ public:
 }
 
 
-#endif //XMLBEANSPP_CONTENTS_H_
+#endif //XMLBEANSXX_CONTENTS_H_
 

@@ -26,22 +26,42 @@
 
 namespace xmlbeansxx {
     
+    /** 
+     * Objects of this class represent qualified name, which contains namespace URI and localPart. Corresponds to javax.xml.namespace.QName class.
+     * TODO: implementation
+     */
     class QName {
     };
     typedef boost::shared_ptr<QName> QNamePtr;
 
+    /**
+     * Objects of this class represent some calendar time. Corresponds to java.util.Calendar class.
+     * TODO: implementation
+     */
     class Calendar {
     };
     typedef boost::shared_ptr<Calendar> CalendarPtr;
     
+    /** 
+     * Represents xml schema compatible Gregorian Date. Corresponds to org.apache.xmlbeans.GDate class.
+     * TODO: implementation
+     */
     class GDate {
     };
     typedef boost::shared_ptr<GDate> GDatePtr;
 
+    /**
+     * Represents list of Objects. Corresponds to java.util.List class.
+     * TODO: implementation
+     */
     class List {
     };
     typedef boost::shared_ptr<List> ListPtr;
 
+    /**
+     * Represents some object. Corresponds to java.lang.Object class.
+     * This is mock class for code generator.
+     */
     class Object {
         public:
         virtual std::string toString() const { return ""; }
