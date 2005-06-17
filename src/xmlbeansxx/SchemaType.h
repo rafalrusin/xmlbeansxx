@@ -56,13 +56,10 @@ public:
     /** Element properties map. */
     Map_String_SchemaPropertyPtr elements;
 
-    /** Function pointer for creating XmlObject of this SchemaType. */
-    CreateObjFn createFn;
-    
-    /** @deprecated Function pointer for creating array of XmlObjects of this SchemaType. */
-    CreateObjFn createArrayFn;
+    /** Functions for creating XmlObject of this SchemaType. */
+    CreateObjFn createFn,createArrayFn;
 
-    /** Name of a class in C++ corresponding to this SchemaType. */
+    /** Name of a class corresponding to this SchemaType. */
     std::string className;
     
     /** Local part of QName of this SchemaType. TODO: change it to xmlbeansxx::QName. */
@@ -72,43 +69,29 @@ public:
 
     /** @deprecated This is used to support xmlbeansxx::XmlArray serialization and deserialization. */
     std::string arrayXsdTypeName;
-    
     /** @deprecated This is used to support xmlbeansxx::XmlArray serialization and deserialization. */
     int arrayXsdNamespaceID;
     
-    /** True if contents of objects of this type should be strong type processed.  */
     bool processContents;
 
-    /** C++ corresponding class type info. */
     const std::type_info &classTypeInfo;
    
     enum CONTENT_TYPE {EMPTY_CONTENT,SIMPLE_CONTENT,ELEMENT_CONTENT,MIXED_CONTENT,NOT_COMPLEX_TYPE};
-    
-    /** Type of content for this SchemaType. */
     CONTENT_TYPE contentType;
     
+    //methods
     SchemaType(const std::type_info &classTypeInfo);
     
     XmlObjectPtr createSubObject(const std::string &name) const;
 
-    /** 
-     * Locates property of attribute of given name.
-     * @return NULL if not found.
-     */
     SchemaPropertyPtr findAttribute(const std::string &name) const;
-    
-    /**
-     * Locates property of element of given name. 
-     * @return NULL if not found.
-     */
     SchemaPropertyPtr findElement(const std::string &name) const;
 
-    /** @return type of content of this SchemaType. */
     CONTENT_TYPE getContentType() const;
 
     //schema facets
 
-    /** Precision of xs:decimals. -1 while not set. */
+    /** -1 while not set */
     int fractionDigits;
 };
 
