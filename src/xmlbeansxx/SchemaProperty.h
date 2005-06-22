@@ -31,7 +31,7 @@ typedef boost::shared_ptr<std::string> StringPtr;
 class SchemaType;
 
 /** 
- * Corresponds to org.apache.xmlbeans.Schemaproperty Java class. 
+ * Corresponds to org.apache.xmlbeans.SchemaProperty Java class. 
  * Contains information about a property of some SchemaType.
  */
 class SchemaProperty {
