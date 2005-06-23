@@ -70,7 +70,7 @@ public:
 };
 
 /**
- * Every generated class registers herself in this type system during static initialization. 
+ * Every generated class registers itself in this type system during static initialization. 
  */
 TypeSystem *globalTypeSystem();
 
