@@ -1,3 +1,7 @@
 /*! \mainpage
  *  \section Documentation
+ * xmlbeansxx is a port to C++ of Java XmlBeans. This is API documentation for xmlbeansxx.
+ *
+ *
+ * Copyright 2004-2005 TouK s.c.
  */
