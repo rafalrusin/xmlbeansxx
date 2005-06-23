@@ -35,7 +35,7 @@ namespace xmlbeansxx {
  * java_cast<ToType>(fromVariable)
  * is similar to Java expression:
  * (ToType) fromVariable
- * It throws xmlbeansxx::ClassCastException when cast fails.
+ * It throws xmlbeansxx::ClassCastException while cast fails.
  */
 template<class T2,class T>
 boost::shared_ptr<T2> java_cast(const boost::shared_ptr<T> &a) {
