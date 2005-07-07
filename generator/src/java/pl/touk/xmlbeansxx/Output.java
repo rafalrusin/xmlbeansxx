@@ -43,7 +43,7 @@ public class Output {
     int nsDepth = -2;
     
     public void splitCpp() {
-    	String cns=currentNamespace;
+    	String cns = currentNamespace;
     	enterNamespace("");
     	cpp.println("//--split--");
     	enterNamespace(cns);
@@ -66,7 +66,7 @@ public class Output {
             h.println();
             cpp.println();
             
-            currentNamespace=namespace;
+            currentNamespace = namespace;
         }
     }
 
