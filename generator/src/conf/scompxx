@@ -35,9 +35,11 @@ BIN=`dirname $basefile`
 
 ARG_XSD="$@"
 
+# write xsd file dependencies to xsd.txt
 rm -f xsd.txt
 if ! $BIN/xmlbeansxx-gen -Dincludes=xsd.txt $ARG_XSD; then exit 1; fi
 
+# generate C++ names file names based on XSDs
 COMP_XSD="`cat xsd.txt`"
 for i in $COMP_XSD; do
     COMP_H="$COMP_H `basename $i .xsd`.h"
@@ -124,8 +126,8 @@ lib_LTLIBRARIES = libxmltypes.la
 libxmltypes_la_LDFLAGS = -version-info 1:0:0 -lxmlbeansxx
 libxmltypes_la_SOURCES = \$(COMP_H) \$(COMP_CPP)
 
-\$(COMP_H) \$(COMP_CPP): $ARG_XSD
-	$BIN/xmlbeansxx-gen $ARG_XSD
+\$(COMP_H) \$(COMP_CPP): \$(COMP_XSD)
+	$BIN/xmlbeansxx-gen \$(COMP_XSD)
 
 MOSTLYCLEANFILES = \$(COMP_H) \$(COMP_CPP)
 
@@ -143,4 +145,4 @@ make && cat <<EOF
 # in order to install library into system
 ###########################################
 EOF
-
+ 
