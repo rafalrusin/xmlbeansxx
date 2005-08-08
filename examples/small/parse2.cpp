@@ -14,12 +14,18 @@ int main() {
     try {
         XmlParser p;
         //boost::shared_ptr<ContentDocument> root(new ContentDocument());
-        fstream in("c.xml",ios::in);
-        ContentDocumentPtr root(ContentDocument::Factory::parse(in));
+        fstream in("d.xml",ios::in);
+        //ContentDocumentPtr root(ContentDocument::Factory::parse(in));
+        ContentDocumentPtr root(ContentDocument::Factory::newInstance());
+        p.getXmlOptions()->setValidation(true);
+        p.loadGrammar("c.xsd");
+        p.parse(in, root.get());
+        /*
         cout<<"firstname:"<<root->getContent()->getEmployee()->getFirstname()<<"\n";
         cout<<"age:"<<root->getContent()->getEmployee()->getAgeAttr()<<"\n";	
         cout<<"firstname as xml:\n"<<root->getContent()->getEmployee()->xgetFirstname()->toString()<<"\n";
 		cout<<"serializing:\n";
+        */
         root->serialize(cout);
 		cout<<"\n";
     } catch (BeansException ex) {

@@ -33,16 +33,19 @@ DECLARE_PTR(std::string,StringPtr,constStringPtr)
 class XmlObject;
 DECLARE_PTR(XmlObject,XmlObjectPtr,constXmlObjectPtr)
 
+
+typedef StoreString DictNameType;
+
 /**
  * Represents dictionary element.
  */
 template<class T>
 struct DictEl {
-    StoreString name;
+    DictNameType name;
     T value;
 
     DictEl() {}
-    DictEl(std::string name,T value):
+    DictEl(const DictNameType &name,const T &value):
     name(name),value(value) {}
 };
 
@@ -59,20 +62,20 @@ public:
     /** @return true if dictionary has no content. */
     bool hasEmptyContent() const;
     /** @return NULL if element was not found otherwise it's value. */
-    StringPtr find(std::string u) const;
+    StringPtr find(const DictNameType &u) const;
     /** @return number of elements given name. */
-    int count(std::string u) const;
+    int count(const DictNameType &u) const;
     /** Appends specified element. */
-    void add(std::string u,T v);
+    void add(const DictNameType &u,const T &v);
     /** 
      * Sets specified element at given position. 
      * For attribute dictionary only position 0 is possible.
      */
-    void set(std::string u,int pos,T v);
+    void set(const DictNameType &u,int pos,const T &v);
     /**
      * Removes specified element.
      */
-    int del(std::string u);
+    int del(const DictNameType &u);
     /**
      * Clears contents of dictionary.
      */
@@ -93,23 +96,23 @@ public:
     /** @return true if dictionary has no content. */
     bool hasEmptyContent() const;
     /** @return NULL if element at specified index was not found otherwise it's value. */
-    T find(std::string u,int index) const;
+    T find(const DictNameType &u,int index) const;
     /** @return number of elements given name. */
-    int count(std::string u) const;
+    int count(const DictNameType &u) const;
     /** Appends specified element to end of list. */
-    void add(std::string u,T v);
+    void add(const DictNameType &u,const T &v);
     /** 
      * Sets specified element at given position. If position is out of bounds, then adds some NULL elements.
      */
-    void set(std::string u,int pos,T v);
+    void set(const DictNameType &u,int pos,const T &v);
     /**
      * Removes all elements of specified name.
      */
-    int del(std::string u);
+    int del(const DictNameType &u);
     /**
      * Removes element of given name at specified index (by cutting it off).
      */
-    void removeAt(std::string name,int index);
+    void removeAt(const DictNameType &u,int index);
     /**
      * Clears contents of dictionary.
      */

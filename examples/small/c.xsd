@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <xs:schema elementFormDefault="qualified" targetNamespace="http://mind.p4.com/mytest" xmlns="http://mind.p4.com/mytest" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<!--<xs:element name="content" type="xs:anyType"/>-->
 	<xs:element name="content" type="content-type"/>
 	<xs:complexType name="content-type">
 		<xs:sequence>

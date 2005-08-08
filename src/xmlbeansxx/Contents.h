@@ -67,10 +67,10 @@ public:
 	std::string getSimpleContent() const;
 
     /** Adds new attribute */
-    void appendAttr(const std::string name,const std::string value);
+    void appendAttr(const DictNameType &name,const std::string &value);
     
     /** Adds new element */
-    void appendElem(const std::string name,XmlObjectPtr value);
+    void appendElem(const DictNameType &name,const XmlObjectPtr &value);
 
     /** @return true while this contents don't have any attributes and elements */
     bool hasEmptyContent() const;
@@ -103,67 +103,67 @@ public:
     /**
      * This is called from serialize from XmlObject beeing Document type.
      */
-    void serializeDocument(std::ostream &o,XmlOptionsPtr options,const XmlObject *obj) const;
+    void serializeDocument(std::ostream &o,const XmlOptionsPtr &options,const XmlObject *obj) const;
 
     /**
      * Takes string value of given attribute. 
      * @return NULL while attribute doesn't exist
      */
-    StringPtr getAttr(std::string attrName) const;
+    StringPtr getAttr(const DictNameType &attrName) const;
     
     /**
      * Takes attribute from contents as XmlObject of proper type.
      */
-    XmlObjectPtr getAttrObject(const std::string &attrName, XmlObject *parent) const;
+    XmlObjectPtr getAttrObject(const DictNameType &attrName, XmlObject *parent) const;
     
     /** 
      * Creates only XmlObject of proper type with attrValue string content. 
      */
-    XmlObjectPtr getAttrObject2(const std::string &attrName, const std::string &attrValue, XmlObject *parent) const;
+    XmlObjectPtr getAttrObject2(const DictNameType &attrName, const std::string &attrValue, XmlObject *parent) const;
 
     /**
      * Sets specified attribute with value. Setting NULL value removes attribute.
      */
-    void setAttr(std::string elemName,StringPtr value);
+    void setAttr(const DictNameType &attrName,const StringPtr &value);
 
     /**
      * @return element of specified name (NULL if doesn't exist)
      */
-    XmlObjectPtr getElem(std::string elemName) const;
+    XmlObjectPtr getElem(const DictNameType &elemName) const;
 
     /**
      * Retrieves element of specified name at specified position.
      * If position is out of bounds, it returns NULL.
      */
-    XmlObjectPtr getElemAt(std::string elemName,int index) const;
+    XmlObjectPtr getElemAt(const DictNameType &elemName,int index) const;
 
     /** Gets specified element (creates one if there is NULL) */
-    XmlObjectPtr cgetElemAt(std::string elemName,int index,ObjectCreatorFn createFn,XmlObject *creator);
+    XmlObjectPtr cgetElemAt(const DictNameType &elemName,int index,ObjectCreatorFn createFn,XmlObject *creator);
     
     /**
      * Sets element of given name and value. NULL removes element.
      */
-    void setElem(std::string elemName,XmlObjectPtr value);
+    void setElem(const DictNameType &elemName,const XmlObjectPtr &value);
 
     /**
      * Sets element of given name at specified index. If index is out of bounds, then some NULL values are added. 
      */
-    void setElemAt(std::string elemName,int index,XmlObjectPtr value);
+    void setElemAt(const DictNameType &elemName,int index,const XmlObjectPtr &value);
 
     /** Removes element at specified index (by cutting it off). */
-    void removeElemAt(std::string elemName,int index);
+    void removeElemAt(const DictNameType &elemName,int index);
 
     /** Removes all elements of given name. */
-    void removeElems(std::string name);
+    void removeElems(const DictNameType &name);
 
     /** Counts number of elements of given name */
-    int countElems(std::string name) const;
+    int countElems(const DictNameType &name) const;
 
     /** @return array of elements of given name */
-    shared_array<XmlObjectPtr > getElemArray(std::string elemName) const;
+    shared_array<XmlObjectPtr > getElemArray(const DictNameType &elemName) const;
     
     /** Sets array of elements of given name. */
-    void setElemArray(std::string elemName,const shared_array<XmlObjectPtr > &value);
+    void setElemArray(const DictNameType &elemName,const shared_array<XmlObjectPtr > &value);
 
 private:
     void serializeAttrs(std::ostream &o) const;

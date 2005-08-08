@@ -867,7 +867,7 @@ public class ClassGen {
             //set
             genMethod("", "void", className(currentType), 
                       x + "set" + javaPropertyName(prop),
-                      userType + " value",
+                      "const " + userType + " &value",
                       convertFromGiven("value","v")
                       + "contents.setElem("	+ genPropName(prop) + ",v);");
         }
@@ -877,7 +877,7 @@ public class ClassGen {
             genMethod("", "void",
                       className(currentType),
                       x + "set" + javaPropertyName(prop)+ "Array",
-                      vuserType + " values",
+                      "const " + vuserType + " &values",
                       convertFromGivenArray("values","v")
                       + "contents.setElemArray("
                       + genPropName(prop)
@@ -889,7 +889,7 @@ public class ClassGen {
             genMethod("", "void",
                       className(currentType),
                       "dset" + javaPropertyName(prop)+ "Array",
-                      dvtype + " values",
+                      "const " + dvtype + " &values",
                       "contents.setElemArray("
                       + genPropName(prop)
                       + ",values->getArray());");
@@ -900,7 +900,7 @@ public class ClassGen {
             genMethod("", "void", 
                       className(currentType),
                       x + "add" + javaPropertyName(prop),
-                      userType + " value",
+                      "const " + userType + " &value",
                       convertFromGiven("value","v")
                       + "contents.appendElem("
                       + genPropName(prop) + ",v);"
@@ -911,7 +911,7 @@ public class ClassGen {
             //setArray
             genMethod("", "void", className(currentType), 
                       x + "set" + javaPropertyName(prop) + "Array",
-                      "int index, " + userType + " value",
+                      "int index, const " + userType + " &value",
                       convertFromGiven("value","v")
                       + "contents.setElemAt("
                       + genPropName(prop)
@@ -924,7 +924,7 @@ public class ClassGen {
             genMethod("", "void", 
                       className(currentType),
                       x + "set" + javaPropertyName(prop) + "Attr",
-                      userType + " value",
+                      "const " + userType + " &value",
                       convertFromGiven("value","v")
                       + "xmlbeansxx::StringPtr c;\n"
                       + "if (v!=NULL) c=xmlbeansxx::StringPtr(new std::string(v->getSimpleContent()));\n"
@@ -1512,11 +1512,11 @@ public class ClassGen {
                             + nsLinks.getVarName(st.getDocumentElementName()
                                                  .getNamespaceURI()) + "; }");
             out.h
-                .println("  virtual void serialize(std::ostream &out,xmlbeansxx::XmlOptionsPtr opts=xmlbeansxx::XmlOptionsPtr(new xmlbeansxx::XmlOptions())) const;");
+                .println("  virtual void serialize(std::ostream &out,const xmlbeansxx::XmlOptionsPtr &opts=xmlbeansxx::XmlOptionsPtr(new xmlbeansxx::XmlOptions())) const;");
             out.cpp
                 .println("void "
                          + className(st)
-                         + "::serialize(std::ostream &out,xmlbeansxx::XmlOptionsPtr opts) const {");
+                         + "::serialize(std::ostream &out,const xmlbeansxx::XmlOptionsPtr &opts) const {");
             out.cpp.println("  contents.serializeDocument(out,opts,this);");
             out.cpp.println("}");
         }

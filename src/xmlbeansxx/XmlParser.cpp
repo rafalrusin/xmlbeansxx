@@ -48,7 +48,7 @@ log4cxx::LoggerPtr MyHandler::log = log4cxx::Logger::getLogger(std::string("xmlb
 XERCES_CPP_NAMESPACE_USE
 
 InputSource *MyEntityResolver::resolveEntity(const XMLCh *publicId,const XMLCh *systemId) {
-    TRACER(log,"resolveEntity");
+    TRACER(log,"resolveEntity")
 
     Transcoder tr(ENCODING);
     std::string pub(tr.transcode(publicId));
@@ -62,7 +62,7 @@ MyHandler::MyHandler(XmlParser *p): p(p) {}
 void MyHandler::resetDocument() {}
 void MyHandler::startElement(const XMLCh* const oname, AttributeList& oatts) {
     std::string name(p->tr->transcode(oname));
-    TRACER2(log,std::string("startElement(")+string(name)+")");
+    TRACER2(log,std::string("startElement(")+string(name)+")")
     //cout<<"start el "<<name<<"\n";
     LocalAttributeList latts(oatts,p->tr.get());
     int latts_size=latts.getLength();
@@ -185,7 +185,7 @@ void MyHandler::startElement(const XMLCh* const oname, AttributeList& oatts) {
     }
 }
 void MyHandler::characters(const XMLCh* const chars, const unsigned int length) {
-    TRACER2(log,"characters");
+    TRACER2(log,"characters")
     boost::scoped_array<XMLCh> chars2(new XMLCh[length+1]);
     FOR(i,(int)length) chars2[i]=chars[i];
     chars2[length]=0;
@@ -193,7 +193,7 @@ void MyHandler::characters(const XMLCh* const chars, const unsigned int length) 
     p->nodesStack.top().str+=s;
 }
 void MyHandler::endElement(const XMLCh *const name) {
-    TRACER2(log,"endElement");
+    TRACER2(log,"endElement")
     //LOG4CXX_DEBUG2(log,std::string("MyHandler::endElement - start"));
     XmlParser::StackEl e=p->nodesStack.top();
     e.obj->setSimpleContent(e.str);
@@ -230,7 +230,7 @@ XmlParser::XmlParser():tr(new Transcoder(ENCODING)),opts(new XmlOptions()) {
     init();
 }
 
-XmlParser::XmlParser(boost::shared_ptr<XmlOptions> opts):tr(new Transcoder(ENCODING)),opts(opts) {
+XmlParser::XmlParser(const boost::shared_ptr<XmlOptions> &opts):tr(new Transcoder(ENCODING)),opts(opts) {
     init();
 }
 
@@ -289,7 +289,7 @@ void XmlParser::updateOptions() {
 }
 
 void XmlParser::parse(istream &in,XmlObject *root) {
-    TRACER(log,"parse");
+    TRACER(log,"parse")
     LOG4CXX_INFO(log,std::string("XmlParser::parse() - start"));
     //SYNC(*(root->mutex()))
 #ifdef BOOST_HAS_THREADS

@@ -37,7 +37,7 @@ bool AttrDict::hasEmptyContent() const {
     return true;
 }
 
-StringPtr AttrDict::find(std::string u) const {
+StringPtr AttrDict::find(const DictNameType &u) const {
     FOREACH(it,contents) {
         if (it->name==u) {
             return StringPtr(new std::string(it->value));
@@ -46,7 +46,7 @@ StringPtr AttrDict::find(std::string u) const {
     return StringPtr();
 }
 
-int AttrDict::count(std::string u) const {
+int AttrDict::count(const DictNameType &u) const {
     int ile=0;
     FOREACH(it,contents) {
         if (it->name==u) {
@@ -56,12 +56,11 @@ int AttrDict::count(std::string u) const {
     return ile;
 }
 
-/** Duplicates u and v */
-void AttrDict::add(std::string u,AttrDict::T v) {
+void AttrDict::add(const DictNameType &u,const AttrDict::T &v) {
     contents.push_back(DictEl<AttrDict::T>(u,v));
 }
 
-void AttrDict::set(std::string u,int pos,AttrDict::T v) {
+void AttrDict::set(const DictNameType &u,int pos,const AttrDict::T &v) {
     FOREACH(it,contents) {
         if (it->name==u) {
             if (pos==0) {
@@ -71,14 +70,14 @@ void AttrDict::set(std::string u,int pos,AttrDict::T v) {
             pos--;
         }
     }
-    FOR(i,pos) add
-        (u,(AttrDict::T)NULL);
-    add
-        (u,v);
+    FOR(i,pos) {
+        add(u,(AttrDict::T)NULL);
+    }
+    add(u,v);
     //throw new XmlException("Trying to set value at non existing position");
 }
 
-int AttrDict::del(std::string u) {
+int AttrDict::del(const DictNameType &u) {
     int p=0,p2=0;
     int ile=0;
     while (p<int(contents.size())) {
@@ -124,7 +123,7 @@ bool ElemDict::hasEmptyContent() const {
     return true;
 }
 
-ElemDict::T ElemDict::find(std::string u,int nr) const {
+ElemDict::T ElemDict::find(const DictNameType &u,int nr) const {
     FOREACH(it,contents) {
         if (it->name==u) {
             nr--;
@@ -135,7 +134,7 @@ ElemDict::T ElemDict::find(std::string u,int nr) const {
     return ElemDict::T();
 }
 
-int ElemDict::count(std::string u) const {
+int ElemDict::count(const DictNameType &u) const {
     int ile=0;
     FOREACH(it,contents) {
         if (it->name==u) {
@@ -146,13 +145,12 @@ int ElemDict::count(std::string u) const {
 }
 
 /** Duplicates u, but not v */
-void ElemDict::add(std::string u,ElemDict::T v) {
+void ElemDict::add(const DictNameType &u,const ElemDict::T &v) {
     contents.push_back(DictEl<ElemDict::T>(u,v));
     //logger.debug("ElemDict::add - %s",v->className());
 }
 
-void ElemDict::set
-    (std::string u,int pos,ElemDict::T v) {
+void ElemDict::set(const DictNameType &u,int pos,const ElemDict::T &v) {
     FOREACH(it,contents) {
         if (it->name==u) {
             if (pos==0) {
@@ -162,21 +160,20 @@ void ElemDict::set
             pos--;
         }
     }
-    FOR(i,pos) add
-        (u,ElemDict::T());
-    add
-        (u,v);
+    FOR(i,pos) {
+        add(u,ElemDict::T());
+    }
+    add(u,v);
     //throw new XmlException("Trying to set value at non existing position");
 }
 
-int ElemDict::del(std::string u) {
+int ElemDict::del(const DictNameType &u) {
     int p=0,p2=0;
     int ile=0;
     while (p<int(contents.size())) {
         if (p!=p2)
             contents[p2]=contents[p];
         if (contents[p].name==u) {
-            //delete contents[p].name;
             contents[p].name=std::string();
             contents[p].value.reset();
             ile++;
@@ -191,16 +188,10 @@ int ElemDict::del(std::string u) {
 }
 
 void ElemDict::free() {
-    /*
-    FOREACH(it,contents) {
-        it->value.reset();
-        //delete it->name;
-        it->name=NULL;
-    }*/
     contents.clear();
 }
 
-void ElemDict::removeAt(std::string name,int index) {
+void ElemDict::removeAt(const DictNameType &name,int index) {
     FOREACH(it,contents) {
         if (it->name==name) {
             index--;

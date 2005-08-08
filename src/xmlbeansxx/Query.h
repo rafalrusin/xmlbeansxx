@@ -61,8 +61,8 @@ class Operator {
 class QueryNode {
     static log4cxx::LoggerPtr log;
     public:
-    virtual bool getBooleanValue(XmlObjectPtr object);
-    virtual std::vector<std::string> getValue(XmlObjectPtr object);
+    virtual bool getBooleanValue(const XmlObjectPtr &object);
+    virtual std::vector<std::string> getValue(const XmlObjectPtr &object);
     virtual ~QueryNode();
 };
 
@@ -72,9 +72,9 @@ class QueryExpr: public QueryNode {
     QueryNodePtr a,b; 
     int oper;
     public:
-    QueryExpr(QueryNodePtr a,int oper,QueryNodePtr b);
-    virtual bool getBooleanValue(XmlObjectPtr object);
-    virtual std::vector<std::string> getValue(XmlObjectPtr object);
+    QueryExpr(const QueryNodePtr &a,int oper,const QueryNodePtr &b);
+    virtual bool getBooleanValue(const XmlObjectPtr &object);
+    virtual std::vector<std::string> getValue(const XmlObjectPtr &object);
 };
 
 class QueryString: public QueryNode {
@@ -84,7 +84,7 @@ class QueryString: public QueryNode {
     
     public:
     QueryString(std::string str);
-    virtual std::vector<std::string> getValue(XmlObjectPtr object);
+    virtual std::vector<std::string> getValue(const XmlObjectPtr &object);
 };
 
 class QueryAttribute: public QueryNode {
@@ -93,7 +93,7 @@ class QueryAttribute: public QueryNode {
     std::string attrName;
     public:
     QueryAttribute(std::string attrName);
-    virtual std::vector<std::string> getValue(XmlObjectPtr object);
+    virtual std::vector<std::string> getValue(const XmlObjectPtr &object);
 };
 
 class QueryElement: public QueryNode {
@@ -102,8 +102,8 @@ class QueryElement: public QueryNode {
     std::string elemName;
     QueryNodePtr next;
     public:
-    QueryElement(std::string elemName,QueryNodePtr next);
-    virtual std::vector<std::string> getValue(XmlObjectPtr object);
+    QueryElement(std::string elemName,const QueryNodePtr &next);
+    virtual std::vector<std::string> getValue(const XmlObjectPtr &object);
 };
 
 }

@@ -87,7 +87,7 @@ private:
 
 public:
     XmlParser();
-    XmlParser(boost::shared_ptr<XmlOptions> opts);
+    XmlParser(const boost::shared_ptr<XmlOptions> &opts);
     virtual ~XmlParser();
 
     /**
@@ -100,7 +100,7 @@ public:
     boost::shared_ptr<XmlOptions> getXmlOptions() const {
         return opts;
     }
-    void setXmlOptions(boost::shared_ptr<XmlOptions> options) {
+    void setXmlOptions(const boost::shared_ptr<XmlOptions> &options) {
         opts=options;
     }
 

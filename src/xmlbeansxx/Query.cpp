@@ -22,11 +22,16 @@
 #include "BoostAssert.h"
 
 
+//Turn on tracing
+//#define TRACER2 TRACER
+
+//Turn off tracing
+#define TRACER2(log,msg) 
 
 namespace xmlbeansxx {
 
 log4cxx::LoggerPtr QueryExpr::log = log4cxx::Logger::getLogger("xmlbeansxx.QueryExpr");
-QueryExpr::QueryExpr(QueryNodePtr a,int oper,QueryNodePtr b):a(a),b(b),oper(oper) {}
+QueryExpr::QueryExpr(const QueryNodePtr &a,int oper,const QueryNodePtr &b):a(a),b(b),oper(oper) {}
 
 log4cxx::LoggerPtr QueryNode::log = log4cxx::Logger::getLogger("xmlbeansxx.QueryNode");
 
@@ -37,7 +42,7 @@ log4cxx::LoggerPtr QueryAttribute::log = log4cxx::Logger::getLogger("xmlbeansxx.
 QueryAttribute::QueryAttribute(std::string attrName): attrName(attrName) {}
 
 log4cxx::LoggerPtr QueryElement::log = log4cxx::Logger::getLogger("xmlbeansxx.QueryElement");
-QueryElement::QueryElement(std::string elemName,QueryNodePtr next): elemName(elemName),next(next) {}
+QueryElement::QueryElement(std::string elemName,const QueryNodePtr &next): elemName(elemName),next(next) {}
 
 QueryNode::~QueryNode() {}
 
@@ -49,20 +54,20 @@ namespace {
     }
 }
 
-bool QueryNode::getBooleanValue(XmlObjectPtr object) {
-    TRACER(log,"getBooleanValue");
+bool QueryNode::getBooleanValue(const XmlObjectPtr &object) {
+    TRACER2(log,"getBooleanValue")
     return getValue(object).size()>0;
 }
 
-std::vector<std::string> QueryNode::getValue(XmlObjectPtr object) {
-    TRACER(log,"getValue");
+std::vector<std::string> QueryNode::getValue(const XmlObjectPtr &object) {
+    TRACER2(log,"getValue")
     //Not possible
     BOOST_ASSERT(false);
     return std::vector<std::string>();
 }
 
-bool QueryExpr::getBooleanValue(XmlObjectPtr object) {
-    TRACER(log,"getBooleanValue");
+bool QueryExpr::getBooleanValue(const XmlObjectPtr &object) {
+    TRACER2(log,"getBooleanValue")
     if (oper==Operator::AND) {
         return a->getBooleanValue(object) && b->getBooleanValue(object);
     } else if (oper==Operator::OR) {
@@ -92,19 +97,19 @@ bool QueryExpr::getBooleanValue(XmlObjectPtr object) {
     }
 }
 
-std::vector<std::string> QueryExpr::getValue(XmlObjectPtr object) {
-    TRACER(log,"getValue");
+std::vector<std::string> QueryExpr::getValue(const XmlObjectPtr &object) {
+    TRACER2(log,"getValue")
     return singleString(XmlBoolean(getBooleanValue(object)).getCanonicalContent());
 }
 
 
-std::vector<std::string> QueryString::getValue(XmlObjectPtr object) {
-    TRACER(log,"getValue");
+std::vector<std::string> QueryString::getValue(const XmlObjectPtr &object) {
+    TRACER2(log,"getValue")
     return singleString(str);
 }
 
-std::vector<std::string> QueryAttribute::getValue(XmlObjectPtr object) {
-    TRACER(log,"getValue");
+std::vector<std::string> QueryAttribute::getValue(const XmlObjectPtr &object) {
+    TRACER2(log,"getValue")
     XmlObjectPtr a=object->contents.getAttrObject(attrName,object.get());
 
     std::vector<std::string> r;
@@ -114,7 +119,7 @@ std::vector<std::string> QueryAttribute::getValue(XmlObjectPtr object) {
     return r;
 }
 
-std::vector<std::string> QueryElement::getValue(XmlObjectPtr object) {
+std::vector<std::string> QueryElement::getValue(const XmlObjectPtr &object) {
     std::vector<std::string> r;
     shared_array<XmlObjectPtr> v(object->contents.getElemArray(elemName));
     FOREACH(it,v) {

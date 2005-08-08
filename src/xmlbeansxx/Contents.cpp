@@ -37,6 +37,17 @@ using namespace std;
 #define SYNC(mutex)
 #endif
 
+
+/*
+//Disable XmlObject synchronization
+#undef SYNC
+#define SYNC(mutex)
+*/
+
+//Disable tracing
+#undef TRACER
+#define TRACER(logger, msg)
+
 namespace xmlbeansxx {
 
 log4cxx::LoggerPtr Contents::log = log4cxx::Logger::getLogger(std::string("xmlbeansxx.Contents"));
@@ -68,12 +79,13 @@ bool Contents::hasEmptyContent() const {
 }
 
 void Contents::simpleCopyFrom(const Contents &orig) {
-    TRACER(log,std::string("simpleCopyFrom"));
+    TRACER(log,std::string("simpleCopyFrom"))
     SYNC(mutex)
+/*
 #ifdef BOOST_HAS_THREADS
     boost::detail::thread::scoped_lock<boost::recursive_mutex> lock2(orig.mutex);
 #endif
-
+*/
     FOREACH(it,orig.elems.contents) {
         elems.add(it->name,it->value);
     }
@@ -85,9 +97,11 @@ void Contents::simpleCopyFrom(const Contents &orig) {
 
 void Contents::copyFrom(const Contents &obj) {
     SYNC(mutex)
+/*
 #ifdef BOOST_HAS_THREADS
     boost::detail::thread::scoped_lock<boost::recursive_mutex> lock2(obj.mutex);
 #endif
+*/
     FOREACH(it,obj.elems.contents) {
         XmlObjectPtr o=it->value;
         if (o!=NULL)
@@ -125,7 +139,7 @@ struct three {
     }
 };
     
-bool shallPrintXsiType(const SchemaType *xsdDefined,XmlObjectPtr obj) {
+bool shallPrintXsiType(const SchemaType *xsdDefined,const XmlObjectPtr &obj) {
     static XmlObjectPtr src=XmlObject::Factory::newInstance();
     return obj->getSchemaType()->classTypeInfo != src->getSchemaType()->classTypeInfo 
         && obj->getSchemaType()->classTypeInfo != xsdDefined->classTypeInfo;
@@ -134,7 +148,7 @@ bool shallPrintXsiType(const SchemaType *xsdDefined,XmlObjectPtr obj) {
 
 void Contents::serializeElems(int emptyNsID,ostream &o,const std::map<std::string,SchemaPropertyPtr> *order) const {
     SYNC(mutex)
-    TRACER(log,"serializeElems");
+    TRACER(log,"serializeElems")
     //logger.debug("Contents::serializeElems - order=%p, elements:",order);
     //--
     if (order!=NULL) {
@@ -185,7 +199,7 @@ void Contents::serializeElems(int emptyNsID,ostream &o,const std::map<std::strin
 }
 
 void Contents::serialize2(int emptyNsID,bool printXsiType,std::string elemName,ostream &o,const XmlObject *obj) const {
-    TRACER(log,"serialize2");
+    TRACER(log,"serialize2")
     SYNC(mutex)
 
     int ans=obj->getSchemaType()->arrayXsdNamespaceID;
@@ -313,8 +327,8 @@ void Contents::free() {
     //logger->debug(std::string("Contents::free() - finish"));
 }
 
-void Contents::serializeDocument(ostream &o,XmlOptionsPtr options,const XmlObject *obj) const {
-    TRACER(log,"serializeDocument");
+void Contents::serializeDocument(ostream &o,const XmlOptionsPtr &options,const XmlObject *obj) const {
+    TRACER(log,"serializeDocument")
     //XmlContextPtr xmlContext(new XmlContext());
     SYNC(mutex)
 
@@ -354,7 +368,7 @@ void Contents::serializeDocument(ostream &o,XmlOptionsPtr options,const XmlObjec
     o<<"\n";
 }
 
-StringPtr Contents::getAttr(std::string elemName) const {
+StringPtr Contents::getAttr(const DictNameType &elemName) const {
     SYNC(mutex)
     return attrs.find(elemName);
     /*
@@ -366,14 +380,14 @@ StringPtr Contents::getAttr(std::string elemName) const {
     */
 }
 
-XmlObjectPtr Contents::getAttrObject(const std::string &attrName, XmlObject *parent) const {
+XmlObjectPtr Contents::getAttrObject(const DictNameType &attrName, XmlObject *parent) const {
     SYNC(mutex)
     StringPtr v=attrs.find(attrName);
     if (v==NULL) return XmlObjectPtr();
     else return getAttrObject2(attrName,*v,parent);
 }
 
-XmlObjectPtr Contents::getAttrObject2(const std::string &attrName, const std::string &attrValue, XmlObject *parent) const {
+XmlObjectPtr Contents::getAttrObject2(const DictNameType &attrName, const std::string &attrValue, XmlObject *parent) const {
     XmlObjectPtr r;
     SchemaPropertyPtr prop=parent->getSchemaType()->findAttribute(attrName);
     if (prop!=NULL) {
@@ -385,26 +399,26 @@ XmlObjectPtr Contents::getAttrObject2(const std::string &attrName, const std::st
     return r;
 }
 
-void Contents::setAttr(std::string elemName,StringPtr value) {
+void Contents::setAttr(const DictNameType &attrName,const StringPtr &value) {
     SYNC(mutex)
-    attrs.del(elemName);
+    attrs.del(attrName);
     //cout<<"\n!adding "<<elemName<<"->"<<value<<"\n";
     if (value!=NULL)
-        attrs.add(elemName,*value);
+        attrs.add(attrName,*value);
 }
 
-XmlObjectPtr Contents::getElem(std::string elemName) const {
+XmlObjectPtr Contents::getElem(const DictNameType &elemName) const {
     SYNC(mutex)
     return elems.find(elemName,0);
 }
 
-XmlObjectPtr Contents::getElemAt(std::string elemName,int index) const {
+XmlObjectPtr Contents::getElemAt(const DictNameType &elemName,int index) const {
     SYNC(mutex)
     return elems.find(elemName,index);
 }
 
-XmlObjectPtr Contents::cgetElemAt(std::string elemName,int index,ObjectCreatorFn createFn,XmlObject *creator) {
-    TRACER(log,"cgetElemAt");
+XmlObjectPtr Contents::cgetElemAt(const DictNameType &elemName,int index,ObjectCreatorFn createFn,XmlObject *creator) {
+    TRACER(log,"cgetElemAt")
 
     XmlObjectPtr e(getElemAt(elemName,index));
     if (e!=NULL)
@@ -423,7 +437,7 @@ XmlObjectPtr Contents::cgetElemAt(std::string elemName,int index,ObjectCreatorFn
 
 /*
 XmlObjectPtr Contents::cgetElemAt(std::string elemName,int index,int namespaceID,std::string typeName,XmlObject *creator) {
-    TRACER(logger,"Contents::cgetElemAt()");
+    TRACER(logger,"Contents::cgetElemAt()")
     VAL(e,getElemAt(elemName,index));
     if (e!=NULL)
         return e;
@@ -437,31 +451,31 @@ XmlObjectPtr Contents::cgetElemAt(std::string elemName,int index,int namespaceID
     return e;
 }*/
 
-void Contents::setElem(std::string elemName,XmlObjectPtr value) {
+void Contents::setElem(const DictNameType &elemName,const XmlObjectPtr &value) {
     SYNC(mutex)
     elems.del(elemName);
     if (value!=NULL)
         elems.add(elemName,value);
 }
 
-void Contents::setElemAt(std::string elemName,int index,XmlObjectPtr value) {
+void Contents::setElemAt(const DictNameType &elemName,int index,const XmlObjectPtr &value) {
     SYNC(mutex)
     elems.set(elemName,index,value);
 }
 
-void Contents::removeElemAt(std::string elemName,int index) {
+void Contents::removeElemAt(const DictNameType &elemName,int index) {
     SYNC(mutex)
     elems.removeAt(elemName,index);
     
 }
 
 
-void Contents::removeElems(std::string name) {
+void Contents::removeElems(const DictNameType &name) {
     SYNC(mutex)
     elems.del(name);
 }
 
-int Contents::countElems(std::string name) const {
+int Contents::countElems(const DictNameType &name) const {
     SYNC(mutex)
     return elems.count(name);
 }
@@ -484,17 +498,17 @@ vector<pair<string,string> > Contents::getAttrs() const {
     return v;
 }
 
-void Contents::appendAttr(std::string name,std::string value) {
+void Contents::appendAttr(const DictNameType &name,const std::string &value) {
     SYNC(mutex)
     attrs.add(name,value);
 }
 
-void Contents::appendElem(std::string name,XmlObjectPtr value) {
+void Contents::appendElem(const DictNameType &name,const XmlObjectPtr &value) {
     SYNC(mutex)
     elems.add(name,value);
 }
 
-shared_array<XmlObjectPtr > Contents::getElemArray(std::string elemName) const {
+shared_array<XmlObjectPtr > Contents::getElemArray(const DictNameType &elemName) const {
     SYNC(mutex)
     std::vector<XmlObjectPtr > r;
     FOREACH(it,elems.contents) {
@@ -505,7 +519,7 @@ shared_array<XmlObjectPtr > Contents::getElemArray(std::string elemName) const {
     return toSharedArray(r);
 }
 
-void Contents::setElemArray(std::string elemName,const shared_array<XmlObjectPtr > &value) {
+void Contents::setElemArray(const DictNameType &elemName,const shared_array<XmlObjectPtr > &value) {
     SYNC(mutex)
     elems.del(elemName);
     for (int i=0;i<value.size();i++) {

@@ -30,6 +30,12 @@
 #include "Tracer.h"
 
 
+//Enable tracing methods
+//#define TRACER2 TRACER
+
+//Disable tracing methods
+#define TRACER2(log,msg)
+
 
 namespace xmlbeansxx {
 std::string istreamToString(std::istream &in) {
@@ -80,8 +86,8 @@ bool XmlObject::setAnyElement(std::string elementName,std::string anyContent) {
     return true;
 }
 
-void XmlObject::serialize(std::ostream &o,XmlOptionsPtr options) const {
-    TRACER(log,"serialize");
+void XmlObject::serialize(std::ostream &o,const XmlOptionsPtr &options) const {
+    TRACER(log,"serialize")
 
     if (options->getPrintXmlDeclaration())
         o<<"<?xml version='1.0' encoding='UTF-8'?>\n";
@@ -101,7 +107,7 @@ void XmlObject::serialize(std::ostream &o,XmlOptionsPtr options) const {
     */
 }
 
-std::string XmlObject::toString(XmlOptionsPtr options) const {
+std::string XmlObject::toString(const XmlOptionsPtr &options) const {
     std::ostringstream ss;
     serialize(ss,options);
     return ss.str();
@@ -143,8 +149,8 @@ std::string XmlObject::getCanonicalContent() const {
     return getSimpleContent();
 }
 
-XmlObjectPtr XmlObject::query(std::string elementName,QueryNodePtr queryExpr) const {
-    TRACER(log,"query");
+XmlObjectPtr XmlObject::query(std::string elementName,const QueryNodePtr &queryExpr) const {
+    TRACER2(log,"query")
     shared_array<XmlObjectPtr> elems=contents.getElemArray(elementName);
     
     FOREACH(it,elems) {
@@ -157,8 +163,8 @@ XmlObjectPtr XmlObject::query(std::string elementName,QueryNodePtr queryExpr) co
     return XmlObjectPtr();
 }
 
-XmlObjectPtr XmlObject::cquery(std::string elementName,QueryNodePtr queryExpr,ObjectCreatorFn createFn) {
-    TRACER(log,"cquery");
+XmlObjectPtr XmlObject::cquery(std::string elementName,const QueryNodePtr &queryExpr,ObjectCreatorFn createFn) {
+    TRACER2(log,"cquery")
     
     XmlObjectPtr r=query(elementName,queryExpr);
     if (r==NULL) {
@@ -212,7 +218,7 @@ void XmlAnySimpleType::setStringValue(const std::string &v) {
 log4cxx::LoggerPtr XmlBoolean::log = log4cxx::Logger::getLogger(std::string("xmlbeansxx.XmlBoolean"));
 
 bool XmlBoolean::getBooleanValue() const {
-    TRACER(log,"getBooleanValue");
+    TRACER2(log,"getBooleanValue")
     LOG4CXX_DEBUG(log,"value:"+contents.getSimpleContent());
     bool boolVal;
     if (contents.getSimpleContent()=="0") {
@@ -281,7 +287,7 @@ XmlString XmlString::substring(int beginIndex) const {
 }
 
 XmlString XmlString::substring(int beginIndex,int endIndex) const {
-    TRACER(log,"substring");
+    TRACER2(log,"substring")
     std::string s(getSimpleContent());
     if (beginIndex<0) {
         beginIndex+=s.size();
@@ -328,7 +334,7 @@ XmlInteger::operator mpz_class() const {
 log4cxx::LoggerPtr XmlDecimal::log = log4cxx::Logger::getLogger(std::string("xmlbeansxx.XmlDecimal"));
 
 mpf_class XmlDecimal::getMpfValue() const {
-    TRACER(log,"getMpfValue");
+    TRACER2(log,"getMpfValue")
     std::string v=TextUtils::collapse(contents.getSimpleContent());
     if (!TextUtils::checkDecimal(v)) 
         throw XmlIllegalValueException("xs:decimal",v);
@@ -345,7 +351,7 @@ void XmlDecimal::setMpfValue(const mpf_class &v) {
 }
 
 mpz_class XmlDecimal::getMpzValue() const {
-    TRACER(log,"getMpzValue");
+    TRACER2(log,"getMpzValue")
     std::string v=TextUtils::collapse(contents.getSimpleContent());
     if (!TextUtils::checkInteger(v)) 
         throw XmlIllegalValueException("xs:integer",v);
@@ -465,7 +471,7 @@ CalendarPtr XmlDateTime::getCalendarValue() const {
     return CalendarPtr();
 }
 
-void XmlDateTime::setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v) {
+void XmlDateTime::setCalendarValue(const boost::shared_ptr<xmlbeansxx::Calendar> &v) {
     throw NotImplementedException("XmlDateTime::getCalendarValue");
 }
 
@@ -496,7 +502,7 @@ CalendarPtr XmlTime::getCalendarValue() const {
     return CalendarPtr();
 }
 
-void XmlTime::setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v) {
+void XmlTime::setCalendarValue(const boost::shared_ptr<xmlbeansxx::Calendar> &v) {
     throw NotImplementedException("XmlTime::setCalendarValue");
 }
 
@@ -539,7 +545,7 @@ CalendarPtr XmlDate::getCalendarValue() const {
     return CalendarPtr();
 }
 
-void XmlDate::setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v) {
+void XmlDate::setCalendarValue(const boost::shared_ptr<xmlbeansxx::Calendar> &v) {
     throw NotImplementedException("XmlDate::setCalendarValue");
 }
 
@@ -557,7 +563,7 @@ boost::shared_ptr<xmlbeansxx::Calendar> XmlGDay::getCalendarValue() const {
     return boost::shared_ptr<xmlbeansxx::Calendar>();
 }
 
-void XmlGDay::setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v) {
+void XmlGDay::setCalendarValue(const boost::shared_ptr<xmlbeansxx::Calendar> &v) {
     throw NotImplementedException("XmlGDay::setCalendarValue");
 }
     
@@ -567,7 +573,7 @@ boost::shared_ptr<xmlbeansxx::Calendar> XmlGMonth::getCalendarValue() const {
     return boost::shared_ptr<xmlbeansxx::Calendar>();
 }
 
-void XmlGMonth::setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v) {
+void XmlGMonth::setCalendarValue(const boost::shared_ptr<xmlbeansxx::Calendar> &v) {
     throw NotImplementedException("XmlGMonth::setCalendarValue");
 }
     
@@ -577,7 +583,7 @@ boost::shared_ptr<xmlbeansxx::Calendar> XmlGMonthDay::getCalendarValue() const {
     return boost::shared_ptr<xmlbeansxx::Calendar>();
 }
 
-void XmlGMonthDay::setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v) {
+void XmlGMonthDay::setCalendarValue(const boost::shared_ptr<xmlbeansxx::Calendar> &v) {
     throw NotImplementedException("XmlGMonthDay::getCalendarValue");
 }
     
@@ -587,7 +593,7 @@ boost::shared_ptr<xmlbeansxx::Calendar> XmlGYear::getCalendarValue() const {
     return boost::shared_ptr<xmlbeansxx::Calendar>();
 }
 
-void XmlGYear::setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v) {
+void XmlGYear::setCalendarValue(const boost::shared_ptr<xmlbeansxx::Calendar> &v) {
     throw NotImplementedException("XmlGYear::getCalendarValue");
 }
     
@@ -597,7 +603,7 @@ boost::shared_ptr<xmlbeansxx::Calendar> XmlGYearMonth::getCalendarValue() const 
     return boost::shared_ptr<xmlbeansxx::Calendar>();
 }
 
-void XmlGYearMonth::setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v) {
+void XmlGYearMonth::setCalendarValue(const boost::shared_ptr<xmlbeansxx::Calendar> &v) {
     throw NotImplementedException("XmlGYearMonth::getCalendarValue");
 }
     
@@ -628,13 +634,13 @@ boost::shared_ptr<xmlbeansxx::QName> XmlQName::getQNameValue() const {
     return boost::shared_ptr<xmlbeansxx::QName>();
 }
 
-void XmlQName::setQNameValue(boost::shared_ptr<xmlbeansxx::QName> v) {
+void XmlQName::setQNameValue(const boost::shared_ptr<xmlbeansxx::QName> &v) {
     throw NotImplementedException("XmlQName::getQNameValue");
 }
 
 %%class xmlbeansxx::XmlFloat
 float XmlFloat::getFloatValue() const {
-  TRACER(log,"getFloatValue");
+  TRACER2(log,"getFloatValue")
   LOG4CXX_DEBUG(log,"value:"+contents.getSimpleContent());
   std::istringstream iss(contents.getSimpleContent());
   float floatVal;
@@ -654,7 +660,7 @@ void XmlFloat::setFloatValue(float v) {
 
 %%class xmlbeansxx::XmlDouble
 double XmlDouble::getDoubleValue() const {
-  TRACER(log,"getDoubleValue");
+  TRACER2(log,"getDoubleValue")
   LOG4CXX_DEBUG(log,"value:"+contents.getSimpleContent());
   std::istringstream iss(contents.getSimpleContent());
   double doubleVal;

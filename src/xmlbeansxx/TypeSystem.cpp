@@ -47,7 +47,7 @@ TypeSystem::TypeSystem(): n_namespaces(0) {
 }
 
 XmlObjectPtr TypeSystem::createByName(const std::string &typeName,int namespace_nr) {
-    TRACER(log,"createByName");
+    TRACER(log,"createByName")
     CreateObjFn f=typeCreators[pair<int,string>(namespace_nr,typeName)]->createFn;
     if (f==NULL) {
         LOG4CXX_DEBUG(log,std::string("typeName:")+typeName+std::string(" returning NULL pointer"));
@@ -59,7 +59,7 @@ XmlObjectPtr TypeSystem::createByName(const std::string &typeName,int namespace_
 }
 
 XmlObjectPtr TypeSystem::createArrayByName(const std::string &typeName,int namespace_nr) {
-    TRACER(log,"createArrayByName");
+    TRACER(log,"createArrayByName")
     CreateObjFn f=typeCreators[pair<int,string>(namespace_nr,typeName)]->createArrayFn;
     if (f==NULL) {
         LOG4CXX_DEBUG(log,std::string("typeName:")+typeName+std::string(" returning NULL pointer"));

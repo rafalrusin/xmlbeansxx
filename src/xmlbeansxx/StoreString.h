@@ -114,7 +114,7 @@ private:
     unsigned long buf;
     inline bool isStored() const;
 
-    void construct(const std::string &str);
+    void construct(const char *str);
     static StringStorage *getStorage();
     inline void copyFrom(const StoreString &from);
 
@@ -122,6 +122,7 @@ public:
     StoreString();
     StoreString(const StoreString &from);
     StoreString(const std::string &str);
+    StoreString(const char *str);
     ~StoreString();
     inline const char *c_str() const;
     inline unsigned int hashCode() const;

@@ -17,21 +17,11 @@
 #ifndef _XMLBEANSXX_TRACER_H_
 #define _XMLBEANSXX_TRACER_H_
 
-#define XMLBEANSXX_LOGGING
-
 #include <log4cxx/logger.h>
 #include <log4cxx/mdc.h>
 #include <string>
 
-#ifdef XMLBEANSXX_LOGGING
-#define TRACER(log,method) Tracer tracer(log,method)
-#else
-#define TRACER(log,method)
-#undef LOG4CXX_DEBUG
-#define LOG4CXX_DEBUG(log,text)
-#endif
-
-
+#define TRACER(log,method) Tracer tracer(log,method);
 
 namespace xmlbeansxx {
 

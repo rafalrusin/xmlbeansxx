@@ -43,7 +43,7 @@ public:
     /** This is not NULL if this property is a singleton (not array) and has default value */
     StringPtr singletonDefault;
 
-    SchemaProperty(int order,const SchemaType *type, StringPtr singletonDefault);
+    SchemaProperty(int order,const SchemaType *type, const StringPtr &singletonDefault);
 };
 
 }

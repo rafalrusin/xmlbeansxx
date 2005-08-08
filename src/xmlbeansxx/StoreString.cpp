@@ -32,7 +32,7 @@ namespace {
 
 char *duplicate(const char *str) {
     static log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger("xmlbeansxx.duplicate");
-    //TRACER(logger,"duplicate");
+    //TRACER(logger,"duplicate")
 
     char *buf;
     int l=strlen(str)+1;
@@ -138,10 +138,10 @@ StringStorage::~StringStorage() {
 //------------------------------------------------
 log4cxx::LoggerPtr StoreString::log = log4cxx::Logger::getLogger("xmlbeansxx.StoreString");
 
-void StoreString::construct(const std::string &str) {
-    buf=getStorage()->get(str.c_str());
+void StoreString::construct(const char *str) {
+    buf=getStorage()->get(str);
     if (buf==0) {
-        buf=(unsigned long)duplicate(str.c_str());
+        buf=(unsigned long)duplicate(str);
     }
 }
 
@@ -151,22 +151,26 @@ StringStorage *StoreString::getStorage() {
 }
 
 StoreString::StoreString() {
-    //TRACER(log,"StoreString");
-    construct(std::string());
+    //TRACER(log,"StoreString")
+    construct("");
 }
 
 StoreString::StoreString(const std::string &str) {
-    //TRACER(log,"StoreString");
+    //TRACER(log,"StoreString")
+    construct(str.c_str());
+}
+
+StoreString::StoreString(const char *str) {
     construct(str);
 }
 
 StoreString::StoreString(const StoreString &from) {
-    //TRACER(log,"StoreString");
+    //TRACER(log,"StoreString")
     copyFrom(from);
 }
 
 StoreString::~StoreString() {
-    //TRACER(log,"~StoreString");
+    //TRACER(log,"~StoreString")
     //LOG4CXX_DEBUG(log,"str:"<<c_str());
     if (!isStored()) {
         //LOG4CXX_DEBUG(log,"Deleting "<<TextUtils::ptrToString(buf));

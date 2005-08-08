@@ -102,16 +102,16 @@ class XmlArray:public XmlObject {
 		if (createFn==NULL) createFn=T::Factory::newInstanceXmlObject;
         return java_cast<T>(contents.cgetElemAt(XmlArray_elemName,i,createFn,this));
     }
-    void setArray(int i,boost::shared_ptr<T> value) {
+    void setArray(int i,const boost::shared_ptr<T> &value) {
         TRACER(XmlArray_log,"setArray");
         contents.setElemAt(XmlArray_elemName,i,value);
     }
     
     boost::shared_ptr<T> xgetArray(int i) const { return getArray(i); }
     boost::shared_ptr<T> xcgetArray(int i,xmlbeansxx::ObjectCreatorFn createFn=NULL) { return cgetArray(i,createFn); }
-    void xsetArray(int i,boost::shared_ptr<T> value) { return setArray(i,value); }
+    void xsetArray(int i,const boost::shared_ptr<T> &value) { return setArray(i,value); }
     
-    void append(boost::shared_ptr<T> value) {
+    void append(const boost::shared_ptr<T> &value) {
         TRACER(XmlArray_log,"append");
         contents.appendElem(XmlArray_elemName,value);
     }

@@ -73,7 +73,7 @@ namespace xmlbeansxx {
   }
 
   std::string TextUtils::collapse(const std::string &str) {
-    TRACER2(log,"collapse");
+    TRACER2(log,"collapse")
     LOG4CXX_DEBUG2(log,"str:"+str);
     int l=str.size();
     int a=0,b=l-1;

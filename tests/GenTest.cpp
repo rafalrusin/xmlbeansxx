@@ -71,7 +71,10 @@ void namespaceTests() {
 		LOG4CXX_DEBUG(logger,std::string("created:\n") + root->toString() + "\n~created\n");
 		LOG4CXX_DEBUG(logger,root->digest());
 
-        ContentDocumentPtr root2 = ContentDocument::Factory::parse(root->toString());
+        std::string rootStr = root->toString();
+        LOG4CXX_DEBUG(logger, rootStr);
+
+        ContentDocumentPtr root2 = ContentDocument::Factory::parse(rootStr);
         CPPUNIT_ASSERT(root2->getContent()->getEmployee()->getLastname() == std::string("_ln<>_"));
 
 }
