@@ -39,15 +39,15 @@ log4cxx::LoggerPtr QueryString::log = log4cxx::Logger::getLogger("xmlbeansxx.Que
 QueryString::QueryString(std::string str):str(str) {}
 
 log4cxx::LoggerPtr QueryAttribute::log = log4cxx::Logger::getLogger("xmlbeansxx.QueryAttribute");
-QueryAttribute::QueryAttribute(std::string attrName): attrName(attrName) {}
+QueryAttribute::QueryAttribute(const DictNameType &attrName): attrName(attrName) {}
 
 log4cxx::LoggerPtr QueryElement::log = log4cxx::Logger::getLogger("xmlbeansxx.QueryElement");
-QueryElement::QueryElement(std::string elemName,const QueryNodePtr &next): elemName(elemName),next(next) {}
+QueryElement::QueryElement(const DictNameType &elemName,const QueryNodePtr &next): elemName(elemName),next(next) {}
 
 QueryNode::~QueryNode() {}
 
 namespace {
-    std::vector<std::string> singleString(std::string s) {
+    std::vector<std::string> singleString(const std::string &s) {
         std::vector<std::string> v;
         v.push_back(s);
         return v;

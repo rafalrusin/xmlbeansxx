@@ -66,6 +66,7 @@ void MyHandler::startElement(const XMLCh* const oname, AttributeList& oatts) {
     //cout<<"start el "<<name<<"\n";
     LocalAttributeList latts(oatts,p->tr.get());
     int latts_size=latts.getLength();
+    //return;
     int restorePosition=p->xmlContext.restorePosition();
 
     if (p->nodesStack.top().processContents==false) {
@@ -190,9 +191,11 @@ void MyHandler::characters(const XMLCh* const chars, const unsigned int length) 
     FOR(i,(int)length) chars2[i]=chars[i];
     chars2[length]=0;
     std::string s(p->tr->transcode(chars2.get()));
+    //return;
     p->nodesStack.top().str+=s;
 }
 void MyHandler::endElement(const XMLCh *const name) {
+    //return;
     TRACER2(log,"endElement")
     //LOG4CXX_DEBUG2(log,std::string("MyHandler::endElement - start"));
     XmlParser::StackEl e=p->nodesStack.top();

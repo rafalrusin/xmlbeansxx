@@ -19,6 +19,7 @@
 #include "TextUtils.h"
 
 namespace boost {
+/*
 void assertion_failed(char const * expr, char const * function, char const * file, long line) {
     throw xmlbeansxx::AssertionFailedException(
         "Expr: " + std::string(expr) + "; "
@@ -26,6 +27,7 @@ void assertion_failed(char const * expr, char const * function, char const * fil
         + "File: " + std::string(file) + "; "
         + "Line: " + xmlbeansxx::TextUtils::intToString(line) + "; "
     );
-}
+}*/
+
 }
 

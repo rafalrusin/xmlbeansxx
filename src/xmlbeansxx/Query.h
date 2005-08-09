@@ -23,6 +23,7 @@
 #include <boost/shared_ptr.hpp>
 #include <log4cxx/logger.h>
 #include "macros.h"
+#include "Dict.h"
 
 /*
  * This file contains classes used for xpath evaluation. 
@@ -90,19 +91,19 @@ class QueryString: public QueryNode {
 class QueryAttribute: public QueryNode {
     private:
     static log4cxx::LoggerPtr log;
-    std::string attrName;
+    DictNameType attrName;
     public:
-    QueryAttribute(std::string attrName);
+    QueryAttribute(const DictNameType &attrName);
     virtual std::vector<std::string> getValue(const XmlObjectPtr &object);
 };
 
 class QueryElement: public QueryNode {
     private:
     static log4cxx::LoggerPtr log;
-    std::string elemName;
+    DictNameType elemName;
     QueryNodePtr next;
     public:
-    QueryElement(std::string elemName,const QueryNodePtr &next);
+    QueryElement(const DictNameType &elemName,const QueryNodePtr &next);
     virtual std::vector<std::string> getValue(const XmlObjectPtr &object);
 };
 

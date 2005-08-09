@@ -16,13 +16,14 @@
 
 #ifndef _XMLBEANSXX_BOOST_ASSERT_H_
 #define _XMLBEANSXX_BOOST_ASSERT_H_
-
+//Boost Assert Handler is disabled in xmlbeansxx
+/*
 #define BOOST_ENABLE_ASSERT_HANDLER
 #include <boost/assert.hpp>
-
+*/
 namespace boost {
     /** Boost assert handler. */
-    void assertion_failed(char const * expr, char const * function, char const * file, long line);
+    //void assertion_failed(char const * expr, char const * function, char const * file, long line);
 }
 
 #endif //_XMLBEANSXX_BOOST_ASSERT_H_
