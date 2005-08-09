@@ -293,7 +293,7 @@ void XmlParser::updateOptions() {
 
 void XmlParser::parse(istream &in,XmlObject *root) {
     TRACER(log,"parse")
-    LOG4CXX_INFO(log,std::string("XmlParser::parse() - start"));
+    LOG4CXX_DEBUG(log,std::string("XmlParser::parse() - start"));
     //SYNC(*(root->mutex()))
 #ifdef BOOST_HAS_THREADS
     boost::detail::thread::scoped_lock<boost::recursive_mutex> lock((root->mutex()));
@@ -314,7 +314,7 @@ void XmlParser::parse(istream &in,XmlObject *root) {
     }
     nodesStack.pop();
     BOOST_ASSERT(nodesStack.empty());
-    LOG4CXX_INFO(log,std::string("XmlParser::parse() - finish"));
+    LOG4CXX_DEBUG(log,std::string("XmlParser::parse() - finish"));
 }
 
 std::pair<int,std::string> XmlParser::nsSplit(const std::string str) {
