@@ -18,7 +18,7 @@
 <project name="xmlbeansxx-gen" default="dist" basedir=".">
 	<!--<property name="gentor.dir" value="../gentor"/>
 	<property name="gentor.jar" value="${gentor.dir}/dist/lib/gentor.jar"/>-->
-	<property name="project.version" value="0.6.2"/>
+	<property name="project.version" value="0.6.3"/>
     
 	<property name="dist.dir" value="dist"/>
 	<property name="build.dir" value="build"/>
