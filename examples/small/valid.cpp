@@ -8,11 +8,11 @@ using namespace com::p4::mind::mytest;
 int main() {
     //Xsd validation
     try {
-        XmlParser p;
+        XmlParserPtr p(XmlParser::create());
         ContentDocumentPtr doc(ContentDocument::Factory::newInstance());
-        p.getXmlOptions()->setValidation(true);
-        p.loadGrammar("c.xsd");
-        p.parse(cin,doc.get());
+        p->getXmlOptions()->setValidation(true);
+        p->loadGrammar("c.xsd");
+        p->parse(cin,doc.get());
         doc->serialize(cout);
 		
     } catch (BeansException ex) {

@@ -80,9 +80,9 @@ void namespaceTests() {
 }
 
 void parsing() {
-    XmlParser p;
-    p.loadGrammar("c.xsd");
-    p.getXmlOptions()->setValidation(true);
+    XmlParserPtr p(XmlParser::create());
+    p->loadGrammar("c.xsd");
+    p->getXmlOptions()->setValidation(true);
 
     /*
     {
@@ -90,7 +90,7 @@ void parsing() {
         LOG4CXX_DEBUG(logger, "parsing b.xml");
         ContentDocumentPtr doc=ContentDocument::Factory::newInstance();
         try {
-            p.parse(in,doc.get());
+            p->parse(in,doc.get());
       LOG4CXX_INFO(logger,"b.xml parse passed - error");
             CPPUNIT_ASSERT(false);
         } catch (BeansException &ex) {
@@ -105,7 +105,7 @@ void parsing() {
         LOG4CXX_DEBUG(logger, "parsing c.xml");
         ContentDocumentPtr docC=ContentDocument::Factory::newInstance();
         try {
-            p.parse(in,docC.get());
+            p->parse(in,docC.get());
         } catch (BeansException &ex) {
             LOG4CXX_INFO(logger,std::string("Exception: ") + ex.getMessage());
             CPPUNIT_ASSERT(false);
@@ -129,7 +129,7 @@ void parsing() {
     }
 
     //    ContentDocumentPtr doc=ContentDocument::Factory::newInstance();
-    //p.parse(in,doc.get());
+    //p->parse(in,doc.get());
     CPPUNIT_ASSERT(doc->getContent()->getEmployee()->getAgeAttr()==10);
     LOG4CXX_DEBUG(logger,doc->toString());
 

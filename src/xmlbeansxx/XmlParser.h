@@ -18,134 +18,42 @@
 #define _XMLBEANSXX_XMLPARSER_H_
 
 #include "BoostAssert.h"
-#include <map>
-#include <stack>
 #include <string>
 #include <vector>
 #include <boost/shared_ptr.hpp>
-#include <memory>
-
-#include <xercesc/sax/InputSource.hpp>
-#include <xercesc/sax/HandlerBase.hpp>
-#include <xercesc/parsers/SAXParser.hpp>
-#include <xercesc/util/XMLException.hpp>
-#include <xercesc/validators/common/Grammar.hpp>
-#include <xercesc/framework/XMLGrammarPool.hpp>
-
 #include "XmlOptions.h"
-#include "XmlContext.h"
-
-#include <log4cxx/logger.h>
-
 
 
 namespace xmlbeansxx {
 
-class Transcoder;
-
-class MyEntityResolver: public XERCES_CPP_NAMESPACE::EntityResolver {
-private:
-    static log4cxx::LoggerPtr log;
-    
-    XERCES_CPP_NAMESPACE::InputSource *resolveEntity(const XMLCh *publicId,const XMLCh *systemId);
-};
-
 class XmlObject;
 
-/** This class is used for parsing of xml documents. It uses xerces xml parser and optionally can use xerces xml schema validator.  */
+class XmlParser;
+typedef boost::shared_ptr<XmlParser> XmlParserPtr;
+
+/** This class is used for parsing of xml documents. It uses some xml parser and optionally can use xml schema validator.  */
 class XmlParser {
-private:
-    static log4cxx::LoggerPtr log;
-    
-    std::auto_ptr<MyEntityResolver> entityResolver;
-    std::auto_ptr<XERCES_CPP_NAMESPACE::SAXParser> sax;
-    friend class MyHandler;
-    std::auto_ptr<MyHandler> handler;
-    std::auto_ptr<xercesc::XMLGrammarPool> grammarPool;
-
-    /** Used to convert from xerces unicode to UTF8 */
-    std::auto_ptr<Transcoder> tr;
-
-    struct StackEl {
-        XmlObject *obj;
-        std::string str;
-        bool processContents;
-        int restorePosition;
-        StackEl(XmlObject *o,bool processContents,int restorePosition)
-            : obj(o),processContents(processContents),restorePosition(restorePosition)
-            {}
-    };
-
-    XmlContext xmlContext;
-    std::stack<StackEl> nodesStack;
-
-    int xsi_ns;
-    //char mbuf[1024]; //buffer for various things
-    std::string currentString;
-
-    boost::shared_ptr<XmlOptions> opts;
-
 public:
-    XmlParser();
-    XmlParser(const boost::shared_ptr<XmlOptions> &opts);
-    virtual ~XmlParser();
+    static XmlParserPtr create();
+    static XmlParserPtr create(const boost::shared_ptr<XmlOptions> &opts);
 
     /**
-     * Parses using xercesc parser an xml document from std::istream to some XmlDocument. 
-     * If XmlOptions validation is set, then uses xercesc schema validator
+     * Parses using some parser an xml document from std::istream to some XmlDocument. 
+     * If XmlOptions validation is set, then uses schema validator
      * (apropriate grammars should be loaded using eg. loadGrammar method).
      */
-    void parse(std::istream &in, XmlObject *documentRoot);
+    virtual void parse(std::istream &in, XmlObject *documentRoot) = 0;
 
-    boost::shared_ptr<XmlOptions> getXmlOptions() const {
-        return opts;
-    }
-    void setXmlOptions(const boost::shared_ptr<XmlOptions> &options) {
-        opts=options;
-    }
+    virtual boost::shared_ptr<XmlOptions> getXmlOptions() const = 0;
+    virtual void setXmlOptions(const boost::shared_ptr<XmlOptions> &options) = 0;
 
-    /** Loads grammars into xercesc parser from specified file names. */
-    void loadGrammars(const std::vector<std::string> &fileNames);
-    /** Loads grammar into xercesc parser from specified file name. */
-    void loadGrammar(const std::string fileName);
-    /** Unloads all grammars from xercesc parser. */
-    void unloadGrammars();
-
-private:
-    void init(bool reinit=false);
-
-    void updateOptions();
-
-    /** converts "xs:string" to <"string",nr>, where nr is namespace name in globalTypeSystem */
-    std::pair<int,std::string> nsSplit(const std::string str);
-    /** converts "xs:string" to <"xs","string"> */
-    std::pair<std::string,std::string> tagSplit(const std::string str);
-
+    /** Loads grammars into parser from specified file names. */
+    virtual void loadGrammars(const std::vector<std::string> &fileNames) = 0;
+    /** Loads grammar into parser from specified file name. */
+    virtual void loadGrammar(const std::string fileName) = 0;
+    /** Unloads all grammars from parser. */
+    virtual void unloadGrammars() = 0;
 };
-
-class MyHandler: public XERCES_CPP_NAMESPACE::HandlerBase {
-private:
-    static log4cxx::LoggerPtr log;
-    XmlParser *p;
-public:
-    MyHandler(XmlParser *p);
-    void resetDocument();
-    void startElement(const XMLCh* const name, XERCES_CPP_NAMESPACE::AttributeList& attributes);
-    void characters(const XMLCh* const chars, const unsigned int length);
-    void endElement(const XMLCh* const name);
-    void ignorableWhitespace(const XMLCh* const chars, const unsigned int length);
-
-    std::string getErrorStr(const XERCES_CPP_NAMESPACE::SAXParseException& exc);
-    void warning(const XERCES_CPP_NAMESPACE::SAXParseException& exc);
-    void error(const XERCES_CPP_NAMESPACE::SAXParseException& exc);
-    void fatalError(const XERCES_CPP_NAMESPACE::SAXParseException& exc);
-    void resetErrors();
-
-private:
-    void updateValidation();
-
-};
-
 }
 
 #endif//_XMLBEANSXX_XMLPARSER_H_

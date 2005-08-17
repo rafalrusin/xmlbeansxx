@@ -1478,13 +1478,13 @@ public class ClassGen {
             if (st.isDocumentType()) {
                 out.cpp.println(genPtr(className(st)) + " doc(" + genNewXmlObject(st) + ");");
                 out.cpp
-                    .println("xmlbeansxx::XmlParser p(options); p.parse(in,doc.get()); return doc;");
+                    .println("xmlbeansxx::XmlParserPtr p(xmlbeansxx::XmlParser::create(options)); p->parse(in,doc.get()); return doc;");
             } else {
                 out.cpp
                     .println(genPtr("xmlbeansxx::definitions::XmlFragmentDocument")
                              + " doc(xmlbeansxx::definitions::XmlFragmentDocument::Factory::newInstance());");
                 out.cpp
-                    .println("xmlbeansxx::XmlParser p(options); p.parse(in,doc.get()); return "
+                    .println("xmlbeansxx::XmlParserPtr p(xmlbeansxx::XmlParser::create(options)); p->parse(in,doc.get()); return "
                              + genThrowingCast(className(st),
                                                "doc->getXmlFragment()->getElement()")
                              + ";");

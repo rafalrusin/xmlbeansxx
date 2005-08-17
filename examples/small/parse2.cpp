@@ -12,14 +12,14 @@ int main() {
     //log4cxx::BasicConfigurator::configure();
     //typed document parsing (using classes generated from c.xsd)
     try {
-        XmlParser p;
+        XmlParserPtr p(XmlParser::create());
         //boost::shared_ptr<ContentDocument> root(new ContentDocument());
         fstream in("d.xml",ios::in);
         //ContentDocumentPtr root(ContentDocument::Factory::parse(in));
         ContentDocumentPtr root(ContentDocument::Factory::newInstance());
-        p.getXmlOptions()->setValidation(true);
-        p.loadGrammar("c.xsd");
-        p.parse(in, root.get());
+        p->getXmlOptions()->setValidation(true);
+        p->loadGrammar("c.xsd");
+        p->parse(in, root.get());
         /*
         cout<<"firstname:"<<root->getContent()->getEmployee()->getFirstname()<<"\n";
         cout<<"age:"<<root->getContent()->getEmployee()->getAgeAttr()<<"\n";	

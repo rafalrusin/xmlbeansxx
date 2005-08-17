@@ -55,9 +55,9 @@ std::string readXml(std::string fname) {
 }
 
 void namespaceTests() {
-    XmlParser p;
-    p.loadGrammar("c.xsd");
-    p.getXmlOptions()->setValidation(true);
+    XmlParserPtr p(XmlParser::create());
+    p->loadGrammar("c.xsd");
+    p->getXmlOptions()->setValidation(true);
 
     std::string xml = readXml("c.xml");
 
@@ -66,7 +66,7 @@ void namespaceTests() {
         try {
             double t1 = currentTime();
             istringstream in(xml);
-            p.parse(in,doc.get());
+            p->parse(in,doc.get());
             double t2 = currentTime();
             cout << "Duration: " << t2-t1 << " sec." << " " << 1./(t2-t1) << " per second" << endl;
         } catch (BeansException &ex) {
