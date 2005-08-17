@@ -9,7 +9,7 @@ int main() {
     //Xsd validation
     try {
         XmlParser p;
-        ContentDocumentPtr doc(new ContentDocument());
+        ContentDocumentPtr doc(ContentDocument::Factory::newInstance());
         p.getXmlOptions()->setValidation(true);
         p.loadGrammar("c.xsd");
         p.parse(cin,doc.get());

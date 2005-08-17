@@ -61,13 +61,17 @@ static SchemaType XmlArray_initSchemaType() {
  */
 template<class T>
 class XmlArray:public XmlObject {
-    T elemObj;
-    
+    private:
+    Contents _contents;
     public:
     XmlArray() {}
     
     XmlArray(const shared_array<XmlObjectPtr> &a) {
         setArray(a);
+    }
+
+    virtual Contents *getContents() const { 
+        return const_cast<Contents *>(&_contents);
     }
   
     virtual const xmlbeansxx::SchemaType *getSchemaType() const {
@@ -75,36 +79,18 @@ class XmlArray:public XmlObject {
       return &schemaType; 
     }
 
-    /*
-    //virtual methods
-    virtual xmlbeansxx::XmlObjectPtr newSameType() const {
-        return boost::shared_ptr<XmlArray<T> >(new XmlArray<T>());
-    }
-    virtual std::string arrayXsdTypeName() const {
-        return elemObj.xsdTypeName();
-    }
-    virtual int arrayXsdNamespace() const {
-        return elemObj.xsdNamespace();
-    }
-    
-    virtual bool processContents() const {
-        return true;
-    }
-    //~virtual methods
-    */
-    
     boost::shared_ptr<T> getArray(int i) const {
         TRACER(XmlArray_log,"getArray");
-        return java_cast<T>(contents.getElemAt(XmlArray_elemName,i));
+        return java_cast<T>(getContents()->getElemAt(XmlArray_elemName,i));
     }
     boost::shared_ptr<T> cgetArray(int i,xmlbeansxx::ObjectCreatorFn createFn=NULL) {
         TRACER(XmlArray_log,"cgetArray");
 		if (createFn==NULL) createFn=T::Factory::newInstanceXmlObject;
-        return java_cast<T>(contents.cgetElemAt(XmlArray_elemName,i,createFn,this));
+        return java_cast<T>(getContents()->cgetElemAt(XmlArray_elemName,i,createFn,this));
     }
     void setArray(int i,const boost::shared_ptr<T> &value) {
         TRACER(XmlArray_log,"setArray");
-        contents.setElemAt(XmlArray_elemName,i,value);
+        getContents()->setElemAt(XmlArray_elemName,i,value);
     }
     
     boost::shared_ptr<T> xgetArray(int i) const { return getArray(i); }
@@ -113,16 +99,16 @@ class XmlArray:public XmlObject {
     
     void append(const boost::shared_ptr<T> &value) {
         TRACER(XmlArray_log,"append");
-        contents.appendElem(XmlArray_elemName,value);
+        getContents()->appendElem(XmlArray_elemName,value);
     }
     void unset() {
         TRACER(XmlArray_log,"unset");
-        contents.removeElems(XmlArray_elemName);
+        getContents()->removeElems(XmlArray_elemName);
     }
     
     int size() const {
         TRACER(XmlArray_log,"size");
-        return contents.countElems(XmlArray_elemName);
+        return getContents()->countElems(XmlArray_elemName);
     }
 
     XmlInteger length() const {
@@ -131,12 +117,12 @@ class XmlArray:public XmlObject {
 
     void setArray(const shared_array<XmlObjectPtr> &vec) {
         TRACER(XmlArray_log,"setArray");
-        contents.setElemArray(XmlArray_elemName,vec);
+        getContents()->setElemArray(XmlArray_elemName,vec);
     }
 
     shared_array<XmlObjectPtr> getArray() const {
         TRACER(XmlArray_log,"getArray");
-        return contents.getElemArray(XmlArray_elemName);
+        return getContents()->getElemArray(XmlArray_elemName);
     }
 };
 

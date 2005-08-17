@@ -99,7 +99,7 @@ bool QueryExpr::getBooleanValue(const XmlObjectPtr &object) {
 
 std::vector<std::string> QueryExpr::getValue(const XmlObjectPtr &object) {
     TRACER2(log,"getValue")
-    return singleString(XmlBoolean(getBooleanValue(object)).getCanonicalContent());
+    return singleString(getBooleanValue(object)?"true":"false");
 }
 
 
@@ -110,7 +110,7 @@ std::vector<std::string> QueryString::getValue(const XmlObjectPtr &object) {
 
 std::vector<std::string> QueryAttribute::getValue(const XmlObjectPtr &object) {
     TRACER2(log,"getValue")
-    XmlObjectPtr a=object->contents.getAttrObject(attrName,object.get());
+    XmlObjectPtr a=object->getContents()->getAttrObject(attrName,object.get());
 
     std::vector<std::string> r;
     if (a!=NULL) {
@@ -121,7 +121,7 @@ std::vector<std::string> QueryAttribute::getValue(const XmlObjectPtr &object) {
 
 std::vector<std::string> QueryElement::getValue(const XmlObjectPtr &object) {
     std::vector<std::string> r;
-    shared_array<XmlObjectPtr> v(object->contents.getElemArray(elemName));
+    shared_array<XmlObjectPtr> v(object->getContents()->getElemArray(elemName));
     FOREACH(it,v) {
         if (*it!=NULL) {
             if (next==NULL) {

@@ -54,16 +54,6 @@ log4cxx::LoggerPtr Contents::log = log4cxx::Logger::getLogger(std::string("xmlbe
 
 //Contents Impl
 
-Contents::Contents() { }
-
-Contents::~Contents() {
-    free();
-}
-
-Contents::Contents(const Contents &orig) {
-    simpleCopyFrom(orig);
-}
-	
 void Contents::setSimpleContent(const std::string &c) {
     SYNC(mutex)
     value=c;
@@ -78,7 +68,7 @@ bool Contents::hasEmptyContent() const {
     return attrs.hasEmptyContent() && elems.hasEmptyContent();
 }
 
-void Contents::simpleCopyFrom(const Contents &orig) {
+void Contents::simpleCopyFrom(const Contents *orig) {
     TRACER(log,std::string("simpleCopyFrom"))
     SYNC(mutex)
 /*
@@ -86,30 +76,30 @@ void Contents::simpleCopyFrom(const Contents &orig) {
     boost::detail::thread::scoped_lock<boost::recursive_mutex> lock2(orig.mutex);
 #endif
 */
-    FOREACH(it,orig.elems.contents) {
+    FOREACH(it,orig->elems.contents) {
         elems.add(it->name,it->value);
     }
 
-    FOREACH(it,orig.attrs.contents) {
+    FOREACH(it,orig->attrs.contents) {
         attrs.add(it->name,it->value);
     }
 }
 
-void Contents::copyFrom(const Contents &obj) {
+void Contents::copyFrom(const Contents *obj) {
     SYNC(mutex)
 /*
 #ifdef BOOST_HAS_THREADS
     boost::detail::thread::scoped_lock<boost::recursive_mutex> lock2(obj.mutex);
 #endif
 */
-    FOREACH(it,obj.elems.contents) {
+    FOREACH(it,obj->elems.contents) {
         XmlObjectPtr o=it->value;
         if (o!=NULL)
             o=o->clone();
         elems.add(it->name,o);
     }
 
-    FOREACH(it,obj.attrs.contents) {
+    FOREACH(it,obj->attrs.contents) {
         attrs.add(it->name,it->value);
     }
 }
@@ -183,7 +173,7 @@ void Contents::serializeElems(int emptyNsID,ostream &o,const std::map<std::strin
             XmlObjectPtr value(elems.contents[it->second].value);
             if (value!=NULL) {
                 bool printXsiType= it->third==NULL || shallPrintXsiType(it->third->schemaType,value);
-                value->contents.serialize(elems.contents[it->second].name,o,value.get(),emptyNsID,printXsiType);
+                value->getContents()->serialize(elems.contents[it->second].name,o,value.get(),emptyNsID,printXsiType);
             }
         }
     } else {
@@ -265,7 +255,7 @@ void Contents::serialize2(int emptyNsID,bool printXsiType,std::string elemName,o
 
     {
         std::string cnt=obj->exchangeEntities(obj->getSimpleContent());
-        if (cnt==std::string() && !obj->contents.hasElements()) {
+        if (cnt==std::string() && !const_cast<XmlObject *>(obj)->getContents()->hasElements()) {
             o<<"/>";
         } else {
             o<<">";
@@ -364,7 +354,7 @@ void Contents::serializeDocument(ostream &o,const XmlOptionsPtr &options,const X
 
     bool printXsiType=shallPrintXsiType(prop->schemaType,it->value);
     //----------
-    it->value->contents.serialize2(emptyNsID,printXsiType,it->name,o,it->value.get());
+    it->value->getContents()->serialize2(emptyNsID,printXsiType,it->name,o,it->value.get());
     o<<"\n";
 }
 

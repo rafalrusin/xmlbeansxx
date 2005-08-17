@@ -12,7 +12,7 @@ BUILT_SOURCES = $(SCHEMAS_CPP) $(SCHEMAS_H)
 $(SCHEMAS_CPP) $(SCHEMAS_H): ${top_srcdir}/generator/dist/bin/xmlbeansxx-gen $(SCHEMAS_XSD)
 	${top_builddir}/generator/dist/bin/xmlbeansxx-gen $(SCHEMAS_XSD)
 
-noinst_PROGRAMS = create parse xpaths parse2 valid simple_types testEasyPO
+noinst_PROGRAMS = create parse parse2 valid testEasyPO
 
 create_SOURCES = create.cpp
 nodist_create_SOURCES = $(SCHEMAS_CPP) $(SCHEMAS_H)
@@ -27,7 +27,5 @@ testEasyPO_SOURCES = testEasyPO.cpp
 nodist_testEasyPO_SOURCES = $(SCHEMAS_CPP) $(SCHEMAS_H)
 
 parse_SOURCES = parse.cpp
-xpaths_SOURCES = xpaths.cpp
-simple_types_SOURCES = simple_types.cpp
 
 MOSTLYCLEANFILES = $(SCHEMAS_CPP) $(SCHEMAS_H)

@@ -29,7 +29,7 @@ int main() {
         LOG4CXX_ERROR(logger,"Exception: "+std::string(e.getMessage()));
         throw e;
     }
-	return 0;
+    return 0;
 }
 
 
@@ -52,9 +52,9 @@ void namespaceTests() {
         XmlBase64BinaryPtr b=XmlBase64Binary::Factory::newInstance();
         b->setByteArrayValue(a);
         LOG4CXX_DEBUG(logger,"Base64 xml:" + b->toString());
-		
-		shared_array<unsigned char> c = b->getByteArrayValue();
-		LOG4CXX_DEBUG(logger, "tu");
+
+        shared_array<unsigned char> c = b->getByteArrayValue();
+        LOG4CXX_DEBUG(logger, "tu");
 #if NNN
         logstream LOG(logger, Level::DEBUG);
         //LOG << "abc" << 15 << LOG4CXX_ENDMSG;

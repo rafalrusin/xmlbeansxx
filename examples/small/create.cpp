@@ -9,27 +9,27 @@ using namespace xmlbeansxx;
 int main() {
     try {
         //xml tree creation using generated classes from c.xsd
-        ContentDocumentPtr root(new ContentDocument());
+        ContentDocumentPtr root(ContentDocument::Factory::newInstance());
         //root->cgetContent()->set
-        ContentTypePtr ct(new ContentType());
+        ContentTypePtr ct(ContentType::Factory::newInstance());
         root->setContent(ct);
-        FullpersoninfoPtr p(new Fullpersoninfo());
+        FullpersoninfoPtr p(Fullpersoninfo::Factory::newInstance());
         ct->setEmployee(p);
         p->setCity(77);
-        p->xsetAddress(XmlStringPtr(new XmlString("_addr_")));
-        p->xsetLastname(XmlStringPtr(new XmlString("_ln<>_")));
-        p->xsetFirstname(XmlStringPtr(new XmlString("_fn_")));
+        p->xsetAddress(XmlString::Factory::newInstance("_addr_"));
+        p->xsetLastname(XmlString::Factory::newInstance("_ln<>_"));
+        p->xsetFirstname(XmlString::Factory::newInstance("_fn_"));
         p->setDt("\n\n 2004-01-30T22:50:11  ");
         boost::shared_ptr<XmlArray<XmlString> > tab=p->dgetTableArray();
         tab->cgetArray(0);
         tab->cgetArray(1);
 		p->dsetTableArray(tab);
 		p->addNewTable();
-        p->xsetCar(CarTypePtr(new CarType("2")));
-        p->setCarAttr(CarTypePtr(new CarType("3"))->getSimpleContent());
+        p->xsetCar(CarType::Factory::newInstance("2"));
+        p->setCarAttr(3);
 
-        p->xsetAgeAttr(XmlIntPtr(new XmlInt(20)));
-        p->xsetMoneyAttr(AmountTypePtr(new AmountType("10.256789")));
+        p->xsetAgeAttr(XmlInt::Factory::newInstance(20));
+        p->xsetMoneyAttr(AmountType::Factory::newInstance("10.256789"));
         //root->serialize(cout);
 		cout<<root->toString();
 

@@ -71,13 +71,13 @@ void MyHandler::startElement(const XMLCh* const oname, AttributeList& oatts) {
 
     if (p->nodesStack.top().processContents==false) {
         LOG4CXX_DEBUG2(log,std::string("Contents not processed"));
-        XmlObjectPtr n(new XmlObject());
+        XmlObjectPtr n(XmlObject::Factory::newInstance());
 
         FOR(i,latts_size) {
-            n->contents.appendAttr(latts.getName(i),latts.getValue(i));
+            n->getContents()->appendAttr(latts.getName(i),latts.getValue(i));
         }
 
-        p->nodesStack.top().obj->contents.appendElem(name,n);
+        p->nodesStack.top().obj->getContents()->appendElem(name,n);
         p->nodesStack.push(XmlParser::StackEl(n.get(),false,restorePosition));
     } else {
         name=p->tagSplit(name).second;
@@ -172,16 +172,16 @@ void MyHandler::startElement(const XMLCh* const oname, AttributeList& oatts) {
         }
 
         //Removing default attributes and elements, they will be added after parsing this element
-        n->contents.free();
+        n->getContents()->free();
 
         LOG4CXX_DEBUG2(log,std::string("Pass 3 - adding attributes to object"));
         //adding attributes to new object
         FOR(i,latts_size) {
             if (skipped[i])
                 continue;
-            n->contents.appendAttr(latts.getName(i),latts.getValue(i));
+            n->getContents()->appendAttr(latts.getName(i),latts.getValue(i));
         }
-        p->nodesStack.top().obj->contents.appendElem(name,n);
+        p->nodesStack.top().obj->getContents()->appendElem(name,n);
         p->nodesStack.push(XmlParser::StackEl(n.get(),n->getSchemaType()->processContents,restorePosition));
     }
 }
@@ -200,7 +200,7 @@ void MyHandler::endElement(const XMLCh *const name) {
     //LOG4CXX_DEBUG2(log,std::string("MyHandler::endElement - start"));
     XmlParser::StackEl e=p->nodesStack.top();
     e.obj->setSimpleContent(e.str);
-    e.obj->contents.insertDefaults(e.obj->getSchemaType());
+    e.obj->getContents()->insertDefaults(e.obj->getSchemaType());
     p->xmlContext.restore(p->nodesStack.top().restorePosition);
     p->nodesStack.pop();
     //LOG4CXX_DEBUG2(log,std::string("MyHandler::endElement - finish"));

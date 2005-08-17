@@ -18,7 +18,7 @@ int main() {
         LOG4CXX_ERROR(logger,"Exception: "+std::string(e.getMessage()));
         throw e;
     }
-	return 0;
+    return 0;
 }
 
 
@@ -59,23 +59,23 @@ void namespaceTests() {
     p.loadGrammar("c.xsd");
     p.getXmlOptions()->setValidation(true);
 
-	std::string xml = readXml("c.xml");
-	
+    std::string xml = readXml("c.xml");
+
     while (true) {
         ContentDocumentPtr doc=ContentDocument::Factory::newInstance();
         try {
             double t1 = currentTime();
-			istringstream in(xml);
+            istringstream in(xml);
             p.parse(in,doc.get());
             double t2 = currentTime();
             cout << "Duration: " << t2-t1 << " sec." << " " << 1./(t2-t1) << " per second" << endl;
         } catch (BeansException &ex) {
-		    //LOG4CXX_DEBUG(logger,"Exception: " << ex.getMessage());
+            //LOG4CXX_DEBUG(logger,"Exception: " << ex.getMessage());
             //log4cxx::logstream s(logger, log4cxx::Level::DEBUG);
             //s << "xx";
             //log4cxx::logstream(logger, log4cxx::Level::DEBUG) << (ex.getMessage());
-            
-			throw;
+
+            throw;
         }
     }
 }

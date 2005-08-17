@@ -56,10 +56,6 @@ public:
 #endif
 	
 public:
-    Contents();
-    Contents(const Contents &orig);
-    ~Contents();
-	
     /** Sets string content. */
 	void setSimpleContent(const std::string &c);
     
@@ -82,10 +78,10 @@ public:
     std::vector<std::pair<std::string,std::string> > getAttrs() const;
 
     /** Copies contents from orig (not deeply). */
-    void simpleCopyFrom(const Contents &orig);
+    void simpleCopyFrom(const Contents *orig);
 
     /** Deeply copies all contents from orig. */
-    void copyFrom(const Contents &orig);
+    void copyFrom(const Contents *orig);
 
     /**
      * Chceck whether this contents have some elements (complex content).
