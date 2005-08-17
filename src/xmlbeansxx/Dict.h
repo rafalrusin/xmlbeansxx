@@ -24,6 +24,7 @@
 #include <boost/shared_ptr.hpp>
 #include "macros.h"
 #include "StoreString.h"
+#include "Contents.h"
 
 
 	
@@ -33,8 +34,6 @@ DECLARE_PTR(std::string,StringPtr,constStringPtr)
 class XmlObject;
 DECLARE_PTR(XmlObject,XmlObjectPtr,constXmlObjectPtr)
 
-
-typedef StoreString DictNameType;
 
 /**
  * Represents dictionary element.

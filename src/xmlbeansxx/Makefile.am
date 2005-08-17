@@ -39,6 +39,10 @@ libxmlbeansxx_la_SOURCES = \
 	TextUtils.cpp\
 	Contents.h\
 	Contents.cpp\
+	ContentsImpl.h\
+	ContentsImpl.cpp\
+	SimpleValue.h\
+	SimpleValue.cpp\
 	Dict.h\
 	Dict.cpp\
 	XmlArray.h\

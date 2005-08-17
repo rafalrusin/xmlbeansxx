@@ -37,6 +37,8 @@ public:
     static XmlParserPtr create();
     static XmlParserPtr create(const boost::shared_ptr<XmlOptions> &opts);
 
+    virtual ~XmlParser() {}
+
     /**
      * Parses using some parser an xml document from std::istream to some XmlDocument. 
      * If XmlOptions validation is set, then uses schema validator

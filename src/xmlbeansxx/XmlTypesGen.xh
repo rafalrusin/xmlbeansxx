@@ -101,8 +101,6 @@ private:
     friend class QueryAttribute;
     friend class QueryElement;
     
-    //Contents _contents;
-
 protected:    
     static log4cxx::LoggerPtr log;
 public:

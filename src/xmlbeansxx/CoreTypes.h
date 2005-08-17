@@ -64,6 +64,7 @@ namespace xmlbeansxx {
      */
     class Object {
         public:
+        virtual ~Object() {}
         virtual std::string toString() const { return ""; }
     };
     typedef boost::shared_ptr<Object> ObjectPtr;

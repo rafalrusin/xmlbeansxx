@@ -19,6 +19,7 @@
 
 //#include <set>
 #include <string>
+#include <cstring>
 #include <log4cxx/logger.h>
 #include <ext/hash_map>
 
@@ -129,6 +130,7 @@ public:
 
     inline StoreString &operator=(const StoreString &b);
     inline bool operator ==(const StoreString &str) const;
+    inline bool operator <(const StoreString &str) const;
 
     inline operator std::string() const;
 
@@ -178,6 +180,10 @@ inline unsigned int StoreString::hashCode() const {
 inline bool StoreString::operator ==(const StoreString &str) const {
     if (isStored() && str.isStored()) return buf==str.buf;
     else return CStrEqFn()(c_str(),str.c_str());
+}
+
+inline bool StoreString::operator <(const StoreString &str) const {
+    return strcmp(c_str(), str.c_str()) < 0;
 }
 
 inline StoreString::operator std::string() const {

@@ -49,6 +49,7 @@ private:
 };
 
 class XmlObject;
+class MyHandler;
 
 /** This class is used for parsing of xml documents. It uses xerces xml parser and optionally can use xerces xml schema validator.  */
 class XercesParser: public XmlParser {

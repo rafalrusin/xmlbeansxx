@@ -54,6 +54,7 @@ static SchemaType XmlArray_initSchemaType() {
       return st;
 }
 
+ContentsPtr createXmlArrayContents();
 
 /** 
  * @deprecated
@@ -62,16 +63,19 @@ static SchemaType XmlArray_initSchemaType() {
 template<class T>
 class XmlArray:public XmlObject {
     private:
-    Contents _contents;
+    ContentsPtr _contents;
     public:
-    XmlArray() {}
+    XmlArray() {
+        _contents = createXmlArrayContents();
+    }
     
     XmlArray(const shared_array<XmlObjectPtr> &a) {
+        _contents = createXmlArrayContents();
         setArray(a);
     }
 
     virtual Contents *getContents() const { 
-        return const_cast<Contents *>(&_contents);
+        return const_cast<Contents *>((Contents *)(_contents.get()));
     }
   
     virtual const xmlbeansxx::SchemaType *getSchemaType() const {
@@ -111,8 +115,8 @@ class XmlArray:public XmlObject {
         return getContents()->countElems(XmlArray_elemName);
     }
 
-    XmlInteger length() const {
-        return XmlInteger(size());
+    int length() const {
+        return size();
     }
 
     void setArray(const shared_array<XmlObjectPtr> &vec) {

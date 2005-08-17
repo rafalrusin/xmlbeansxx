@@ -49,11 +49,10 @@ std::string istreamToString(std::istream &in) {
     return s;
 }
 
-class NoExchangeEntitiesXmlObject: public XmlObject {
-    Contents _contents;
+class NoExchangeEntitiesXmlObject: public XmlObject, ContentsImpl {
     public:
     virtual Contents *getContents() const {
-        return const_cast<Contents *>(&_contents);
+        return const_cast<Contents *>((const Contents *)this);
     }
     virtual std::string exchangeEntities(const std::string& str) const { return str; }
 };
@@ -85,7 +84,7 @@ std::string XmlObject::digest() {
 
 bool XmlObject::setAnyElement(std::string elementName,std::string anyContent) {
     boost::shared_ptr<NoExchangeEntitiesXmlObject> obj(new NoExchangeEntitiesXmlObject);
-    obj->setSimpleContent(anyContent);
+    obj->getContents()->setSimpleContent(anyContent);
     getContents()->setElem(elementName,obj);
     return true;
 }
@@ -119,7 +118,7 @@ std::string XmlObject::toString(const XmlOptionsPtr &options) const {
 
 #ifdef BOOST_HAS_THREADS
 boost::recursive_mutex &XmlObject::mutex() const {
-    return getContents()->mutex;
+    return getContents()->getMutex();
 }
 #endif
 

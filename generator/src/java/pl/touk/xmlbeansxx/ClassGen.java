@@ -171,6 +171,7 @@ public class ClassGen {
             out.cpp.println("#include <xmlbeansxx/xml-fragment.h>");
             out.cpp.println("#include <xmlbeansxx/TextUtils.h>");
             out.cpp.println("#include <xmlbeansxx/Contents.h>");
+            out.cpp.println("#include <xmlbeansxx/ContentsImpl.h>");
             out.h.println("#include <vector>");
             out.h.println("#include <string>");
 			
@@ -1387,7 +1388,7 @@ public class ClassGen {
 
         {
             //Impl
-            out.cpp.println("class " + classImplName(st) + ": public " + className(st) + ", public xmlbeansxx::Contents {");
+            out.cpp.println("class " + classImplName(st) + ": public " + className(st) + ", public xmlbeansxx::ContentsImpl {");
             out.cpp.println("public:");
             out.cpp.println("virtual Contents *getContents() const {");
             out.cpp.println("return (Contents *)(const_cast<" + classImplName(st) + " *>(this));");
