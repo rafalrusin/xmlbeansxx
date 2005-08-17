@@ -96,8 +96,6 @@ void MyHandler::startElement(const XMLCh* const oname, AttributeList& oatts) {
                 int ns=globalTypeSystem()->getNamespace(latts.getValue(i));
                 if (ns==-1 && p->opts->getTypedParsing())
                     throw XmlException(string("Namespace '")+string(latts.getValue(i))+string("' is not registered in globalTypeSystem."));
-                if (ns==-1)
-                    ns=-2;
                 p->xmlContext.setLink(tag.second,ns);
                 skipped[i]=true;
             }
