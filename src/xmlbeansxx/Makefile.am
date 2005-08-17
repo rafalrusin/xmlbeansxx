@@ -92,11 +92,9 @@ nodist_libxmlbeansxxinclude_HEADERS = \
 
 XmlTypesGen.h XmlTypesGen.cpp: ${top_srcdir}/generator/dist/bin/xmlbeansxx-genbuiltin XmlTypesGen.xh XmlTypesGen.xcpp
 	${top_builddir}/generator/dist/bin/xmlbeansxx-genbuiltin
-	astyle --style=java XmlTypesGen.h XmlTypesGen.cpp
 
 xml-fragment.h xml-fragment.cpp: ${top_srcdir}/generator/dist/bin/xmlbeansxx-gen xml-fragment.xsd
 	${top_builddir}/generator/dist/bin/xmlbeansxx-gen ${srcdir}/xml-fragment.xsd
-	astyle --style=java xml-fragment.h xml-fragment.cpp
 
 MOSTLYCLEANFILES=XmlTypesGen.h XmlTypesGen.cpp xml-fragment.h xml-fragment.cpp
 
