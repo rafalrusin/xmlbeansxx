@@ -57,6 +57,7 @@ AC_SUBST(xmlbeansxx_gen_dir)
 
 #AC_CHECK_FILE($xmlbeansxx_gen_dir/bin/xmlbeansxx-gen, , AC_MSG_ERROR([File $xmlbeansxx_gen_dir/bin/xmlbeansxx-gen not found]))
 AC_CHECK_LIB(xerces-c,main,,AC_MSG_ERROR([xerces-c library not found. Please install it.]))
+AC_CHECK_LIB(xml2,main,,AC_MSG_ERROR([libxml2 library not found. Please install it.]))
 AC_CHECK_LIB(log4cxx,main,,AC_MSG_ERROR([log4cxx library not found. Please install it.]))
 AC_CHECK_LIB(gmp,main,,AC_MSG_ERROR([gmp library not found. Please install it.]))
 AC_CHECK_LIB(gmpxx,main,,AC_MSG_ERROR([gmpxx library not found. Please install gmp with gmpxx option enabled.]))

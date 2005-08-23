@@ -46,7 +46,9 @@ public class TSLoader {
 	    //XmlErrorWatcher errorListener = new XmlErrorWatcher(new XmlErrorPrinter(true,null));
 	    XmlErrorWatcher errorListener = new XmlErrorWatcher(new MyXmlErrorPrinter());
 	    //XmlErrorWatcher errorListener = new XmlErrorWatcher(Collections.EMPTY_SET);
-        SchemaTypeSystem system = loadTypeSystem2(name, xsdFiles, null, false, false, false, Collections.EMPTY_SET, baseDir, new HashMap(), errorListener);
+
+        //TODO pw: disabling particle validation rules (noPvr) solves BUG on sf.net
+        SchemaTypeSystem system = loadTypeSystem2(name, xsdFiles, null, false, false, true, Collections.EMPTY_SET, baseDir, new HashMap(), errorListener);
         if (errorListener.hasError())
             return null;
         return system;
@@ -127,7 +129,7 @@ public class TSLoader {
             opts.setCompileNoPvrRule();
         if (mdefNamespaces != null)
             opts.setCompileMdefNamespaces(mdefNamespaces);
-        opts.setCompileNoValidation(); // already validated here
+        //        opts.setCompileNoValidation(); // already validated here
 
         // now pass it to the main compile function
         SchemaTypeSystemCompiler.Parameters params = new SchemaTypeSystemCompiler.Parameters();

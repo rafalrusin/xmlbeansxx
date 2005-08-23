@@ -34,6 +34,8 @@ libxmlbeansxx_la_SOURCES = \
 	XmlParser.h\
 	XercesParser.cpp\
 	XercesParser.h\
+	LibXMLParser.cpp\
+	LibXMLParser.h\
 	macros.h\
 	TextUtils.h\
 	TextUtils.cpp\

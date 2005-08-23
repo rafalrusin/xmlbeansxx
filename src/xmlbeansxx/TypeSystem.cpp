@@ -76,6 +76,7 @@ int TypeSystem::addNamespace(const std::string namespaceName) {
         n_namespaces++;
         return n_namespaces-1;
     } else {
+        // return namespace's number by URI
         return namespaces[namespaceName]-1;
     }
 }

@@ -312,7 +312,9 @@ void XercesParser::parse(istream &in,XmlObject *root) {
         throw;
     }
     nodesStack.pop();
-    BOOST_ASSERT(nodesStack.empty());
+    if (!nodesStack.empty()) {
+        LOG4CXX_ERROR(LOG, "nodesStack is NOT empty!");
+    }
     LOG4CXX_DEBUG(LOG,std::string("XercesParser::parse() - finish"));
 }
 
