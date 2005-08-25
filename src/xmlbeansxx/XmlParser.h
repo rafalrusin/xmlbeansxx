@@ -45,6 +45,7 @@ public:
      * (apropriate grammars should be loaded using eg. loadGrammar method).
      */
     virtual void parse(std::istream &in, XmlObject *documentRoot) = 0;
+    virtual void parse(std::string &doc, XmlObject *documentRoot) = 0;
 
     virtual boost::shared_ptr<XmlOptions> getXmlOptions() const = 0;
     virtual void setXmlOptions(const boost::shared_ptr<XmlOptions> &options) = 0;
