@@ -94,7 +94,13 @@ public:
      * If XmlOptions validation is set, then uses xercesc schema validator
      * (apropriate grammars should be loaded using eg. loadGrammar method).
      */
-    virtual void parse(std::istream &in, XmlObject *documentRoot);
+    void parse(std::istream &in, XmlObject *documentRoot);
+    /**
+     * Parses using xercesc parser an xml document from std::string to some XmlDocument. 
+     * If XmlOptions validation is set, then uses xercesc schema validator
+     * (apropriate grammars should be loaded using eg. loadGrammar method).
+     */
+    void parse(std::string &doc, XmlObject *documentRoot);
 
     virtual boost::shared_ptr<XmlOptions> getXmlOptions() const {
         return opts;
