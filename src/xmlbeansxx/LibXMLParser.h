@@ -70,6 +70,7 @@ namespace xmlbeansxx {
 
         // parse using libxml2 parser
         void parse(std::istream &in, XmlObject *documentRoot);
+        void parse(std::string &doc, XmlObject *documentRoot);
 
         boost::shared_ptr<XmlOptions> getXmlOptions() const { return options; }
 

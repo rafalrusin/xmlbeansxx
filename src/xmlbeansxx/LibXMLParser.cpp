@@ -19,7 +19,7 @@
 #include "BeansException.h"
 #include "Tracer.h"
 #include "defs.h"
-
+#include <stdio.h>
 #include <boost/scoped_array.hpp>
 
 #include <libxml/xmlstring.h>
@@ -30,7 +30,7 @@ namespace xmlbeansxx {
 
     // include class static objects in scope (else tests won't link)
     bool LibXMLParser::initialized = false;
-    boost::mutex LibXMLParser::mutex;
+    //boost::mutex LibXMLParser::mutex;
 
     using namespace std;
 
@@ -40,7 +40,7 @@ namespace xmlbeansxx {
      * SAX callbacks headers
      */
     extern "C" {
-        void startElementNs(void *ctx,
+        void static startElementNs(void *ctx,
                             const xmlChar *localname,
                             const xmlChar *prefix,
                             const xmlChar *URI,
@@ -49,25 +49,62 @@ namespace xmlbeansxx {
                             int nb_attributes,
                             int nb_defaulted,
                             const xmlChar **attributes);
-        void endElementNs(void *ctx,
+        void static endElementNs(void *ctx,
                           const xmlChar *localname,
                           const xmlChar *prefix,
                           const xmlChar *URI);
-        void characters(void *ctx, const xmlChar *ch, int len);
-        void serror(void *ctx, xmlErrorPtr error);
+        void static characters(void *ctx, const xmlChar *ch, int len);
+        void static serror(void *ctx, xmlErrorPtr error);
+
+        static xmlSAXHandler xmlbeansxxSAX2HandlerStruct = {
+    NULL, 
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    characters,
+    NULL,
+    NULL,
+    NULL,
+    NULL,//warningDebug,
+    NULL,//errorDebug,
+    NULL,//fatalErrorDebug,
+    NULL,
+    NULL,//cdataBlockDebug,
+    NULL,
+    XML_SAX2_MAGIC,
+    NULL,
+    startElementNs,
+    endElementNs,
+    NULL
+};
+
+static xmlSAXHandlerPtr xmlbeansxxSAX2Handler = &xmlbeansxxSAX2HandlerStruct;
+
     }
 
     log4cxx::LoggerPtr LOG = log4cxx::Logger::getLogger(
         string("xmlbeansxx.LibXMLParser") );
 
     LibXMLParser::LibXMLParser()
-        : options(new XmlOptions()), saxHandlerPtr(0)
+        : options(new XmlOptions())
     {
         init();
     }
 
     LibXMLParser::LibXMLParser(const boost::shared_ptr<XmlOptions> &options)
-        : saxHandlerPtr(0)
     {
         this->options = options;
         init();
@@ -76,91 +113,54 @@ namespace xmlbeansxx {
     LibXMLParser::~LibXMLParser()
     {
         unloadGrammars();
-        if (saxHandlerPtr != 0)
-            delete saxHandlerPtr;
     }
 
     void LibXMLParser::init()
     {
-        LOG4CXX_DEBUG(LOG, "init - start");
-
+        //LOG4CXX_DEBUG(LOG, "init - start");
+/*
 #ifdef BOOST_HAS_THREADS
         {
             boost::detail::thread::scoped_lock<boost::mutex> lock(mutex);
             if (initialized == false) {
-                LOG4CXX_DEBUG(LOG, "initializing libxml2 parser...");
+                //LOG4CXX_DEBUG(LOG, "initializing libxml2 parser...");
                 xmlInitParser();
                 initialized = true;
             }
         }
 #endif
-
+*/
         user_data = this;
 
         schema         = NULL;
         validationCtxt = NULL;
         schemaPlug     = NULL;
 
-        {
-            this->saxHandlerPtr = new xmlSAXHandler;
-            this->saxHandlerPtr->internalSubset = NULL;
-            this->saxHandlerPtr->isStandalone = NULL;
-            this->saxHandlerPtr->hasInternalSubset = NULL;
-            this->saxHandlerPtr->hasExternalSubset = NULL;
-            this->saxHandlerPtr->resolveEntity = NULL;
-            this->saxHandlerPtr->getEntity = NULL;
-            this->saxHandlerPtr->entityDecl = NULL;
-            this->saxHandlerPtr->notationDecl = NULL;
-            this->saxHandlerPtr->attributeDecl = NULL;
-            this->saxHandlerPtr->elementDecl = NULL;
-            this->saxHandlerPtr->unparsedEntityDecl = NULL;
-            this->saxHandlerPtr->setDocumentLocator = NULL;
-            this->saxHandlerPtr->startDocument = NULL;
-            this->saxHandlerPtr->endDocument = NULL;
-            this->saxHandlerPtr->startElement = NULL;
-            this->saxHandlerPtr->endElement = NULL;
-            this->saxHandlerPtr->reference = NULL;
-            this->saxHandlerPtr->characters = characters;
-            this->saxHandlerPtr->ignorableWhitespace = NULL;
-            this->saxHandlerPtr->processingInstruction = NULL;
-            this->saxHandlerPtr->comment = NULL;
-            this->saxHandlerPtr->warning = NULL;
-            this->saxHandlerPtr->error = NULL;
-            this->saxHandlerPtr->fatalError = NULL;
-            this->saxHandlerPtr->getParameterEntity = NULL;
-            this->saxHandlerPtr->cdataBlock = NULL;
-            this->saxHandlerPtr->externalSubset = NULL;
-            this->saxHandlerPtr->initialized = XML_SAX2_MAGIC;
-            this->saxHandlerPtr->_private = NULL;
-            this->saxHandlerPtr->startElementNs = startElementNs;
-            this->saxHandlerPtr->endElementNs = endElementNs;
-            this->saxHandlerPtr->serror = serror;
-        }
 
         xsi_ns = globalTypeSystem()->
             addNamespace("http://www.w3.org/2001/XMLSchema-instance");
 
-        LOG4CXX_DEBUG(LOG, "init - finish");
+        //LOG4CXX_DEBUG(LOG, "init - finish");
     }
 
     void LibXMLParser::parse(istream &in, XmlObject *documentRoot)
     {
-        // libxml2 parser can parse file or memory
-        // can't have filename, so give memory
+        //TODO: improve it!
         string line, doc;
         while (getline(in, line)) {
-            line.append(" ");
+            //TODO:  przemek a to po co ten " " przeciez to moze popsuc dokument xml!
+            //line.append(" ");
             doc.append(line);
         }
+        parse(doc, documentRoot);
+    } 
 
-        TRACER(LOG, "parse");
-        LOG4CXX_DEBUG(LOG, string("LibXMLParser::parse() - start"));
+    void LibXMLParser::parse(std::string &doc, XmlObject *documentRoot)
+    {
+	
+        xmlSAXHandlerPtr handler;
 
-#ifdef BOOST_HAS_THREADS
-        boost::detail::thread::scoped_lock<boost::recursive_mutex>
-            lock(documentRoot->mutex());
-        LOG4CXX_DEBUG(LOG, string("locked"));
-#endif
+        handler = xmlbeansxxSAX2Handler;
 
         while (!nodesStack.empty())
             nodesStack.pop();
@@ -171,18 +171,33 @@ namespace xmlbeansxx {
                     0) );
 
         int errNo;
-        if ((errNo = xmlSAXUserParseMemory(this->saxHandlerPtr,
+        if ( validationCtxt == NULL )  {
+            if ((errNo = xmlSAXUserParseMemory(handler,
                                            (void *) this,
                                            (const char *) doc.c_str(),
                                            doc.length())) != 0) {
-            // TODO: error handling (xmlParserSetError... ?)
-            LOG4CXX_ERROR(LOG, "parse error");
-            throw new XmlParseException(string("LibXMLParseException"));
-        }
+                // TODO: error handling (xmlParserSetError... ?)
+                LOG4CXX_ERROR(LOG, "parse error");
+                throw new XmlParseException(string("LibXMLParseException"));
+            }
+        } 
+        else {
+            xmlParserInputBufferPtr buf = NULL;
+            buf = xmlParserInputBufferCreateMem((const char *)doc.c_str(), doc.length(), XML_CHAR_ENCODING_NONE);
 
+            if (( errNo = xmlSchemaValidateStream(validationCtxt, 
+                            buf,
+                            XML_CHAR_ENCODING_NONE, 
+                            handler, 
+                            (void *)this)) != 0 ) {
+                
+                LOG4CXX_ERROR(LOG, "parse (with validation) error");
+                throw new XmlParseException(string("LibXMLParseException"));
+             }
+        }
         nodesStack.pop();
         BOOST_ASSERT(nodesStack.empty());
-        LOG4CXX_DEBUG(LOG, string("LibXMLParser::parse() - finish"));
+        //LOG4CXX_DEBUG(LOG, string("LibXMLParser::parse() - finish"));
     }
 
     void addSchemaValidityError(void *ctx, const char *msg, ...)
@@ -251,9 +266,14 @@ namespace xmlbeansxx {
         }
 
         xmlSchemaSetParserErrors(schemaParserCtxt,
-                                 addSchemaValidityError,
-                                 addSchemaValidityWarning,
-                                 this);
+                            (xmlSchemaValidityErrorFunc) fprintf,
+                                        (xmlSchemaValidityWarningFunc) fprintf,
+                                                    stderr);
+
+        //xmlSchemaSetParserErrors(schemaParserCtxt,
+         //                        addSchemaValidityError,
+          //                       addSchemaValidityWarning,
+           //                      this);
 
         schema = xmlSchemaParse(schemaParserCtxt);
         xmlSchemaFreeParserCtxt(schemaParserCtxt); // not needed anymore
@@ -276,7 +296,7 @@ namespace xmlbeansxx {
                                 addSchemaValidityWarning,
                                 this);
         
-        schemaPlug = xmlSchemaSAXPlug(validationCtxt,
+        /*schemaPlug = xmlSchemaSAXPlug(validationCtxt,
                                       &saxHandlerPtr,
                                       &(this->user_data));
         if (schemaPlug == NULL) {
@@ -285,6 +305,7 @@ namespace xmlbeansxx {
             unloadGrammars();
             return;
         }
+        */
     }
 
     // clear after schemas loading
@@ -380,45 +401,45 @@ namespace xmlbeansxx {
                         int nb_defaulted,
                         const xmlChar **attributes) // (localname/prefix/URI/value/end)
     {
-//         LOG4CXX_DEBUG(LOG, "SAX2 - StartElementNS");
-//         LOG4CXX_DEBUG(LOG, string("localname: ") + (const char *) localname);
-//         LOG4CXX_DEBUG(LOG, string("prefix   : ") + (prefix == NULL ? "" : (const char *) prefix));
-//         LOG4CXX_DEBUG(LOG, string("URI      : ") + (URI == NULL ? "" : (const char *) URI));
-//         LOG4CXX_DEBUG(LOG, "namespaces...");
+//         //LOG4CXX_DEBUG(LOG, "SAX2 - StartElementNS");
+//         //LOG4CXX_DEBUG(LOG, string("localname: ") + (const char *) localname);
+//         //LOG4CXX_DEBUG(LOG, string("prefix   : ") + (prefix == NULL ? "" : (const char *) prefix));
+//         //LOG4CXX_DEBUG(LOG, string("URI      : ") + (URI == NULL ? "" : (const char *) URI));
+//         //LOG4CXX_DEBUG(LOG, "namespaces...");
 //         FOR(i, nb_namespaces) {
-//             LOG4CXX_DEBUG(LOG, string("namespace: ")
+//             //LOG4CXX_DEBUG(LOG, string("namespace: ")
 //                           + (namespaces[2*i] == NULL ? "" : (const char *) namespaces[2*i])
 //                           + "="
 //                           + (const char *) namespaces[2*i+1]);
 //         }
-//         LOG4CXX_DEBUG(LOG, "attributes...");
+//         //LOG4CXX_DEBUG(LOG, "attributes...");
 //         FOR(i, nb_attributes) {
-//             LOG4CXX_DEBUG(LOG, string("attribute: "));
-//             LOG4CXX_DEBUG(LOG, string("localname: ") + (const char *) attributes[5*i]);
-//             LOG4CXX_DEBUG(LOG, string("prefix   : ")
+//             //LOG4CXX_DEBUG(LOG, string("attribute: "));
+//             //LOG4CXX_DEBUG(LOG, string("localname: ") + (const char *) attributes[5*i]);
+//             //LOG4CXX_DEBUG(LOG, string("prefix   : ")
 //                           + (attributes[5*i+1] == NULL
 //                              ? "" 
 //                              : (const char *) attributes[5*i+1]));
-//             LOG4CXX_DEBUG(LOG, string("URI      : ")
+//             //LOG4CXX_DEBUG(LOG, string("URI      : ")
 //                           + (attributes[5*i+2] == NULL
 //                              ? ""
 //                              : (const char *) attributes[5*i+2]));
-//             LOG4CXX_DEBUG(LOG, string("value    : ") + getAttrValue(attributes, 5*i));
+//             //LOG4CXX_DEBUG(LOG, string("value    : ") + getAttrValue(attributes, 5*i));
 //         }
 
         /* *************************************************************************** */
-
         LibXMLParser *parser = (LibXMLParser *) ctx;
 
         string name((const char *) localname);
 
-        TRACER(LOG, string("startElement(") + string(name) + ")");
+        //LOG4CXX_INFO(LOG, "star element " << localname);
+        //TRACER(LOG, string("startElement(") + string(name) + ")");
 
         int restorePosition = parser->xmlContext.restorePosition();
 
         // add a new node without contents processing
         if (parser->nodesStack.top().processContents == false) {
-            LOG4CXX_DEBUG(LOG, "Adding new node without processing contents");
+            //LOG4CXX_DEBUG(LOG, "Adding new node without processing contents");
             XmlObjectPtr xmlObjPtr( XmlObject::Factory::newInstance() );
 
             for (int i = 0, current = 0;
@@ -454,7 +475,7 @@ namespace xmlbeansxx {
                     pfx = (const char *) namespaces[2*i+NS_PREFIX];
                 parser->xmlContext.setLink(pfx, ns);
             }
-
+            
             // parsed attributes are skipped
             boost::scoped_array<bool> skipped(new bool[nb_attributes]);
 
@@ -462,7 +483,7 @@ namespace xmlbeansxx {
             XmlObjectPtr xmlObjPtr;
             bool isArray = false;
 
-            LOG4CXX_DEBUG(LOG, string("Parsing xsi attributes"));
+            //LOG4CXX_DEBUG(LOG, string("Parsing xsi attributes"));
 
             for (int i = 0, current = 0;
                  i < nb_attributes;
@@ -496,10 +517,10 @@ namespace xmlbeansxx {
                                                + string(name) + string("'"));
 
                         if (!isArray) {
-                            LOG4CXX_DEBUG(LOG, string("createByName.."));
+                            //LOG4CXX_DEBUG(LOG, string("createByName.."));
                             xmlObjPtr = globalTypeSystem()->
                                 createByName(nsTag.second, nsTag.first);
-                            LOG4CXX_DEBUG(LOG, string("createByName..returned"));
+                            //LOG4CXX_DEBUG(LOG, string("createByName..returned"));
 
                             if (xmlObjPtr == 0)
                                 throw XmlException(string("Xsd Type '")
@@ -516,10 +537,10 @@ namespace xmlbeansxx {
                                                + string("' in type name, in element '")
                                                + string(name) + string("'"));
                         isArray = true;
-                        LOG4CXX_DEBUG(LOG, string("createArrayByName.."));
+                        //LOG4CXX_DEBUG(LOG, string("createArrayByName.."));
                         xmlObjPtr = globalTypeSystem()->
                             createArrayByName(nsTag.second, nsTag.first);
-                        LOG4CXX_DEBUG(LOG, string("createArrayByName..returned"));
+                        //LOG4CXX_DEBUG(LOG, string("createArrayByName..returned"));
 
                         if (xmlObjPtr == 0)
                             throw XmlException(string("Xsd Type '")
@@ -541,25 +562,25 @@ namespace xmlbeansxx {
             } // end for()
 
             if (xmlObjPtr == 0) {
-                LOG4CXX_DEBUG(LOG, string("createSubObject ") + string(name)
-                                   + string(" on object: "
-                                   + parser->nodesStack.top().obj->
-                                            getSchemaType()->className));
+                //LOG4CXX_DEBUG(LOG, string("createSubObject ") + string(name)
+                                   //+ string(" on object: "
+                                   //+ parser->nodesStack.top().obj->
+                                    //        getSchemaType()->className));
 
                 xmlObjPtr = parser->nodesStack.top().obj->getSchemaType()->
                     createSubObject(name);
 
-                LOG4CXX_DEBUG(LOG, string("createSubObject returned"));
+                //LOG4CXX_DEBUG(LOG, string("createSubObject returned"));
 
                 if(xmlObjPtr == 0) {
-                    LOG4CXX_DEBUG(LOG, string("createSubObject was NULL"));
+                    //LOG4CXX_DEBUG(LOG, string("createSubObject was NULL"));
                     throw XmlException(string("Cannot create subelement '")
                                        + string(name)
                                        + string("' on object of class "
                                        + parser->nodesStack.top().obj->
                                                 getSchemaType()->className));
                 } else {
-                    LOG4CXX_DEBUG(LOG, string("createSubObject was not NULL"));
+                    //LOG4CXX_DEBUG(LOG, string("createSubObject was not NULL"));
                 }
             }
 
@@ -567,7 +588,7 @@ namespace xmlbeansxx {
             // after parsing this element
             xmlObjPtr->getContents()->free();
 
-            LOG4CXX_DEBUG(LOG, string("Adding attributes to object"));
+            //LOG4CXX_DEBUG(LOG, string("Adding attributes to object"));
 
             //adding attributes to new object
             for (int i = 0, current = 0;
@@ -580,8 +601,8 @@ namespace xmlbeansxx {
                 string attrname(getAttrName(attributes, current));
                 string attrval(getAttrValue(attributes, current));
 
-                LOG4CXX_DEBUG(LOG, string("adding attr.name : ") + attrname);
-                LOG4CXX_DEBUG(LOG, string("adding attr.value: ") + attrval);
+                //LOG4CXX_DEBUG(LOG, string("adding attr.name : ") + attrname);
+                //LOG4CXX_DEBUG(LOG, string("adding attr.value: ") + attrval);
 
                 xmlObjPtr->getContents()->appendAttr(attrname, attrval);
             }
@@ -599,16 +620,15 @@ namespace xmlbeansxx {
                       const xmlChar *prefix,
                       const xmlChar *URI)
     {
-//         LOG4CXX_DEBUG(LOG, "SAX2 - END elementNS here!");
-//         LOG4CXX_DEBUG(LOG, string("localname: ") + (const char *) localname);
-//         LOG4CXX_DEBUG(LOG, string("prefix   : ")
+//         //LOG4CXX_DEBUG(LOG, "SAX2 - END elementNS here!");
+//         //LOG4CXX_DEBUG(LOG, string("localname: ") + (const char *) localname);
+//         //LOG4CXX_DEBUG(LOG, string("prefix   : ")
 //                       + (prefix == NULL ? "" : (const char *) prefix));
-//         LOG4CXX_DEBUG(LOG, string("URI      : ")
+//         //LOG4CXX_DEBUG(LOG, string("URI      : ")
 //                       + (URI == NULL ? "" : (const char *) URI));
-
         LibXMLParser *parser = (LibXMLParser *) ctx;
 
-        TRACER(LOG,"endElementNs");
+        //TRACER(LOG,"endElementNs");
         LibXMLParser::Element elem = parser->nodesStack.top();
         elem.obj->setSimpleContent(elem.characters);
         elem.obj->getContents()->insertDefaults(elem.obj->getSchemaType());
@@ -621,7 +641,7 @@ namespace xmlbeansxx {
         LibXMLParser *parser = (LibXMLParser *) ctx;
 
         string s( (const char*) ch, length);
-        cout << "got(" << length << ") characters: " << s << endl;
+        //cout << "got(" << length << ") characters: " << s << endl;
         parser->nodesStack.top().characters += s;
     }
 
