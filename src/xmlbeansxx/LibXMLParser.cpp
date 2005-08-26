@@ -41,57 +41,57 @@ namespace xmlbeansxx {
      */
     extern "C" {
         void static startElementNs(void *ctx,
-                            const xmlChar *localname,
-                            const xmlChar *prefix,
-                            const xmlChar *URI,
-                            int nb_namespaces,
-                            const xmlChar **namespaces,
-                            int nb_attributes,
-                            int nb_defaulted,
-                            const xmlChar **attributes);
+                                   const xmlChar *localname,
+                                   const xmlChar *prefix,
+                                   const xmlChar *URI,
+                                   int nb_namespaces,
+                                   const xmlChar **namespaces,
+                                   int nb_attributes,
+                                   int nb_defaulted,
+                                   const xmlChar **attributes);
         void static endElementNs(void *ctx,
-                          const xmlChar *localname,
-                          const xmlChar *prefix,
-                          const xmlChar *URI);
+                                 const xmlChar *localname,
+                                 const xmlChar *prefix,
+                                 const xmlChar *URI);
         void static characters(void *ctx, const xmlChar *ch, int len);
         void static serror(void *ctx, xmlErrorPtr error);
 
         static xmlSAXHandler xmlbeansxxSAX2HandlerStruct = {
-    NULL, 
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    characters,
-    NULL,
-    NULL,
-    NULL,
-    NULL,//warningDebug,
-    NULL,//errorDebug,
-    NULL,//fatalErrorDebug,
-    NULL,
-    NULL,//cdataBlockDebug,
-    NULL,
-    XML_SAX2_MAGIC,
-    NULL,
-    startElementNs,
-    endElementNs,
-    NULL
-};
+            NULL, 
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            characters,
+            NULL,
+            NULL,
+            NULL,
+            NULL,//warningDebug,
+            NULL,//errorDebug,
+            NULL,//fatalErrorDebug,
+            NULL,
+            NULL,//cdataBlockDebug,
+            NULL,
+            XML_SAX2_MAGIC,
+            NULL,
+            startElementNs,
+            endElementNs,
+            serror
+        };
 
-static xmlSAXHandlerPtr xmlbeansxxSAX2Handler = &xmlbeansxxSAX2HandlerStruct;
+        static xmlSAXHandlerPtr xmlbeansxxSAX2Handler = &xmlbeansxxSAX2HandlerStruct;
 
     }
 
@@ -132,9 +132,10 @@ static xmlSAXHandlerPtr xmlbeansxxSAX2Handler = &xmlbeansxxSAX2HandlerStruct;
 */
         user_data = this;
 
-        schema         = NULL;
-        validationCtxt = NULL;
-        schemaPlug     = NULL;
+        schemaParserCtxt = NULL;
+        schema           = NULL;
+        validationCtxt   = NULL;
+        schemaPlug       = NULL;
 
 
         xsi_ns = globalTypeSystem()->
@@ -143,13 +144,19 @@ static xmlSAXHandlerPtr xmlbeansxxSAX2Handler = &xmlbeansxxSAX2HandlerStruct;
         //LOG4CXX_DEBUG(LOG, "init - finish");
     }
 
+    string LibXMLParser::generateErrorMessage(xmlErrorPtr error)
+    {
+        if (error == NULL)
+            return string("Can't get xmlError message from libxml2");
+
+        return string(error->message);
+    }
+
     void LibXMLParser::parse(istream &in, XmlObject *documentRoot)
     {
         //TODO: improve it!
         string line, doc;
         while (getline(in, line)) {
-            //TODO:  przemek a to po co ten " " przeciez to moze popsuc dokument xml!
-            //line.append(" ");
             doc.append(line);
         }
         parse(doc, documentRoot);
@@ -173,12 +180,12 @@ static xmlSAXHandlerPtr xmlbeansxxSAX2Handler = &xmlbeansxxSAX2HandlerStruct;
         int errNo;
         if ( validationCtxt == NULL )  {
             if ((errNo = xmlSAXUserParseMemory(handler,
-                                           (void *) this,
-                                           (const char *) doc.c_str(),
-                                           doc.length())) != 0) {
-                // TODO: error handling (xmlParserSetError... ?)
-                LOG4CXX_ERROR(LOG, "parse error");
-                throw new XmlParseException(string("LibXMLParseException"));
+                                               (void *) this,
+                                               (const char *) doc.c_str(),
+                                               doc.length())) != 0) {
+
+                xmlErrorPtr error = xmlGetLastError();
+                throw new XmlParseException(generateErrorMessage(error));
             }
         } 
         else {
@@ -191,13 +198,12 @@ static xmlSAXHandlerPtr xmlbeansxxSAX2Handler = &xmlbeansxxSAX2HandlerStruct;
                             handler, 
                             (void *)this)) != 0 ) {
                 
-                LOG4CXX_ERROR(LOG, "parse (with validation) error");
-                throw new XmlParseException(string("LibXMLParseException"));
+                xmlErrorPtr error = xmlGetLastError();
+                throw new XmlParseException(generateErrorMessage(error));
              }
         }
         nodesStack.pop();
         BOOST_ASSERT(nodesStack.empty());
-        //LOG4CXX_DEBUG(LOG, string("LibXMLParser::parse() - finish"));
     }
 
     void addSchemaValidityError(void *ctx, const char *msg, ...)
@@ -257,37 +263,27 @@ static xmlSAXHandlerPtr xmlbeansxxSAX2Handler = &xmlbeansxxSAX2HandlerStruct;
                 warnings.clear();
         }
 
-        xmlSchemaParserCtxtPtr schemaParserCtxt;
         schemaParserCtxt = xmlSchemaNewParserCtxt(filename.c_str());
         if (schemaParserCtxt == NULL) {
-            // TODO: error handling
-            LOG4CXX_ERROR(LOG, "Can't create xmlSchemaParserContext");
+            throw new BeansException("Can't create xmlSchemaParserContext");
             return;
         }
 
         xmlSchemaSetParserErrors(schemaParserCtxt,
-                            (xmlSchemaValidityErrorFunc) fprintf,
-                                        (xmlSchemaValidityWarningFunc) fprintf,
-                                                    stderr);
-
-        //xmlSchemaSetParserErrors(schemaParserCtxt,
-         //                        addSchemaValidityError,
-          //                       addSchemaValidityWarning,
-           //                      this);
+                                 addSchemaValidityError,
+                                 addSchemaValidityWarning,
+                                 this);
 
         schema = xmlSchemaParse(schemaParserCtxt);
-        xmlSchemaFreeParserCtxt(schemaParserCtxt); // not needed anymore
         if (schema == NULL) {
-            // TODO: error handling
-            LOG4CXX_ERROR(LOG, "Can't precompile schema");
             unloadGrammars();
+            throw new BeansException("Can't precompile schema");
             return;
         }
 
         if ((validationCtxt = xmlSchemaNewValidCtxt(schema)) == NULL) {
-            // TODO: error handling
-            LOG4CXX_ERROR(LOG, "Can't create schema validation context");
             unloadGrammars();
+            throw new BeansException("Can't create schema validation context");
             return;
         }
 
@@ -323,6 +319,8 @@ static xmlSAXHandlerPtr xmlbeansxxSAX2Handler = &xmlbeansxxSAX2HandlerStruct;
             xmlSchemaFree(schema);
             schema = NULL;
         }
+        if (schemaParserCtxt)
+            xmlSchemaFreeParserCtxt(schemaParserCtxt);
     }
 
     // return namespace number bound to prefix or default namespace if
@@ -382,7 +380,7 @@ static xmlSAXHandlerPtr xmlbeansxxSAX2Handler = &xmlbeansxxSAX2HandlerStruct;
     {
         const xmlChar *start = attributes[current+ATTR_VALUE];
         const xmlChar *end   = attributes[current+ATTR_END];
-        // can be buggy?
+
         int len = end - start;
         return string((const char *) start, len);
     }
@@ -559,7 +557,7 @@ static xmlSAXHandlerPtr xmlbeansxxSAX2Handler = &xmlbeansxxSAX2HandlerStruct;
                                            + string(name));
                     }
                 }
-            } // end for()
+            }
 
             if (xmlObjPtr == 0) {
                 //LOG4CXX_DEBUG(LOG, string("createSubObject ") + string(name)
@@ -620,15 +618,8 @@ static xmlSAXHandlerPtr xmlbeansxxSAX2Handler = &xmlbeansxxSAX2HandlerStruct;
                       const xmlChar *prefix,
                       const xmlChar *URI)
     {
-//         //LOG4CXX_DEBUG(LOG, "SAX2 - END elementNS here!");
-//         //LOG4CXX_DEBUG(LOG, string("localname: ") + (const char *) localname);
-//         //LOG4CXX_DEBUG(LOG, string("prefix   : ")
-//                       + (prefix == NULL ? "" : (const char *) prefix));
-//         //LOG4CXX_DEBUG(LOG, string("URI      : ")
-//                       + (URI == NULL ? "" : (const char *) URI));
         LibXMLParser *parser = (LibXMLParser *) ctx;
 
-        //TRACER(LOG,"endElementNs");
         LibXMLParser::Element elem = parser->nodesStack.top();
         elem.obj->setSimpleContent(elem.characters);
         elem.obj->getContents()->insertDefaults(elem.obj->getSchemaType());
@@ -641,7 +632,6 @@ static xmlSAXHandlerPtr xmlbeansxxSAX2Handler = &xmlbeansxxSAX2HandlerStruct;
         LibXMLParser *parser = (LibXMLParser *) ctx;
 
         string s( (const char*) ch, length);
-        //cout << "got(" << length << ") characters: " << s << endl;
         parser->nodesStack.top().characters += s;
     }
 

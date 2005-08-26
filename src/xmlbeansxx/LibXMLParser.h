@@ -49,12 +49,13 @@ namespace xmlbeansxx {
         static boost::mutex mutex;
 #endif
 
-        xmlSchemaPtr          schema;         // internal schema representation
-        xmlSchemaValidCtxtPtr validationCtxt; // based on schema
-        xmlSchemaSAXPlugPtr   schemaPlug;     // plugged schema validation layer
+        xmlSchemaParserCtxtPtr schemaParserCtxt; // schema parser context
+        xmlSchemaPtr           schema;           // internal schema representation
+        xmlSchemaValidCtxtPtr  validationCtxt;   // based on schema
+        xmlSchemaSAXPlugPtr    schemaPlug;       // plugged schema validation layer
 
-        std::list<std::string> errors;        // schema validity errors
-        std::list<std::string> warnings;      // schema validity warnings
+        std::list<std::string> errors;           // schema validity errors
+        std::list<std::string> warnings;         // schema validity warnings
 
         boost::shared_ptr<XmlOptions> options;
 
@@ -138,6 +139,7 @@ namespace xmlbeansxx {
 
     private:
         void init();
+        std::string generateErrorMessage(xmlErrorPtr);
     };
 }
 
