@@ -5,7 +5,7 @@ INCLUDES = -I ${top_srcdir}/src
 LDADD = ${top_builddir}/src/xmlbeansxx/libxmlbeansxx.la
 
 if HAVE_CPPUNIT
-AM_CPPFLAGS = $(CPPUNIT_CFLAGS) 
+CXXFLAGS += $(CPPUNIT_CFLAGS) 
 LDADD += $(CPPUNIT_LIBS)
 endif
 
