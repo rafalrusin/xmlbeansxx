@@ -2,10 +2,10 @@
 # V_1_1
 AC_PREREQ(2.57)
 
-AC_INIT(XMLBEANSXX, 0.6.3, support@TouK.pl)
+AC_INIT(XMLBEANSXX, 0.7.1, support@TouK.pl)
 #Before release, change library versions 
 #Read http://www.gnu.org/software/libtool/manual.html#SEC32 before doing this
-AC_SUBST(library_version_info, 1:1:0)
+AC_SUBST(library_version_info, 2:0:1)
 
 
 AC_CONFIG_AUX_DIR([config])
@@ -24,8 +24,6 @@ AC_SUBST(LTDLINCL)
 AC_SUBST(LIBLTDL)
 AC_LIBTOOL_DLOPEN
 AC_PROG_LIBTOOL
-
-CXXFLAGS="-Wall -O2"
 
 ACX_PTHREAD([
 		LIBS="$PTHREAD_LIBS $LIBS"
@@ -57,7 +55,6 @@ AC_SUBST(xmlbeansxx_gen_dir)
 
 #AC_CHECK_FILE($xmlbeansxx_gen_dir/bin/xmlbeansxx-gen, , AC_MSG_ERROR([File $xmlbeansxx_gen_dir/bin/xmlbeansxx-gen not found]))
 AC_CHECK_LIB(xerces-c,main,,AC_MSG_ERROR([xerces-c library not found. Please install it.]))
-AC_CHECK_LIB(xml2,main,,AC_MSG_ERROR([libxml2 library not found. Please install it.]))
 AC_CHECK_LIB(log4cxx,main,,AC_MSG_ERROR([log4cxx library not found. Please install it.]))
 AC_CHECK_LIB(gmp,main,,AC_MSG_ERROR([gmp library not found. Please install it.]))
 AC_CHECK_LIB(gmpxx,main,,AC_MSG_ERROR([gmpxx library not found. Please install gmp with gmpxx option enabled.]))

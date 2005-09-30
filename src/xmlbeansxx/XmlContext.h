@@ -4,9 +4,9 @@
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
-
+ 
     http://www.apache.org/licenses/LICENSE-2.0
-
+ 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,33 +18,34 @@
 #define _XMLBEANSXX_XMLCONTEXT_H_
 
 #include "BoostAssert.h"
-#include <map>
-#include <string>
-#include <vector>
-#include <stack>
 #include <boost/shared_ptr.hpp>
-
+#include "String.h"
+#include "Map.h"
+#include "Stack.h"
+#include "StoreString.h"
 
 namespace xmlbeansxx {
-    
+
 /**
  * Provides context of xml namespace links. 
- */    
+ */
 class XmlContext {
 private:
-    std::map<std::string,int> nsLinks;
-    std::stack<std::pair<std::string,int> > restoreLinks;
-        
+    Map<String, StoreString, StoreString::Hash>::type nsLinks;
+    Stack<std::pair<String, StoreString> >::type restoreLinks;
+    Stack<int>::type rememberedPositions;
+
 public:
     /** @return remembered shortcut mapping to namespace. */
-    int getLink(std::string shortcut);
+    StoreString getLink(String shortcut);
     /** Adds new shortcut to a namespace ns. */
-    void setLink(std::string shortcut,int ns);
+    void setLink(String shortcut, StoreString ns);
 
-    /** @return current position. It can be used for restore. */
-    int restorePosition();
-    /** Restores state of links to restorePosition */
-    void restore(int restorePosition);
+    /** Restores state of links to last remembered posittion. */
+    void restore();
+    
+    /** Remembers state of links. */
+    void remember();
 };
 }
 

@@ -22,6 +22,7 @@
 #include <xercesc/util/XMLString.hpp>
 #include <sstream>
 #include <cstdio>
+#include "CoreTypes.h"
 
 
 #define TRACER2(a,b) 
@@ -34,36 +35,36 @@ XERCES_CPP_NAMESPACE_USE
 
 namespace xmlbeansxx {
 
-  log4cxx::LoggerPtr TextUtils::log = log4cxx::Logger::getLogger(std::string("xmlbeansxx.TextUtils"));
+  log4cxx::LoggerPtr TextUtils::log = log4cxx::Logger::getLogger(String("xmlbeansxx.TextUtils"));
 
   TextUtils::TextUtils() {}
 
 
-  std::string TextUtils::intToString(int i) {
+  String TextUtils::intToString(int i) {
     ostringstream ss;
     ss<<i;
     return ss.str();
   }
 
-  std::string TextUtils::floatToString(float f) {
+  String TextUtils::floatToString(float f) {
     ostringstream ss;
     ss<<f;
     return ss.str();
   }
 
-  std::string TextUtils::doubleToString(double d) {
+  String TextUtils::doubleToString(double d) {
     ostringstream ss;
     ss<<d;
     return ss.str();
   }
 
-  std::string TextUtils::ptrToString(const void *ptr) {
+  String TextUtils::ptrToString(const void *ptr) {
     char buf[20];
     snprintf(buf,20,"%p",ptr);
     return string(buf);
   }
 
-  std::string TextUtils::boolToString(bool b) {
+  String TextUtils::boolToString(bool b) {
     if (b==false) return "false";
     else return "true";
   }
@@ -72,7 +73,7 @@ namespace xmlbeansxx {
     return ch=='\n' || ch==' ' || ch=='\t';
   }
 
-  std::string TextUtils::collapse(const std::string &str) {
+  String TextUtils::collapse(const String &str) {
     TRACER2(log,"collapse")
     LOG4CXX_DEBUG2(log,"str:"+str);
     int l=str.size();
@@ -81,14 +82,14 @@ namespace xmlbeansxx {
     while (b>=0 && isWhite(str[b])) b--;
     if (b<a) {
       LOG4CXX_DEBUG2(log,"ret:");
-      return std::string();
+      return String();
     } else {
       LOG4CXX_DEBUG2(log,"ret:"+str.substr(a,b-a+1));
       return str.substr(a,b-a+1);
     }
   }
 
-  std::string TextUtils::exchangeEntities(const std::string& str) {
+  String TextUtils::exchangeEntities(const String& str) {
     std::ostringstream o;
     for ( unsigned int i = 0; i < str.size(); i++ ) {
       switch (str[i]) {
@@ -115,13 +116,13 @@ namespace xmlbeansxx {
     return o.str();
   }
 
-  std::string TextUtils::exchangeEntitiesWithCDATA(const std::string& str) {
-    return std::string("<![CDATA[") + str + std::string("]]>");
+  String TextUtils::exchangeEntitiesWithCDATA(const String& str) {
+    return String("<![CDATA[") + str + String("]]>");
   }
 
-  bool TextUtils::checkInteger(const std::string &num2) {
+  bool TextUtils::checkInteger(const String &num2) {
     if (num2.size()<1) return false;
-    std::string num;
+    String num;
     if (num2[0] == '-' || num2[0] == '+')
         num = num2.substr(1);
     else
@@ -132,9 +133,9 @@ namespace xmlbeansxx {
     return true;
   }
 
-  bool TextUtils::checkDecimal(const std::string &num2) {
+  bool TextUtils::checkDecimal(const String &num2) {
     if (num2.size()<1) return false;
-    std::string num;
+    String num;
     if (num2[0] == '-' || num2[0] == '+')
         num = num2.substr(1);
     else
@@ -155,13 +156,13 @@ namespace xmlbeansxx {
     return c>='0' && c<='9';
   }
 
-  bool TextUtils::areDigits(const std::string &d) {
+  bool TextUtils::areDigits(const String &d) {
     bool r=true;
     FOREACH(it,d) r=r && TextUtils::isDigit(*it);
     return r;
   }
 
-  bool TextUtils::checkDate(const std::string &date) {
+  bool TextUtils::checkDate(const String &date) {
     if (date.size()!=10) return false;
     return TextUtils::areDigits(date.substr(0,4))
       && TextUtils::areDigits(date.substr(5,2))
@@ -169,10 +170,10 @@ namespace xmlbeansxx {
       && date[4]=='-' && date[7]=='-';
   }
 
-  xmlbeansxx::shared_array<unsigned char> TextUtils::base64Decode(const std::string &what) {
+  xmlbeansxx::Array<unsigned char> TextUtils::base64Decode(const String &what) {
     unsigned int outLen;
     XMLByte *buf=Base64::decode((XMLByte *)what.c_str(),&outLen);
-    xmlbeansxx::shared_array<unsigned char> a(outLen);
+    xmlbeansxx::Array<unsigned char> a(outLen);
     FOR(i,int(outLen)) {
       a[i]=buf[i];
     }
@@ -180,15 +181,31 @@ namespace xmlbeansxx {
     return a;
   }
 
-  std::string TextUtils::base64Encode(xmlbeansxx::shared_array<unsigned char> what) {
+  String TextUtils::base64Encode(Array<byte> what) {
     unsigned int outLen;
-    XMLByte *buf=Base64::encode(what.get(),what.size(),&outLen);
-    std::string s;
+    byte *buf0 = new byte[what.size()];
+    FOR(i, what.size()) {
+        buf0[i] = what[i];
+    }
+    XMLByte *buf=Base64::encode(buf0, what.size(), &outLen);
+    String s;
     FOR(i,int(outLen)) {
       s+=buf[i];
     }
+    delete buf0;
     XMLString::release(&buf);
     return s;
   }
 
+
+  String TextUtils::istreamToString(std::istream &in) {
+    String s,s2;
+    while (true) {
+        in>>s2;
+        if (in.eof())
+            break;
+        s+=s2;
+    }
+    return s;
+}
 }

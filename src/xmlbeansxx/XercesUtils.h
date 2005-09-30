@@ -4,9 +4,9 @@
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
-
+ 
     http://www.apache.org/licenses/LICENSE-2.0
-
+ 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,6 +29,7 @@
 #include <xercesc/sax/InputSource.hpp>
 #include <xercesc/util/XercesDefs.hpp>
 #include <xercesc/framework/XMLFormatter.hpp>
+#include "String.h"
 
 
 
@@ -36,14 +37,14 @@ namespace xmlbeansxx {
 
 class Transcoder;
 
-/** This is wrapper for xercesc::AttributeList to use UTF-8 std::strings instead of xerces internal string representation. */
+/** This is wrapper for xercesc::AttributeList to use UTF-8 Strings instead of xerces internal string representation. */
 class LocalAttributeList {
     int len;
-    boost::scoped_array<std::string> list;
+    boost::scoped_array<String> list;
 public:
     LocalAttributeList(xercesc::AttributeList &al,Transcoder *tr);
-    std::string getName(int i);
-    std::string getValue(int i);
+    String getName(int i);
+    String getValue(int i);
     int getLength();
     ~LocalAttributeList() ;
 };
@@ -66,30 +67,30 @@ public:
     xercesc::BinInputStream* makeStream() const;
 };
 
-/** Provides a xerces XMLFormatTarget that writes to std::string. */
+/** Provides a xerces XMLFormatTarget that writes to String. */
 class StdStringFormatTarget: public xercesc::XMLFormatTarget {
-    private:
-    std::string s;
-    public:
+private:
+    String s;
+public:
     StdStringFormatTarget();
 
     virtual void writeChars(const XMLByte *const toWrite, const unsigned int count, xercesc::XMLFormatter *const formatter);
-    std::string getString() const;
+    String getString() const;
     void reset();
 };
 
-/** Provides transcoding of xerces const XMLCh * string to std::string in given encoding. */
+/** Provides transcoding of xerces const XMLCh * string to String in given encoding. */
 class Transcoder {
-    private:
+private:
     StdStringFormatTarget t;
     xercesc::XMLFormatter f;
-    
-    public:
-    /** 
+
+public:
+    /**
      * @param encoding is a name of destination encoding. Eg. 'UTF-8'.
      */
     Transcoder(const char *encoding);
-    std::string transcode(const XMLCh *s);
+    String transcode(const XMLCh *s);
 };
 
 

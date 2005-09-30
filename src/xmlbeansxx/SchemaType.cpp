@@ -20,42 +20,4 @@
 
 namespace xmlbeansxx {
 
-Map_String_SchemaPropertyPtr::Map_String_SchemaPropertyPtr() {}
-Map_String_SchemaPropertyPtr::Map_String_SchemaPropertyPtr(const Map_String_SchemaPropertyPtr &b): std::map<std::string,SchemaPropertyPtr>(b) {}
-
-void SchemaType::init() {
-    fractionDigits=-1;
-    contentType=MIXED_CONTENT;
-}
-
-SchemaType::SchemaType(const std::type_info &classTypeInfo): classTypeInfo(classTypeInfo) {
-    init();
-}
-
-XmlObjectPtr SchemaType::createSubObject(const std::string &name) const {
-    SchemaPropertyPtr sp;
-    Map_String_SchemaPropertyPtr::const_iterator it=elements.find(name);
-    if (it!=elements.end()) {
-        return it->second->schemaType->createFn();
-    } else {
-        return XmlObject::Factory::newInstance(); 
-    }
-}
-    
-SchemaPropertyPtr SchemaType::findAttribute(const std::string &name) const {
-    Map_String_SchemaPropertyPtr::const_iterator it=attributes.find(name);
-    if (it==attributes.end()) return SchemaPropertyPtr();
-    else return it->second;
-}
-
-SchemaPropertyPtr SchemaType::findElement(const std::string &name) const {
-    Map_String_SchemaPropertyPtr::const_iterator it=elements.find(name);
-    if (it==elements.end()) return SchemaPropertyPtr();
-    else return it->second;
-}
-
-SchemaType::CONTENT_TYPE SchemaType::getContentType() const {
-    return contentType;
-}
-
 }

@@ -4,16 +4,14 @@ using namespace std;
 using namespace xmlbeansxx;
 
 int main() {
-    //not typed document parsing
+    //document parsing
     try {
-		string str=XmlInteger::Factory::newInstance(10213)->toString();
-		cout<<"str:\n"<<str<<"\n";
-        XmlIntegerPtr i=XmlInteger::Factory::parse(str);
-        i=XmlInteger::Factory::newInstance((*i)+(*XmlInteger::Factory::newInstance(1)));
-		cout<<"after add:"<<i->getSimpleContent()<<"\n";
-        i->serialize(cout);
+		string str=newInstance<XmlInteger>(BigInteger(10213))->toString();
+		cout << "document to parse:" << endl << str << endl;
+        XmlInteger i = XmlInteger::Factory::parse(str);
+		cout << "value: " << i->getBigIntegerValue() << endl;
     } catch (BeansException ex) {
-        cout<<"BeansException: "<<ex.getMessage()<<"\n";
+        cout << "BeansException: " << ex.getMessage() << endl;
     }
     return 0;
 }

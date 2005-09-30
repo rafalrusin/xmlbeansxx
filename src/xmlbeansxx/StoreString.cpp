@@ -31,8 +31,7 @@ namespace {
 
 
 char *duplicate(const char *str) {
-    static log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger("xmlbeansxx.duplicate");
-    //TRACER(logger,"duplicate")
+    //static log4cxx::LoggerPtr LOG = log4cxx::Logger::getLogger("xmlbeansxx.duplicate");
 
     char *buf;
     int l=strlen(str)+1;
@@ -46,7 +45,8 @@ char *duplicate(const char *str) {
          * This method assumes that 'new' operator always returns even pointer. 
          * This may cause portability problems.
          */
-        LOG4CXX_FATAL(logger,"Memory allocation using new operator returned odd pointer. This is not supported.");
+        //LOG4CXX_FATAL(LOG,"Memory allocation using new operator returned odd pointer. This is not supported.");
+        std::cerr << "Memory allocation using new operator returned odd pointer. This is not supported." << std::endl;
         throw IllegalStateException();
     }
     //strcpy(buf,str);
@@ -55,13 +55,40 @@ char *duplicate(const char *str) {
 }
 
 void freeDuplicate(char *str) {
-    static log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger("xmlbeansxx.freeDuplicate");
+    //static log4cxx::LoggerPtr LOG = log4cxx::Logger::getLogger("xmlbeansxx.freeDuplicate");
     //LOG4CXX_DEBUG(logger,"freeDuplicate:"<<str<<" ptr:"<<TextUtils::ptrToString(str));
     delete[] str;
 }
 }
+
+/** String storage remembers a collection of const char * strings. One can add some strings for further use. */
+class StringStorage {
+private:
+    //std::set<CStr> contents;
+    //typedef std::set<const char *,CStrLessFn> StoreSet;
+    typedef Map<const char *, int, CStrHashFn, CStrEqFn>::type StoreMap;
+    StoreMap contents;
+public:
+    struct SSInfo {
+        const char *str;
+        int hashCode;
+    };
+    
+    Vector<SSInfo>::type stored;
+
+    StringStorage();
+    /** Remembers a string in global pool */
+    void add(const String &str);
+    /** Checks whether given string is stored */
+    bool isStored(const char *str);
+
+    /** Takes a stored representation of given string or 0 if the string is not stored. */
+    unsigned long get(const char *str);
+    ~StringStorage();
+};
+
 //------------------------------------------------
-SimpleString::SimpleString(const std::string &s) {
+SimpleString::SimpleString(const String &s) {
     buf=duplicate(s.c_str());
 }
 SimpleString::SimpleString(const SimpleString &from) {
@@ -99,10 +126,10 @@ bool CStr::operator<(const CStr &b) const {
 //------------------------------------------------
 StringStorage::StringStorage() {
     //add default storage
-    add(std::string());
+    add(String());
 }
 
-void StringStorage::add(const std::string &str) {
+void StringStorage::add(const String &str) {
     const char *cs=str.c_str();
     if (cs==NULL) cs="";
     if (!isStored(cs)) {
@@ -136,18 +163,31 @@ StringStorage::~StringStorage() {
 }
 
 //------------------------------------------------
-log4cxx::LoggerPtr StoreString::log = log4cxx::Logger::getLogger("xmlbeansxx.StoreString");
+log4cxx::LoggerPtr StoreString::LOG = StoreString::LOG ;
+StringStorage *StoreString::storage = StoreString::storage;
+
+StoreString::MyExistence_I::MyExistence_I() {
+    StoreString::LOG = log4cxx::Logger::getLogger("xmlbeansxx.StoreString");
+    storage = new StringStorage();
+    LOG4CXX_DEBUG(LOG, "initialized");
+}
+
+StoreString::MyExistence_I::~MyExistence_I() {
+    delete storage;
+    storage = NULL;
+    LOG4CXX_DEBUG(LOG, "finalized");
+}
+
+Existence StoreString::staticInit() {
+    static Existence ptr(new MyExistence_I());
+    return ptr;
+}
 
 void StoreString::construct(const char *str) {
-    buf=getStorage()->get(str);
+    buf=storage->get(str);
     if (buf==0) {
         buf=(unsigned long)duplicate(str);
     }
-}
-
-StringStorage *StoreString::getStorage() {
-    static StringStorage *storage=new StringStorage();
-    return storage;
 }
 
 StoreString::StoreString() {
@@ -155,7 +195,7 @@ StoreString::StoreString() {
     construct("");
 }
 
-StoreString::StoreString(const std::string &str) {
+StoreString::StoreString(const String &str) {
     //TRACER(log,"StoreString")
     construct(str.c_str());
 }
@@ -179,13 +219,35 @@ StoreString::~StoreString() {
     buf=0;
 }
 
-std::string StoreString::toString() const {
-    return std::string(const_cast<char *>(c_str()));
+String StoreString::toString() const {
+    return String(const_cast<char *>(c_str()));
 }
 
-void StoreString::store(const std::string &str) {
-    getStorage()->add(str);
+StoreString StoreString::store(const String &str) {
+    storage->add(str);
+    return StoreString(str);
 }
+
+const char *StoreString::c_str() const {
+    if (isStored()) {
+        return storage->stored[buf/2].str;
+    } else {
+        return (char *)buf;
+    }
+}
+
+unsigned int StoreString::hashCode() const {
+    if (isStored()) {
+        return storage->stored[buf/2].hashCode;
+    } else return CStrHashFn()((char *)buf);
+}
+
+bool StoreString::isStored() const {
+    //LOG4CXX_DEBUG(LOG, "here this " << this);
+    //LOG4CXX_DEBUG(LOG, "ptr " << buf);
+    return ((unsigned long)buf)&1;
+}
+
 
 }
 

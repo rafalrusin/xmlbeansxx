@@ -90,48 +90,48 @@
       <tr> <td>xs:anyType</td> <td>XmlObject</td> <td>xmlbeansxx::XmlObject</td> </tr>
       <tr> <td>xs:anySimpleType</td> <td>XmlAnySimpleType</td> <td>std::string</td> </tr>
       <tr> <td>xs:anyURI</td> <td>XmlAnyURI</td> <td>std::string</td> </tr>
-      <tr> <td>xs:base64Binary</td> <td>XmlBase64Binary</td> <td>xmlbeansxx::shared_array&lt;unsigned char&gt;</td> </tr>
+      <tr> <td>xs:base64Binary</td> <td>XmlBase64Binary</td> <td>xmlbeansxx::Array&lt;unsigned char&gt;</td> </tr>
       <tr> <td>xs:boolean</td> <td>XmlBoolean</td> <td>bool</td> </tr>
       <tr> <td>xs:byte</td> <td>XmlByte</td> <td>unsigned char</td> </tr>
-      <tr> <td>xs:date</td> <td>XmlDate</td> <td>boost::shared_ptr&lt;xmlbeansxx::Calendar&gt;</td> </tr>
-      <tr> <td>xs:dateTime</td> <td>XmlDateTime</td> <td>boost::shared_ptr&lt;xmlbeansxx::Calendar&gt;</td> </tr>
-      <tr> <td>xs:decimal</td> <td>XmlDecimal</td> <td>mpf_class</td> </tr>
+      <tr> <td>xs:date</td> <td>XmlDate</td> <td>xmlbeansxx::Calendar</td> </tr>
+      <tr> <td>xs:dateTime</td> <td>XmlDateTime</td> <td>xmlbeansxx::Calendar</td> </tr>
+      <tr> <td>xs:decimal</td> <td>XmlDecimal</td> <td>xmlbeansxx::BigDecimal</td> </tr>
       <tr> <td>xs:double</td> <td>XmlDouble</td> <td>double</td> </tr>
-      <tr> <td>xs:duration</td> <td>XmlDuration</td> <td>boost::shared_ptr&lt;xmlbeansxx::GDuration&gt;</td> </tr>
+      <tr> <td>xs:duration</td> <td>XmlDuration</td> <td>xmlbeansxx::GDuration</td> </tr>
       <tr> <td>xs:ENTITIES</td> <td>XmlENTITIES</td> <td>std::string</td> </tr>
       <tr> <td>xs:ENTITY</td> <td>XmlENTITY</td> <td>std::string</td> </tr>
       <tr> <td>xs:float</td> <td>XmlFloat</td> <td>float</td> </tr>
-      <tr> <td>xs:gDay</td> <td>XmlGDay</td> <td>boost::shared_ptr&lt;xmlbeansxx::Calendar&gt;</td> </tr>
-      <tr> <td>xs:gMonth</td> <td>XmlGMonth</td> <td>boost::shared_ptr&lt;xmlbeansxx::Calendar&gt;</td> </tr>
-      <tr> <td>xs:gMonthDay</td> <td>XmlGMonthDay</td> <td>boost::shared_ptr&lt;xmlbeansxx::Calendar&gt;</td> </tr>
-      <tr> <td>xs:gYear</td> <td>XmlGYear</td> <td>boost::shared_ptr&lt;xmlbeansxx::Calendar&gt;</td> </tr>
-      <tr> <td>xs:gYearMonth</td> <td>XmlGYearMonth</td> <td>boost::shared_ptr&lt;xmlbeansxx::Calendar&gt;</td> </tr>
-      <tr> <td>xs:hexBinary</td> <td>XmlHexBinary</td> <td>xmlbeansxx::shared_array&lt;unsigned char&gt;</td> </tr>
+      <tr> <td>xs:gDay</td> <td>XmlGDay</td> <td>xmlbeansxx::Calendar</td> </tr>
+      <tr> <td>xs:gMonth</td> <td>XmlGMonth</td> <td>xmlbeansxx::Calendar</td> </tr>
+      <tr> <td>xs:gMonthDay</td> <td>XmlGMonthDay</td> <td>xmlbeansxx::Calendar</td> </tr>
+      <tr> <td>xs:gYear</td> <td>XmlGYear</td> <td>xmlbeansxx::Calendar</td> </tr>
+      <tr> <td>xs:gYearMonth</td> <td>XmlGYearMonth</td> <td>xmlbeansxx::Calendar</td> </tr>
+      <tr> <td>xs:hexBinary</td> <td>XmlHexBinary</td> <td>xmlbeansxx::Array&lt;unsigned char&gt;</td> </tr>
       <tr> <td>xs:ID</td> <td>XmlID</td> <td>std::string</td> </tr>
       <tr> <td>xs:IDREF</td> <td>XmlIDREF</td> <td>std::string</td> </tr>
       <tr> <td>xs:IDREFS</td> <td>XmlIDREFS</td> <td>std::string</td> </tr>
       <tr> <td>xs:int</td> <td>XmlInt</td> <td>int</td> </tr>
-      <tr> <td>xs:integer</td> <td>XmlInteger</td> <td>mpz_class</td> </tr>
+      <tr> <td>xs:integer</td> <td>XmlInteger</td> <td>xmlbeansxx::BigInteger</td> </tr>
       <tr> <td>xs:language</td> <td>XmlLanguage</td> <td>std::string</td> </tr>
-      <tr> <td>xs:long</td> <td>XmlLong</td> <td>mpz_class</td> </tr>
+      <tr> <td>xs:long</td> <td>XmlLong</td> <td>xmlbeansxx::Long</td> </tr>
       <tr> <td>xs:Name</td> <td>XmlName</td> <td>std::string</td> </tr>
       <tr> <td>xs:NCName</td> <td>XmlNCNAME</td> <td>std::string</td> </tr>
-      <tr> <td>xs:negativeInteger</td> <td>XmlNegativeInteger</td> <td>mpz_class</td> </tr>
+      <tr> <td>xs:negativeInteger</td> <td>XmlNegativeInteger</td> <td>xmlbeansxx::BigInteger</td> </tr>
       <tr> <td>xs:NMTOKEN</td> <td>XmlNMTOKEN</td> <td>std::string</td> </tr>
       <tr> <td>xs:NMTOKENS</td> <td>XmlNMTOKENS</td> <td>std::string</td> </tr>
-      <tr> <td>xs:nonNegativeInteger</td> <td>XmlNonNegativeInteger</td> <td>mpz_class</td> </tr>
-      <tr> <td>xs:nonPositiveInteger</td> <td>XmlNonPositiveInteger</td> <td>mpz_class</td> </tr>
+      <tr> <td>xs:nonNegativeInteger</td> <td>XmlNonNegativeInteger</td> <td>xmlbeansxx::BigInteger</td> </tr>
+      <tr> <td>xs:nonPositiveInteger</td> <td>XmlNonPositiveInteger</td> <td>xmlbeansxx::BigInteger</td> </tr>
       <tr> <td>xs:normalizedString</td> <td>XmlNormalizedString</td> <td>std::string</td> </tr>
       <tr> <td>xs:NOTATION</td> <td>XmlNOTATION</td> <td>Not supported</td> </tr>
-      <tr> <td>xs:positiveInteger</td> <td>XmlPositiveInteger</td> <td>mpz_class</td> </tr>
-      <tr> <td>xs:QName</td> <td>XmlQName</td> <td>boost::shared_ptr&lt;xmlbeansxx::QName&gt;</td> </tr>
+      <tr> <td>xs:positiveInteger</td> <td>XmlPositiveInteger</td> <td>xmlbeansxx::BigInteger</td> </tr>
+      <tr> <td>xs:QName</td> <td>XmlQName</td> <td>xmlbeansxx::QName</td> </tr>
       <tr> <td>xs:short</td> <td>XmlShort</td> <td>short</td> </tr>
       <tr> <td>xs:string</td> <td>XmlString</td> <td>std::string</td> </tr>
-      <tr> <td>xs:time</td> <td>XmlTime</td> <td>boost::shared_ptr&lt;xmlbeansxx::Calendar&gt;</td> </tr>
+      <tr> <td>xs:time</td> <td>XmlTime</td> <td>xmlbeansxx::Calendar</td> </tr>
       <tr> <td>xs:token</td> <td>XmlToken</td> <td>std::string</td> </tr>
       <tr> <td>xs:unsignedByte</td> <td>XmlUnsignedByte</td> <td>short</td> </tr>
-      <tr> <td>xs:unsignedInt</td> <td>XmlUnsignedInt</td> <td>mpz_class</td> </tr>
-      <tr> <td>xs:unsignedLong</td> <td>XmlUnsignedLong</td> <td>mpz_class</td> </tr>
+      <tr> <td>xs:unsignedInt</td> <td>XmlUnsignedInt</td> <td>xmlbeansxx::BigInteger</td> </tr>
+      <tr> <td>xs:unsignedLong</td> <td>XmlUnsignedLong</td> <td>xmlbeansxx::BigInteger</td> </tr>
       <tr> <td>xs:unsignedShort</td> <td>XmlUnsignedShort</td> <td>int</td> </tr>
     </table>
   </body> 

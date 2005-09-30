@@ -89,8 +89,6 @@ ACX_PTHREAD([
 		AC_MSG_WARN([Compiling without thread support])
 	])
 
-CXXFLAGS="-O0"
-
 AC_CHECK_HEADERS([boost/smart_ptr.hpp boost/any.hpp], , AC_MSG_ERROR([boost library is required]))
 
 AC_SUBST(ac_aux_dir)

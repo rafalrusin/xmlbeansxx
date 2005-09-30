@@ -20,22 +20,24 @@
 	
 namespace xmlbeansxx {
 
-int XmlContext::getLink(std::string shortcut) {
-    return nsLinks[shortcut]-1;
+StoreString XmlContext::getLink(String shortcut) {
+    return nsLinks[shortcut];
 }
 
-void XmlContext::setLink(std::string shortcut,int ns) {
-    restoreLinks.push(std::pair<std::string,int>(shortcut,nsLinks[shortcut]));
-    nsLinks[shortcut]=ns+1;
+void XmlContext::setLink(String shortcut, StoreString ns) {
+    restoreLinks.push(std::pair<String, StoreString>(shortcut, nsLinks[shortcut]));
+    nsLinks[shortcut] = ns;
 }
 
-int XmlContext::restorePosition() {
-    return restoreLinks.size();
+void XmlContext::remember() {
+    rememberedPositions.push(restoreLinks.size());
 }
 
-void XmlContext::restore(int restorePosition) {
-    while (int(restoreLinks.size())>restorePosition) {
-        nsLinks[restoreLinks.top().first]=restoreLinks.top().second;
+void XmlContext::restore() {
+    int restorePosition = rememberedPositions.top();
+    rememberedPositions.pop();
+    while (int(restoreLinks.size()) > restorePosition) {
+        nsLinks[restoreLinks.top().first] = restoreLinks.top().second;
         restoreLinks.pop();
     }
 }

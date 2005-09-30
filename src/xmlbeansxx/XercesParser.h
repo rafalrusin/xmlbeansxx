@@ -6,9 +6,9 @@
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
-
+ 
     http://www.apache.org/licenses/LICENSE-2.0
-
+ 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,6 @@
 
 #include "BoostAssert.h"
 #include <map>
-#include <stack>
 #include <string>
 #include <vector>
 #include <boost/shared_ptr.hpp>
@@ -35,6 +34,7 @@
 
 #include <log4cxx/logger.h>
 #include "XmlParser.h"
+#include "XmlCursor.h"
 
 
 namespace xmlbeansxx {
@@ -44,75 +44,59 @@ class Transcoder;
 class MyEntityResolver: public XERCES_CPP_NAMESPACE::EntityResolver {
 private:
     static log4cxx::LoggerPtr LOG;
-    
+
     XERCES_CPP_NAMESPACE::InputSource *resolveEntity(const XMLCh *publicId,const XMLCh *systemId);
 };
 
 class XmlObject;
-class MyHandler;
+class XercesDocumentHandler;
+class XercesErrorHandler;
 
 /** This class is used for parsing of xml documents. It uses xerces xml parser and optionally can use xerces xml schema validator.  */
-class XercesParser: public XmlParser {
+class XercesParser_I: public XmlParser_I {
 private:
     static log4cxx::LoggerPtr LOG;
-    
+
     std::auto_ptr<MyEntityResolver> entityResolver;
     std::auto_ptr<XERCES_CPP_NAMESPACE::SAXParser> sax;
-    friend class MyHandler;
-    std::auto_ptr<MyHandler> handler;
+    friend class XercesDocumentHandler;
+    std::auto_ptr<XercesDocumentHandler> documentHandler;
+    std::auto_ptr<XercesErrorHandler> errorHandler;
     std::auto_ptr<xercesc::XMLGrammarPool> grammarPool;
 
     /** Used to convert from xerces unicode to UTF8 */
     std::auto_ptr<Transcoder> tr;
 
-    struct StackEl {
-        XmlObject *obj;
-        std::string str;
-        bool processContents;
-        int restorePosition;
-        StackEl(XmlObject *o,bool processContents,int restorePosition)
-            : obj(o),processContents(processContents),restorePosition(restorePosition)
-            {}
-    };
-
     XmlContext xmlContext;
-    std::stack<StackEl> nodesStack;
+    XmlCursor cursor;
 
-    int xsi_ns;
-    //char mbuf[1024]; //buffer for various things
-    std::string currentString;
+    StoreString xsi_ns;
 
-    boost::shared_ptr<XmlOptions> opts;
+    XmlOptions opts;
 
 public:
-    XercesParser();
-    XercesParser(const boost::shared_ptr<XmlOptions> &opts);
-    virtual ~XercesParser();
+    XercesParser_I();
+    XercesParser_I(const XmlOptions &opts);
+    virtual ~XercesParser_I();
 
     /**
      * Parses using xercesc parser an xml document from std::istream to some XmlDocument. 
      * If XmlOptions validation is set, then uses xercesc schema validator
      * (apropriate grammars should be loaded using eg. loadGrammar method).
      */
-    void parse(std::istream &in, XmlObject *documentRoot);
-    /**
-     * Parses using xercesc parser an xml document from std::string to some XmlDocument. 
-     * If XmlOptions validation is set, then uses xercesc schema validator
-     * (apropriate grammars should be loaded using eg. loadGrammar method).
-     */
-    void parse(std::string &doc, XmlObject *documentRoot);
+    virtual void parse(std::istream &in, const XmlObject &documentRoot);
 
-    virtual boost::shared_ptr<XmlOptions> getXmlOptions() const {
+    virtual XmlOptions getXmlOptions() const {
         return opts;
     }
-    virtual void setXmlOptions(const boost::shared_ptr<XmlOptions> &options) {
+    virtual void setXmlOptions(const XmlOptions &options) {
         opts=options;
     }
 
     /** Loads grammars into xercesc parser from specified file names. */
-    virtual void loadGrammars(const std::vector<std::string> &fileNames);
+    virtual void loadGrammars(const std::vector<String> &fileNames);
     /** Loads grammar into xercesc parser from specified file name. */
-    virtual void loadGrammar(const std::string fileName);
+    virtual void loadGrammar(const String &fileName);
     /** Unloads all grammars from xercesc parser. */
     virtual void unloadGrammars();
 
@@ -121,34 +105,42 @@ private:
 
     void updateOptions();
 
-    /** converts "xs:string" to <"string",nr>, where nr is namespace name in globalTypeSystem */
-    std::pair<int,std::string> nsSplit(const std::string str);
+    /** converts eg. "xs:string" to <nr,"string">, where nr is namespace ID in globalTypeSystem */
+    QName nsSplit(const String &str, bool isAttr = false);
     /** converts "xs:string" to <"xs","string"> */
-    std::pair<std::string,std::string> tagSplit(const std::string str);
+    std::pair<String, String> tagSplit(const String &str);
 
 };
 
-class MyHandler: public XERCES_CPP_NAMESPACE::HandlerBase {
+class XercesDocumentHandler: public XERCES_CPP_NAMESPACE::DocumentHandler {
 private:
     static log4cxx::LoggerPtr LOG;
-    XercesParser *p;
+    XercesParser_I *p;
 public:
-    MyHandler(XercesParser *p);
+    XercesDocumentHandler(XercesParser_I *p);
+    void startDocument();
     void resetDocument();
+    void endDocument();
+    void processingInstruction(const XMLCh *a, const XMLCh *b);
+    void setDocumentLocator(const XERCES_CPP_NAMESPACE::Locator *locator);
     void startElement(const XMLCh* const name, XERCES_CPP_NAMESPACE::AttributeList& attributes);
     void characters(const XMLCh* const chars, const unsigned int length);
     void endElement(const XMLCh* const name);
     void ignorableWhitespace(const XMLCh* const chars, const unsigned int length);
+};
 
-    std::string getErrorStr(const XERCES_CPP_NAMESPACE::SAXParseException& exc);
+class XercesErrorHandler: public XERCES_CPP_NAMESPACE::ErrorHandler {
+private:
+    static log4cxx::LoggerPtr LOG;
+    Transcoder *tr;
+public:
+    XercesErrorHandler(Transcoder *tr);
+
+    String getErrorStr(const XERCES_CPP_NAMESPACE::SAXParseException& exc);
     void warning(const XERCES_CPP_NAMESPACE::SAXParseException& exc);
     void error(const XERCES_CPP_NAMESPACE::SAXParseException& exc);
     void fatalError(const XERCES_CPP_NAMESPACE::SAXParseException& exc);
     void resetErrors();
-
-private:
-    void updateValidation();
-
 };
 
 }

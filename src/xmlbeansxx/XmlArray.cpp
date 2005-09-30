@@ -15,16 +15,6 @@
 
 
 #include "XmlArray.h"
-#include "ContentsImpl.h"
-
-	
 namespace xmlbeansxx {
-
-log4cxx::LoggerPtr XmlArray_log = log4cxx::Logger::getLogger(std::string("xmlbeansxx.XmlArray"));
-std::string XmlArray_elemName("e");
-
-ContentsPtr createXmlArrayContents() {
-    return ContentsPtr(new ContentsImpl());
-}
 }
 

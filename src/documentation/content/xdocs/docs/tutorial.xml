@@ -187,8 +187,8 @@
                         according to JavaBeans conventions. For example, for the
                         <code>&lt;date&gt;</code> element you have the following:</p>
 <source>public:
-        xmlbeansxx::CalendarPtr getDate()
-        void setDate ( xmlbeansxx::CalendarPtr )</source>
+        xmlbeansxx::Calendar getDate()
+        void setDate ( xmlbeansxx::Calendar )</source>
 
 <p>This is one of two ways that the schema compiler provides for access to the
                         <code>&lt;date&gt;</code> element &mdash; a more convenient, Java-native
@@ -200,8 +200,8 @@
                         <strong>xmlbeansxx</strong> defines:</p>
 
 <source>public:
-        xmlbeansxx::XmlDateTimePtr xgetDate()
-        void xsetDate( xmlbeansxx::XmlDateTimePtr )</source>
+        xmlbeansxx::XmlDateTime xgetDate()
+        void xsetDate( xmlbeansxx::XmlDateTime )</source>
 <!-- <p>
                         
 <a href="http://xmlbeans.apache.org/docs/reference/org/apache/xmlbeans/XmlDateTime.html">
@@ -324,7 +324,7 @@ string addLineItem(istream purchaseOrder, string itemDescription,
                                           string itemPriceString,
 					  string itemQuantityString) {
         // Bind the incoming XML to an xmlbeansxx type.
-        PurchaseOrderDocumentPtr poDoc;
+        PurchaseOrderDocument poDoc;
         poDoc = PurchaseOrderDocument::parse(purchaseOrder);
 
         return poDoc->toString();
@@ -350,11 +350,11 @@ string addLineItem(istream purchaseOrder, string itemDescription,
                     that in <strong>xmlbeansxx</strong>, you get at the type representing a global element by going
                     through the <code>"Document"</code> type that contains it &mdash; here, with the
                     <code>getPurchaseOrder</code> method. </p>
-<source>mpz_class perUnitOunces (perUnitOuncesString);
-mpz_class itemPrice (itemPriceString);
-mpz_class itemQuantity (itemQuantityString);
+<source>BigInteger perUnitOunces (perUnitOuncesString);
+BigInteger itemPrice (itemPriceString);
+BigInteger itemQuantity (itemQuantityString);
 
-LineItemPtr newItem = poDoc->getPurchaseOrder()->addNewLineItem();
+LineItem newItem = poDoc->getPurchaseOrder()->addNewLineItem();
 newItem->setDescription(itemDescription);
 newItem->setPerUnitOunces(perUnitOunces);
 newItem->setPrice(itemPrice);
@@ -378,21 +378,21 @@ string addLineItem(istream& purchaseOrder, string itemDescription,
 	                                   string itemQuantityString)
 {
     // Bind the incoming XML to an xmlbeansxx type.
-    PurchaseOrderDocumentPtr poDoc;
+    PurchaseOrderDocument poDoc;
     poDoc = PurchaseOrderDocument::Factory::parse(purchaseOrder);
 
     // Convert incoming data to types that can be used in accessors.
-    mpz_class perUnitOunces(perUnitOuncesString);
-    mpz_class itemPrice(itemPriceString);
-    mpz_class itemQuantity(itemQuantityString);
+    BigInteger perUnitOunces(perUnitOuncesString);
+    BigInteger itemPrice(itemPriceString);
+    BigInteger itemQuantity(itemQuantityString);
 
     // Add the new <line-item> element.
-    PurchaseOrderDocument_PurchaseOrderPtr po(poDoc->getPurchaseOrder());
+    PurchaseOrderDocument_PurchaseOrder po(poDoc->getPurchaseOrder());
     if (!po) {
         return string("NULL PURCHASE-ORDER");
     }
 
-    LineItemPtr newItem = po->addNewLineItem();
+    LineItem newItem = po->addNewLineItem();
 
     newItem->setDescription(itemDescription);
     newItem->setPerUnitOunces(perUnitOunces);

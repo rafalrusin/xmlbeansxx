@@ -22,4 +22,4 @@ LIB=`dirname $basefile`/../lib
 BIN=`dirname $basefile`
 CLASSPATH=$LIB/xbean.jar:$LIB/xmlbeansxx-gen.jar:$LIB/commons-logging-1.0.4.jar:$LIB/log4j-1.2.8.jar:$BIN
 
-java -classpath $CLASSPATH -Dgenbuiltin -Dlog4j.configuration=log4j.properties pl.touk.xmlbeansxx.ClassGen
+java -classpath $CLASSPATH -Dgenbuiltin -Dlog4j.configuration=log4j.properties $@ pl.touk.xmlbeansxx.ClassGen

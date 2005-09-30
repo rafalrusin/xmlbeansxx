@@ -43,7 +43,12 @@ public class Validator {
     public static void go(String xml,String[] xsds) throws Exception {
         String[] xmls={xml};
 		
-        SchemaTypeSystem ts=ClassGen.loadTS("",xsds);
+        List<String> xsds2 = new ArrayList<String>();
+        for (String i : xsds) {
+            xsds2.add(i);
+        }
+        
+        SchemaTypeSystem ts=ClassGen.loadTS("", xsds2);
         SchemaTypeLoader tl;
         /*
           {

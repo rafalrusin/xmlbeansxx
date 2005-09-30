@@ -1,28 +1,32 @@
 /*
-    Copyright 2004-2005 TouK s.c.
-    
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License. */
+Copyright 2004-2005 TouK s.c.
+ 
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+ 
+http://www.apache.org/licenses/LICENSE-2.0
+ 
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. */
 
 
 #ifndef _XMLBEANSXX_STORESTRING_H_
 #define _XMLBEANSXX_STORESTRING_H_
 
+#include "BoostAssert.h"
 //#include <set>
 #include <string>
 #include <cstring>
 #include <log4cxx/logger.h>
-#include <ext/hash_map>
-
+#include "Map.h"
+#include "Vector.h"
+#include <boost/scoped_ptr.hpp>
+#include "Existence.h"
+#include "String.h"
 
 
 namespace xmlbeansxx {
@@ -33,7 +37,7 @@ private:
     char *buf;
     void copyFrom(const SimpleString &from);
 public:
-    SimpleString(const std::string &s);
+    SimpleString(const String &s);
     SimpleString(const SimpleString &from);
     ~SimpleString();
     SimpleString &operator=(const SimpleString &b);
@@ -45,15 +49,15 @@ public:
 /*
 class CStr {
 private:
-    const char *buf;
+const char *buf;
 public:
-    CStr(const char *buf);
-    const char *get() const;
-    bool operator<(const CStr &b) const;
+CStr(const char *buf);
+const char *get() const;
+bool operator<(const CStr &b) const;
 };*/
 
 class CStrHashFn {
-    public:
+public:
     unsigned int operator()(const char *str) const {
         unsigned int v=0;
         while (*str!=0) {
@@ -65,87 +69,80 @@ class CStrHashFn {
 };
 
 class CStrLessFn {
-    public:
+public:
     bool operator()(const char *a,const char *b) const {
         return strcmp(a,b)<0;
     }
 };
 
 class CStrEqFn {
-    public:
+public:
     bool operator()(const char *a,const char *b) const {
-        if (a==b) return true; 
+        if (a==b) return true;
         else return strcmp(a,b)==0;
     }
 };
 
-/** String storage remembers a collection of const char * strings. One can add some strings for further use. */
-class StringStorage {
-private:
-    //std::set<CStr> contents;
-    //typedef std::set<const char *,CStrLessFn> StoreSet;
-    typedef __gnu_cxx::hash_map<const char *,int,CStrHashFn,CStrEqFn> StoreMap;
-    StoreMap contents;
-public:
-    struct SSInfo {
-        const char *str;
-        int hashCode;
-    };
-    std::vector<SSInfo> stored;
-    
-    StringStorage();
-    /** Remembers a string in global pool */
-    void add(const std::string &str);
-    /** Checks whether given string is stored */
-    bool isStored(const char *str);
+class StringStorage;
 
-    /** Takes a stored representation of given string or 0 if the string is not stored. */
-    unsigned long get(const char *str);
-    ~StringStorage();
-};
-
-/** 
- * Immutable string with ability to remember globally some strings. User can use static method 'store' to remember some strings. 
- * Construction of StoreString(s) with not remembered s causes duplication of s.
- */
+/**
+* Immutable string with ability to remember globally some strings. User can use static method 'store' to remember some strings.
+* Construction of StoreString(s) with not remembered s causes duplication of s.
+*/
 class StoreString {
 private:
-    static log4cxx::LoggerPtr log;
-
+    static log4cxx::LoggerPtr LOG;
+private:
+    static StringStorage *storage;
+private:
     unsigned long buf;
-    inline bool isStored() const;
+    bool isStored() const;
 
     void construct(const char *str);
-    static StringStorage *getStorage();
     inline void copyFrom(const StoreString &from);
 
+class MyExistence_I: public Existence_I {
+    public:
+        MyExistence_I();
+        virtual ~MyExistence_I();
+    };
+
 public:
+    static Existence staticInit();
+
     StoreString();
     StoreString(const StoreString &from);
-    StoreString(const std::string &str);
+    StoreString(const String &str);
     StoreString(const char *str);
     ~StoreString();
-    inline const char *c_str() const;
-    inline unsigned int hashCode() const;
+    const char *c_str() const;
+    unsigned int hashCode() const;
 
     inline StoreString &operator=(const StoreString &b);
     inline bool operator ==(const StoreString &str) const;
     inline bool operator <(const StoreString &str) const;
 
-    inline operator std::string() const;
+    inline operator String() const;
 
-    std::string toString() const;
+    String toString() const;
     /** Remembers a string in collection, so it won't be allocated several times. */
-    static void store(const std::string &str);
+    static StoreString store(const String &str);
+
+    class Hash {
+    public:
+        unsigned int operator()(const StoreString &ss) const {
+            return ss.hashCode();
+        }
+    };
 };
 
 inline std::ostream &operator<<(std::ostream &out, const StoreString &str);
-inline std::string operator+(const std::string &a,const StoreString &b);
-inline std::string operator+(const StoreString &a,const std::string &b);
-inline std::string operator+(const StoreString &a,const StoreString &b);
+inline String operator+(const std::string &a,const StoreString &b);
+inline String operator+(const StoreString &a,const std::string &b);
+inline String operator+(const StoreString &a,const StoreString &b);
 
-inline bool operator==(const std::string &a,const StoreString &b);
-inline bool operator==(const StoreString &a,const std::string &b);
+inline bool operator==(const String &a,const StoreString &b);
+inline bool operator==(const StoreString &a,const String &b);
 
 //Inline functions
 inline StoreString &StoreString::operator=(const StoreString &b) {
@@ -162,21 +159,6 @@ inline void StoreString::copyFrom(const StoreString &from) {
     }
 }
 
-inline bool StoreString::isStored() const {
-    return ((unsigned long)buf)&1;
-}
-
-inline const char *StoreString::c_str() const {
-    if (isStored()) {
-        return getStorage()->stored[buf/2].str; 
-    } else { return (char *)buf; }
-}
-
-inline unsigned int StoreString::hashCode() const {
-    if (isStored()) { return getStorage()->stored[buf/2].hashCode; }
-    else return CStrHashFn()((char *)buf);
-}
-
 inline bool StoreString::operator ==(const StoreString &str) const {
     if (isStored() && str.isStored()) return buf==str.buf;
     else return CStrEqFn()(c_str(),str.c_str());
@@ -186,41 +168,35 @@ inline bool StoreString::operator <(const StoreString &str) const {
     return strcmp(c_str(), str.c_str()) < 0;
 }
 
-inline StoreString::operator std::string() const {
-    return std::string(const_cast<char *>(c_str()));
+inline StoreString::operator String() const {
+    return String(const_cast<char *>(c_str()));
 }
 
 inline std::ostream &operator<<(std::ostream &out, const StoreString &str) {
     return out<<str.c_str();
 }
 
-inline std::string operator+(const std::string &a,const StoreString &b) {
+inline String operator+(const std::string &a,const StoreString &b) {
     return a+b.toString();
 }
 
-inline std::string operator+(const StoreString &a,const std::string &b) {
+inline String operator+(const StoreString &a,const std::string &b) {
     return a.toString()+b;
 }
 
-inline std::string operator+(const StoreString &a,const StoreString &b) {
+inline String operator+(const StoreString &a,const StoreString &b) {
     return a.toString()+b.toString();
 }
 
-inline bool operator==(const std::string &a,const StoreString &b) {
+inline bool operator==(const String &a,const StoreString &b) {
     return CStrEqFn()(a.c_str(),b.c_str());
 }
 
-inline bool operator==(const StoreString &a,const std::string &b) {
+inline bool operator==(const StoreString &a,const String &b) {
     return CStrEqFn()(a.c_str(),b.c_str());
 }
 
 
-class StoreStringHashFn {
-    public:
-    unsigned int operator()(const StoreString &ss) const {
-        return ss.hashCode();
-    }
-};
 
 }
 

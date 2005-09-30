@@ -18,7 +18,7 @@
 
 #include "XercesUtils.h"
 #include "defs.h"
-#include "TypeSystem.h"
+#include "XmlBeans.h"
 #include "XmlException.h"
 #include "XmlTypesGen.h"
 #include "Tracer.h"
@@ -42,50 +42,42 @@ using namespace std;
 #define LOG4CXX_DEBUG2(a,b)
 
 
-log4cxx::LoggerPtr XercesParser::LOG = log4cxx::Logger::getLogger(std::string("xmlbeansxx.XercesParser"));
-log4cxx::LoggerPtr MyEntityResolver::LOG = log4cxx::Logger::getLogger(std::string("xmlbeansxx.MyEntityResolver"));
-log4cxx::LoggerPtr MyHandler::LOG = log4cxx::Logger::getLogger(std::string("xmlbeansxx.MyHandler"));
+log4cxx::LoggerPtr XercesParser_I::LOG = log4cxx::Logger::getLogger(String("xmlbeansxx.XercesParser"));
+log4cxx::LoggerPtr MyEntityResolver::LOG = log4cxx::Logger::getLogger(String("xmlbeansxx.MyEntityResolver"));
+log4cxx::LoggerPtr XercesDocumentHandler::LOG = log4cxx::Logger::getLogger(String("xmlbeansxx.XercesDocumentHandler"));
+log4cxx::LoggerPtr XercesErrorHandler::LOG = log4cxx::Logger::getLogger(String("xmlbeansxx.XercesErrorHandler"));
 
 XERCES_CPP_NAMESPACE_USE
 
 InputSource *MyEntityResolver::resolveEntity(const XMLCh *publicId,const XMLCh *systemId) {
-    //TRACER(LOG,"resolveEntity")
+    TRACER(LOG,"resolveEntity")
 
     Transcoder tr(ENCODING);
-    std::string pub(tr.transcode(publicId));
-    std::string sys(tr.transcode(systemId));
-    //LOG4CXX_DEBUG(LOG,std::string("Resolving grammar of publicId: ")+pub+" systemId: "+sys);
+    String pub(tr.transcode(publicId));
+    String sys(tr.transcode(systemId));
+    LOG4CXX_DEBUG(LOG,String("Resolving grammar of publicId: ")+pub+" systemId: "+sys);
     return NULL;
 }
 
 
-MyHandler::MyHandler(XercesParser *p): p(p) {}
-void MyHandler::resetDocument() {}
-void MyHandler::startElement(const XMLCh* const oname, AttributeList& oatts) {
-    std::string name(p->tr->transcode(oname));
-    //TRACER2(LOG,std::string("startElement(")+string(name)+")")
-    //cout<<"start el "<<name<<"\n";
+XercesDocumentHandler::XercesDocumentHandler(XercesParser_I *p): p(p) {}
+
+void XercesDocumentHandler::startDocument() {}
+void XercesDocumentHandler::resetDocument() {}
+void XercesDocumentHandler::endDocument() {}
+void XercesDocumentHandler::processingInstruction(const XMLCh *a, const XMLCh *b) {}
+void XercesDocumentHandler::setDocumentLocator(const XERCES_CPP_NAMESPACE::Locator *locator) {}
+
+
+void XercesDocumentHandler::startElement(const XMLCh* const oname, AttributeList& oatts) {
     LocalAttributeList latts(oatts,p->tr.get());
     int latts_size=latts.getLength();
-    //return;
-    int restorePosition=p->xmlContext.restorePosition();
+    p->xmlContext.remember();
 
-    if (p->nodesStack.top().processContents==false) {
-        //LOG4CXX_DEBUG2(LOG,std::string("Contents not processed"));
-        XmlObjectPtr n(XmlObject::Factory::newInstance());
-
-        FOR(i,latts_size) {
-            n->getContents()->appendAttr(latts.getName(i),latts.getValue(i));
-        }
-
-        p->nodesStack.top().obj->getContents()->appendElem(name,n);
-        p->nodesStack.push(XercesParser::StackEl(n.get(),false,restorePosition));
-    } else {
-        name=p->tagSplit(name).second;
-
+    {
         boost::scoped_array<bool> skipped(new bool[latts_size]);
 
-        //LOG4CXX_DEBUG2(LOG,std::string("Pass 1 - xmlns attributes "));
+        LOG4CXX_DEBUG2(LOG,String("Pass 1 - xmlns attributes "));
         FOR(i,latts_size) {
             skipped[i]=false;
             pair<string,string> tag=p->tagSplit(latts.getName(i));
@@ -93,145 +85,77 @@ void MyHandler::startElement(const XMLCh* const oname, AttributeList& oatts) {
                 swap(tag.first,tag.second);
             if (tag.first=="xmlns") {
                 //cout<<"set ns link: "<<(p->mbuf+y)<<" -> "<<latts[i+1].getLocalStr()<<"\n";
-                int ns=globalTypeSystem()->getNamespace(latts.getValue(i));
-                if (ns==-1 && p->opts->getTypedParsing())
-                    throw XmlException(string("Namespace '")+string(latts.getValue(i))+string("' is not registered in globalTypeSystem."));
+                StoreString ns(latts.getValue(i));
                 p->xmlContext.setLink(tag.second,ns);
                 skipped[i]=true;
             }
         }
-        //LOG4CXX_DEBUG2(LOG,std::string("Pass 2 - xsi attributes "));
-        //Creating object for this element
-
-        XmlObjectPtr n;
-        bool isArray=false;
-
-        FOR(i,latts_size) {
-            if (skipped[i])
-                continue;
-            pair<int,string> tag=p->nsSplit(latts.getName(i));
-            
-            /*
-            if (tag.first==-1) {
-                throw XmlException(string("Undefined namespace link '")+string(latts.getName(i))+string("' in element '")+string(name)+string("'"));
-            }*/
-            
-            if (tag.first==p->xsi_ns) {
-                skipped[i]=true;
-                ////LOG4CXX_DEBUG2(LOG,"xsi_ns:'%s'",p->mbuf+u);
-
-                if (tag.second=="type") {
-                    pair<int,string> tag2=p->nsSplit(latts.getValue(i));
-                    if (tag2.first==-1)
-                        throw XmlException(string("Undefined namespace link '")+string(latts.getValue(i))+string("' in type name, in element '")+string(name)+string("'"));
-                    //log.debug("MyHandler::startElement() 1.");
-
-                    //log.debug("MyHandler::startElement() 2.");
-
-                    if (!isArray) {
-                        //LOG4CXX_DEBUG2(LOG,std::string("createByName.."));
-                        n=globalTypeSystem()->createByName(tag2.second,tag2.first);
-                        //LOG4CXX_DEBUG2(LOG,std::string("createByName..returned"));
-
-                        if (n==NULL)
-                            throw XmlException(string("Xsd Type '")+string(latts.getValue(i))+string("' not defined in builtin type system"));
-                    }
-                } else if (tag.second=="array") {
-                    pair<int,string> tag2=p->nsSplit(latts.getValue(i));
-                    if (tag2.first==-1)
-                        throw XmlException(string("Undefined namespace link '")+string(latts.getValue(i))+string("' in type name, in element '")+string(name)+string("'"));
-
-                    isArray=true;
-                    //LOG4CXX_DEBUG2(LOG,std::string("createArrayByName.."));
-                    n=globalTypeSystem()->createArrayByName(tag2.second,tag2.first);
-                    //LOG4CXX_DEBUG2(LOG,std::string("createArrayByName..returned"));
-                    if (n==NULL)
-                        throw XmlException(string("Xsd Type '")+string(latts.getValue(i))+string("' not defined in builtin type system"));
-
-                } else if (tag.second=="schemaLocation") {}
-                else {
-                    throw XmlException(string("Undefined schema instance usage '")+string(latts.getValue(i))+string("' in element ")+string(name));
+    
+        p->cursor->beginElement(p->nsSplit(p->tr->transcode(oname)));
+        
+        LOG4CXX_DEBUG2(LOG,String("Pass 3 - adding attributes to object"));
+        //adding attributes to new object
+        {
+            FOR(i,latts_size) {
+                if (skipped[i])
+                    continue;
+                VAL(name, p->nsSplit(latts.getName(i), true));
+                if (name == XmlBeans::xsi_type()) {
+                    p->cursor->insertAttributeWithValue(name, p->nsSplit(latts.getValue(i)));
+                } else {
+                    p->cursor->insertAttributeWithValue(name, latts.getValue(i));
                 }
             }
         }
-
-        //cout<<"start:name:"<<name<<"\n";
-        if (n==NULL) {
-            //LOG4CXX_DEBUG2(LOG,std::string("createSubObject ")+std::string(name)+std::string(" on object: "+p->nodesStack.top().obj->getSchemaType()->className));
-            n=p->nodesStack.top().obj->getSchemaType()->createSubObject(name);
-            //LOG4CXX_DEBUG2(LOG,std::string("createSubObject returned"));
-            if(n==NULL) {
-                //LOG4CXX_DEBUG2(LOG,std::string("createSubObject was NULL"));
-                throw XmlException(string("Cannot create subelement '")+std::string(name)+string("' on object of class "+p->nodesStack.top().obj->getSchemaType()->className));
-            } else {
-                //LOG4CXX_DEBUG2(LOG,std::string("createSubObject was not NULL"));
-            }
-            ////LOG4CXX_DEBUG2(LOG,std::string("MyHandler::startElement - created type: ")
-        }
-
-        //Removing default attributes and elements, they will be added after parsing this element
-        n->getContents()->free();
-
-        //LOG4CXX_DEBUG2(LOG,std::string("Pass 3 - adding attributes to object"));
-        //adding attributes to new object
-        FOR(i,latts_size) {
-            if (skipped[i])
-                continue;
-            n->getContents()->appendAttr(latts.getName(i),latts.getValue(i));
-        }
-        p->nodesStack.top().obj->getContents()->appendElem(name,n);
-        p->nodesStack.push(XercesParser::StackEl(n.get(),n->getSchemaType()->processContents,restorePosition));
     }
 }
-void MyHandler::characters(const XMLCh* const chars, const unsigned int length) {
-    //TRACER2(LOG,"characters")
+void XercesDocumentHandler::characters(const XMLCh* const chars, const unsigned int length) {
+    TRACER2(LOG,"characters")
     boost::scoped_array<XMLCh> chars2(new XMLCh[length+1]);
     FOR(i,(int)length) chars2[i]=chars[i];
     chars2[length]=0;
-    std::string s(p->tr->transcode(chars2.get()));
-    //return;
-    p->nodesStack.top().str+=s;
+    String s(p->tr->transcode(chars2.get()));
+    p->cursor->insertChars(s);
 }
-void MyHandler::endElement(const XMLCh *const name) {
+void XercesDocumentHandler::endElement(const XMLCh *const name) {
     //return;
-    //TRACER2(LOG,"endElement")
-    ////LOG4CXX_DEBUG2(LOG,std::string("MyHandler::endElement - start"));
-    XercesParser::StackEl e=p->nodesStack.top();
-    e.obj->setSimpleContent(e.str);
-    e.obj->getContents()->insertDefaults(e.obj->getSchemaType());
-    p->xmlContext.restore(p->nodesStack.top().restorePosition);
-    p->nodesStack.pop();
-    ////LOG4CXX_DEBUG2(LOG,std::string("MyHandler::endElement - finish"));
+    TRACER2(LOG,"endElement")
+    //LOG4CXX_DEBUG2(LOG,String("XercesDocumentHandler::endElement - start"));
+    p->cursor->pop();
+    p->xmlContext.restore();
+    //LOG4CXX_DEBUG2(LOG,String("XercesDocumentHandler::endElement - finish"));
 }
-void MyHandler::ignorableWhitespace(const XMLCh* const chars, const unsigned int length) {}
+void XercesDocumentHandler::ignorableWhitespace(const XMLCh* const chars, const unsigned int length) {}
 
 //---
-string MyHandler::getErrorStr(const SAXParseException& e) {
+XercesErrorHandler::XercesErrorHandler(Transcoder *tr): tr(tr) {}
+
+string XercesErrorHandler::getErrorStr(const SAXParseException& e) {
     ostringstream ss;
     ss << "At line " << e.getLineNumber()
     << ", char " << e.getColumnNumber()
-    << ", " << p->tr->transcode(e.getMessage());
+    << ", " << tr->transcode(e.getMessage());
     return ss.str();
 }
-void MyHandler::warning(const SAXParseException& exc) {
+void XercesErrorHandler::warning(const SAXParseException& exc) {
     //TODO: log warning
-    //LOG4CXX_INFO(log,std::string("MyHandler::warning() - Xerces-c warning: ")+getErrorStr(exc));
+    //LOG4CXX_INFO(log,String("XercesDocumentHandler::warning() - Xerces-c warning: ")+getErrorStr(exc));
     throw XmlParseException(string("Xerces-c warning: ")+getErrorStr(exc));
 }
-void MyHandler::error(const SAXParseException& exc) {
+void XercesErrorHandler::error(const SAXParseException& exc) {
     throw XmlParseException(string("Xerces-c error: ")+getErrorStr(exc));
 }
-void MyHandler::fatalError(const SAXParseException& exc) {
+void XercesErrorHandler::fatalError(const SAXParseException& exc) {
     throw XmlParseException(string("Xerces-c fatal error: ")+getErrorStr(exc));
 }
-void MyHandler::resetErrors() { }
+void XercesErrorHandler::resetErrors() { }
 
 //---
-XercesParser::XercesParser():tr(new Transcoder(ENCODING)),opts(new XmlOptions()) {
+XercesParser_I::XercesParser_I():tr(new Transcoder(ENCODING)),opts(XmlOptions::New()) {
     init();
 }
 
-XercesParser::XercesParser(const boost::shared_ptr<XmlOptions> &opts):tr(new Transcoder(ENCODING)),opts(opts) {
+XercesParser_I::XercesParser_I(const XmlOptions &opts):tr(new Transcoder(ENCODING)),opts(opts) {
     init();
 }
 
@@ -250,16 +174,16 @@ namespace {
     boost::recursive_mutex &__glob_gpm = getGrammarPoolMutex();
 #endif
 
-    std::set<std::string> &getGrammarPoolSet() {
-        static std::set<std::string> s;
+    std::set<String> &getGrammarPoolSet() {
+        static std::set<String> s;
         return s;
     }
         
 }
 
-void XercesParser::init(bool reinit) {
-    //LOG4CXX_DEBUG(LOG,"start");
-    xsi_ns=globalTypeSystem()->addNamespace("http://www.w3.org/2001/XMLSchema-instance");
+void XercesParser_I::init(bool reinit) {
+    LOG4CXX_DEBUG(LOG,"start");
+    xsi_ns = XmlBeans::xsi_ns();
     /*if (initialized==false)
         throw XmlException("XmlBeans++ not initialized. Use org::apache::xmlbeans::initializeBeans()");*/
 
@@ -271,80 +195,69 @@ void XercesParser::init(bool reinit) {
     }
     sax=auto_ptr<SAXParser>(new SAXParser(0,XMLPlatformUtils::fgMemoryManager,grammarPool.get()));
     //~
-    handler=auto_ptr<MyHandler>(new MyHandler(this));
+    documentHandler=auto_ptr<XercesDocumentHandler>(new XercesDocumentHandler(this));
+    errorHandler=auto_ptr<XercesErrorHandler>(new XercesErrorHandler(tr.get()));
     sax->setEntityResolver(entityResolver.get());
-    sax->setDocumentHandler(handler.get());
-    sax->setErrorHandler(handler.get());
+    sax->setDocumentHandler(documentHandler.get());
+    sax->setErrorHandler(errorHandler.get());
     sax->setDoNamespaces(true);
     sax->cacheGrammarFromParse(true);
     sax->useCachedGrammarInParse(true);
-    //LOG4CXX_DEBUG(LOG,"finish");
+    LOG4CXX_DEBUG(LOG,"finish");
 }
 
-XercesParser::~XercesParser() {}
+XercesParser_I::~XercesParser_I() {}
 
-void XercesParser::updateOptions() {
+void XercesParser_I::updateOptions() {
     sax->setValidationScheme(opts->getValidation()?SAXParser::Val_Always:SAXParser::Val_Never);
     sax->setDoSchema(opts->getValidation());
     sax->setValidationSchemaFullChecking(opts->getValidation());
 }
 
-void XercesParser::parse(std::string &doc, XmlObject *documentRoot) {
-    std::istringstream in(doc);
-    parse(in, documentRoot);
-}
-
-void XercesParser::parse(istream &in,XmlObject *root) {
-    //TRACER(LOG,"parse")
-    //LOG4CXX_DEBUG(LOG,std::string("XercesParser::parse() - start"));
-    //SYNC(*(root->mutex()))
-    /*
-#ifdef BOOST_HAS_THREADS
-    //TODO: is it really really needed here!
-    boost::detail::thread::scoped_lock<boost::recursive_mutex> lock((root->mutex()));
-    //LOG4CXX_DEBUG(LOG,std::string("locked"));
-#endif
-*/
+void XercesParser_I::parse(istream &in, const XmlObject &root) {
+    TRACER(LOG,"parse")
+    LOG4CXX_DEBUG(LOG,String("XercesParser::parse() - start"));
     updateOptions();
-    while (!nodesStack.empty())
-        nodesStack.pop();
-    nodesStack.push(StackEl(root,root->getSchemaType()->processContents,0));
-
+    
+    cursor = root->newCursor();
     sax->resetDocument();
     StdInputSource s(in);
     try {
         sax->parse(s);
     } catch (...) {
         init(true); //TODO: remove this when xerces-c validation bug is fixed
+        cursor = Null();
         throw;
     }
-    nodesStack.pop();
-    if (!nodesStack.empty()) {
-        LOG4CXX_ERROR(LOG, "nodesStack is NOT empty!");
-    }
-    //LOG4CXX_DEBUG(LOG,std::string("XercesParser::parse() - finish"));
+    cursor = Null();
+    
+    LOG4CXX_DEBUG(LOG,String("XercesParser::parse() - finish"));
 }
 
-std::pair<int,std::string> XercesParser::nsSplit(const std::string str) {
+QName XercesParser_I::nsSplit(const String &str, bool isAttr) {
     string::size_type pos=str.find(':');
-    if (pos==string::npos) {
-        return pair<int,string>(xmlContext.getLink(""),str);
+    if (pos == string::npos) {
+        if (isAttr) {
+            return QName("", str);
+        } else {
+            return QName(xmlContext.getLink(""), str);
+        }
     } else {
-        return pair<int,string>(xmlContext.getLink(str.substr(0,pos)),str.substr(pos+1));
+        return QName(xmlContext.getLink(str.substr(0,pos)) ,str.substr(pos+1));
     }
 }
 
-std::pair<std::string,std::string> XercesParser::tagSplit(const std::string str) {
-    string::size_type pos=str.find(':');
+std::pair<String, String> XercesParser_I::tagSplit(const String &str) {
+    String::size_type pos = str.find(':');
     if (pos==string::npos) {
-        return pair<string,string>("",str);
+        return pair<String, String>("",str);
     } else {
-        return pair<string,string>(str.substr(0,pos),str.substr(pos+1));
+        return pair<String, String>(str.substr(0,pos),str.substr(pos+1));
     }
 }
 
 
-void XercesParser::loadGrammars(const std::vector<std::string> &fileNames) {
+void XercesParser_I::loadGrammars(const std::vector<String> &fileNames) {
     FOREACH(it,fileNames) {
         loadGrammar(*it);
     }
@@ -352,33 +265,33 @@ void XercesParser::loadGrammars(const std::vector<std::string> &fileNames) {
 
 /*
 //TODO: Uncomment while xerces-c parallel parsing bug is fixed
-void XercesParser::loadGrammar(const std::string fileName) {
+void XercesParser::loadGrammar(const String fileName) {
 #ifdef BOOST_HAS_THREADS
     boost::detail::thread::scoped_lock<boost::recursive_mutex> lock(getGrammarPoolMutex());
-    //LOG4CXX_DEBUG(LOG,std::string("locked grammar pool"));
+    LOG4CXX_DEBUG(LOG,String("locked grammar pool"));
 #endif
     if (getGrammarPoolSet().count(fileName)==0) {
         sax->loadGrammar(fileName.c_str(),Grammar::SchemaGrammarType,true);
         getGrammarPoolSet().insert(fileName);
     } else {
-        //LOG4CXX_DEBUG(LOG,"Taking grammar "<<fileName<<" from cache");
+        LOG4CXX_DEBUG(LOG,"Taking grammar "<<fileName<<" from cache");
     }
 }
 
 void XercesParser::unloadGrammars() {
 #ifdef BOOST_HAS_THREADS
     boost::detail::thread::scoped_lock<boost::recursive_mutex> lock(getGrammarPoolMutex());
-    //LOG4CXX_DEBUG(LOG,std::string("locked grammar pool"));
+    LOG4CXX_DEBUG(LOG,String("locked grammar pool"));
 #endif
     sax->resetCachedGrammarPool();
     getGrammarPoolSet().clear();
 }
 */
 
-void XercesParser::loadGrammar(const std::string fileName) {
+void XercesParser_I::loadGrammar(const String &fileName) {
     sax->loadGrammar(fileName.c_str(),Grammar::SchemaGrammarType,true);
 }
-void XercesParser::unloadGrammars() {
+void XercesParser_I::unloadGrammars() {
     sax->resetCachedGrammarPool();
 }
 

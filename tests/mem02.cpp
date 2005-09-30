@@ -3,6 +3,7 @@
 #include <log4cxx/logger.h>
 //#include <log4cxx/stream.h>
 #include <xmlbeansxx/xmlbeansxx.h>
+//#include <xmlbeansxx/ValidatingParser.h>
 #include "c.h"
 #include <fstream>
 #include <sstream>
@@ -55,20 +56,22 @@ std::string readXml(std::string fname) {
 }
 
 void namespaceTests() {
-    XmlParserPtr p(XmlParser::create());
+    XmlParser p(XmlParser::create());
+    //XmlParser p(new ValidatingParser());
     p->loadGrammar("c.xsd");
     p->getXmlOptions()->setValidation(true);
 
     std::string xml = readXml("c.xml");
 
     while (true) {
-        ContentDocumentPtr doc=ContentDocument::Factory::newInstance();
+        ContentDocument doc=ContentDocument::Factory::newInstance();
         try {
             double t1 = currentTime();
             istringstream in(xml);
-            p->parse(in,doc.get());
+            p->parse(in, doc);
             double t2 = currentTime();
             cout << "Duration: " << t2-t1 << " sec." << " " << 1./(t2-t1) << " per second" << endl;
+            cout << "Xml: " << doc->toString() << endl;
         } catch (BeansException &ex) {
             //LOG4CXX_DEBUG(logger,"Exception: " << ex.getMessage());
             //log4cxx::logstream s(logger, log4cxx::Level::DEBUG);

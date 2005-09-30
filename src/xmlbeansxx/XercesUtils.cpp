@@ -25,17 +25,17 @@ namespace xmlbeansxx {
 XERCES_CPP_NAMESPACE_USE
 
 
-LocalAttributeList::LocalAttributeList(AttributeList &al,Transcoder *tr):len(al.getLength()),list(new std::string[2*al.getLength()]) {
+LocalAttributeList::LocalAttributeList(AttributeList &al,Transcoder *tr):len(al.getLength()),list(new String[2*al.getLength()]) {
     FOR(i,len) {
         list[2*i]=tr->transcode(al.getName(i));
         list[2*i+1]=tr->transcode(al.getValue(i));
     }
 }
 
-std::string LocalAttributeList::getName(int i) {
+String LocalAttributeList::getName(int i) {
     return list[2*i];
 }
-std::string LocalAttributeList::getValue(int i) {
+String LocalAttributeList::getValue(int i) {
     return list[2*i+1];
 }
 
@@ -72,22 +72,22 @@ void StdStringFormatTarget::writeChars(const XMLByte *const toWrite, const unsig
     s.append((const char *)toWrite,count);
 }
 
-std::string StdStringFormatTarget::getString() const {
+String StdStringFormatTarget::getString() const {
     return s;
 }
 
 void StdStringFormatTarget::reset() {
-    s=std::string();
+    s=String();
 }
 
 
 Transcoder::Transcoder(const char *encoding): t(), f(encoding,"1.0",&t) {}
 
-std::string Transcoder::transcode(const XMLCh *s) {
-    if (s==NULL) return std::string();
+String Transcoder::transcode(const XMLCh *s) {
+    if (s==NULL) return String();
 /*    
     char *t=XMLString::transcode(s);
-    std::string r(t);
+    String r(t);
     XMLString::release(&t);
     return r;
 */    

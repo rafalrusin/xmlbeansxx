@@ -2,9 +2,6 @@
 
 #include "log4cxx/logger.h"
 #include <log4cxx/config.h>
-#if NNN
-#include "log4cxx/stream.h"
-#endif
 
 log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger(std::string("mem01"));
 using namespace log4cxx;
@@ -40,7 +37,7 @@ using namespace log4cxx;
 void namespaceTests() {
     while (true) {
         //Base64
-        shared_array<unsigned char> a(3);
+        Array<unsigned char> a(3);
         a[0]='a';
         a[1]='b';
         a[2]='c';
@@ -49,15 +46,11 @@ void namespaceTests() {
         LOG4CXX_DEBUG(logger,"Base64 size:" + TextUtils::intToString(s.size()));
         LOG4CXX_DEBUG(logger,"Base64:" + s);
 
-        XmlBase64BinaryPtr b=XmlBase64Binary::Factory::newInstance();
+        XmlBase64Binary b=XmlBase64Binary::Factory::newInstance();
         b->setByteArrayValue(a);
         LOG4CXX_DEBUG(logger,"Base64 xml:" + b->toString());
 
-        shared_array<unsigned char> c = b->getByteArrayValue();
+        Array<unsigned char> c = b->getByteArrayValue();
         LOG4CXX_DEBUG(logger, "tu");
-#if NNN
-        logstream LOG(logger, Level::DEBUG);
-        //LOG << "abc" << 15 << LOG4CXX_ENDMSG;
-#endif
     }
 }

@@ -40,8 +40,8 @@ public class Input {
 						String s=(String)gaps.get(gapName);
 						if (s==null) s="";
 						gaps.put(gapName,s+b.toString());
-						b=new StringBuffer();
 					}
+				    b=new StringBuffer();
 
 					StringTokenizer tok=new StringTokenizer(l.substring(2));
 					String t;
