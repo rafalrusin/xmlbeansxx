@@ -205,13 +205,13 @@ nodist_libxmlbeansxxinclude_HEADERS = \
 	xml-fragment.h\
 	xmlbeansxx-schema.h
 
-XmlTypesGen.h XmlTypesGen.cpp: ${top_srcdir}/generator/dist/bin/xmlbeansxx-genbuiltin ${srcdir}/XmlTypesGen.xh ${srcdir}/XmlTypesGen.xcpp
+XmlTypesGen.h XmlTypesGen.cpp: ${srcdir}/XmlTypesGen.xh ${srcdir}/XmlTypesGen.xcpp
 	${top_builddir}/generator/dist/bin/xmlbeansxx-genbuiltin
 
-xml-fragment.h xml-fragment.cpp: ${top_srcdir}/generator/dist/bin/xmlbeansxx-gen ${srcdir}/xml-fragment.xsd
+xml-fragment.h xml-fragment.cpp: ${srcdir}/xml-fragment.xsd
 	${top_builddir}/generator/dist/bin/xmlbeansxx-gen ${srcdir}/xml-fragment.xsd
 
-xmlbeansxx-schema.h xmlbeansxx-schema.cpp: ${top_srcdir}/generator/dist/bin/xmlbeansxx-gen ${srcdir}/xmlbeansxx-schema.xsd ${srcdir}/xmlbeansxx-schema.xh ${srcdir}/xmlbeansxx-schema.xcpp
+xmlbeansxx-schema.h xmlbeansxx-schema.cpp: ${srcdir}/xmlbeansxx-schema.xsd ${srcdir}/xmlbeansxx-schema.xh ${srcdir}/xmlbeansxx-schema.xcpp
 	${top_builddir}/generator/dist/bin/xmlbeansxx-gen ${srcdir}/xmlbeansxx-schema.xsd
 
 MOSTLYCLEANFILES=XmlTypesGen.h XmlTypesGenImpl.h XmlTypesGen.cpp xml-fragment.h xml-fragmentImpl.h xml-fragment.cpp xmlbeansxx-schema.h xmlbeansxx-schemaImpl.h xmlbeansxx-schema.cpp

@@ -32,7 +32,7 @@ install-data-local:
 	ln -s ${datadir}/xmlbeansxx/bin/xmlbeansxx-gen ${DESTDIR}${bindir}/xmlbeansxx-gen
 	ln -s ${datadir}/xmlbeansxx/bin/scompxx ${DESTDIR}${bindir}/scompxx
 	
-dist-hook:
+dist-hook: stamp-build
 	for file in `find -regex '\./\(src\|lib\|build\.xml\).*' -not -regex '.*/\..*'`; do \
 		if [ -d $$file ]; then \
 			mkdir $(distdir)/$$file; \

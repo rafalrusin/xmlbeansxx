@@ -9,7 +9,10 @@ CXXFLAGS += $(CPPUNIT_CFLAGS)
 LDADD += $(CPPUNIT_LIBS)
 endif
 
-SCHEMAS_XSD = ${srcdir}/c.xsd
+c.xsd: ${srcdir}/c.xsd-src
+	cp ${srcdir}/c.xsd-src c.xsd
+
+SCHEMAS_XSD = c.xsd
 SCHEMAS_CPP = c.cpp
 SCHEMAS_H = c.h cImpl.h
 
@@ -28,5 +31,5 @@ noinst_PROGRAMS = speed01
 speed01_SOURCES = speed01.cpp 
 nodist_speed01_SOURCES = c.h c.cpp
 
-MOSTLYCLEANFILES = $(SCHEMAS_CPP) $(SCHEMAS_H)
+MOSTLYCLEANFILES = $(SCHEMAS_CPP) $(SCHEMAS_H) $(SCHEMAS_XSD)
 
