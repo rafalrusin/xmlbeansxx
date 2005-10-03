@@ -8,8 +8,6 @@ if HAVE_CPPUNIT
 CXXFLAGS += $(CPPUNIT_CFLAGS) 
 LDADD += $(CPPUNIT_LIBS)
 endif
-c.xsd: ${srcdir}/c.xsd
-	cp -f ${srcdir}/c.xsd c.xsd
 
 SCHEMAS_XSD = ${srcdir}/c.xsd
 SCHEMAS_CPP = c.cpp
@@ -19,16 +17,17 @@ BUILT_SOURCES = $(SCHEMAS_CPP) $(SCHEMAS_H)
 
 $(SCHEMAS_CPP) $(SCHEMAS_H): $(SCHEMAS_XSD)
 	${top_builddir}/generator/dist/bin/xmlbeansxx-gen $(SCHEMAS_XSD)
+	if ! [ -f ${top_builddir}/tests/c.xsd ]; then cp -f ${srcdir}/c.xsd ${srcdir}/*.xml ${srcdir}/log4j.properties ${top_builddir}/tests; fi
 
 TESTS=BeansTest GenTest
 check_PROGRAMS = $(TESTS)
 BeansTest_SOURCES=TestApp.cpp BeansTest.cpp BeansTest.h
-GenTest_SOURCES=TestApp.cpp GenTest.cpp GenTest.h c.xsd
+GenTest_SOURCES=TestApp.cpp GenTest.cpp GenTest.h
 nodist_GenTest_SOURCES = $(SCHEMAS_CPP) $(SCHEMAS_H)
 
 noinst_PROGRAMS = speed01
 speed01_SOURCES = speed01.cpp 
 nodist_speed01_SOURCES = c.h c.cpp
 
-MOSTLYCLEANFILES = $(SCHEMAS_CPP) $(SCHEMAS_H) $(SCHEMAS_XSD)
+MOSTLYCLEANFILES = $(SCHEMAS_CPP) $(SCHEMAS_H)
 
