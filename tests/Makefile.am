@@ -8,11 +8,10 @@ if HAVE_CPPUNIT
 CXXFLAGS += $(CPPUNIT_CFLAGS) 
 LDADD += $(CPPUNIT_LIBS)
 endif
+c.xsd: ${srcdir}/c.xsd
+	cp -f ${srcdir}/c.xsd c.xsd
 
-c.xsd: ${srcdir}/c.xsd-src
-	cp ${srcdir}/c.xsd-src c.xsd
-
-SCHEMAS_XSD = c.xsd
+SCHEMAS_XSD = ${srcdir}/c.xsd
 SCHEMAS_CPP = c.cpp
 SCHEMAS_H = c.h cImpl.h
 
@@ -24,7 +23,7 @@ $(SCHEMAS_CPP) $(SCHEMAS_H): $(SCHEMAS_XSD)
 TESTS=BeansTest GenTest
 check_PROGRAMS = $(TESTS)
 BeansTest_SOURCES=TestApp.cpp BeansTest.cpp BeansTest.h
-GenTest_SOURCES=TestApp.cpp GenTest.cpp GenTest.h 
+GenTest_SOURCES=TestApp.cpp GenTest.cpp GenTest.h c.xsd
 nodist_GenTest_SOURCES = $(SCHEMAS_CPP) $(SCHEMAS_H)
 
 noinst_PROGRAMS = speed01
