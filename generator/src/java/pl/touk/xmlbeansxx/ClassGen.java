@@ -196,13 +196,14 @@ public class ClassGen {
             out.cpp.println("#include <xmlbeansxx/Existence.h>");
             out.cpp.println("#include <xmlbeansxx/XmlBeans.h>");
             out.cpp.println("#include <xmlbeansxx/SchemaTypeLoaderImpl.h>");
-            out.cpp.println("#include <xmlbeansxx/SchemaTypeImpl.h>");
 			
             if (!generatingBuiltin) {
                 out.h.println("#include <xmlbeansxx/XmlTypesGen.h>");
+                out.hImpl.println("#include <xmlbeansxx/XmlTypesGenImpl.h>");
             } else {
                 out.h.println("#include <xmlbeansxx/Null.h>");
                 out.h.println("#include <xmlbeansxx/Ptr.h>");
+                out.hImpl.println("#include <xmlbeansxx/SchemaTypeImpl.h>");
             }
             //if (set.isEmpty()) {
             //} else {
@@ -566,7 +567,7 @@ public class ClassGen {
     }
 	
     public static String genPropName(SchemaProperty elem) {
-        return genQNamePropertyVar(elem);
+        return "(*" +genQNamePropertyVar(elem) + ")";
     }
 	
     void genAttrCode(SchemaType containerType, SchemaProperty attr) {
@@ -853,11 +854,12 @@ public class ClassGen {
     }
     
     private String genNewSchemaProperty(int i, SchemaProperty prop) {
-        return fullClassName(prop.getType()) + "::staticInit();\n"
-            + "{\n"
+        return 
+            //fullClassName(prop.getType()) + "::staticInit();\n"
+            "{\n"
             + "xmlbeansxx::SchemaPropertyImpl _prop(xmlbeansxx::SchemaPropertyImpl::New());\n"
             + "_prop->order = " + (i + 1) + ";\n"
-            + "_prop->schemaType = " + fullClassName(prop.getType()) + "::type;\n"
+            + "_prop->schemaType = " + fullClassImplName(prop.getType()) + "_I::get_raw_schema_type();\n"
             + "_prop->_hasDefault = " + genNVCType(prop.hasDefault()) + ";\n"
             + "_prop->defaultText = " + genString(prop.getDefaultText() == null ? "" : prop.getDefaultText()) + ";\n"
             + "st->" + (prop.isAttribute() ? "attributes" : "elements") + "[" + genQName(prop.getName()) + "] = _prop;\n" 
@@ -866,14 +868,21 @@ public class ClassGen {
 
     private void genInitSchemaType(SchemaType st) {
         out.hImpl.println("public:");
+        
+        out.hImpl.println("static xmlbeansxx::SchemaTypeImpl get_raw_schema_type();");
+        out.cpp.println("xmlbeansxx::SchemaTypeImpl " + classImplName(st) + "_I::get_raw_schema_type() {");
+        out.cpp.println("static xmlbeansxx::SchemaTypeImpl st = xmlbeansxx::SchemaTypeImpl::New(typeid(" + fullClassName(st) + "));");
+        out.cpp.println("return st;");
+        out.cpp.println("}");
 
         out.hImpl.println("static xmlbeansxx::SchemaType initSchemaType();");
         out.cpp.println("xmlbeansxx::SchemaType "
                         + classImplName(st) + "_I::initSchemaType() {");
-        out.cpp.println("xmlbeansxx::SchemaTypeImpl st(xmlbeansxx::SchemaTypeImpl::New(typeid("+fullClassName(st)+")));");
+        //out.cpp.println("xmlbeansxx::SchemaTypeImpl st(xmlbeansxx::SchemaTypeImpl::New(typeid("+fullClassName(st)+")));");
+        out.cpp.println("xmlbeansxx::SchemaTypeImpl st(" + classImplName(st) + "_I::get_raw_schema_type());");
 
         {
-            out.cpp.println("st->_isDocumentType = " + (st.isDocumentType()?"true":"false") + ";");
+            out.cpp.println("st->_isDocumentType = " + (st.isDocumentType() ? "true" : "false") + ";");
             out.cpp.println("st->createRawXmlObject = " + genCreateRawXmlObject(st)+";");
 			
             out.cpp.println("st->whitespaceRule = "+genWsRule(st.getWhiteSpaceRule())+";");
@@ -895,7 +904,7 @@ public class ClassGen {
                     r = "false";
                 else
                     r = "true";
-                out.cpp.println("st->processContents = "+r+";");
+                out.cpp.println("st->processContents = " + r + ";");
             }
         }
 
@@ -903,7 +912,7 @@ public class ClassGen {
             {
                 XmlInteger fd=(XmlInteger)st.getFacet(SchemaType.FACET_FRACTION_DIGITS);
                 if (fd!=null) {
-                    out.cpp.println("st->fractionDigits="+fd.getBigIntegerValue().toString()+";");
+                    out.cpp.println("st->fractionDigits = "+fd.getBigIntegerValue().toString()+";");
                 }
             }
         } else {
@@ -1045,7 +1054,7 @@ public class ClassGen {
             out.hImpl.println("private:");
             traverseProperties(st, new PropertyTraversor() {
                 public void fn(SchemaProperty prop) {
-                    out.hImpl.println("static xmlbeansxx::QName " + genQNamePropertyVar(prop) + ";");
+                    out.hImpl.println("static xmlbeansxx::QName *" + genQNamePropertyVar(prop) + ";");
                 }
             });
         }
@@ -1121,7 +1130,7 @@ public class ClassGen {
                 //Setting QNames of properties
                 traverseProperties(st, new PropertyTraversor() {
                     public void fn(SchemaProperty prop) {
-                        out.cpp.println(genQNamePropertyVar(prop) + " = " + genQName(prop.getName()) + ";");
+                        out.cpp.println(genQNamePropertyVar(prop) + " = new " + genQName(prop.getName()) + ";");
                     }
                 });
             }
@@ -1136,7 +1145,8 @@ public class ClassGen {
                 //Setting QNames of properties
                 traverseProperties(st, new PropertyTraversor() {
                     public void fn(SchemaProperty prop) {
-                        out.cpp.println(genQNamePropertyVar(prop) + " = xmlbeansxx::QName();");
+                        out.cpp.println("delete " + genQNamePropertyVar(prop) + ";");
+                        out.cpp.println(genQNamePropertyVar(prop) + " = NULL;");
                     }
                 });
             }
@@ -1149,7 +1159,7 @@ public class ClassGen {
             //Init QNames of properties
             traverseProperties(st, new PropertyTraversor() {
                 public void fn(SchemaProperty prop) {
-                    out.cpp.println("xmlbeansxx::QName " + fullClassImplName(st) + "_I::" + genQNamePropertyVar(prop) 
+                    out.cpp.println("xmlbeansxx::QName *" + fullClassImplName(st) + "_I::" + genQNamePropertyVar(prop) 
                         + " = " + fullClassImplName(st) + "_I::" + genQNamePropertyVar(prop) + ";");
                 }
             });

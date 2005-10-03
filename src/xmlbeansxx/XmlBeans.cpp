@@ -28,12 +28,13 @@ namespace {
     Existence existenceVar = XmlBeans::staticInit();
 }
 
-log4cxx::LoggerPtr XmlBeans::LOG = XmlBeans::LOG;
+log4cxx::LoggerPtr XmlBeans::LOG() {
+    static log4cxx::LoggerPtr LOG = log4cxx::Logger::getLogger("xmlbeansxx.XmlBeans");
+    return LOG;
+}
 
-XmlBeans::MyExistence_I::MyExistence_I() {
-    XmlBeans::LOG = log4cxx::Logger::getLogger("xmlbeansxx.XmlBeans");
-    
-    LOG4CXX_DEBUG(XmlBeans::LOG,"Initializing xmlbeansxx");
+XmlBeans::MyExistence_I::MyExistence_I() {    
+    LOG4CXX_DEBUG(XmlBeans::LOG(), "Initializing xmlbeansxx");
     dependencies.push_back(StoreString::staticInit());
     StoreString::store("");
     XmlBeans::xs_ns(); //internal static init invokation to be thread-safe
@@ -45,21 +46,21 @@ XmlBeans::MyExistence_I::MyExistence_I() {
         XMLPlatformUtils::Initialize("pl_PL.UTF-8");
         //XMLPlatformUtils::Initialize();
     } catch(...) {
-        LOG4CXX_ERROR(XmlBeans::LOG, "Error during Xerces-c initialization");
+        LOG4CXX_ERROR(XmlBeans::LOG(), "Error during Xerces-c initialization");
         throw IllegalStateException();
     }
     //~Xerces init
     
-    LOG4CXX_DEBUG(XmlBeans::LOG,"Initialized xmlbeansxx");
+    LOG4CXX_DEBUG(XmlBeans::LOG(),"Initialized xmlbeansxx");
 }
 
 XmlBeans::MyExistence_I::~MyExistence_I() {
-    LOG4CXX_DEBUG(XmlBeans::LOG, "Terminating xmlbeansxx");
+    LOG4CXX_DEBUG(XmlBeans::LOG(), "Terminating xmlbeansxx");
     //Xerces termination
     try {
         XMLPlatformUtils::Terminate();
     } catch(...) {
-        LOG4CXX_ERROR(XmlBeans::LOG, "Error during Xerces-c termination");
+        LOG4CXX_ERROR(XmlBeans::LOG(), "Error during Xerces-c termination");
         throw IllegalStateException();
     }
     //~Xerces termination

@@ -22,7 +22,7 @@ limitations under the License. */
 namespace xmlbeansxx {
 class XmlBeans {
 private:
-    static log4cxx::LoggerPtr LOG;
+    static log4cxx::LoggerPtr LOG();
 class MyExistence_I: public Existence_I {
         std::vector<Existence> dependencies;
     public:

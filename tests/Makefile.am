@@ -24,10 +24,9 @@ BeansTest_SOURCES=TestApp.cpp BeansTest.cpp BeansTest.h
 GenTest_SOURCES=TestApp.cpp GenTest.cpp GenTest.h 
 nodist_GenTest_SOURCES = $(SCHEMAS_CPP) $(SCHEMAS_H)
 
-noinst_PROGRAMS = mem01 mem02
-mem01_SOURCES = mem01.cpp 
-mem02_SOURCES = mem02.cpp
-nodist_mem02_SOURCES = c.h c.cpp
+noinst_PROGRAMS = speed01
+speed01_SOURCES = speed01.cpp 
+nodist_speed01_SOURCES = c.h c.cpp
 
 MOSTLYCLEANFILES = $(SCHEMAS_CPP) $(SCHEMAS_H)
 
