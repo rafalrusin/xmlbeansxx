@@ -76,10 +76,10 @@ void namespaceTests() {
 
     p->xsetAgeAttr(newInstance<XmlInt>("20"));
     p->xsetMoneyAttr(newInstance<AmountType>("10.256789"));
-    //TODO CPPUNIT_ASSERT(p->xgetMoneyAttr()->getStringValue() == String("10.26"));
+    CPPUNIT_ASSERT(p->xgetMoneyAttr()->getStringValue() == String("10.26"));
     LOG4CXX_DEBUG(LOG, "6");
     p->xsetMoneyAttr(newInstance<AmountType>("10.254789"));
-    //TODO CPPUNIT_ASSERT(p->xgetMoneyAttr()->getStringValue() == String("10.25"));
+    CPPUNIT_ASSERT(p->xgetMoneyAttr()->getStringValue() == String("10.25"));
     //root->serialize(cout);
     p->setDane(DaneType::Factory::newInstance());
     LOG4CXX_DEBUG(LOG,String("created:\n") + root->toString() + "\n~created\n");

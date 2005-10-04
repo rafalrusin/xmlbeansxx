@@ -32,8 +32,8 @@ int main() {
             string xml = doc->toString();
             double t2 = currentTime();
             LOG4CXX_INFO(LOG, "Duration: " << t2-t1 << " sec." << " " << 1. / (t2-t1) << " per second");
-            LOG4CXX_DEBUG(LOG, "Car: " << car);
-            LOG4CXX_DEBUG(LOG, "Xml: " << xml);
+            LOG4CXX_INFO(LOG, "Car: " << car);
+            //LOG4CXX_INFO(LOG, "Xml: " << xml);
         }
     } catch (xmlbeansxx::BeansException &e) {
         LOG4CXX_ERROR(LOG, "Exception: " + e.getMessage());

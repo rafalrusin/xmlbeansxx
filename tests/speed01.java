@@ -16,11 +16,17 @@ public class speed01 {
                 double t1 = currentTime();
                 ContentDocument doc = ContentDocument.Factory.parse(new File("d.xml"));
                 int car = ((Fullpersoninfo)(doc.getContent().getEmployee())).getCar();
-                String xml = doc.toString();
+                String xml;
+                {
+                    StringWriter out = new StringWriter();
+                    doc.save(out, new XmlOptions().setSavePrettyPrintIndent(0));
+                    xml = out.toString();
+                }
+                doc.validate();
                 double t2 = currentTime();
                 LOG.info("Duration: " + (t2-t1) + " sec. " + (1. / (t2-t1)) + " per second");
-                LOG.debug("Car: " + car);
-                LOG.debug("Xml: " + xml);
+                LOG.info("Car: " + car);
+                //LOG.info("Xml: " + xml);
             }
         } catch (Exception e) {
             LOG.error("Exception: " + e.getMessage());
