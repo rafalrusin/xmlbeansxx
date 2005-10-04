@@ -9,4 +9,4 @@ set -x
 CP=".:xmltypes.jar:../generator/lib/commons-logging-1.0.4.jar:`printjars $XMLBEANS_HOME/lib/*.jar`"
 $XMLBEANS_HOME/bin/scomp c.xsd \
 && javac -cp $CP speed01.java \
-&& java -cp $CP -Dlog4j.configuration=log4j.properties speed01
+&& java -server -cp $CP -Dlog4j.configuration=log4j.properties speed01
