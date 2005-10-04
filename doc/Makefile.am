@@ -11,3 +11,6 @@ doxygen: html/api/index.html
 html/api/index.html: Doxyfile main-page.txt
 	mkdir -p html
 	@DOXYGEN@
+
+clean-local:
+	rm -fr html

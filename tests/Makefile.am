@@ -17,7 +17,7 @@ BUILT_SOURCES = $(SCHEMAS_CPP) $(SCHEMAS_H)
 
 $(SCHEMAS_CPP) $(SCHEMAS_H): $(SCHEMAS_XSD)
 	${top_builddir}/generator/dist/bin/xmlbeansxx-gen $(SCHEMAS_XSD)
-	if ! [ -f ${top_builddir}/tests/c.xsd ]; then cp -f ${srcdir}/c.xsd ${srcdir}/*.xml ${srcdir}/log4j.properties ${top_builddir}/tests; fi
+	if ! [ -f c.xsd ]; then touch copy-stamp; cp -f ${srcdir}/c.xsd ${srcdir}/*.xml ${srcdir}/log4j.properties .; fi
 
 TESTS=BeansTest GenTest
 check_PROGRAMS = $(TESTS)
@@ -31,3 +31,5 @@ nodist_speed01_SOURCES = c.h c.cpp
 
 MOSTLYCLEANFILES = $(SCHEMAS_CPP) $(SCHEMAS_H)
 
+clean-local:
+	if [ -f copy-stamp ]; then rm -f c.xsd *.xml log4j.properties copy-stamp; fi
