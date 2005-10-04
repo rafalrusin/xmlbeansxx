@@ -1,5 +1,5 @@
 SUBDIRS =
-EXTRA_DIST = a.xml b.xml c.xml c.xsd log4j.properties
+EXTRA_DIST = a.xml b.xml c.xml d.xml c.xsd log4j.properties speed01.java speed01.java.run
 
 INCLUDES = -I ${top_srcdir}/src
 LDADD = ${top_builddir}/src/xmlbeansxx/libxmlbeansxx.la
