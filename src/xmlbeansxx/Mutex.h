@@ -30,6 +30,7 @@ typedef boost::detail::thread::scoped_lock<Mutex> Lock;
 class Mutex {}
 ;
 class Lock {
+    public:
     Lock(Mutex &mutex) {}
 }
 ;

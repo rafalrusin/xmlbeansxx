@@ -17,7 +17,7 @@ limitations under the License. */
 #include "BoostAssert.h"
 #include <log4cxx/logger.h>
 #include <xmlbeansxx/String.h>
-#include <boost/shared_ptr.hpp>
+#include "Ptr.h"
 namespace xmlbeansxx {
 class ValidationContext_I {
 private:
@@ -26,6 +26,7 @@ public:
     virtual void invalid(const String &code, const String &args) = 0;
     virtual ~ValidationContext_I() {}
 };
-typedef boost::shared_ptr<ValidationContext_I> ValidationContext;
+BEGIN_CLASS(ValidationContext, ValidationContext_I)
+END_CLASS()
 }
 #endif //XMLBEANSXX_VALIDATIONCONTEXT_INCLUDED

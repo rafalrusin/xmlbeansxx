@@ -91,7 +91,10 @@ void XercesDocumentHandler::startElement(const XMLCh* const oname, AttributeList
             }
         }
     
-        p->cursor->beginElement(p->nsSplit(p->tr->transcode(oname)));
+        {
+            QName name = p->nsSplit(p->tr->transcode(oname));
+            p->cursor->beginElement(name);
+        }
         
         LOG4CXX_DEBUG2(LOG,String("Pass 3 - adding attributes to object"));
         //adding attributes to new object
@@ -101,9 +104,11 @@ void XercesDocumentHandler::startElement(const XMLCh* const oname, AttributeList
                     continue;
                 VAL(name, p->nsSplit(latts.getName(i), true));
                 if (name == XmlBeans::xsi_type()) {
-                    p->cursor->insertAttributeWithValue(name, p->nsSplit(latts.getValue(i)));
+                    QName value = p->nsSplit(latts.getValue(i));
+                    p->cursor->insertAttributeWithValue(name, value);
                 } else {
-                    p->cursor->insertAttributeWithValue(name, latts.getValue(i));
+                    String value = latts.getValue(i);
+                    p->cursor->insertAttributeWithValue(name, value);
                 }
             }
         }
@@ -118,7 +123,6 @@ void XercesDocumentHandler::characters(const XMLCh* const chars, const unsigned 
     p->cursor->insertChars(s);
 }
 void XercesDocumentHandler::endElement(const XMLCh *const name) {
-    //return;
     TRACER2(LOG,"endElement")
     //LOG4CXX_DEBUG2(LOG,String("XercesDocumentHandler::endElement - start"));
     p->cursor->pop();
@@ -212,6 +216,11 @@ void XercesParser_I::updateOptions() {
     sax->setValidationScheme(opts->getValidation()?SAXParser::Val_Always:SAXParser::Val_Never);
     sax->setDoSchema(opts->getValidation());
     sax->setValidationSchemaFullChecking(opts->getValidation());
+}
+
+void XercesParser_I::parse(const String &in, const XmlObject &root) {
+    istringstream is(in);
+    parse(is, root);
 }
 
 void XercesParser_I::parse(istream &in, const XmlObject &root) {

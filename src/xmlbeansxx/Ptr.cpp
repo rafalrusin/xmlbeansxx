@@ -16,4 +16,8 @@
 #include "Ptr.h"
 #include <log4cxx/logger.h>
 namespace xmlbeansxx {
+log4cxx::LoggerPtr Ptr::LOG() {
+    static log4cxx::LoggerPtr l = log4cxx::Logger::getLogger("xmlbeansxx.Ptr");
+    return l;
+}
 }

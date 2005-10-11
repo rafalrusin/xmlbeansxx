@@ -17,7 +17,6 @@ limitations under the License. */
 #include "BoostAssert.h"
 #include <log4cxx/logger.h>
 #include "StoreString.h"
-#include <boost/shared_ptr.hpp>
 namespace xmlbeansxx {
 /**
 * Objects of this class represent qualified name, which contains namespace URI and localPart. Corresponds to javax.xml.namespace.QName class.

@@ -16,7 +16,6 @@ limitations under the License. */
 #define XMLBEANSXX_TYPESTOREUSER_INCLUDED
 #include "BoostAssert.h"
 #include <log4cxx/logger.h>
-#include <boost/shared_ptr.hpp>
 #include "SchemaType.h"
 #include "Mutex.h"
 #include "Ptr.h"

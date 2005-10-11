@@ -1,0 +1,506 @@
+/*
+  Copyright 2004-2005 TouK s.c.
+    
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+ 
+  http://www.apache.org/licenses/LICENSE-2.0
+ 
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. */
+
+#include "LibXMLParser.h"
+#include "XmlBeans.h"
+#include "XmlTypesGen.h"
+#include "BeansException.h"
+#include "Tracer.h"
+#include "defs.h"
+#include <stdio.h>
+#include <boost/scoped_array.hpp>
+
+#include <libxml/xmlstring.h>
+
+#include <log4cxx/logger.h>
+
+//#define LOG4CXX_DEBUG2(a,b) LOG4CXX_DEBUG(a, b)
+#define LOG4CXX_DEBUG2(a,b) 
+
+namespace {
+    const bool INSERT_INTO_CURSOR = true;
+    const bool IMMEDIATE_RETURN = false;
+}
+
+namespace xmlbeansxx {
+
+    
+// include class static objects in scope (else tests won't link)
+bool LibXMLParser::initialized = false;
+//boost::mutex LibXMLParser::mutex;
+
+using namespace std;
+
+class XmlObject;
+
+/**
+ * SAX callbacks headers
+ */
+extern "C" {
+    void static startElementNs(void *ctx,
+                               const xmlChar *localname,
+                               const xmlChar *prefix,
+                               const xmlChar *URI,
+                               int nb_namespaces,
+                               const xmlChar **namespaces,
+                               int nb_attributes,
+                               int nb_defaulted,
+                               const xmlChar **attributes);
+    void static endElementNs(void *ctx,
+                             const xmlChar *localname,
+                             const xmlChar *prefix,
+                             const xmlChar *URI);
+    void static characters(void *ctx, const xmlChar *ch, int len);
+    void static serror(void *ctx, xmlErrorPtr error);
+
+    static xmlSAXHandler xmlbeansxxSAX2HandlerStruct = {
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                characters,
+                NULL,
+                NULL,
+                NULL,
+                NULL,//warningDebug,
+                NULL,//errorDebug,
+                NULL,//fatalErrorDebug,
+                NULL,
+                NULL,//cdataBlockDebug,
+                NULL,
+                XML_SAX2_MAGIC,
+                NULL,
+                startElementNs,
+                endElementNs,
+                serror
+            };
+
+    static xmlSAXHandlerPtr xmlbeansxxSAX2Handler = &xmlbeansxxSAX2HandlerStruct;
+
+}
+
+log4cxx::LoggerPtr LOG = log4cxx::Logger::getLogger(
+                             string("xmlbeansxx.LibXMLParser") );
+
+LibXMLParser::LibXMLParser()
+        : options(XmlOptions::New()) {
+    init();
+}
+
+LibXMLParser::LibXMLParser(const XmlOptions &options) {
+    this->options = options;
+    init();
+}
+
+LibXMLParser::~LibXMLParser() {
+    unloadGrammars();
+}
+
+void LibXMLParser::init() {
+    //LOG4CXX_DEBUG(LOG, "init - start");
+    /*
+    #ifdef BOOST_HAS_THREADS
+            {
+                boost::detail::thread::scoped_lock<boost::mutex> lock(mutex);
+                if (initialized == false) {
+                    //LOG4CXX_DEBUG(LOG, "initializing libxml2 parser...");
+                    xmlInitParser();
+                    initialized = true;
+                }
+            }
+    #endif
+    */
+    user_data = this;
+
+    schemaParserCtxt = NULL;
+    schema           = NULL;
+    validationCtxt   = NULL;
+    schemaPlug       = NULL;
+
+    xsi_ns = XmlBeans::xsi_ns();
+    //LOG4CXX_DEBUG(LOG, "init - finish");
+}
+
+string LibXMLParser::generateErrorMessage(xmlErrorPtr error) {
+    if (error == NULL)
+        return string("Can't get xmlError message from libxml2");
+
+    return string(error->message);
+}
+
+void LibXMLParser::parse(istream &in, const XmlObject &documentRoot) {
+    //TODO: improve it!
+    string line, doc;
+    while (getline(in, line)) {
+        doc.append(line);
+    }
+    parse(doc, documentRoot);
+}
+
+void LibXMLParser::parse(const String &doc, const XmlObject &documentRoot) {
+
+    xmlSAXHandlerPtr handler;
+
+    handler = xmlbeansxxSAX2Handler;
+
+    cursor = documentRoot->newCursor();
+    xmlContext.setLink("", "");
+
+    int errNo;
+    if ( validationCtxt == NULL )  {
+        if ((errNo = xmlSAXUserParseMemory(handler,
+                                           (void *) this,
+                                           (const char *) doc.c_str(),
+                                           doc.length())) != 0) {
+
+            xmlErrorPtr error = xmlGetLastError();
+            throw new XmlParseException(generateErrorMessage(error));
+        }
+    } else {
+        xmlParserInputBufferPtr buf = NULL;
+        buf = xmlParserInputBufferCreateMem((const char *)doc.c_str(), doc.length(), XML_CHAR_ENCODING_NONE);
+
+        if (( errNo = xmlSchemaValidateStream(validationCtxt,
+                                              buf,
+                                              XML_CHAR_ENCODING_NONE,
+                                              handler,
+                                              (void *)this)) != 0 ) {
+
+            xmlErrorPtr error = xmlGetLastError();
+            throw new XmlParseException(generateErrorMessage(error));
+        }
+    }
+
+    cursor = Null();
+}
+
+void addSchemaValidityError(void *ctx, const char *msg, ...) {
+    char buf[1024];
+    va_list args;
+
+    va_start(args, msg);
+    int len = vsnprintf(buf, sizeof(buf)/sizeof(buf[0]), msg, args);
+    va_end(args);
+
+    LibXMLParser *parser = (LibXMLParser *) ctx;
+    if (len == 0)
+        parser->addError("Can't create schema validity error!");
+    else
+        parser->addError(buf);
+}
+
+void addSchemaValidityWarning(void *ctx, const char *msg, ...) {
+    char buf[1024];
+    va_list args;
+
+    va_start(args, msg);
+    int len = vsnprintf(buf, sizeof(buf)/sizeof(buf[0]), msg, args);
+    va_end(args);
+
+    LibXMLParser *parser = (LibXMLParser *) ctx;
+    if (len == 0)
+        parser->addWarning("Can't create schema validity warning!");
+    else
+        parser->addWarning(buf);
+}
+
+// TODO: how to load grammars from couple of files?
+void LibXMLParser::loadGrammars(const vector<string>& files) {
+    //         FOREACH(it, files) {
+    //             loadGrammar(*it);
+    //         }
+}
+
+/*
+ * Load schema and create internal representation.
+ * Plug schema validation context to SAX parser.
+ */
+void LibXMLParser::loadGrammar(const string &filename) {
+    {
+        // prevent memory leak from previous load
+        if (schemaPlug != NULL)
+            unloadGrammars();
+
+        if (!errors.empty())
+            errors.clear();
+        if (!warnings.empty())
+            warnings.clear();
+    }
+
+    schemaParserCtxt = xmlSchemaNewParserCtxt(filename.c_str());
+    if (schemaParserCtxt == NULL) {
+        throw new BeansException("Can't create xmlSchemaParserContext");
+        return;
+    }
+
+    xmlSchemaSetParserErrors(schemaParserCtxt,
+                             addSchemaValidityError,
+                             addSchemaValidityWarning,
+                             this);
+
+    schema = xmlSchemaParse(schemaParserCtxt);
+    if (schema == NULL) {
+        unloadGrammars();
+        throw new BeansException("Can't precompile schema");
+        return;
+    }
+
+    if ((validationCtxt = xmlSchemaNewValidCtxt(schema)) == NULL) {
+        unloadGrammars();
+        throw new BeansException("Can't create schema validation context");
+        return;
+    }
+
+    xmlSchemaSetValidErrors(validationCtxt,
+                            addSchemaValidityError,
+                            addSchemaValidityWarning,
+                            this);
+
+    /*schemaPlug = xmlSchemaSAXPlug(validationCtxt,
+                                  &saxHandlerPtr,
+                                  &(this->user_data));
+    if (schemaPlug == NULL) {
+        // TODO: errors
+        LOG4CXX_ERROR(LOG, "Can't plug in schema validation layer");
+        unloadGrammars();
+        return;
+    }
+    */
+}
+
+// clear after schemas loading
+void LibXMLParser::unloadGrammars() {
+    if (schemaPlug) {
+        xmlSchemaSAXUnplug(schemaPlug);
+        schemaPlug = NULL;
+    }
+    if (validationCtxt) {
+        xmlSchemaFreeValidCtxt(validationCtxt);
+        validationCtxt = NULL;
+    }
+    if (schema) {
+        xmlSchemaFree(schema);
+        schema = NULL;
+    }
+    if (schemaParserCtxt)
+        xmlSchemaFreeParserCtxt(schemaParserCtxt);
+}
+
+
+
+// return namespace number bound to prefix or default namespace if
+// no prefix was given
+QName LibXMLParser::nsSplit(const String &str, bool isAttr) {
+    string::size_type pos=str.find(':');
+    if (pos == string::npos) {
+        if (isAttr) {
+            return QName("", str);
+        } else {
+            return QName(xmlContext.getLink(""), str);
+        }
+    } else {
+        return QName(xmlContext.getLink(str.substr(0,pos)) ,str.substr(pos+1));
+    }
+}
+
+QName LibXMLParser::getQName(const char *prefix, const char *localname, bool isAttr) {
+    if (isAttr && prefix == NULL) return QName("", localname);
+    else return QName(xmlContext.getLink(prefix == NULL ? "" : prefix), localname);
+}
+
+std::pair<String, String> LibXMLParser::tagSplit(const String &str) {
+    String::size_type pos = str.find(':');
+    if (pos==string::npos) {
+        return pair<String, String>("",str);
+    } else {
+        return pair<String, String>(str.substr(0,pos),str.substr(pos+1));
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////
+/////////////////////// SAX callback routines ////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
+// common xmlChar **namespaces indexes
+enum { NS_PREFIX = 0, NS_URI = 1 };
+
+// common xmlChar **attributes indexes
+const int ATTRTABSIZE = 5;
+enum { ATTR_LOCALNAME = 0,
+       ATTR_PREFIX    = 1,
+       ATTR_URI       = 2,
+       ATTR_VALUE     = 3,
+       ATTR_END       = 4 };
+
+// create attribute's name consisting of prefix:localname
+// if prefix is NULL, only name == localname
+inline string getAttrName(const xmlChar **attributes, int current) {
+    string an;
+    if (attributes[current+ATTR_PREFIX] != NULL) {
+        an.append((const char *) attributes[current+ATTR_PREFIX]);
+        an.append(":");
+    }
+    an.append((const char *) attributes[current+ATTR_LOCALNAME]);
+    return an;
+}
+
+// extract attribute's value from string, contained between start/end
+inline string getAttrValue(const xmlChar **attributes) {
+    const xmlChar *start = attributes[ATTR_VALUE];
+    const xmlChar *end   = attributes[ATTR_END];
+
+    int len = end - start;
+    return string((const char *) start, len);
+}
+
+// prefix     - when not provided is NULL
+// URI        - when not provided is NULL
+// namespaces - consists of prefix/namespace pairs
+// attributes - attribute's value is between 'value' and 'end'
+void startElementNs(void *ctx,
+                    const xmlChar *localname,
+                    const xmlChar *prefix,
+                    const xmlChar *URI,
+                    int nb_namespaces,
+                    const xmlChar **namespaces,
+                    int nb_attributes,
+                    int nb_defaulted,
+                    const xmlChar **attributes) // (localname/prefix/URI/value/end)
+{
+    if (IMMEDIATE_RETURN)
+        return;
+    {
+        
+        LOG4CXX_DEBUG2(LOG, "SAX2 - StartElementNS info")
+        LOG4CXX_DEBUG2(LOG, string("localname: ") + (const char *) localname)
+        LOG4CXX_DEBUG2(LOG, string("prefix   : ") + (prefix == NULL ? "" : (const char *) prefix))
+        LOG4CXX_DEBUG2(LOG, string("URI      : ") + (URI == NULL ? "" : (const char *) URI))
+        
+        /*
+        LOG4CXX_DEBUG2(LOG, "namespaces...");
+        FOR(i, nb_namespaces) {
+            LOG4CXX_DEBUG2(LOG, string("namespace: ")
+                          + (namespaces[2*i] == NULL ? "" : (const char *) namespaces[2*i])
+                          + "="
+                          + (const char *) namespaces[2*i+1]);
+        }
+        LOG4CXX_DEBUG2(LOG, "attributes...");
+        FOR(i, nb_attributes) {
+            LOG4CXX_DEBUG2(LOG, string("attribute: "));
+            LOG4CXX_DEBUG2(LOG, string("localname: ") + (const char *) attributes[5*i]);
+            LOG4CXX_DEBUG2(LOG, string("prefix   : ")
+                          + (attributes[5*i+1] == NULL
+                             ? ""
+                             : (const char *) attributes[5*i+1]));
+            LOG4CXX_DEBUG2(LOG, string("URI      : ")
+                          + (attributes[5*i+2] == NULL
+                             ? ""
+                             : (const char *) attributes[5*i+2]));
+            LOG4CXX_DEBUG2(LOG, string("value    : ") + getAttrValue(attributes + 5*i));
+        }*/
+        LOG4CXX_DEBUG2(LOG, "SAX2 - end info")
+    }
+
+    /* *************************************************************************** */
+    LibXMLParser *parser = (LibXMLParser *) ctx;
+
+    parser->xmlContext.remember();
+
+    {
+        LOG4CXX_DEBUG2(LOG, "store namespaces in xmlContext")
+        for (int current = 0;
+                current < 2 * nb_namespaces;
+                current += 2) {
+
+            LOG4CXX_DEBUG2(LOG, "iteration")
+
+            const char * ns0 = (const char *) namespaces[current + NS_URI];
+            BOOST_ASSERT(ns0 != NULL);
+            StoreString ns(ns0);
+            const char *prefix = (const char *) namespaces[current + NS_PREFIX];
+            LOG4CXX_DEBUG2(LOG, "prefix: " << (prefix == NULL ? "" : prefix) << " namespace: " << ns)
+            parser->xmlContext.setLink(prefix == NULL ? "" : prefix, ns);
+        }
+    }
+
+    {
+        LOG4CXX_DEBUG2(LOG, "begin element")
+        QName name(parser->getQName((const char *) prefix, (const char *) localname));
+        if (INSERT_INTO_CURSOR)
+            parser->cursor->beginElement(name);
+    }
+
+    {
+        LOG4CXX_DEBUG2(LOG, "add attributes to cursor")
+        for (int current = 0;
+                current < ATTRTABSIZE * nb_attributes;
+                current += ATTRTABSIZE) {
+            StoreString uri;
+            QName name(parser->getQName((const char *) attributes[current + ATTR_PREFIX], (const char *) attributes[current + ATTR_LOCALNAME], true));
+            if (name == XmlBeans::xsi_type()) {
+                QName value = parser->nsSplit(getAttrValue(attributes + current));
+                if (INSERT_INTO_CURSOR)
+                    parser->cursor->insertAttributeWithValue(name, value);
+            } else {
+                String value(getAttrValue(attributes + current));
+                if (INSERT_INTO_CURSOR)
+                    parser->cursor->insertAttributeWithValue(name, value);
+            }
+        }
+    }
+}
+
+void endElementNs(void *ctx,
+                  const xmlChar *localname,
+                  const xmlChar *prefix,
+                  const xmlChar *URI) {
+
+    if (IMMEDIATE_RETURN)
+        return;
+    LOG4CXX_DEBUG2(LOG, "end element " << (const char *) localname)
+    LibXMLParser *parser = (LibXMLParser *) ctx;
+    if (INSERT_INTO_CURSOR)
+        parser->cursor->pop();
+    parser->xmlContext.restore();
+    LOG4CXX_DEBUG2(LOG, "leaving end element " << (const char *) localname)
+}
+
+void characters(void *ctx, const xmlChar *ch, int length) {
+    if (IMMEDIATE_RETURN)
+        return;
+    LibXMLParser *parser = (LibXMLParser *) ctx;
+
+    string s( (const char*) ch, length);
+    if (INSERT_INTO_CURSOR)
+       parser->cursor->insertChars(s);
+}
+
+void serror(void *ctx, xmlErrorPtr error) {
+    LOG4CXX_ERROR(LOG, string("serror: ") + error->message);
+}
+}

@@ -16,15 +16,19 @@
 
 #include "XmlParser.h"
 #include "XercesParser.h"
+#include "LibXMLParser.h"
 
 namespace xmlbeansxx {
     
 XmlParser XmlParser::create() {
-    return XmlParser(boost::shared_ptr<XercesParser_I>(new XercesParser_I()));
+    //return XmlParser(boost::shared_ptr<XercesParser_I>(new XercesParser_I()));
+    return LibXMLParserPtr::New();
 }
 
 XmlParser XmlParser::create(const XmlOptions &opts) {
-    return XmlParser(boost::shared_ptr<XercesParser_I>(new XercesParser_I(opts)));
+    //return XmlParser(boost::shared_ptr<XercesParser_I>(new XercesParser_I(opts)));
+    return LibXMLParserPtr::New(opts);
 }
+
 }
 

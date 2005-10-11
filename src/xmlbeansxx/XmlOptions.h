@@ -40,7 +40,9 @@ public:
     
     XmlOptions copy() {
         XmlOptions n = XmlOptions::New();
-        (*n.ptr) = (*this);
+        n->_saveXmlDecl = _saveXmlDecl;
+        n->_validation = _validation;
+        //*n = *this;
         return n;
     }
 

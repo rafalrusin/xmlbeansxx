@@ -29,6 +29,7 @@ public:
 
     virtual bool visit(const QName &name) = 0;
 };
-typedef boost::shared_ptr<TypeStoreVisitor_I> TypeStoreVisitor;
+BEGIN_CLASS(TypeStoreVisitor, TypeStoreVisitor_I)
+END_CLASS()
 }
 #endif //XMLBEANSXX_TYPESTOREVISITOR_INCLUDED

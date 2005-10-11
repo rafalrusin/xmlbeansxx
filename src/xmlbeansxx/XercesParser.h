@@ -85,6 +85,7 @@ public:
      * (apropriate grammars should be loaded using eg. loadGrammar method).
      */
     virtual void parse(std::istream &in, const XmlObject &documentRoot);
+    virtual void parse(const String &in, const XmlObject &documentRoot);
 
     virtual XmlOptions getXmlOptions() const {
         return opts;

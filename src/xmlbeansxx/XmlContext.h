@@ -18,7 +18,6 @@
 #define _XMLBEANSXX_XMLCONTEXT_H_
 
 #include "BoostAssert.h"
-#include <boost/shared_ptr.hpp>
 #include "String.h"
 #include "Map.h"
 #include "Stack.h"

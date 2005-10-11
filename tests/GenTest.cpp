@@ -52,7 +52,7 @@ void namespaceTests() {
     p->xsetLastname(newInstance<CdataString>("_ln<>_"));
     p->xsetFirstname(newInstance<XmlString>("_fn_"));
     LOG4CXX_DEBUG(LOG, "3");
-    p->xsetDt(newInstance<XmlDateTime>("\n\n 2004-01-30T22:50:11  "));
+    p->xsetDt(newInstance<XmlDateTime>("2004-01-30T22:50:11"));
     LOG4CXX_DEBUG(LOG, "3.1");
     Array<XmlString> tab=p->xgetTableArray();
     LOG4CXX_DEBUG(LOG, "3.2");
@@ -156,7 +156,7 @@ void parsing() {
     VAL(age, doc->getContent()->getEmployee()->getAgeAttr());
     LOG4CXX_DEBUG(LOG, "age: " << age);
     LOG4CXX_DEBUG(LOG,doc->toString());
-    CPPUNIT_ASSERT( age == 10);
+    CPPUNIT_ASSERT(age == 10);
 
     XmlCursor cursor =  doc->getContent()->getEmployee()->newCursor();
     cursor->beginElement(QName("", "dane"));

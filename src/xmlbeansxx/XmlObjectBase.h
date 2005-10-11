@@ -16,7 +16,7 @@ limitations under the License. */
 #define XMLBEANSXX_XMLOBJECTBASE_INCLUDED
 #include "BoostAssert.h"
 #include <log4cxx/logger.h>
-#include <boost/enable_shared_from_this.hpp>
+#include "Ptr.h"
 #include <xmlbeansxx/String.h>
 #include <xmlbeansxx/ValidationContext.h>
 #include <xmlbeansxx/BeansException.h>
@@ -31,7 +31,11 @@ limitations under the License. */
 #include "XmlTypesGen.h"
 #include "TypeStore.h"
 namespace xmlbeansxx {
-class XmlObjectBase_I: public virtual SimpleValue_I, public virtual TypeStoreUser_I, public virtual XmlObject_I, public boost::enable_shared_from_this<XmlObjectBase_I> {
+class XmlObjectBase_I;
+BEGIN_CLASS(XmlObjectBase, XmlObjectBase_I)
+END_CLASS()
+
+class XmlObjectBase_I: public virtual SimpleValue_I, public virtual TypeStoreUser_I, public virtual XmlObject_I, public EnablePtrFromThis<XmlObjectBase_I> {
 private:
     static log4cxx::LoggerPtr LOG;
 
@@ -39,6 +43,8 @@ class ValueOutOfRangeValidationContext_I: public ValidationContext_I {
     public:
         virtual void invalid(const String &code, const String &args);
     };
+BEGIN_CLASS(ValueOutOfRangeValidationContext, ValueOutOfRangeValidationContext_I)
+END_CLASS()
 
 public:
     static ValidationContext _voorVc;
@@ -131,9 +137,6 @@ protected:
     String get_store_text();
     void set_store_text(const String &text);
 };
-
-BEGIN_CLASS(XmlObjectBase, XmlObjectBase_I)
-END_CLASS()
 
 }
 #endif //XMLBEANSXX_XMLOBJECTBASE_INCLUDED

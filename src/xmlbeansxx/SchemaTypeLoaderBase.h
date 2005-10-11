@@ -24,7 +24,8 @@
 #include "SchemaTypeLoader.h"
 namespace xmlbeansxx {
 class SchemaTypeLoaderBase_I;
-typedef boost::shared_ptr<SchemaTypeLoaderBase_I> SchemaTypeLoaderBase;
+BEGIN_CLASS(SchemaTypeLoaderBase, SchemaTypeLoaderBase_I)
+END_CLASS()
 class SchemaTypeLoaderBase_I: public SchemaTypeLoader_I {
     private:
     static log4cxx::LoggerPtr LOG;

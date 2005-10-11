@@ -21,8 +21,8 @@
 #include "String.h"
 #include <string>
 #include <vector>
-#include <boost/shared_ptr.hpp>
 #include "XmlOptions.h"
+#include "String.h"
 
 namespace xmlbeansxx {
 
@@ -39,6 +39,7 @@ public:
      * (apropriate grammars should be loaded using eg. loadGrammar method).
      */
     virtual void parse(std::istream &in, const XmlObject &documentRoot) = 0;
+    virtual void parse(const String &in, const XmlObject &documentRoot) = 0;
 
     virtual XmlOptions getXmlOptions() const = 0;
     virtual void setXmlOptions(const XmlOptions &options) = 0;

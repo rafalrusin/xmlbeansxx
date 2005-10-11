@@ -19,7 +19,6 @@ limitations under the License. */
 
 #include "BoostAssert.h"
 #include "String.h"
-#include <boost/shared_ptr.hpp>
 #include "Ptr.h"
 namespace xmlbeansxx {
 

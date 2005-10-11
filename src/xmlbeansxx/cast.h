@@ -44,8 +44,25 @@ boost::shared_ptr<T2> throwing_pointer_cast(const boost::shared_ptr<T> &a) {
 }
 
 template<class T2,class T>
+inline T2 *throwing_cast(T *a) {
+    if (a==NULL) return NULL;
+    else {
+        T2 *b = dynamic_cast<T2 *>(a);
+        if (b==NULL) throw ClassCastException(String("from ")+std::string(typeid(*a).name())+std::string(" to ")+std::string(typeid(T2).name()));
+        return b;
+    }
+}
+
+
+template<class T2,class T>
 boost::shared_ptr<T2> ptr_cast(const boost::shared_ptr<T> &a) {
     return throwing_pointer_cast<T2>(a);
+}
+
+template<class T2,class T>
+inline T2 *ptr_cast(T *a) {
+    return throwing_cast<T2>(a);
+    //return dynamic_cast<T2 *>(a);
 }
 
 
@@ -58,6 +75,8 @@ class cast_traits {
     }
 };
 
+
+/*
 template<typename TO, typename FROM>
 class cast_traits<boost::shared_ptr<TO>, boost::shared_ptr<FROM> > {
     public:
@@ -66,8 +85,18 @@ class cast_traits<boost::shared_ptr<TO>, boost::shared_ptr<FROM> > {
     }
 };
 
+
 template<typename TO, typename FROM>
-TO cast(const FROM &from) {
+class cast_traits<TO *, FROM *> {
+    public:
+    inline TO *operator ()(FROM *from) const {
+        return ptr_cast<TO>(from);
+    }
+};
+*/
+
+template<typename TO, typename FROM>
+inline TO cast(const FROM &from) {
     return cast_traits<TO, FROM>()(from);
 }
 

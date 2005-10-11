@@ -20,8 +20,8 @@ limitations under the License. */
 #include "QName.h"
 #include "Mutex.h"
 #include "Ptr.h"
-#include <boost/enable_shared_from_this.hpp>
 #include "TextUtils.h"
+//#include <list>
 namespace xmlbeansxx {
 
 
@@ -37,7 +37,7 @@ class NamedPair {
 };
 
 
-class XobjBase_I: public TypeStore_I, public boost::enable_shared_from_this<XobjBase_I> {
+class XobjBase_I: public TypeStore_I, public EnablePtrFromThis<XobjBase_I> {
 private:
     static log4cxx::LoggerPtr LOG;
 
@@ -46,6 +46,7 @@ protected:
     
 public:
     typedef Vector<NamedPair>::type ContentsType;
+    //typedef std::list<NamedPair> ContentsType;
 
     TypeStoreUser getUser();
     
@@ -138,30 +139,10 @@ class SimpleContentStore_I: public XobjBase_I {
     }
 };
 
-
-/*
-class SimpleContentStore_I: public XobjBase_I {
-    static log4cxx::LoggerPtr LOG;
-    Mutex _mutex;
-    String _value;
-    static ContentsType _contents;
-    public:
-    virtual Mutex &mutex() { return _mutex; }
-    virtual ContentsType &getContents() { 
-        LOG4CXX_ERROR(LOG, "Illegal State");
-        throw IllegalStateException();    
-        return _contents; 
-    }
-    virtual String &getValue() { return _value; }
-    bool isAttr() { return true; }
-};
-BEGIN_CLASS(SimpleContentStore, SimpleContentStore_I)
-END_CLASS()
-*/
-
 class TypeStoreImpl {
     public:
     static TypeStore create(const SchemaType &schemaType);
 };
+
 }
 #endif //XMLBEANSXX_TYPESTOREIMPL_INCLUDED

@@ -25,6 +25,7 @@
 #include "StoreString.h"
 #include "xml-fragment.h"
 #include "SchemaTypeImpl.h"
+//#include "singleton.h"
 namespace xmlbeansxx {
 
 /*
@@ -35,14 +36,65 @@ namespace xmlbeansxx {
 log4cxx::LoggerPtr XobjBase_I::LOG = log4cxx::Logger::getLogger("xmlbeansxx.XobjBase");
 
 namespace {
+
+/*
+template <typename T, int memorySize, typename _Alloc = std::allocator<T> >
+class Pool {
+    T *memory;
+    std::vector<T *> available;
+    _Alloc alloc;
+    
+    public:
+
+    class Deleter {
+        public:
+        void operator()(T *ptr) {
+            ptr->~T();
+            singleton<Pool<T, memorySize, _Alloc> >::instance()->available.push_back(ptr);
+        }
+    };
+    
+    Pool() {
+        memory = alloc.allocate(memorySize);
+        for (int i = 0; i < memorySize; i++) {
+            available.push_back(memory + i);
+        }
+    }
+    
+    ~Pool() {
+        alloc.deallocate(memory, memorySize);
+    }
+    
+    boost::shared_ptr<T> allocate() {
+        if (available.size() > 0) {
+            T * ptr = available[available.size() - 1];
+            available.pop_back();
+            new (ptr) T();
+            return boost::shared_ptr<T>(ptr, Deleter());
+        } else {
+            throw std::bad_alloc();
+            return boost::shared_ptr<T>();
+        }
+    }
+    
+    static boost::shared_ptr<Pool> create() { return boost::shared_ptr<Pool>(new Pool()); }
+};
+*/
+
 XobjBase createAttributeStore(const SchemaType &type) {
+    /*
+    std::cerr << "SchemaType: " << sizeof(SchemaType) << std::endl;
+    std::cerr << "XobjBase_I: " << sizeof(XobjBase_I) << std::endl;
+    std::cerr << "MixedContentStore_I: " << sizeof(MixedContentStore_I) << std::endl;
+    std::cerr << "NamedPair: " << sizeof(NamedPair) << std::endl;
+    */
     XobjBase o = SimpleContentStore::New();
     o->setSchemaType(type);
     return o;
 }
 
 XobjBase createElementStore(const SchemaType &type) {
-    XobjBase o = MixedContentStore::New();
+    XobjBase o = MixedContentStore::New(); //(singleton<Pool<MixedContentStore_I, 1000000> >::instance()->allocate());
     o->setSchemaType(type);
     return o;
 }
@@ -106,6 +158,20 @@ class CalculateNamespacesVisitor: public NameVisitor {
             nsMap[name.first] = link;
         }
     }
+};
+
+class EmptyXmlSerializeVisitor: public XmlSerializeVisitor {
+    public:
+    virtual void begin() {}
+    virtual void end() {}
+    virtual void beginElement(const QName &name) {}
+    virtual void beginElementContents() {}
+    virtual void endElement(const QName &name) {}
+    virtual void endElementQuick() {}
+    virtual void attribute(const QName &name) {}
+    virtual void attributeValue(const String &value) {}
+    virtual void attributeValue(const QName &value) {}
+    virtual void text(const String &value) {}
 };
 
 class StdXmlSerializeVisitor: public XmlSerializeVisitor {
@@ -201,7 +267,166 @@ class StdXmlSerializeVisitor: public XmlSerializeVisitor {
     }
 };
 
-log4cxx::LoggerPtr StdXmlSerializeVisitor::LOG = log4cxx::Logger::getLogger("xmlbeansxx.StdXmlSerializeVisitor");
+class StringBuffer {
+    String _str;
+    public:
+    StringBuffer() {
+        _str.reserve(20000);
+    }
+    inline void operator += (char c) { _str += c; }
+    inline void operator += (const String &str) { 
+        _str += str; 
+    }
+    String str() { return _str; }
+};
+
+template <int SIZE = 10240, int GROW_FACTOR = 2>
+class StringTabBuffer {
+    int pos;
+    char *tab;
+    int tabSize;
+    
+    inline void realloc(int newSize) {
+        char *newTab = new char[newSize];
+        memcpy(newTab, tab, pos);
+        delete tab;
+        tab = newTab;
+    }
+
+    inline void addChar(char c) {
+        tab[pos] = c; pos++;
+        if (pos > tabSize) realloc(GROW_FACTOR * pos);
+    }
+    
+    public:
+    StringTabBuffer(): pos(0), tab(new char[SIZE]), tabSize(SIZE) {}
+    ~StringTabBuffer() { 
+        delete tab;
+        tab = NULL;
+    }
+
+    inline void operator += (char c) { addChar(c);  }
+    inline void operator += (const String &str) { 
+        int s = str.size();
+        if (pos + s > tabSize) realloc((pos+s) * GROW_FACTOR);
+        memcpy(tab + pos, str.c_str(), s);
+        pos += s;
+    }
+    String str() { addChar(0); return String((const char *) tab); }
+};
+
+class EmptyStringBuffer {
+    public:
+    inline void operator += (char c) { }
+    inline void operator += (const String &str) { }
+    String str() { return ""; }
+};
+
+class StringXmlSerializeVisitor: public XmlSerializeVisitor {
+    private:
+    static log4cxx::LoggerPtr LOG;
+    
+    bool isRoot; 
+    NSMap namespaceMap;
+    XmlOptions options;
+    public:
+    //StringBuffer output;
+    StringTabBuffer<> output;
+    private:
+
+    inline void outputQName(const QName &name) {
+        //output += name.second;
+        //return;
+        String mapped;
+        VAL(namespaceElement, namespaceMap.find(name.first));
+        if (namespaceElement == namespaceMap.end()) {
+            LOG4CXX_WARN(LOG, "namespace '" << name.first << "' not mapped");
+        } else {
+            mapped = namespaceElement->second;
+        }
+        if (mapped.size() == 0) {
+            output += name.second;
+        } else {
+            output += mapped;
+            output += ':';
+            output += name.second;
+        }
+    }
+
+    public:
+    StringXmlSerializeVisitor(NSMap &namespaceMap, const XmlOptions &options): namespaceMap(namespaceMap), options(options) {}
+    
+    virtual void begin() {
+        isRoot = true;
+        if (options->getSaveXmlDecl()) {
+            output += "<?xml version='1.0' encoding='UTF-8'?>\n";
+        }
+    }
+
+    virtual void end() {
+    }
+
+    virtual void beginElement(const QName &name) {
+        output += '<';
+        outputQName(name);
+        if (isRoot) {
+            //output xmlns declarations
+            FOREACH(it, namespaceMap) {
+                if (!(it->first == StoreString(""))) {
+                    output += " xmlns";
+                    if (it->second == "") {
+                    } else {
+                        output += ":";
+                        output += it->second;
+                    }
+                    output += "='";
+                    output += it->first;
+                    output += '\'';
+                }
+            }
+            isRoot = false;
+        }
+    }
+
+    virtual void beginElementContents() {
+        output += '>';
+    }
+    
+    virtual void endElement(const QName &name) {
+        output += '<';
+        output += '/';
+        outputQName(name);
+        output += '>';
+    }
+    
+    virtual void endElementQuick() {
+        output += '/';
+        output += '>';
+    }
+    
+    virtual void attribute(const QName &name) {
+        output += ' ';
+        outputQName(name);
+        output += '=';
+    }
+    
+    virtual void attributeValue(const String &value) {
+        output += '\'';
+        output += TextUtils::exchangeEntities(value);
+        output += '\'';
+    }
+    
+    virtual void attributeValue(const QName &value) {
+        output += '\'';
+        outputQName(value);
+        output += '\'';
+    }
+    
+    virtual void text(const String &value) {
+        output += TextUtils::exchangeEntities(value);
+    }
+};
+log4cxx::LoggerPtr StringXmlSerializeVisitor::LOG = log4cxx::Logger::getLogger("xmlbeansxx.StringXmlSerializeVisitor");
 
 class XmlSerializer {
     public:
@@ -221,23 +446,31 @@ class XmlSerializer {
         }
 
         
-        FOREACH(it, target->getAttributes()) {
-            visitor.attribute(it->name);
-            visitor.attributeValue(it->value->fetch_text());
+        {
+            VAL(attributes, target->getAttributes());
+            VAL(attributesEnd, attributes.end());
+            for (__typeof(attributes.begin()) it = attributes.begin(); it != attributesEnd; ++it) {
+                visitor.attribute(it->name);
+                visitor.attributeValue(it->value->fetch_text());
+            }
         }
 
         bool quickEnd = true;
-        FOREACH(it, target->getElements()) {
-            XobjBase value(it->value);
-            if (value != Null()) {
-                if (quickEnd) {
-                    quickEnd = false;
-                    visitor.beginElementContents();
+        {
+            VAL(elements, target->getElements());
+            VAL(elementsEnd, elements.end());
+            for (__typeof(elements.begin()) it = elements.begin(); it != elementsEnd; ++it) {
+                XobjBase value(it->value);
+                if (value != Null()) {
+                    if (quickEnd) {
+                        quickEnd = false;
+                        visitor.beginElementContents();
+                    }
+        
+                    SchemaProperty prop = type->getElementProperty(it->name);
+                    bool shallPrintXsiType = type != XmlObject::type && (prop != Null()) && value->getSchemaType() != prop->getType();
+                    serializeRec(it->name, shallPrintXsiType, value);
                 }
-    
-                SchemaProperty prop = type->getElementProperty(it->name);
-                bool shallPrintXsiType = type != XmlObject::type && (prop != Null()) && value->getSchemaType() != prop->getType();
-                serializeRec(it->name, shallPrintXsiType, value);
             }
         }
 
@@ -354,12 +587,13 @@ class Cur_I: public virtual XmlCursor_I {
 
     void dump() {
         LOG4CXX_DEBUG(LOG, "dump");
+        /*
         FOREACH(it, target->getAttributes()) {
             LOG4CXX_DEBUG(LOG, "ATTR " << it->name.toString() << " -> " << it->value.ptr.get());
         }
         FOREACH(it, target->getElements()) {
             LOG4CXX_DEBUG(LOG, "ELEM " << it->name.toString() << " -> " << it->value.ptr.get());
-        }
+        }*/
     }
     
     virtual Mutex &mutex() { return _mutex; }
@@ -378,14 +612,34 @@ class Cur_I: public virtual XmlCursor_I {
     }
     
     virtual String xmlText(const XmlOptions &options) {
-        std::ostringstream ss;
-        save(ss, options);
-        return ss.str();
-    }
-    virtual void save(std::ostream &output, const XmlOptions &options) {
         Lock lock(target->mutex());
         {
             CorrectElementOrder correct(target);
+        }
+        SchemaType st = target->getSchemaType();
+        if (!st->isDocumentType()) {
+            definitions::XmlFragmentDocument doc(definitions::XmlFragmentDocument::Factory::newInstance());
+            doc->cgetXmlFragment()->setElement(cast<XmlObject>(target->getUser()));
+            return doc->xmlText(options);
+        } else {
+            CalculateNamespacesVisitor nsVisitor; 
+            VisitNames(nsVisitor, target);
+    
+            //StdXmlSerializeVisitor xmlVisitor(output, nsVisitor.nsMap, options);
+            StringXmlSerializeVisitor xmlVisitor(nsVisitor.nsMap, options);
+            //EmptyXmlSerializeVisitor xmlVisitor;
+            XmlSerializer xmlSerializer(xmlVisitor); 
+            xmlSerializer.serialize(target);
+            return xmlVisitor.output.str();
+            //return "";
+        }
+    }
+    virtual void save(std::ostream &output, const XmlOptions &options) {
+        output << xmlText(options);
+        /*
+        Lock lock(target->mutex());
+        {
+            //CorrectElementOrder correct(target);
         }
         SchemaType st = target->getSchemaType();
         if (!st->isDocumentType()) {
@@ -396,10 +650,11 @@ class Cur_I: public virtual XmlCursor_I {
             CalculateNamespacesVisitor nsVisitor; 
             VisitNames(nsVisitor, target);
     
-            StdXmlSerializeVisitor xmlVisitor(output, nsVisitor.nsMap, options);
+            //StdXmlSerializeVisitor xmlVisitor(output, nsVisitor.nsMap, options);
+            EmptyXmlSerializeVisitor xmlVisitor;
             XmlSerializer xmlSerializer(xmlVisitor); 
             xmlSerializer.serialize(target);
-        }
+        }*/
     }
     virtual bool isAttr() {
         LOG4CXX_ERROR(LOG, "Not implemented");
@@ -483,7 +738,7 @@ log4cxx::LoggerPtr Cur_I::LOG = log4cxx::Logger::getLogger("xmlbeansxx.Cur");
 
 
 XmlCursor XobjBase_I::new_cursor() {
-    return Cur::New(shared_from_this());
+    return Cur::New(ptrFromThis<XobjBase>());
 }
     
 void XobjBase_I::copy_contents_from(const TypeStore &source) {
@@ -599,6 +854,9 @@ void XobjBase_I::set_element(const QName &name,int index,const TypeStoreUser &va
 }
 
 void XobjBase_I::remove_all_elements(const QName &name) {
+    //LOG4CXX_ERROR(LOG, "Not implemented");
+    //throw NotImplementedException();
+    
     int p=0,p2=0;
     int ile=0;
     ContentsType &elements(getElements());
@@ -640,18 +898,23 @@ TypeStoreUser XobjBase_I::getUser() {
     //This should be changed, TypeStoreUser should be instantiated from itself, not from TypeStore
     VAL(st, cast<SchemaTypeImpl>(getSchemaType()));
     VAL(user, cast<TypeStoreUser>(st->createRawXmlObject()));
-    user->attach_store(TypeStore(shared_from_this()));
+    user->attach_store(ptrFromThis<TypeStore>());
     return user;
 }
 
 
+
 TypeStore TypeStoreImpl::create(const SchemaType &schemaType) {
-    MixedContentStore s = MixedContentStore::New();
-    s->setSchemaType(schemaType);
-    return s;
+    if (schemaType->getContentType() == SchemaType::SIMPLE_CONTENT) {
+        return createAttributeStore(schemaType);
+    } else {
+        return createElementStore(schemaType);
+    }
 }
 
 XobjBase_I::ContentsType SimpleContentStore::emptyContents;
 log4cxx::LoggerPtr SimpleContentStore_I::LOG = log4cxx::Logger::getLogger("xmlbeansxx.SimpleContentStore");
+
+//Mutex MixedContentStore_I::_mutex;
 
 }

@@ -21,6 +21,7 @@ libxmlbeansxx_la_SOURCES = \
 	CXXStringHolder.h\
 	defs.h\
 	Existence.h\
+	LibXMLParser.h\
 	Map.h\
 	Mutex.h\
 	Null.h\
@@ -74,6 +75,7 @@ libxmlbeansxx_la_SOURCES = \
 	CXXLongHolder.cpp\
 	CXXStringHolder.cpp\
 	Existence.cpp\
+	LibXMLParser.cpp\
 	Map.cpp\
 	Mutex.cpp\
 	Null.cpp\
@@ -151,6 +153,7 @@ libxmlbeansxxinclude_HEADERS = \
 	CXXStringHolder.h\
 	defs.h\
 	Existence.h\
+	LibXMLParser.h\
 	Map.h\
 	Mutex.h\
 	Null.h\
@@ -183,21 +186,15 @@ libxmlbeansxxinclude_HEADERS = \
 	XmlArray.h\
 	XmlBeans.h\
 	xmlbeansxx.h\
-	xmlbeansxx-schema.h\
-	xmlbeansxx-schemaImpl.h\
 	XmlComplexContentImpl.h\
 	XmlContext.h\
 	XmlCursor.h\
 	XmlErrorCodes.h\
 	XmlException.h\
-	xml-fragment.h\
-	xml-fragmentImpl.h\
 	XmlObjectBase.h\
 	XmlOptions.h\
 	XmlParser.h\
-	XmlTokenSource.h\
-	XmlTypesGen.h\
-	XmlTypesGenImpl.h
+	XmlTokenSource.h
 
 
 nodist_libxmlbeansxxinclude_HEADERS = \
@@ -205,13 +202,13 @@ nodist_libxmlbeansxxinclude_HEADERS = \
 	xml-fragment.h\
 	xmlbeansxx-schema.h
 
-XmlTypesGen.h XmlTypesGen.cpp: ${srcdir}/XmlTypesGen.xh ${srcdir}/XmlTypesGen.xcpp
+XmlTypesGen.h XmlTypesGen.cpp: ${top_srcdir}/generator/dist/bin/xmlbeansxx-genbuiltin ${srcdir}/XmlTypesGen.xh ${srcdir}/XmlTypesGen.xcpp
 	${top_builddir}/generator/dist/bin/xmlbeansxx-genbuiltin
 
-xml-fragment.h xml-fragment.cpp: ${srcdir}/xml-fragment.xsd
+xml-fragment.h xml-fragment.cpp: ${top_srcdir}/generator/dist/bin/xmlbeansxx-gen ${srcdir}/xml-fragment.xsd
 	${top_builddir}/generator/dist/bin/xmlbeansxx-gen ${srcdir}/xml-fragment.xsd
 
-xmlbeansxx-schema.h xmlbeansxx-schema.cpp: ${srcdir}/xmlbeansxx-schema.xsd ${srcdir}/xmlbeansxx-schema.xh ${srcdir}/xmlbeansxx-schema.xcpp
+xmlbeansxx-schema.h xmlbeansxx-schema.cpp: ${top_srcdir}/generator/dist/bin/xmlbeansxx-gen ${srcdir}/xmlbeansxx-schema.xsd ${srcdir}/xmlbeansxx-schema.xh ${srcdir}/xmlbeansxx-schema.xcpp
 	${top_builddir}/generator/dist/bin/xmlbeansxx-gen ${srcdir}/xmlbeansxx-schema.xsd
 
 MOSTLYCLEANFILES=XmlTypesGen.h XmlTypesGenImpl.h XmlTypesGen.cpp xml-fragment.h xml-fragmentImpl.h xml-fragment.cpp xmlbeansxx-schema.h xmlbeansxx-schemaImpl.h xmlbeansxx-schema.cpp

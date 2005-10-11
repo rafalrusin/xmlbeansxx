@@ -17,11 +17,12 @@
 #define XMLBEANSXX_SCHEMATYPELOADERIMPL_INCLUDED
 #include "BoostAssert.h"
 #include <log4cxx/logger.h>
-#include <boost/shared_ptr.hpp>
 #include "SchemaTypeLoaderBase.h"
+#include "Ptr.h"
 namespace xmlbeansxx {
 class SchemaTypeLoaderImpl_I;
-typedef boost::shared_ptr<SchemaTypeLoaderImpl_I> SchemaTypeLoaderImpl;
+BEGIN_CLASS(SchemaTypeLoaderImpl, SchemaTypeLoaderImpl_I)
+END_CLASS()
 class SchemaTypeLoaderImpl_I: public SchemaTypeLoaderBase_I {
     private:
     static log4cxx::LoggerPtr LOG;

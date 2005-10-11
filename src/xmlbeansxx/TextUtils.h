@@ -64,7 +64,7 @@ public:
     static String base64Encode(xmlbeansxx::Array<unsigned char> what);
 
     /** Reads whole istream into string. */
-    String istreamToString(std::istream &in);
+    static String istreamToString(std::istream &in);
 };
 
 }

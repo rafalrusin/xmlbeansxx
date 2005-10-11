@@ -92,7 +92,7 @@ QName XmlBeans::xsi_type() {
 }
 
 SchemaTypeLoader XmlBeans::getContextTypeLoader() {
-    static SchemaTypeLoader loader(new SchemaTypeLoaderImpl_I());
+    static SchemaTypeLoader loader(SchemaTypeLoaderImpl::New());
     return loader;
 }
 

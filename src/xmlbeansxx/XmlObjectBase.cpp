@@ -42,7 +42,7 @@ log4cxx::LoggerPtr XmlObjectBase_I::LOG = log4cxx::Logger::getLogger("xmlbeansxx
 void XmlObjectBase_I::ValueOutOfRangeValidationContext_I::invalid(const String &code, const String &args) {
     throw XmlValueOutOfRangeException( code, args );
 }
-ValidationContext XmlObjectBase_I::_voorVc(new ValueOutOfRangeValidationContext_I());
+ValidationContext XmlObjectBase_I::_voorVc(ValueOutOfRangeValidationContext::New());
 
 Mutex &XmlObjectBase_I::mutex() {
     return get_store()->mutex();
@@ -142,7 +142,7 @@ XmlCursor XmlObjectBase_I::newCursorForce() {
 }
 
 XmlObject XmlObjectBase_I::ensureStore() {
-    return cast<XmlObject>(shared_from_this());
+    return cast<XmlObject>(ptrFromThis<XmlObjectBase>());
 }
 
 String XmlObjectBase_I::xmlText(const XmlOptions &options) {
