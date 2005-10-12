@@ -24,6 +24,7 @@ libxmlbeansxx_la_SOURCES = \
 	LibXMLParser.h\
 	Map.h\
 	Mutex.h\
+	MutexPool.h\
 	Null.h\
 	Pair.h\
 	Ptr.h\
@@ -78,6 +79,7 @@ libxmlbeansxx_la_SOURCES = \
 	LibXMLParser.cpp\
 	Map.cpp\
 	Mutex.cpp\
+	MutexPool.cpp\
 	Null.cpp\
 	Pair.cpp\
 	Ptr.cpp\
@@ -156,6 +158,7 @@ libxmlbeansxxinclude_HEADERS = \
 	LibXMLParser.h\
 	Map.h\
 	Mutex.h\
+	MutexPool.h\
 	Null.h\
 	Pair.h\
 	Ptr.h\

@@ -30,15 +30,30 @@ int main() {
             ContentDocument doc = ContentDocument::Factory::newInstance();
             double t1 = currentTime();
             parser->parse(in, doc);
+            
             double t2 = currentTime();
+            
+            int car = 0;
+            for (int i = 0; i < 10; i++) {
+                car = (cast<Fullpersoninfo>(doc->getContent()->getEmployee()))->getCar();
+                (cast<Fullpersoninfo>(doc->getContent()->getEmployee()))->setCar(car + 1);
+            }
+
+            {
+                TreeType tree = (cast<Fullpersoninfo>(doc->getContent()->getEmployee()))->getTree()->getLeft()->getLeft();
+                (cast<Fullpersoninfo>(doc->getContent()->getEmployee()))->getTree()->getRight()->getLeft()->setRight(tree);
+            }
+            
+            double t3 = currentTime();
+            
             string xml;
             xml = doc->toString();
-            double t3 = currentTime();
-            int car;
-            car = cast<Fullpersoninfo>(doc->getContent()->getEmployee())->getCar();
+            
+            double t4 = currentTime();
             
             LOG4CXX_INFO(LOG, "Parse duration: " << (t2-t1) << " sec." << " " << 1. / (t2-t1) << " per second.");
-            LOG4CXX_INFO(LOG, "Serialize duration: " << (t3-t2) << " sec." << " " << 1. / (t3-t2) << " per second.");
+            LOG4CXX_INFO(LOG, "Modify duration: " << (t3-t2) << " sec. " << (1. / (t3-t2)) << " per second.");
+            LOG4CXX_INFO(LOG, "Serialize duration: " << (t4-t3) << " sec. " << (1. / (t4-t3)) << " per second.");
             LOG4CXX_INFO(LOG, "Car: " << car);
             //LOG4CXX_INFO(LOG, "Xml: " << xml);
         }

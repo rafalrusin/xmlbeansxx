@@ -29,18 +29,33 @@ public class speed01 {
                 double t1 = currentTime();
                 ContentDocument doc = ContentDocument.Factory.parse(in);
                 doc.validate();
+                
                 double t2 = currentTime();
+                
+                int car = 0;
+                for (int i = 0; i < 10; i++) {
+                    car = ((Fullpersoninfo)(doc.getContent().getEmployee())).getCar();
+                    ((Fullpersoninfo)(doc.getContent().getEmployee())).setCar(car + 1);
+                }
+
+                {
+                    TreeType tree = ((Fullpersoninfo)(doc.getContent().getEmployee())).getTree().getLeft().getLeft();
+                    ((Fullpersoninfo)(doc.getContent().getEmployee())).getTree().getRight().getLeft().setRight(tree);
+                }
+                
+                double t3 = currentTime();
+                
                 String xml;
                 {
                     StringWriter out = new StringWriter();
                     doc.save(out, new XmlOptions().setSavePrettyPrintIndent(0));
                     xml = out.toString();
                 }
-                double t3 = currentTime();
-                int car = ((Fullpersoninfo)(doc.getContent().getEmployee())).getCar();
+                double t4 = currentTime();
 
                 LOG.info("Parse duration: " + (t2-t1) + " sec. " + (1. / (t2-t1)) + " per second.");
-                LOG.info("Serialize duration: " + (t3-t2) + " sec. " + (1. / (t3-t2)) + " per second.");
+                LOG.info("Modify duration: " + (t3-t2) + " sec. " + (1. / (t3-t2)) + " per second.");
+                LOG.info("Serialize duration: " + (t4-t3) + " sec. " + (1. / (t4-t3)) + " per second.");
                 LOG.info("Car: " + car);
                 //LOG.info("Xml: " + xml);
             }

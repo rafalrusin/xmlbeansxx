@@ -280,7 +280,7 @@ class StringBuffer {
     String str() { return _str; }
 };
 
-template <int SIZE = 10240, int GROW_FACTOR = 2>
+template <int SIZE = 30240, int GROW_FACTOR = 2>
 class StringTabBuffer {
     int pos;
     char *tab;
@@ -330,8 +330,8 @@ class StringXmlSerializeVisitor: public XmlSerializeVisitor {
     NSMap namespaceMap;
     XmlOptions options;
     public:
-    //StringBuffer output;
-    StringTabBuffer<> output;
+    StringBuffer output;
+    //StringTabBuffer<> output;
     private:
 
     inline void outputQName(const QName &name) {

@@ -21,6 +21,7 @@ limitations under the License. */
 #include "Mutex.h"
 #include "Ptr.h"
 #include "TextUtils.h"
+#include "MutexPool.h"
 //#include <list>
 namespace xmlbeansxx {
 
@@ -92,12 +93,11 @@ public:
 
 class MixedContentStore_I: public XobjBase_I {
     private:
-    Mutex _mutex;
     String _value;
     ContentsType _attributes, _elements;
     
     public:
-    virtual Mutex &mutex() { return _mutex; }
+    virtual Mutex &mutex() { return MutexPool<>::mutex(this); }
     virtual ContentsType &getAttributes() { return _attributes; }
     virtual ContentsType &getElements() { return _elements; }
     virtual String &getValue() { return _value; }
@@ -118,11 +118,10 @@ END_CLASS()
 class SimpleContentStore_I: public XobjBase_I {
     private:
     static log4cxx::LoggerPtr LOG;
-    Mutex _mutex;
     String _value;
 
     public:
-    virtual Mutex &mutex() { return _mutex; }
+    virtual Mutex &mutex() { return MutexPool<>::mutex(this); }
     virtual ContentsType &getAttributes() { 
         BOOST_ASSERT(false);
         return SimpleContentStore::emptyContents; 
