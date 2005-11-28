@@ -231,7 +231,7 @@ BigInteger XmlObjectBase_I::getBigIntegerValue() {
     String v=TextUtils::collapse(get_store_text());
     if (!TextUtils::checkInteger(v))
         throw XmlIllegalValueException("xs:integer",v);
-    return BigInteger(v);
+    return BigInteger(v, 10);
 }
 void XmlObjectBase_I::setBigIntegerValue(const BigInteger &value) {
     std::ostringstream ss;

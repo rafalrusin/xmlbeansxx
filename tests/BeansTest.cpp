@@ -116,8 +116,8 @@ void namespaceTests() {
     {
         //XmlInteger
         XmlInteger i1 = XmlInteger::Factory::newInstance();
-        i1->setStringValue("125");
-        CPPUNIT_ASSERT(i1->getBigIntegerValue() == 125);
+        i1->setStringValue("0129");
+        CPPUNIT_ASSERT(i1->getBigIntegerValue() == 129);
         
         CPPUNIT_ASSERT((BigInteger(-3) + BigInteger(-5)) == BigInteger(-8));
         BigDecimal v = BigDecimal("-3.5") + BigDecimal("-5.7");
