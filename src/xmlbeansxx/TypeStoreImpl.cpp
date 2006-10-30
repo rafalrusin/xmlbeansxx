@@ -291,6 +291,7 @@ class StringTabBuffer {
         memcpy(newTab, tab, pos);
         delete tab;
         tab = newTab;
+        tabSize = newSize;
     }
 
     inline void addChar(char c) {
