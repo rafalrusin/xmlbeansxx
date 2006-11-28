@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<nodes xmlns="http://mind.p4.com/mytest">
+  <node id="1324" value="opisik">
+      <data>>>>>ito jest jakis 
+	  dlugi tekst&#xA;podzielony enterami&#xA;i z krzaczkami &quot;&amp;&lt;&gt;</data>
+  </node>
+  <node id="13" value=">&quot;opi&#x0A;isik&quot;">
+    <data><![CDATA[cdata z enterami 
+    !@#$%^&*()_+~
+    {}|:"<>?<>?,./[]\;']]></data>
+  </node>
+  <node id="23" value="&#38;"/>
+  <node id="24" value="&amp;">
+    <data><![CDATA[ !@#$%^&*(
+    {:>}"?<|\]]></data>
+  </node>
+  <node id="14" value="opi&#120;sik"/>
+  <node id="324" value="opi&#172;isik"/>
+  <node id="674" value="opi&lt;isik"/>
+  <node id="32" value="opii&gt;sik"/>
+  <node id="0" value="&#x00D3;&#x00F3;&#x0104;&#x0105;&#x0106;&#x0107;&#x0118;&#x0119;&#x0141;&#x0142;&#x0143;&#x0144;&#x015A;&#x015B;&#x0179;&#x017A;&#x017B;&#x017C;&#x201D;&#x201E;"/>
+  <node id="1"> value="&#x00D3;&#x00F3;&#x0104;&#x0105;&#x0106;&#x0107;&#x0118;&#x0119;&#x0141;&#x0142;&#x0143;&#x0144;&#x015A;&#x015B;&#x0179;&#x017A;&#x017B;&#x017C;&#x201D;&#x201E;"</node>
+</nodes>

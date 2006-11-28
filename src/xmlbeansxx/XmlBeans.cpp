@@ -41,15 +41,23 @@ XmlBeans::MyExistence_I::MyExistence_I() {
     XmlBeans::xsi_ns(); //internal static init invokation to be thread-safe
     XmlBeans::xsi_type(); //internal static init invokation to be thread-safe
     
-    //Xerces init
+    // Locales init
+    const char *locale=setlocale(LC_CTYPE, "");
+    if (!locale) {
+        throw XmlException( "Locale not specified. Check LANG, LC_CTYPE, LC_ALL." );
+    } else {
+        LOG4CXX_INFO(log4cxx::Logger::getLogger(std::string("xmlbeansxx")),"Locale: " << locale);
+    }
+    
+    // Xerces init
     try {
-        XMLPlatformUtils::Initialize("pl_PL.UTF-8");
-        //XMLPlatformUtils::Initialize();
+        XMLPlatformUtils::Initialize("");
+        //XMLPlatformUtils::Initialize("pl_PL.UTF-8");
     } catch(...) {
         LOG4CXX_ERROR(XmlBeans::LOG(), "Error during Xerces-c initialization");
         throw IllegalStateException();
     }
-    //~Xerces init
+    // ~Xerces init
     
     LOG4CXX_DEBUG(XmlBeans::LOG(),"Initialized xmlbeansxx");
 }

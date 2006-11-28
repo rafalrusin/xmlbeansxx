@@ -1,5 +1,5 @@
 SUBDIRS =
-EXTRA_DIST = a.xml b.xml c.xml d.xml c.xsd log4j.properties speed01.java speed01.java.run
+EXTRA_DIST = a.xml b.xml c.xml d.xml c.xsd entities.xsd entities.xml log4j.properties speed01.java speed01.java.run
 
 INCLUDES = -I ${top_srcdir}/src
 LDADD = ${top_builddir}/src/xmlbeansxx/libxmlbeansxx.la
@@ -9,9 +9,9 @@ CXXFLAGS += $(CPPUNIT_CFLAGS)
 LDADD += $(CPPUNIT_LIBS)
 endif
 
-SCHEMAS_XSD = ${srcdir}/c.xsd
-SCHEMAS_CPP = c.cpp
-SCHEMAS_H = c.h cImpl.h
+SCHEMAS_XSD = ${srcdir}/c.xsd ${srcdir}/entities.xsd
+SCHEMAS_CPP = c.cpp entities.cpp
+SCHEMAS_H = c.h cImpl.h entities.h
 
 BUILT_SOURCES = $(SCHEMAS_CPP) $(SCHEMAS_H)
 
@@ -19,10 +19,11 @@ $(SCHEMAS_CPP) $(SCHEMAS_H): $(SCHEMAS_XSD)
 	${top_builddir}/generator/dist/bin/xmlbeansxx-gen $(SCHEMAS_XSD)
 	if ! [ -f c.xsd ]; then touch copy-stamp; cp -f ${srcdir}/c.xsd ${srcdir}/*.xml ${srcdir}/log4j.properties .; fi
 
-TESTS=BeansTest GenTest
+TESTS=BeansTest GenTest EntitiesTest
 check_PROGRAMS = $(TESTS)
 BeansTest_SOURCES=TestApp.cpp BeansTest.cpp BeansTest.h
 GenTest_SOURCES=TestApp.cpp GenTest.cpp GenTest.h
+EntitiesTest_SOURCES=TestApp.cpp EntitiesTest.cpp EntitiesTest.h entities.h entities.cpp
 nodist_GenTest_SOURCES = $(SCHEMAS_CPP) $(SCHEMAS_H)
 
 noinst_PROGRAMS = speed01

@@ -113,6 +113,9 @@ private:
 
 };
 
+BEGIN_CLASS(XercesParser, XercesParser_I)
+END_CLASS()
+
 class XercesDocumentHandler: public XERCES_CPP_NAMESPACE::DocumentHandler {
 private:
     static log4cxx::LoggerPtr LOG;

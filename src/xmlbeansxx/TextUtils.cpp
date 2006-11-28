@@ -20,6 +20,7 @@
 
 #include <xercesc/util/Base64.hpp>
 #include <xercesc/util/XMLString.hpp>
+#include <xercesc/framework/MemBufFormatTarget.hpp>
 #include <sstream>
 #include <cstdio>
 #include "CoreTypes.h"
@@ -89,31 +90,21 @@ String TextUtils::collapse(const String &str) {
     }
 }
 
-String TextUtils::exchangeEntities(const String& str) {
-    std::ostringstream o;
-    for ( unsigned int i = 0; i < str.size(); i++ ) {
-        switch (str[i]) {
-        case '\'' :
-            o << "&apos;";
-            break;
-        case '<' :
-            o << "&lt;";
-            break;
-        case '>' :
-            o << "&gt;";
-            break;
-        case '&' :
-            o << "&amp;";
-            break;
-        case '"' :
-            o << "&quot;";
-            break;
-        default :
-            o << str[i];
-            break;
-        }
-    }
-    return o.str();
+String TextUtils::exchangeEntities(const String& str, XMLFormatter::EscapeFlags escapeFlag) {
+    //LOG4CXX_DEBUG(log,"before escaping: " + str);
+    XMLCh* toFormat = XMLString::transcode (str.c_str ());
+    
+    MemBufFormatTarget target;
+    XMLFormatter formatter (XMLUni::fgXMLChEncodingString, &target, escapeFlag);
+    formatter << toFormat;
+    
+    XMLString::release(&toFormat);
+        
+    const XMLByte* bytes = target.getRawBuffer ();
+    string res = XMLString::transcode ((XMLCh*) bytes);
+    
+    LOG4CXX_DEBUG(log,"res:" << res);
+    return res; 
 }
 
 String TextUtils::exchangeEntitiesWithCDATA(const String& str) {

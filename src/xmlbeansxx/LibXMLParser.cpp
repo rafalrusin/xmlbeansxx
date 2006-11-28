@@ -171,6 +171,9 @@ void LibXMLParser::parse(const String &doc, const XmlObject &documentRoot) {
     cursor = documentRoot->newCursor();
     xmlContext.setLink("", "");
 
+    // Set substitutes for entities
+    xmlSubstituteEntitiesDefault (1);
+
     int errNo;
     if ( validationCtxt == NULL )  {
         if ((errNo = xmlSAXUserParseMemory(handler,

@@ -21,6 +21,7 @@ limitations under the License. */
 #include <string>
 #include <log4cxx/logger.h>
 #include <xmlbeansxx/Array.h>
+#include <xercesc/framework/XMLFormatter.hpp>
 #include "String.h"
 
 
@@ -44,7 +45,7 @@ public:
     /** Returns whitespace collapsed string (as does xml schema "whiteSpace" rule "collapse") */
     static String collapse(const String &str);
     /** Exchanges a string to xml representation. Eg. exchanges '<' to '&lt;'. */
-    static String exchangeEntities(const String& str);
+    static String exchangeEntities(const String& str, XERCES_CPP_NAMESPACE::XMLFormatter::EscapeFlags escapeFlag  = XERCES_CPP_NAMESPACE::XMLFormatter::StdEscapes);
     /** Exchanges a string to xml CDATA representation. */
     static String exchangeEntitiesWithCDATA(const String& str);
 

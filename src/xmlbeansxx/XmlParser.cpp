@@ -21,11 +21,13 @@
 namespace xmlbeansxx {
     
 XmlParser XmlParser::create() {
+    //return XercesParser::New ();
     //return XmlParser(boost::shared_ptr<XercesParser_I>(new XercesParser_I()));
     return LibXMLParserPtr::New();
 }
 
 XmlParser XmlParser::create(const XmlOptions &opts) {
+    //return XercesParser::New (opts);
     //return XmlParser(boost::shared_ptr<XercesParser_I>(new XercesParser_I(opts)));
     return LibXMLParserPtr::New(opts);
 }

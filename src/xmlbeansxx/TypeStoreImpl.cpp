@@ -252,7 +252,7 @@ class StdXmlSerializeVisitor: public XmlSerializeVisitor {
     
     virtual void attributeValue(const String &value) {
         output << "'";
-        output << TextUtils::exchangeEntities(value);
+        output << TextUtils::exchangeEntities(value, XERCES_CPP_NAMESPACE::XMLFormatter::AttrEscapes);
         output << "'";
     }
     
@@ -413,7 +413,7 @@ class StringXmlSerializeVisitor: public XmlSerializeVisitor {
     
     virtual void attributeValue(const String &value) {
         output += '\'';
-        output += TextUtils::exchangeEntities(value);
+        output += TextUtils::exchangeEntities(value, XERCES_CPP_NAMESPACE::XMLFormatter::AttrEscapes);
         output += '\'';
     }
     
