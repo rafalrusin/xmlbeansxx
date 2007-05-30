@@ -21,14 +21,16 @@
 usage="\
 Generates C++ library from xsd files.
 
-Usage: $0 [-L lib_name] [-V lib_version] [file1.xsd file2.xsd ... ]
+Usage: $0 [-out lib_name] [-V lib_version] [dirs]* [files.xsd]*
+
+-out lib_name	- Library name
+-V lib_version	- Library version
 
 files.xsd	- Type system schema files
-lib_name	- Library name
-lib_version	- Library version
+dirs		- directores with type system schema files (search recursively)
 
 example:
-$0 -L libmylibrary -V 2:1:3 file.xsd
+$0 -out libmylibrary -V 2:1:3 file.xsd
 
 Report bugs to: <rr@touk.pl>
 Copyright (C) 2004 TouK"
@@ -45,10 +47,11 @@ SRC_DIR="src"
 XSD_PATH_PREFIX="../"
 LIB_NAME="libxmltypes"
 LIB_VERSION="1:0:0"
+DIRS=""
 
 while test $# -gt 0; do
 	case "$1" in
-	-L)	shift
+	-out)	shift
 		LIB_NAME="$1"
 		;;
 	-V)	shift
@@ -56,12 +59,18 @@ while test $# -gt 0; do
 		;;
 	-*)	echo "$usage" ; exit 1
 		;;
-	*)	ARG_XSD="$ARG_XSD $1"
+	*.xsd)	ARG_XSD="$ARG_XSD $1"
+		;;
+	*)	DIRS="$DIRS $1"
 		;;
 	esac
 	shift
 done
 
+
+for i in $DIRS; do
+	 ARG_XSD="$ARG_XSD `find $i -name \*.xsd`"
+done
 
 
 for i in $ARG_XSD; do
