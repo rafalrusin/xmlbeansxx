@@ -174,7 +174,14 @@ ACX_PTHREAD([
 		AC_MSG_WARN([Compiling without thread support])
 	])
 
-CXXFLAGS="-O0"
+AC_PATH_PROG(XML2_CONFIG, xml2-config, no)
+if test "\$XML2_CONFIG" = "no" ; then
+    AC_CHECK_LIB([xml2], [main])
+    AC_CHECK_HEADER([libxml/xmlversion.h])
+else
+    CPPFLAGS="\$CPPFLAGS \`\$XML2_CONFIG --cflags\`"
+    LIBS="\$LIBS \`\$XML2_CONFIG --libs\`"
+fi
 
 AC_CHECK_HEADERS([boost/smart_ptr.hpp boost/any.hpp], , AC_MSG_ERROR([boost library is required]))
 
