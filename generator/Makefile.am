@@ -16,7 +16,7 @@
 
 
 all-local: stamp-build 
-	
+
 stamp-build: $(shell find -regex '\./\(src\|lib\|build\.xml\).*' -not -regex '.*/\..*' | grep -v stamp)
 	cd ${srcdir}; ant dist -Ddist.dir=${PWD}/dist -Dbuild.dir=${PWD}/build
 	touch stamp-build
@@ -31,7 +31,7 @@ install-data-local:
 	cp -r dist/* ${DESTDIR}${datadir}/xmlbeansxx
 	ln -fs ${datadir}/xmlbeansxx/bin/xmlbeansxx-gen ${DESTDIR}${bindir}/xmlbeansxx-gen
 	ln -fs ${datadir}/xmlbeansxx/bin/scompxx ${DESTDIR}${bindir}/scompxx
-	
+
 dist-hook:
 	for file in `find . -regex '\./\(src\|lib\|build\.xml\).*' -not -regex '.*/\..*'`; do \
 		if [ -d $$file ]; then \
