@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
+<document> 
+  <header> 
+    <title>Methods for classes generated from Schema</title> 
+    <notice></notice>
+    <abstract>
+    </abstract>
+    <meta name="Keywords">xmlbeans,xmlbeans port to C++, XML, XML Schema, code generator, XML Manipulation, xmlbeansc, xmlbeans++ xmlbeansc++, xmlbeansxx, xmlbeanscxx</meta>
+  </header> 
+  <body> 
+
+<note>
+<strong>xmlbeansxx</strong> was inspired by <a href="http://xmlbeans.apache.org">Apache XMLBeans</a> (developed by
+                <a href="http://www.apache.org">The Apache XML Project</a>). Generated API is strongly based on
+		<a href="http://xmlbeans.apache.org/docs/1.0.4/guide/conMethodsForGeneratedJavaTypes.html">generated methods in XMLBeans</a>.
+</note>
+
+</body> 
+
+</document>

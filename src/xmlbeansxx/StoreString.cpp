@@ -29,9 +29,9 @@ namespace xmlbeansxx {
 
 namespace {
 
-
 char *duplicate(const char *str) {
-    //static log4cxx::LoggerPtr LOG = log4cxx::Logger::getLogger("xmlbeansxx.duplicate");
+    STATIC_LOGGER_PTR_SET(logger,"xmlbeansxx.duplicate");
+    //TRACER(logger,"duplicate");
 
     char *buf;
     int l=strlen(str)+1;
@@ -40,13 +40,7 @@ char *duplicate(const char *str) {
     //LOG4CXX_DEBUG(logger,"duplicate:"<<str<<" ptr:"<<TextUtils::ptrToString(buf));
 
     if (!((((unsigned long)buf)&1)==0)) {
-        /* 
-         * A c_str string is remembered if and only if it's first bit in pointer is set to 1. 
-         * This method assumes that 'new' operator always returns even pointer. 
-         * This may cause portability problems.
-         */
-        //LOG4CXX_FATAL(LOG,"Memory allocation using new operator returned odd pointer. This is not supported.");
-        std::cerr << "Memory allocation using new operator returned odd pointer. This is not supported." << std::endl;
+        LOG4CXX_FATAL(logger,"Memory allocation using new operator returned odd pointer. This is not supported.");
         throw IllegalStateException();
     }
     //strcpy(buf,str);
@@ -55,40 +49,13 @@ char *duplicate(const char *str) {
 }
 
 void freeDuplicate(char *str) {
-    //static log4cxx::LoggerPtr LOG = log4cxx::Logger::getLogger("xmlbeansxx.freeDuplicate");
+    STATIC_LOGGER_PTR_SET(logger,"xmlbeansxx.freeDuplicate");
     //LOG4CXX_DEBUG(logger,"freeDuplicate:"<<str<<" ptr:"<<TextUtils::ptrToString(str));
     delete[] str;
 }
 }
-
-/** String storage remembers a collection of const char * strings. One can add some strings for further use. */
-class StringStorage {
-private:
-    //std::set<CStr> contents;
-    //typedef std::set<const char *,CStrLessFn> StoreSet;
-    typedef Map<const char *, int, CStrHashFn, CStrEqFn>::type StoreMap;
-    StoreMap contents;
-public:
-    struct SSInfo {
-        const char *str;
-        int hashCode;
-    };
-    
-    Vector<SSInfo>::type stored;
-
-    StringStorage();
-    /** Remembers a string in global pool */
-    void add(const String &str);
-    /** Checks whether given string is stored */
-    bool isStored(const char *str);
-
-    /** Takes a stored representation of given string or 0 if the string is not stored. */
-    unsigned long get(const char *str);
-    ~StringStorage();
-};
-
 //------------------------------------------------
-SimpleString::SimpleString(const String &s) {
+SimpleString::SimpleString(const std::string &s) {
     buf=duplicate(s.c_str());
 }
 SimpleString::SimpleString(const SimpleString &from) {
@@ -126,11 +93,15 @@ bool CStr::operator<(const CStr &b) const {
 //------------------------------------------------
 StringStorage::StringStorage() {
     //add default storage
-    add(String());
+    add(std::string());
 }
 
-void StringStorage::add(const String &str) {
+void StringStorage::add(const std::string &str) {
     const char *cs=str.c_str();
+    return add(cs);
+}
+
+void StringStorage::add(const char * cs) {
     if (cs==NULL) cs="";
     if (!isStored(cs)) {
         const char *s(duplicate(cs));
@@ -163,54 +134,42 @@ StringStorage::~StringStorage() {
 }
 
 //------------------------------------------------
-log4cxx::LoggerPtr StoreString::LOG = StoreString::LOG ;
-StringStorage *StoreString::storage = StoreString::storage;
+LOGGER_PTR_SET(StoreString::log,"xmlbeansxx.StoreString");
+//log4cxx::LoggerPtr StoreString::log = log4cxx::Logger::getLogger("xmlbeansxx.StoreString");
 
-StoreString::MyExistence_I::MyExistence_I() {
-    StoreString::LOG = log4cxx::Logger::getLogger("xmlbeansxx.StoreString");
-    storage = new StringStorage();
-    LOG4CXX_DEBUG(LOG, "initialized");
-}
-
-StoreString::MyExistence_I::~MyExistence_I() {
-    delete storage;
-    storage = NULL;
-    LOG4CXX_DEBUG(LOG, "finalized");
-}
-
-Existence StoreString::staticInit() {
-    static Existence ptr(new MyExistence_I());
-    return ptr;
-}
-
-void StoreString::construct(const char *str) {
-    buf=storage->get(str);
+void StoreString::construct(const std::string &str) {
+    buf=getStorage()->get(str.c_str());
     if (buf==0) {
-        buf=(unsigned long)duplicate(str);
+        buf=(unsigned long)duplicate(str.c_str());
     }
 }
 
+StringStorage *StoreString::getStorage() {
+    static StringStorage *storage=new StringStorage();
+    return storage;
+}
+
 StoreString::StoreString() {
-    //TRACER(log,"StoreString")
-    construct("");
+    //TRACER(log,"StoreString");
+    construct(std::string());
 }
 
-StoreString::StoreString(const String &str) {
-    //TRACER(log,"StoreString")
-    construct(str.c_str());
-}
-
-StoreString::StoreString(const char *str) {
+StoreString::StoreString(const std::string &str) {
+    //TRACER(log,"StoreString");
     construct(str);
+}
+StoreString::StoreString(const char *str) {
+    //TRACER(log,"StoreString");
+    construct(std::string(str));
 }
 
 StoreString::StoreString(const StoreString &from) {
-    //TRACER(log,"StoreString")
+    //TRACER(log,"StoreString");
     copyFrom(from);
 }
 
 StoreString::~StoreString() {
-    //TRACER(log,"~StoreString")
+    //TRACER(log,"~StoreString");
     //LOG4CXX_DEBUG(log,"str:"<<c_str());
     if (!isStored()) {
         //LOG4CXX_DEBUG(log,"Deleting "<<TextUtils::ptrToString(buf));
@@ -219,35 +178,18 @@ StoreString::~StoreString() {
     buf=0;
 }
 
-String StoreString::toString() const {
-    return String(const_cast<char *>(c_str()));
+std::string StoreString::toString() const {
+    return std::string(const_cast<char *>(c_str()));
 }
 
-StoreString StoreString::store(const String &str) {
-    storage->add(str);
+StoreString StoreString::store(const std::string &str) {
+    getStorage()->add(str);
     return StoreString(str);
 }
-
-const char *StoreString::c_str() const {
-    if (isStored()) {
-        return storage->stored[buf/2].str;
-    } else {
-        return (char *)buf;
-    }
+StoreString StoreString::store(const char *str) {
+    getStorage()->add(str);
+    return StoreString(str);
 }
-
-unsigned int StoreString::hashCode() const {
-    if (isStored()) {
-        return storage->stored[buf/2].hashCode;
-    } else return CStrHashFn()((char *)buf);
-}
-
-bool StoreString::isStored() const {
-    //LOG4CXX_DEBUG(LOG, "here this " << this);
-    //LOG4CXX_DEBUG(LOG, "ptr " << buf);
-    return ((unsigned long)buf)&1;
-}
-
 
 }
 

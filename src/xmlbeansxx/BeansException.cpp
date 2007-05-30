@@ -20,10 +20,10 @@ using namespace std;
 	
 namespace xmlbeansxx {
 
-log4cxx::LoggerPtr BeansException::LOG = log4cxx::Logger::getLogger(String("xmlbeansxx.BeansException"));
+LOGGER_PTR_SET(BeansException::log,"xmlbeansxx.BeansException");
 
-BeansException::BeansException(const String msg) throw() :msg(msg) { 
-    LOG4CXX_DEBUG(LOG, msg);
+BeansException::BeansException(const std::string msg) throw() :msg(msg) { 
+    LOG4CXX_DEBUG(log,msg);
 }
 
 const char *BeansException::what() const throw() {
@@ -34,21 +34,17 @@ string BeansException::getMessage() const {
     return msg;
 }
 
-NotImplementedException::NotImplementedException():BeansException("Not implemented") {}
-NotImplementedException::NotImplementedException(const String msg):BeansException("Not implemented:"+msg) {}
+NotImplementedException::NotImplementedException(const std::string msg):BeansException("Not implemented:"+msg) {}
 
-XmlException::XmlException(const String msg):BeansException("Xml:"+msg) {}
-XmlParseException::XmlParseException(const String msg):XmlException(string("While parsing: ")+msg) {}
-XmlSerializeException::XmlSerializeException(const String msg):XmlException(string("While serializing: ")+msg) {}
-XmlIllegalValueException::XmlIllegalValueException(String schemaTypeName,std::string setValue):XmlException("Setting invalid value '"+setValue+"' into object of type '"+schemaTypeName+"'") {}
-ClassCastException::ClassCastException(String msg): BeansException("Invalid Class Cast: "+msg) {}
+XmlException::XmlException(const std::string msg):BeansException("Xml:"+msg) {}
+XmlParseException::XmlParseException(const std::string msg):XmlException(string("While parsing: ")+msg) {}
+XmlSerializeException::XmlSerializeException(const std::string msg):XmlException(string("While serializing: ")+msg) {}
+XmlIllegalValueException::XmlIllegalValueException(std::string schemaTypeName,std::string setValue):XmlException("Setting invalid value '"+setValue+"' into object of type '"+schemaTypeName+"'") {}
+ClassCastException::ClassCastException(std::string msg): BeansException("Invalid Class Cast: "+msg) {}
     
-XmlSimpleTypeException::XmlSimpleTypeException(String message,std::string simpleContent):XmlException(message+" in '"+simpleContent+"'") {}
-IllegalArgumentException::IllegalArgumentException(String msg): BeansException(std::string("Illegal arguments: ")+msg) {}
-IllegalStateException::IllegalStateException(String msg): BeansException(std::string("Illegal state ")+msg) {}
+XmlSimpleTypeException::XmlSimpleTypeException(std::string message,std::string simpleContent):XmlException(message+" in '"+simpleContent+"'") {}
+IllegalArgumentsException::IllegalArgumentsException(std::string msg): BeansException(std::string("Illegal arguments: ")+msg) {}
+IllegalStateException::IllegalStateException(std::string msg): BeansException(std::string("Illegal state ")+msg) {}
 
-AssertionFailedException::AssertionFailedException(String msg): BeansException("Assertion Failed: "+msg) {}
-
-XmlValueOutOfRangeException::XmlValueOutOfRangeException(): XmlException("Value out of range. ") {}
-XmlValueOutOfRangeException::XmlValueOutOfRangeException(const String &code, const String &args): XmlException("Value out of range. " + code + "  " + args) {}
+AssertionFailedException::AssertionFailedException(std::string msg): BeansException("Assertion Failed: "+msg) {}
 }

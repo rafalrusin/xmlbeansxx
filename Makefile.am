@@ -16,4 +16,4 @@
 ACLOCAL = aclocal -I m4
 EXTRA_DIST = bootstrap m4/acx_pthread.m4
 
-SUBDIRS = generator src examples tests doc
+SUBDIRS = generator src examples tests

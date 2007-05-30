@@ -15,6 +15,13 @@
 
 
 #include "XmlArray.h"
+
+
+	
 namespace xmlbeansxx {
+
+LOGGER_PTR_SET(XmlArray_log,"xmlbeansxx.XmlArray");
+
+QName XmlArray_elemName=QName::store("http://xmlbeans.apache.org/definitions","e");
 }
 

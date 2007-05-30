@@ -15,8 +15,8 @@ limitations under the License. */
 #ifndef XMLBEANSXX_QNAME_INCLUDED
 #define XMLBEANSXX_QNAME_INCLUDED
 #include "BoostAssert.h"
-#include <log4cxx/logger.h>
 #include "StoreString.h"
+#include <string>
 namespace xmlbeansxx {
 /**
 * Objects of this class represent qualified name, which contains namespace URI and localPart. Corresponds to javax.xml.namespace.QName class.
@@ -38,10 +38,27 @@ public:
         }
     };
  
-    String toString() const {
-        return second + String("@") + first;
+    operator std::string() const {
+    	return toString();
+    }
+    std::string toString() const {
+    	if(std::string(first).size()>0)	return second + std::string("@") + first;
+	else				return second;
+    }
+    static QName store(const std::string &namespacePrefix, const std::string& localPart) {
+    	return QName(StoreString::store(namespacePrefix), StoreString::store(localPart));
+    }
+    static QName store(const char * namespacePrefix, const char * localPart) {
+    	return QName(StoreString::store(namespacePrefix), StoreString::store(localPart));
     }
 };
+
+inline bool operator<(const QName& a,const QName &b)
+{
+	if(a.first==b.first)
+		return a.second<b.second;
+	return a.first<b.first;
+}
 
 }
 #endif //XMLBEANSXX_QNAME_INCLUDED

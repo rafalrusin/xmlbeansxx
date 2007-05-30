@@ -38,7 +38,7 @@ BIN=`dirname $basefile`
 CLASSPATH=$LIB/xbean.jar:$LIB/xmlbeansxx-gen.jar:$LIB/commons-logging-1.0.4.jar:$LIB/log4j-1.2.8.jar:$BIN
 
 for i; do
-    if [ "`echo $i|head -c 1`" = "-" ]; then
+    if [ "`echo $i| dd count=1 ibs=1 2>/dev/null `" = "-" ]; then
         opts="$opts $i"
     else 
         args="$args $i"

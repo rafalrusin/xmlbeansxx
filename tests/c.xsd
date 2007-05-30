@@ -35,20 +35,13 @@
     </xs:restriction>
   </xs:simpleType>
   
-  <xs:complexType name="MixedType" mixed="true">
-    <xs:sequence>
-      <xs:element name="a" type="xs:int"/>
-      <xs:element name="b" type="xs:int"/>
-    </xs:sequence>
-  </xs:complexType>
-  
   <xs:complexType name="personinfo">
     <xs:sequence>
       <xs:element name="firstname" type="xs:string"/>
       <xs:element name="lastname" type="cdata-string"/>
-      <xs:element name="dane" type="DaneType" minOccurs="0"/>
+      <xs:element name="dane" type="DaneType"/>
       <xs:element name="def" type="xs:string" minOccurs="0" maxOccurs="1" default="_def_"/>
-      <xs:element name="choice" minOccurs="0">
+      <xs:element name="choice">
         <xs:complexType>
           <xs:choice>
             <xs:element name="a" type="xs:int" fixed="10"/>
@@ -57,9 +50,7 @@
         </xs:complexType>
       </xs:element>
       
-      
-      <xs:element name="pattern" type="PatternType" minOccurs="0"/>
-      <xs:element name="mixed" type="MixedType" minOccurs="0"/>
+      <xs:element name="pattern" type="PatternType"/>
       <xs:element name="floatElement" type="xs:float" minOccurs="0"/>
       <xs:element name="doubleElement" type="xs:double" minOccurs="0"/>
       <xs:element name="default" type="xs:int" default="101" minOccurs="0"/>
@@ -71,8 +62,8 @@
     <xs:complexContent>
       <xs:extension base="personinfo">
         <xs:sequence>
-          <xs:element name="address" type="xs:string" minOccurs="0"/>
-          <xs:element name="city" minOccurs="0">
+          <xs:element name="address" type="xs:string"/>
+          <xs:element name="city">
             <xs:simpleType>
               <xs:restriction base="xs:integer">
                 <xs:minInclusive value="0"/>
@@ -80,11 +71,10 @@
               </xs:restriction>
             </xs:simpleType>
           </xs:element>
-          <xs:element default="_default_" maxOccurs="unbounded" name="table" type="xs:string" minOccurs="0"/>
+          <xs:element default="_default_" maxOccurs="unbounded" name="table" type="xs:string"/>
           <xs:element minOccurs="0" name="dt" type="xs:dateTime"/>
           <xs:element minOccurs="0" name="t" type="xs:time"/>
           <xs:element minOccurs="0" name="d" type="xs:date"/>
-          <xs:element minOccurs="0" name="tree" type="TreeType"/>
           <xs:element name="car" type="car-type"/>
         </xs:sequence>
         <xs:attribute name="car" type="car-type"/>
@@ -98,10 +88,4 @@
       <xs:enumeration value="3"/>
     </xs:restriction>
   </xs:simpleType>
-  <xs:complexType name="TreeType">
-    <xs:sequence>
-      <xs:element name="left" type="TreeType" minOccurs="0"/>
-      <xs:element name="right" type="TreeType" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
 </xs:schema>

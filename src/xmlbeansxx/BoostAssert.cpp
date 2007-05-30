@@ -17,17 +17,15 @@
 #include "BoostAssert.h"
 #include "BeansException.h"
 #include "TextUtils.h"
-#include "String.h"
 
 namespace boost {
 void assertion_failed(char const * expr, char const * function, char const * file, long line) {
     throw xmlbeansxx::AssertionFailedException(
-        "Expr: " + xmlbeansxx::String(expr) + "; "
-        + "Function: " + xmlbeansxx::String(function) + "; "
-        + "File: " + xmlbeansxx::String(file) + "; "
+        "Expr: " + std::string(expr) + "; "
+        + "Function: " + std::string(function) + "; "
+        + "File: " + std::string(file) + "; "
         + "Line: " + xmlbeansxx::TextUtils::intToString(line) + "; "
     );
 }
-
 }
 

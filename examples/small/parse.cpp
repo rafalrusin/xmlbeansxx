@@ -4,14 +4,27 @@ using namespace std;
 using namespace xmlbeansxx;
 
 int main() {
-    //document parsing
+    //not typed document parsing
     try {
-		string str=newInstance<XmlInteger>(BigInteger(10213))->toString();
-		cout << "document to parse:" << endl << str << endl;
-        XmlInteger i = XmlInteger::Factory::parse(str);
-		cout << "value: " << i->getBigIntegerValue() << endl;
+    
+	string str= XmlInteger(10213).toString();
+	cout << "str:\n" << str << "\n";
+    	XmlInteger i=XmlInteger::Factory::parse(str);
+	cout << "pased:\n" << i.toString() << "\n";
+	
+        i=XmlInteger(i+XmlInteger(1));
+	cout << "after add:" << i.getSimpleContent() << "\n";
+        i.serialize(cout);
+
+        /*
+        boost::shared_ptr<XmlObject> root(new XmlAnyDocument());
+        boost::shared_ptr<XmlOptions> opts(new XmlOptions());
+        opts->setTypedParsing(false);
+        root->parse(cin,opts);
+        root->serialize(cout);
+        */
     } catch (BeansException ex) {
-        cout << "BeansException: " << ex.getMessage() << endl;
+        cout<<"BeansException: "<<ex.getMessage()<<"\n";
     }
     return 0;
 }

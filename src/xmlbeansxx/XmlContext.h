@@ -18,9 +18,9 @@
 #define _XMLBEANSXX_XMLCONTEXT_H_
 
 #include "BoostAssert.h"
-#include "String.h"
+#include <string>
 #include "Map.h"
-#include "Stack.h"
+#include <stack>
 #include "StoreString.h"
 
 namespace xmlbeansxx {
@@ -30,15 +30,15 @@ namespace xmlbeansxx {
  */
 class XmlContext {
 private:
-    Map<String, StoreString, StoreString::Hash>::type nsLinks;
-    Stack<std::pair<String, StoreString> >::type restoreLinks;
-    Stack<int>::type rememberedPositions;
+    Map<std::string, StoreString, StoreString::Hash>::type nsLinks;
+    std::stack<std::pair<std::string, StoreString> > restoreLinks;
+    std::stack<int> rememberedPositions;
 
 public:
     /** @return remembered shortcut mapping to namespace. */
-    StoreString getLink(String shortcut);
+    StoreString getLink(const std::string & shortcut);
     /** Adds new shortcut to a namespace ns. */
-    void setLink(String shortcut, StoreString ns);
+    void setLink(const std::string& shortcut, StoreString ns);
 
     /** Restores state of links to last remembered posittion. */
     void restore();

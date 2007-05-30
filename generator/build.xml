@@ -18,7 +18,7 @@
 <project name="xmlbeansxx-gen" default="dist" basedir=".">
 	<!--<property name="gentor.dir" value="../gentor"/>
 	<property name="gentor.jar" value="${gentor.dir}/dist/lib/gentor.jar"/>-->
-	<property name="project.version" value="0.6.3"/>
+	<property name="project.version" value="0.6.2"/>
     
 	<property name="dist.dir" value="dist"/>
 	<property name="build.dir" value="build"/>
@@ -65,9 +65,9 @@
 	</target>
 	<target name="clean" description="Cleaning">
 		<delete dir="${dist.dir}"/>
-		<delete dir="${build.dir}"/>
+		<delete dir="build"/>
 		<delete dir="doc"/>
-		<delete dir="${release.dir}"/>
+		<delete dir="release"/>
 	</target>
 	<target name="compile" description="Compilation" depends="prepare">
         <javac srcdir="src/java" destdir="${build.dir}/classes" debug="true" optimize="${opt.javac.optimize}">
@@ -104,7 +104,7 @@
 		</chmod>
 	</target>
 	<target name="release" description="create binary release" depends="dist">
-		<mkdir dir="${release.dir}"/>
+		<mkdir dir="release"/>
 		<tar destfile="${release.file}" compression="gzip">
 			<tarfileset dir="${dist.dir}" prefix="${release.prefix}" mode="755">
 				<include name="bin/*"/>
@@ -115,7 +115,7 @@
 		</tar>
 	</target>
 	<target name="release-src" description="create source release" depends="dist">
-		<mkdir dir="${release.dir}"/>
+		<mkdir dir="release"/>
 		<tar destfile="${release.src.file}" compression="gzip">
 			<tarfileset dir="." prefix="${ant.project.name}-${project.version}">
 				<include name="lib/*"/>

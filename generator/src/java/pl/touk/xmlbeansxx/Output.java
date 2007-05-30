@@ -20,65 +20,37 @@ import java.io.*;
 import java.util.*;
 
 public class Output {
-    public PrintWriter h, cpp, hImpl;
-
-    private String dest(String fileName) {
-        return ClassGen.outDir + "/" + fileName;
-    }
+    public PrintWriter h, cpp;
 
     public Output(String name) throws IOException {
-        String hname = name + ".h", cppname = name + ".cpp", hImplName = name + "Impl.h";
+        String hname = name + ".h", cppname = name + ".cpp";
 
         h = new PrintWriter(new BufferedOutputStream(
-                new FileOutputStream(dest(hname))));
-        hImpl = new PrintWriter(new BufferedOutputStream(
-                new FileOutputStream(dest(hImplName))));
+                new FileOutputStream(hname)));
         cpp = new PrintWriter(new BufferedOutputStream(new FileOutputStream(
-                dest(cppname))));
-        h.println("#ifndef _" + onlyAlNum(name.toUpperCase()) + "_H_INCLUDED_");
-        h.println("#define _" + onlyAlNum(name.toUpperCase()) + "_H_INCLUDED_");
-        
-        hImpl.println("#ifndef _" + onlyAlNum(name.toUpperCase()) + "_H_IMPL_INCLUDED_");
-        hImpl.println("#define _" + onlyAlNum(name.toUpperCase()) + "_H_IMPL_INCLUDED_");
+                cppname)));
+        h.println("#ifndef _" + onlyAlNum(name.toUpperCase()) + "_H_");
+        h.println("#define _" + onlyAlNum(name.toUpperCase()) + "_H_");
+    
     }
 
     public void close() {
         exitNamespace();
         h.println("#endif");
         h.close();
-        hImpl.println("#endif");
-        hImpl.close();
         cpp.close();
     }
 
     int nsDepth = -2;
     
     public void splitCpp() {
-    	String cns = currentNamespace;
+    	String cns=currentNamespace;
     	enterNamespace("");
     	cpp.println("//--split--");
     	enterNamespace(cns);
     }
 
     private String currentNamespace = "";
-
-    private void print(String what) {
-        h.print(what);
-        hImpl.print(what);
-        cpp.print(what);
-    }
-
-    private void println(String what) {
-        h.println(what);
-        hImpl.println(what);
-        cpp.println(what);
-    }
-
-    private void println() {
-        h.println();
-        hImpl.println();
-        cpp.println();
-    }
 
     public void enterNamespace(String namespace) {
         if (!currentNamespace.equals(namespace)) {
@@ -88,27 +60,41 @@ public class Output {
             nsDepth = 0;
             while (t.hasMoreTokens()) {
                 String s = "namespace " + t.nextToken() + " {";
-                print(s);
+                h.print(s);
+                cpp.print(s);
                 nsDepth++;
             }
-            println();
+            h.println();
+            cpp.println();
             
-            currentNamespace = namespace;
+            currentNamespace=namespace;
         }
     }
 
     private void exitNamespace() {
         if (nsDepth==-2) return;
         for (int i = 0; i < nsDepth; i++) {
-            print("}");
+            h.print("}");
+            cpp.print("}");
         }
         nsDepth = -2;
-        println("//--namespace");
+        h.println("//--namespace");
+        cpp.println("//--namespace");
     }
 
     public void leaveNamespace() {
     }
 
+    public void println(String ln) {
+        h.println(ln);
+        cpp.println(ln);
+    }
+
+    public void print(String t) {
+        h.print(t);
+        cpp.print(t);
+    }
+    
     private String onlyAlNum(String s) {
     	StringBuffer b=new StringBuffer();
     	for(int i=0;i<s.length();i++) {

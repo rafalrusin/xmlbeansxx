@@ -1,0 +1,4 @@
+Before runing entities or mem* please type:
+
+export LD_PRELOAD=liblog4cxx.so.9
+

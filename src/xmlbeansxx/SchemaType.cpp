@@ -20,4 +20,43 @@
 
 namespace xmlbeansxx {
 
+Map_QName_SchemaPropertyPtr::Map_QName_SchemaPropertyPtr() {}
+Map_QName_SchemaPropertyPtr::Map_QName_SchemaPropertyPtr(const Map_QName_SchemaPropertyPtr &b): std::map<QName,SchemaPropertyPtr>(b) {}
+
+void SchemaType::init() {
+    fractionDigits=-1;
+    contentType=MIXED_CONTENT;
+    isArray=false;
+}
+
+SchemaType::SchemaType(const std::type_info &classTypeInfo): classTypeInfo(classTypeInfo) {
+    init();
+}
+
+XmlObjectPtr SchemaType::createSubObject(const QName &name) const {
+    SchemaPropertyPtr sp;
+    Map_QName_SchemaPropertyPtr::const_iterator it=elements.find(name);
+    if (it!=elements.end()) {
+        return it->second->schemaType->createFn();
+    } else {
+        return XmlObject::Factory::newInstanceXmlObject(); 
+    }
+}
+    
+SchemaPropertyPtr SchemaType::findAttribute(const QName &name) const {
+    Map_QName_SchemaPropertyPtr::const_iterator it=attributes.find(name);
+    if (it==attributes.end()) return SchemaPropertyPtr();
+    else return it->second;
+}
+
+SchemaPropertyPtr SchemaType::findElement(const QName &name) const {
+    Map_QName_SchemaPropertyPtr::const_iterator it=elements.find(name);
+    if (it==elements.end()) return SchemaPropertyPtr();
+    else return it->second;
+}
+
+SchemaType::CONTENT_TYPE SchemaType::getContentType() const {
+    return contentType;
+}
+
 }

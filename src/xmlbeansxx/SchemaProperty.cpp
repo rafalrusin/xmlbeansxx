@@ -15,7 +15,11 @@
 
 
 #include "SchemaProperty.h"
+
+
 	
 namespace xmlbeansxx {
+
+SchemaProperty::SchemaProperty(int order,const SchemaType *type, StringPtr singletonDefault):order(order),schemaType(type), singletonDefault(singletonDefault) {}
 
 }

@@ -15,7 +15,6 @@ limitations under the License. */
 #ifndef XMLBEANSXX_MAP_INCLUDED
 #define XMLBEANSXX_MAP_INCLUDED
 #include "BoostAssert.h"
-#include <log4cxx/logger.h>
 #include <ext/hash_map>
 namespace xmlbeansxx {
 /*

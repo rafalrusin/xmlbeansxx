@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
+<document> 
+  <header> 
+    <title>The Manifesto of xmlbeansxx</title> 
+    <notice></notice>
+    <abstract></abstract>
+    <meta name="Keywords">xmlbeans,xmlbeans port to C++, XML, XML Schema, code generator, XML Manipulation, xmlbeansc, xmlbeans++ xmlbeansc++, xmlbeansxx, xmlbeanscxx</meta>
+  </header> 
+  <body> 
+    <note>
+      This document points out why it is worthy to use xmlbeans. We try to convince you
+      that it is better than other C++ XML-handling libraries as well as far better than
+      any Java solution.
+    </note>
+  </body> 
+</document>

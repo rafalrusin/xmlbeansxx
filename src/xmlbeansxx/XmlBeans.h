@@ -16,22 +16,13 @@ limitations under the License. */
 #ifndef XMLBEANSXX_XMLBEANS_INCLUDED
 #define XMLBEANSXX_XMLBEANS_INCLUDED
 #include "BoostAssert.h"
-#include <log4cxx/logger.h>
-#include "Existence.h"
-#include "SchemaTypeLoader.h"
+#include "StoreString.h"
+#include "QName.h"
+
 namespace xmlbeansxx {
 class XmlBeans {
 private:
-    static log4cxx::LoggerPtr LOG();
-class MyExistence_I: public Existence_I {
-        std::vector<Existence> dependencies;
-    public:
-        MyExistence_I();
-        ~MyExistence_I();
-    };
 public:
-    static Existence staticInit();
-    static SchemaTypeLoader getContextTypeLoader();
     
     /** Schema namespace name. */
     static StoreString xs_ns();
@@ -39,6 +30,9 @@ public:
     static StoreString xsi_ns();
     /** xsi:type QName */
     static QName xsi_type();
+
+    /** xsi:array QName */    
+    static QName xsi_array();
 };
 }
 #endif //XMLBEANSXX_XMLBEANS_INCLUDED

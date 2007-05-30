@@ -16,12 +16,19 @@
 #    limitations under the License.
 #
 
+#set -x
+
 usage="\
 Generates C++ library from xsd files.
 
-Usage: $0 [file1.xsd file2.xsd ... ]
+Usage: $0 [-L lib_name] [-V lib_version] [file1.xsd file2.xsd ... ]
 
 files.xsd	- Type system schema files
+lib_name	- Library name
+lib_version	- Library version
+
+example:
+$0 -L libmylibrary -V 2:1:3 file.xsd
 
 Report bugs to: <rr@touk.pl>
 Copyright (C) 2004 TouK"
@@ -33,18 +40,87 @@ fi
 basefile=`readlink -f $0`
 BIN=`dirname $basefile`
 
-ARG_XSD="$@"
+ARG_XSD=""
+SRC_DIR="src"
+XSD_PATH_PREFIX="../"
+LIB_NAME="libxmltypes"
+LIB_VERSION="1:0:0"
 
-# write xsd file dependencies to xsd.txt
+while test $# -gt 0; do
+	case "$1" in
+	-L)	shift
+		LIB_NAME="$1"
+		;;
+	-V)	shift
+		LIB_VERSION="$1"
+		;;
+	-*)	echo "$usage" ; exit 1
+		;;
+	*)	ARG_XSD="$ARG_XSD $1"
+		;;
+	esac
+	shift
+done
+
+
+
+for i in $ARG_XSD; do
+	case "$i" in
+	/*)	XSD_FILES="$XSD_FILES $i"
+		;;
+	*)	XSD_FILES="$XSD_FILES $XSD_PATH_PREFIX$i"
+		;;
+	esac
+done 
+
+mkdir $SRC_DIR
+cd $SRC_DIR
+
 rm -f xsd.txt
-if ! $BIN/xmlbeansxx-gen -Dincludes=xsd.txt $ARG_XSD; then exit 1; fi
+if ! $BIN/xmlbeansxx-gen -Dincludes=xsd.txt $XSD_FILES; then exit 1; fi
 
-# generate C++ names file names based on XSDs
-COMP_XSD="`cat xsd.txt`"
+COMP_XSD=`cat xsd.txt`
+COMP_XSD=`echo $COMP_XSD`
+
 for i in $COMP_XSD; do
     COMP_H="$COMP_H `basename $i .xsd`.h"
     COMP_CPP="$COMP_CPP `basename $i .xsd`.cpp"
 done
+
+
+#############################
+
+cat <<EOF >Makefile.am
+ACLOCAL = aclocal -I m4
+
+COMP_XSD=$COMP_XSD
+COMP_H=$COMP_H
+COMP_CPP=$COMP_CPP
+
+include_HEADERS = \$(COMP_H)
+
+lib_LTLIBRARIES = ${LIB_NAME}.la
+${LIB_NAME}_la_LDFLAGS = -version-info $LIB_VERSION -lxmlbeansxx
+${LIB_NAME}_la_SOURCES = \$(COMP_H) \$(COMP_CPP)
+
+\$(COMP_H) \$(COMP_CPP): $XSD_FILES
+	$BIN/xmlbeansxx-gen $XSD_FILES
+
+MOSTLYCLEANFILES = \$(COMP_H) \$(COMP_CPP)
+
+EOF
+
+cd ..
+
+cat <<EOF >Makefile.am
+
+ACLOCAL = aclocal -I m4
+EXTRA_DIST = bootstrap m4/acx_pthread.m4
+SUBDIRS = src
+
+
+EOF
+
 
 ## Creating default make files
 
@@ -89,11 +165,13 @@ ACX_PTHREAD([
 		AC_MSG_WARN([Compiling without thread support])
 	])
 
+CXXFLAGS="-O0"
+
 AC_CHECK_HEADERS([boost/smart_ptr.hpp boost/any.hpp], , AC_MSG_ERROR([boost library is required]))
 
 AC_SUBST(ac_aux_dir)
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile $SRC_DIR/Makefile])
 
 AC_OUTPUT
 EOF
@@ -109,27 +187,6 @@ EOF
 chmod +x bootstrap
 RUN_BOOTSTRAP=1
 fi
-#############################
-
-cat <<EOF >Makefile.am
-ACLOCAL = aclocal -I m4
-
-COMP_XSD=$COMP_XSD
-COMP_H=$COMP_H
-COMP_CPP=$COMP_CPP
-
-include_HEADERS = \$(COMP_H)
-
-lib_LTLIBRARIES = libxmltypes.la
-libxmltypes_la_LDFLAGS = -version-info 1:0:0 -lxmlbeansxx
-libxmltypes_la_SOURCES = \$(COMP_H) \$(COMP_CPP)
-
-\$(COMP_H) \$(COMP_CPP): \$(COMP_XSD)
-	$BIN/xmlbeansxx-gen \$(COMP_XSD)
-
-MOSTLYCLEANFILES = \$(COMP_H) \$(COMP_CPP)
-
-EOF
 
 ## Launching makefiles generation ##
 if [ "$RUN_BOOTSTRAP" = 1 ]; then ./bootstrap || exit 1; fi
@@ -143,4 +200,4 @@ make && cat <<EOF
 # in order to install library into system
 ###########################################
 EOF
- 
+

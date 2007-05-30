@@ -4,9 +4,9 @@
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
- 
+
     http://www.apache.org/licenses/LICENSE-2.0
- 
+
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,115 +18,131 @@
 #include "Tracer.h"
 #include "defs.h"
 
-#include <xercesc/util/Base64.hpp>
-#include <xercesc/util/XMLString.hpp>
-#include <xercesc/framework/MemBufFormatTarget.hpp>
+#include <boost/archive/iterators/base64_from_binary.hpp>
+#include <boost/archive/iterators/binary_from_base64.hpp>
+#include <boost/archive/iterators/transform_width.hpp>
+#include <string>
+
+
+#include <libxml/entities.h>
+
 #include <sstream>
 #include <cstdio>
-#include "CoreTypes.h"
 
 
-#define TRACER2(a,b)
+#define TRACER2(a,b) 
 #define LOG4CXX_DEBUG2(a,b)
 
 
 using namespace std;
-XERCES_CPP_NAMESPACE_USE
+using namespace boost::archive::iterators;
+
+//XERCES_CPP_NAMESPACE_USE
 
 
 namespace xmlbeansxx {
 
-log4cxx::LoggerPtr TextUtils::log = log4cxx::Logger::getLogger(String("xmlbeansxx.TextUtils"));
+  LOGGER_PTR_SET(TextUtils::log,"xmlbeansxx.TextUtils");
 
-TextUtils::TextUtils() {}
+  TextUtils::TextUtils() {}
 
 
-String TextUtils::intToString(int i) {
+  std::string TextUtils::intToString(int i) {
     ostringstream ss;
     ss<<i;
     return ss.str();
-}
+  }
 
-String TextUtils::floatToString(float f) {
+  std::string TextUtils::floatToString(float f) {
     ostringstream ss;
     ss<<f;
     return ss.str();
-}
+  }
 
-String TextUtils::doubleToString(double d) {
+  std::string TextUtils::doubleToString(double d) {
     ostringstream ss;
     ss<<d;
     return ss.str();
-}
+  }
 
-String TextUtils::ptrToString(const void *ptr) {
+  std::string TextUtils::ptrToString(const void *ptr) {
     char buf[20];
     snprintf(buf,20,"%p",ptr);
     return string(buf);
-}
+  }
 
-String TextUtils::boolToString(bool b) {
+  std::string TextUtils::boolToString(bool b) {
     if (b==false) return "false";
     else return "true";
-}
+  }
 
-bool TextUtils::isWhite(char ch) {
+  bool TextUtils::isWhite(char ch) {
     return ch=='\n' || ch==' ' || ch=='\t';
-}
+  }
 
-String TextUtils::collapse(const String &str) {
-    TRACER2(log,"collapse")
+  std::string TextUtils::collapse(const std::string &str) {
+    TRACER2(log,"collapse");
     LOG4CXX_DEBUG2(log,"str:"+str);
     int l=str.size();
     int a=0,b=l-1;
     while (a<l && isWhite(str[a])) a++;
     while (b>=0 && isWhite(str[b])) b--;
     if (b<a) {
-        LOG4CXX_DEBUG2(log,"ret:");
-        return String();
+      LOG4CXX_DEBUG2(log,"ret:");
+      return std::string();
     } else {
-        LOG4CXX_DEBUG2(log,"ret:"+str.substr(a,b-a+1));
-        return str.substr(a,b-a+1);
+      LOG4CXX_DEBUG2(log,"ret:"+str.substr(a,b-a+1));
+      return str.substr(a,b-a+1);
     }
-}
+  }
 
-String TextUtils::exchangeEntities(const String& str, XMLFormatter::EscapeFlags escapeFlag) {
-    //LOG4CXX_DEBUG(log,"before escaping: " + str);
-    XMLCh* toFormat = XMLString::transcode (str.c_str ());
+    std::string TextUtils::exchangeEntities(const std::string& str, TextUtils::EscapeFlags escapeFlag) {
     
-    MemBufFormatTarget target;
-    XMLFormatter formatter (XMLUni::fgXMLChEncodingString, &target, escapeFlag);
-    formatter << toFormat;
-    
-    XMLString::release(&toFormat);
+    xmlChar *retu;
+    if(escapeFlag == AttrEscapes)
+		retu = xmlEncodeSpecialChars(NULL,(xmlChar*)str.c_str());
+    else	retu = xmlEncodeEntitiesReentrant(NULL,(xmlChar*)str.c_str());
+    	
+    std::string s((char*)retu);
+    xmlFree(retu);
+    return s;    
+/*        XMLCh* toFormat = XMLString::transcode (str.c_str ());
         
-    const XMLByte* bytes = target.getRawBuffer ();
-    string res = XMLString::transcode ((XMLCh*) bytes);
-    
-    LOG4CXX_DEBUG(log,"res:" << res);
-    return res; 
-}
+        MemBufFormatTarget target;
+        XMLFormatter formatter (XMLUni::fgXMLChEncodingString, &target, escapeFlag);
+        formatter << toFormat;
+        
+        XMLString::release(&toFormat);
+            
+        const XMLByte* bytes = target.getRawBuffer ();
+        char * s = XMLString::transcode ((XMLCh*) bytes);
+        string res(s);
+        XMLString::release(&s);
+        
+        LOG4CXX_DEBUG(log,"res:" << res);
+        return res; 
+  */  }
 
-String TextUtils::exchangeEntitiesWithCDATA(const String& str) {
-    return String("<![CDATA[") + str + String("]]>");
-}
+  std::string TextUtils::exchangeEntitiesWithCDATA(const std::string& str) {
+    return std::string("<![CDATA[") + str + std::string("]]>");
+  }
 
-bool TextUtils::checkInteger(const String &num2) {
+  bool TextUtils::checkInteger(const std::string &num2) {
     if (num2.size()<1) return false;
-    String num;
+    std::string num;
     if (num2[0] == '-' || num2[0] == '+')
         num = num2.substr(1);
     else
         num = num2;
     FOREACH(it,num) {
-        if (!((*it)>='0' && (*it)<='9')) return false;
+      if (!((*it)>='0' && (*it)<='9')) return false;
     }
     return true;
-}
+  }
 
-bool TextUtils::checkDecimal(const String &num2) {
+  bool TextUtils::checkDecimal(const std::string &num2) {
     if (num2.size()<1) return false;
-    String num;
+    std::string num;
     if (num2[0] == '-' || num2[0] == '+')
         num = num2.substr(1);
     else
@@ -134,66 +150,54 @@ bool TextUtils::checkDecimal(const String &num2) {
 
     int dots=0;
     FOREACH(it,num) {
-        if (!((*it)>='0' && (*it)<='9' || (*it)=='.')) return false;
-        if ((*it)=='.') {
-            dots++;
-            if (dots>1) return false;
-        }
+      if (!((*it)>='0' && (*it)<='9' || (*it)=='.')) return false;
+      if ((*it)=='.') {
+        dots++;
+        if (dots>1) return false;
+      }
     }
     return true;
-}
+  }
 
-bool TextUtils::isDigit(char c) {
+  bool TextUtils::isDigit(char c) {
     return c>='0' && c<='9';
-}
+  }
 
-bool TextUtils::areDigits(const String &d) {
+  bool TextUtils::areDigits(const std::string &d) {
     bool r=true;
     FOREACH(it,d) r=r && TextUtils::isDigit(*it);
     return r;
-}
+  }
 
-bool TextUtils::checkDate(const String &date) {
+  bool TextUtils::checkDate(const std::string &date) {
     if (date.size()!=10) return false;
     return TextUtils::areDigits(date.substr(0,4))
-           && TextUtils::areDigits(date.substr(5,2))
-           && TextUtils::areDigits(date.substr(8,2))
-           && date[4]=='-' && date[7]=='-';
-}
+      && TextUtils::areDigits(date.substr(5,2))
+      && TextUtils::areDigits(date.substr(8,2))
+      && date[4]=='-' && date[7]=='-';
+  }
 
-xmlbeansxx::Array<unsigned char> TextUtils::base64Decode(const String &what) {
-    unsigned int outLen;
-    XMLByte *buf=Base64::decode((XMLByte *)what.c_str(),&outLen);
-    xmlbeansxx::Array<unsigned char> a(outLen);
+typedef base64_from_binary< transform_width<string::const_iterator, 6, 8> > base64_t;
+typedef transform_width< binary_from_base64<string::const_iterator>, 8, 6 > binary_t;
+
+
+
+  xmlbeansxx::shared_array<unsigned char> TextUtils::base64Decode(const std::string &what) {
+    string dec(binary_t(what.begin()),binary_t(what.end()));
+    unsigned int outLen=dec.length();
+    xmlbeansxx::shared_array<unsigned char> a(outLen);
     FOR(i,int(outLen)) {
-        a[i]=buf[i];
+      a[i]=dec[i];
     }
-    XMLString::release(&buf);
     return a;
-}
+  }
 
-String TextUtils::base64Encode(Array<byte> what) {
+  std::string TextUtils::base64Encode(xmlbeansxx::shared_array<unsigned char> what) {
     unsigned int outLen;
-    byte *buf0 = new byte[what.size()];
-    FOR(i, what.size()) {
-        buf0[i] = what[i];
-    }
-    XMLByte *buf=Base64::encode(buf0, what.size(), &outLen);
-    String s;
-    FOR(i,int(outLen)) {
-        s+=buf[i];
-    }
-    delete buf0;
-    XMLString::release(&buf);
-    return s;
-}
+    string str((char*)what.get(),what.size());
+    str.append((3-((str.length())%3)) % 3 ,'\0');
+    string enc(base64_t(str.begin()), base64_t(str.end()));
+    return enc;
+  }
 
-
-String TextUtils::istreamToString(std::istream &in) {
-    string line, doc;
-    while (getline(in, line)) {
-        doc.append(line);
-    }
-    return doc;
-}
 }

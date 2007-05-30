@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
+<document> 
+  <header> 
+    <title>xmlbeansxx developers</title> 
+    <meta name="Keywords">xmlbeans,xmlbeans port to C++, XML, XML Schema, code generator, XML Manipulation, xmlbeansc, xmlbeans++ xmlbeansc++, xmlbeansxx, xmlbeanscxx</meta>
+  </header> 
+  <body>
+    <ul>
+      <li><strong>Rafal Rusin</strong> (<a href="mailto:rr@touk.pl">e-mail</a>) - design, development</li>
+      <li><strong>Piotr Burdylo</strong> (<a href="mailto:pb@touk.pl">e-mail</a>) - testing, documentation, website</li>
+      <li><strong>Przemyslaw Wojnowski</strong> (<a href="mailto:pw@touk.pl">e-mail</a>) - developement</li>      
+      <li><strong>Witek Wolejszo</strong> (<a href="mailto:ww@touk.pl">e-mail</a>) - testing, documentation, website</li>      
+    </ul>
+  </body>
+</document>

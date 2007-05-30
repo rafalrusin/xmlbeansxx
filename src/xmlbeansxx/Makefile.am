@@ -1,217 +1,109 @@
-SUBDIRS = 
-EXTRA_DIST = xml-fragment.xsd xmlbeansxx-schema.xsd XmlTypesGen.xh XmlTypesGen.xcpp xmlbeansxx-schema.xh xmlbeansxx-schema.xcpp
+SUBDIRS =
+EXTRA_DIST = xml-fragment.xsd
 
-CXXFLAGS += -I${srcdir}/../
+AM_CPPFLAGS = -I../
 
 lib_LTLIBRARIES = libxmlbeansxx.la
 libxmlbeansxx_la_LDFLAGS = -version-info $(library_version_info)
 libxmlbeansxx_la_SOURCES = \
-	Array.h\
-	BeansException.h\
+	XmlTypesGen.xh\
+	XmlTypesGen.xcpp\
 	BoostAssert.h\
-	cast.h\
-	CoreTypes.h\
-	CXXBooleanHolder.h\
-	CXXDecimalHolder.h\
-	CXXDoubleHolder.h\
-	CXXFloatHolder.h\
-	CXXIntegerHolder.h\
-	CXXIntHolder.h\
-	CXXLongHolder.h\
-	CXXStringHolder.h\
-	defs.h\
-	Existence.h\
-	LibXMLParser.h\
-	Map.h\
-	Mutex.h\
-	MutexPool.h\
-	Null.h\
-	Pair.h\
-	Ptr.h\
-	QName.h\
-	SchemaProperty.h\
-	SchemaPropertyImpl.h\
-	SchemaType.h\
-	SchemaTypeImpl.h\
-	SchemaTypeLoaderBase.h\
-	SchemaTypeLoader.h\
-	SchemaTypeLoaderImpl.h\
-	Set.h\
-	SimpleValue.h\
-	Stack.h\
-	StoreString.h\
-	String.h\
-	TextUtils.h\
-	Tracer.h\
-	TypeStore.h\
-	TypeStoreImpl.h\
-	TypeStoreUser.h\
-	TypeStoreVisitor.h\
-	ValidationContext.h\
-	Vector.h\
-	wml_types.h\
-	XercesParser.h\
-	XercesUtils.h\
-	XmlArray.h\
-	XmlBeans.h\
-	xmlbeansxx.h\
-	XmlComplexContentImpl.h\
-	XmlContext.h\
-	XmlCursor.h\
-	XmlErrorCodes.h\
-	XmlException.h\
-	XmlObjectBase.h\
-	XmlOptions.h\
-	XmlParser.h\
-	XmlTokenSource.h\
-	BeansException.cpp\
 	BoostAssert.cpp\
-	CoreTypes.cpp\
-	CXXBooleanHolder.cpp\
-	CXXDecimalHolder.cpp\
-	CXXDoubleHolder.cpp\
-	CXXFloatHolder.cpp\
-	CXXIntegerHolder.cpp\
-	CXXIntHolder.cpp\
-	CXXLongHolder.cpp\
-	CXXStringHolder.cpp\
-	Existence.cpp\
-	LibXMLParser.cpp\
-	Map.cpp\
-	Mutex.cpp\
-	MutexPool.cpp\
-	Null.cpp\
-	Pair.cpp\
-	Ptr.cpp\
-	QName.cpp\
-	SchemaProperty.cpp\
-	SchemaPropertyImpl.cpp\
-	SchemaType.cpp\
-	SchemaTypeImpl.cpp\
-	SchemaTypeLoaderBase.cpp\
-	SchemaTypeLoader.cpp\
-	SchemaTypeLoaderImpl.cpp\
-	Set.cpp\
-	SimpleValue.cpp\
-	Stack.cpp\
+	StoreString.h\
 	StoreString.cpp\
-	String.cpp\
-	TextUtils.cpp\
-	TypeStore.cpp\
-	TypeStoreImpl.cpp\
-	TypeStoreUser.cpp\
-	TypeStoreVisitor.cpp\
-	ValidationContext.cpp\
-	Vector.cpp\
-	XercesParser.cpp\
-	XercesUtils.cpp\
-	XmlArray.cpp\
+	CoreTypes.h\
+	CoreTypes.cpp\
+	TypeSystem.h\
+	shared_array.h\
+	SchemaType.h\
+	SchemaType.cpp\
+	Tracer.h\
+	defs.h\
+	geum_types.h\
+	xmlbeansxx.h\
+	TypeSystem.cpp\
+	Walker.cpp\
+	Serialize.cpp\
+	BeansException.h\
+	BeansException.cpp\
 	XmlBeans.cpp\
-	XmlComplexContentImpl.cpp\
-	XmlContext.cpp\
-	XmlCursor.cpp\
-	XmlErrorCodes.cpp\
-	XmlObjectBase.cpp\
+	XmlException.h\
+	XmlOptions.h\
+	QName.h\
+	Query.cpp\
+	Query.h\
+	LibXMLParser.cpp\
+	LibXMLParser.h\
 	XmlParser.cpp\
-	XmlTokenSource.cpp
+	XmlParser.h\
+	macros.h\
+	TextUtils.h\
+	TextUtils.cpp\
+	Contents.h\
+	Contents.cpp\
+	Dict.h\
+	Dict.cpp\
+	XmlArray.h\
+	XmlArray.cpp\
+	XmlContext.cpp\
+	XmlContext.h\
+	SchemaProperty.h\
+	SchemaProperty.cpp\
+	NullPtr.h
+
 nodist_libxmlbeansxx_la_SOURCES = \
 	XmlTypesGen.h\
-	XmlTypesGenImpl.h\
 	XmlTypesGen.cpp\
 	xml-fragment.h\
-	xml-fragmentImpl.h\
-	xml-fragment.cpp\
-	xmlbeansxx-schema.h\
-	xmlbeansxx-schemaImpl.h\
-	xmlbeansxx-schema.cpp
-
-
+	xml-fragment.cpp
 
 BUILT_SOURCES = \
 	XmlTypesGen.h\
-	XmlTypesGenImpl.h\
 	XmlTypesGen.cpp\
 	xml-fragment.h\
-	xml-fragmentImpl.h\
-	xml-fragment.cpp\
-	xmlbeansxx-schema.h\
-	xmlbeansxx-schemaImpl.h\
-	xmlbeansxx-schema.cpp
+	xml-fragment.cpp
 
 libxmlbeansxxincludedir = $(includedir)/xmlbeansxx
 libxmlbeansxxinclude_HEADERS = \
-	Array.h\
-	BeansException.h\
 	BoostAssert.h\
-	cast.h\
+	TypeSystem.h\
 	CoreTypes.h\
-	CXXBooleanHolder.h\
-	CXXDecimalHolder.h\
-	CXXDoubleHolder.h\
-	CXXFloatHolder.h\
-	CXXIntegerHolder.h\
-	CXXIntHolder.h\
-	CXXLongHolder.h\
-	CXXStringHolder.h\
-	defs.h\
-	Existence.h\
-	LibXMLParser.h\
-	Map.h\
-	Mutex.h\
-	MutexPool.h\
-	Null.h\
-	Pair.h\
-	Ptr.h\
-	QName.h\
-	SchemaProperty.h\
-	SchemaPropertyImpl.h\
+	shared_array.h\
 	SchemaType.h\
-	SchemaTypeImpl.h\
-	SchemaTypeLoaderBase.h\
-	SchemaTypeLoader.h\
-	SchemaTypeLoaderImpl.h\
-	Set.h\
-	SimpleValue.h\
-	Stack.h\
-	StoreString.h\
-	String.h\
-	TextUtils.h\
-	Tracer.h\
-	TypeStore.h\
-	TypeStoreImpl.h\
-	TypeStoreUser.h\
-	TypeStoreVisitor.h\
-	ValidationContext.h\
-	Vector.h\
-	wml_types.h\
-	XercesParser.h\
-	XercesUtils.h\
-	XmlArray.h\
-	XmlBeans.h\
+	geum_types.h\
 	xmlbeansxx.h\
-	XmlComplexContentImpl.h\
-	XmlContext.h\
-	XmlCursor.h\
-	XmlErrorCodes.h\
+	BeansException.h\
 	XmlException.h\
-	XmlObjectBase.h\
 	XmlOptions.h\
+	Map.h\
+	QName.h\
+	LibXMLParser.h\
 	XmlParser.h\
-	XmlTokenSource.h
-
+	XmlBeans.h\
+	macros.h\
+	TextUtils.h\
+	Contents.h\
+	Dict.h\
+	XmlArray.h\
+	Tracer.h\
+	XmlContext.h\
+	logger.h\
+	config_auto.h\
+	Query.h\
+	SchemaProperty.h\
+	StoreString.h\
+	NullPtr.h
 
 nodist_libxmlbeansxxinclude_HEADERS = \
 	XmlTypesGen.h\
-	xml-fragment.h\
-	xmlbeansxx-schema.h
+	xml-fragment.h
 
-XmlTypesGen.h XmlTypesGen.cpp: ${top_srcdir}/generator/dist/bin/xmlbeansxx-genbuiltin ${srcdir}/XmlTypesGen.xh ${srcdir}/XmlTypesGen.xcpp
+XmlTypesGen.h XmlTypesGen.cpp: ${top_srcdir}/generator/dist/bin/xmlbeansxx-genbuiltin XmlTypesGen.xh XmlTypesGen.xcpp
 	${top_builddir}/generator/dist/bin/xmlbeansxx-genbuiltin
 
-xml-fragment.h xml-fragment.cpp: ${top_srcdir}/generator/dist/bin/xmlbeansxx-gen ${srcdir}/xml-fragment.xsd
+xml-fragment.h xml-fragment.cpp: ${top_srcdir}/generator/dist/bin/xmlbeansxx-gen xml-fragment.xsd
 	${top_builddir}/generator/dist/bin/xmlbeansxx-gen ${srcdir}/xml-fragment.xsd
 
-xmlbeansxx-schema.h xmlbeansxx-schema.cpp: ${top_srcdir}/generator/dist/bin/xmlbeansxx-gen ${srcdir}/xmlbeansxx-schema.xsd ${srcdir}/xmlbeansxx-schema.xh ${srcdir}/xmlbeansxx-schema.xcpp
-	${top_builddir}/generator/dist/bin/xmlbeansxx-gen ${srcdir}/xmlbeansxx-schema.xsd
+MOSTLYCLEANFILES=XmlTypesGen.h XmlTypesGen.cpp xml-fragment.h xml-fragment.cpp
 
-MOSTLYCLEANFILES=XmlTypesGen.h XmlTypesGenImpl.h XmlTypesGen.cpp xml-fragment.h xml-fragmentImpl.h xml-fragment.cpp xmlbeansxx-schema.h xmlbeansxx-schemaImpl.h xmlbeansxx-schema.cpp

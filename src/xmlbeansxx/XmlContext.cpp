@@ -20,12 +20,12 @@
 	
 namespace xmlbeansxx {
 
-StoreString XmlContext::getLink(String shortcut) {
+StoreString XmlContext::getLink(const std::string& shortcut) {
     return nsLinks[shortcut];
 }
 
-void XmlContext::setLink(String shortcut, StoreString ns) {
-    restoreLinks.push(std::pair<String, StoreString>(shortcut, nsLinks[shortcut]));
+void XmlContext::setLink(const std::string& shortcut, StoreString ns) {
+    restoreLinks.push(std::pair<std::string, StoreString>(shortcut, nsLinks[shortcut]));
     nsLinks[shortcut] = ns;
 }
 

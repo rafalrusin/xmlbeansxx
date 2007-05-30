@@ -14,95 +14,33 @@
     limitations under the License. */
     
 #include "XmlBeans.h"
-#include <log4cxx/logger.h>
 #include "StoreString.h"
-#include <xercesc/util/PlatformUtils.hpp>
 #include "BeansException.h"
-#include "SchemaTypeLoaderImpl.h"
 #include "XmlTypesGen.h"
-XERCES_CPP_NAMESPACE_USE
 
 namespace xmlbeansxx {
 
-namespace {
-    Existence existenceVar = XmlBeans::staticInit();
-}
-
-log4cxx::LoggerPtr XmlBeans::LOG() {
-    static log4cxx::LoggerPtr LOG = log4cxx::Logger::getLogger("xmlbeansxx.XmlBeans");
-    return LOG;
-}
-
-XmlBeans::MyExistence_I::MyExistence_I() {    
-    LOG4CXX_DEBUG(XmlBeans::LOG(), "Initializing xmlbeansxx");
-    dependencies.push_back(StoreString::staticInit());
-    StoreString::store("");
-    XmlBeans::xs_ns(); //internal static init invokation to be thread-safe
-    XmlBeans::xsi_ns(); //internal static init invokation to be thread-safe
-    XmlBeans::xsi_type(); //internal static init invokation to be thread-safe
-    
-    // Locales init
-    const char *locale=setlocale(LC_CTYPE, "");
-    if (!locale) {
-        throw XmlException( "Locale not specified. Check LANG, LC_CTYPE, LC_ALL." );
-    } else {
-        LOG4CXX_INFO(log4cxx::Logger::getLogger(std::string("xmlbeansxx")),"Locale: " << locale);
-    }
-    
-    // Xerces init
-    try {
-        XMLPlatformUtils::Initialize("");
-        //XMLPlatformUtils::Initialize("pl_PL.UTF-8");
-    } catch(...) {
-        LOG4CXX_ERROR(XmlBeans::LOG(), "Error during Xerces-c initialization");
-        throw IllegalStateException();
-    }
-    // ~Xerces init
-    
-    LOG4CXX_DEBUG(XmlBeans::LOG(),"Initialized xmlbeansxx");
-}
-
-XmlBeans::MyExistence_I::~MyExistence_I() {
-    LOG4CXX_DEBUG(XmlBeans::LOG(), "Terminating xmlbeansxx");
-    //Xerces termination
-    try {
-        XMLPlatformUtils::Terminate();
-    } catch(...) {
-        LOG4CXX_ERROR(XmlBeans::LOG(), "Error during Xerces-c termination");
-        throw IllegalStateException();
-    }
-    //~Xerces termination
-}
-
-Existence XmlBeans::staticInit() {
-    static Existence ptr(new MyExistence_I());
-    return ptr;
-}
 
 StoreString XmlBeans::xs_ns() {
-    static StoreString ns = (StoreString::staticInit(), StoreString::store("http://www.w3.org/2001/XMLSchema"));
+    static StoreString ns = StoreString::store("http://www.w3.org/2001/XMLSchema");
     return ns;
 }
 
 StoreString XmlBeans::xsi_ns() {
-    static StoreString ns = (StoreString::staticInit(), StoreString::store("http://www.w3.org/2001/XMLSchema-instance"));
+    static StoreString ns = StoreString::store("http://www.w3.org/2001/XMLSchema-instance");
     return ns;
 }
 
 QName XmlBeans::xsi_type() {
-    static QName n = (StoreString::staticInit(), 
-        QName(
-            StoreString::store("http://www.w3.org/2001/XMLSchema-instance"),
-            StoreString::store("type")
-        )
-        );
+    static QName n = QName::store("http://www.w3.org/2001/XMLSchema-instance","type");
     return n;
 }
 
-SchemaTypeLoader XmlBeans::getContextTypeLoader() {
-    static SchemaTypeLoader loader(SchemaTypeLoaderImpl::New());
-    return loader;
+QName XmlBeans::xsi_array() {
+    static QName n = QName::store("http://www.w3.org/2001/XMLSchema-instance","array");
+    return n;
 }
+
 
 }
 

@@ -4,9 +4,9 @@
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
- 
+
     http://www.apache.org/licenses/LICENSE-2.0
- 
+
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,50 +18,37 @@
 #define _XMLBEANSXX_XMLOPTIONS_H_
 
 #include "BoostAssert.h"
-#include "Ptr.h"
+#include <boost/shared_ptr.hpp>
+
+
 
 namespace xmlbeansxx {
-class XmlOptions_I;
-BEGIN_CLASS(XmlOptions, XmlOptions_I)
-END_CLASS()
 
-/** This class is used to remember various xml options. It corresponds to Java org.apache.xmlbeans.XmlOptions class. */
-class XmlOptions_I {
-    private:
-    bool _saveXmlDecl;    
-    bool _validation;
-    
+class XmlOptions {
+    bool v,d,tp;
 public:
+    XmlOptions():v(false),d(true),tp(true) {}
 
-    XmlOptions_I() {
-        _saveXmlDecl = true;
-        _validation = false;
+    void setValidation(bool v) {
+        XmlOptions::v=v;
     }
-    
-    XmlOptions copy() {
-        XmlOptions n = XmlOptions::New();
-        n->_saveXmlDecl = _saveXmlDecl;
-        n->_validation = _validation;
-        //*n = *this;
-        return n;
-    }
-
-    /** Specifies serialization option which prints '<?xml ... ?>' at the beginning of document. */
-    void setSaveXmlDecl(bool d) {
-        _saveXmlDecl = d;
-    }
-    
-    bool getSaveXmlDecl() {
-        return _saveXmlDecl;
-    }
-
     bool getValidation() {
-        return _validation;
+        return v;
+    }
+    void setPrintXmlDeclaration(bool d) {
+        XmlOptions::d=d;
+    }
+    bool getPrintXmlDeclaration() {
+        return d;
     }
 
-    void setValidation(bool validation) {
-        _validation = validation;
+    bool getTypedParsing() {
+        return tp;
+    }
+    void setTypedParsing(bool v) {
+        tp=v;
     }
 };
+
 }
 #endif//_XMLBEANSXX_XMLOPTIONS_H_

@@ -20,28 +20,29 @@
 #include <list>
 #include <stack>
 #include <string>
-
+#include <istream>
 #include <boost/thread.hpp>
 
 #include <libxml/SAX2.h>
 #include <libxml/xmlschemas.h>
 
-#include <log4cxx/logger.h>
 
-#include "XmlParser.h"
 #include "XmlContext.h"
 #include "XmlOptions.h"
 #include "QName.h"
-#include "XmlCursor.h"
-#include "Ptr.h"
+#include "XmlTypesGen.h"
+
+#include "XmlParser.h"
+
 
 
 namespace xmlbeansxx {
+class XmlObject;
 
     /** 
      * Parse XML documents using libxml2 parser.
      */
-    class LibXMLParser : public XmlParser_I {
+class LibXMLParser : public XmlParser {
     private:
 
         // initialize libxml2 parser only once
@@ -63,17 +64,35 @@ namespace xmlbeansxx {
 
         // is set to 'this' pointer
         void *user_data;
+	
 
     public:
+	
+	struct StackEl {
+            xmlbeansxx::XmlObjectPtr obj;
+	    std::string str;
+    	    bool processContents;
+	    xmlbeansxx::QName name;
+    	    StackEl(XmlObjectPtr o,bool processContents,const QName& n)
+        	: obj(o),processContents(processContents),name(n)
+        	{}
+	};
+	std::stack<StackEl> nodesStack;
+	std::string currentString;
+
+
+
         LibXMLParser();
         LibXMLParser(const XmlOptions &options);
-        ~LibXMLParser();
+        virtual ~LibXMLParser();
 
         // Overrides
 
         // parse using libxml2 parser
-        virtual void parse(std::istream &in, const XmlObject &documentRoot);
-        virtual void parse(const String &in, const XmlObject &documentRoot);
+        virtual void parse(std::istream &in, XmlObject &documentRoot);
+        virtual void parse(const std::string &in, XmlObject &documentRoot);
+
+
 
         XmlOptions getXmlOptions() const { return options; }
 
@@ -91,10 +110,10 @@ namespace xmlbeansxx {
         void unloadGrammars();
 
         /** converts eg. "xs:string" to <nr,"string">, where nr is namespace ID in globalTypeSystem */
-        QName nsSplit(const String &str, bool isAttr = false);
+        QName nsSplit(const std::string &str, bool isAttr = false);
         QName getQName(const char *prefix, const char *localname, bool isAttr = false);
         /** converts "xs:string" to <"xs","string"> */
-        std::pair<String, String> tagSplit(const String &str);
+        std::pair<std::string, std::string> tagSplit(const std::string &str);
 
         // add schema validity error message
         void addError(const char *msg) {
@@ -119,7 +138,7 @@ namespace xmlbeansxx {
         xmlSAXHandlerPtr saxHandlerPtr;
 
         XmlContext xmlContext;
-        XmlCursor cursor;
+//        XmlCursor cursor;
         StoreString xsi_ns;
 
     private:
@@ -127,8 +146,6 @@ namespace xmlbeansxx {
         std::string generateErrorMessage(xmlErrorPtr);
     };
 
-    BEGIN_CLASS(LibXMLParserPtr, LibXMLParser)
-    END_CLASS()
 }
 
 #endif//_XMLBEANSXX_LIBXMLPARSER_H_

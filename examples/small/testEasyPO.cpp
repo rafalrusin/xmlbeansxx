@@ -7,29 +7,30 @@ using namespace xmlbeansxx;
 using namespace xmlbeansxx::samples::enumeration::schemaenum::easypo;
 
 int main() {
+
     try {
         fstream in("easypo.xml", ios::in);
-        PurchaseOrderDocument poDoc(PurchaseOrderDocument::Factory::parse(in));
+        PurchaseOrderDocument poDoc=PurchaseOrderDocument::Factory::parse(in);
 
-        LineItem giftLineItem = poDoc->getPurchaseOrder()->addNewLineItem();
-        giftLineItem->setDescription("Calendar");
-        giftLineItem->setPrice(0);
-        giftLineItem->setQuantity(1);
-        giftLineItem->setPerUnitOunces(10);
-
-        Array<LineItem> arr = poDoc->getPurchaseOrder()->getLineItemArray();
-        for(int i=0; i < arr.size() ; i++) {
-            cout << "item: " << i << endl;
-            cout << " - description:     " << arr[i]->getDescription() << endl;
-            cout << " - quantity:        " << arr[i]->getQuantity() << endl;
-            cout << " - price:           " << arr[i]->getPrice() << endl;
-            cout << " - amount:          " << arr[i]->getQuantity() * arr[i]->getPrice() << endl;
+        LineItem giftLineItem = poDoc.getPurchaseOrder().addNewLineItem();
+	giftLineItem.setDescription(string("Calendar"));
+        giftLineItem.setPrice(3);
+        giftLineItem.setQuantity(6);
+        giftLineItem.setPerUnitOunces(10);
+        
+        vector<LineItem> arr = poDoc.getPurchaseOrder().getLineItemArray();
+        for(unsigned i=0; i < arr.size() ; i++) {
+            cout << "item: " << i << "\n";
+            cout << " - description:     " << arr[i].getDescription() << "\n";
+            cout << " - quantity:        " << arr[i].getQuantity() << "\n";
+            cout << " - price:           " << arr[i].getPrice() << "\n";
+            cout << " - amount:          " << arr[i].getQuantity() * arr[i].getPrice() << "\n";
         }
-
-        cout << "Xml:" << endl << poDoc->toString() << endl;
-
+        
+	cout << "Xml:\n" << poDoc.toString() << "\n";
+	
     } catch (BeansException &ex) {
-        cout << "BeansException: " << ex.getMessage() << endl;
+        cout<<"BeansException: "<<ex.getMessage()<<"\n";
     }
     return 0;
 }
