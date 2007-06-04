@@ -87,10 +87,11 @@ std::pair<std::string,std::string> XmlObject::getXpathToken(std::string xpath) c
 
 int XmlObject::documentElementNamespaceID() const { return -1; }
 
-/*std::string XmlObject::digest() {
-    return contents->digest(this); 
+std::string XmlObject::digest() {
+	if(!contents) return "NULL";
+    	return contents->digest(); 
 }
-*/
+
 
 bool XmlObject::setAnyElement(const QName& elementName,const std::string& anyContent) {
     NoExchangeEntitiesXmlObject obj;
@@ -135,6 +136,13 @@ void XmlObject::swapContents(const ContentsPtr& p)
     contents.reset();
     contents = p;
 }
+
+/*void XmlObject::swapContents(const constContentsPtr& p)
+{
+    contents.reset();
+    contents = p;
+}
+*/
 
 XmlObjectPtr XmlObject::clone() const {
     XmlObjectPtr n=getSchemaType()->createFn();

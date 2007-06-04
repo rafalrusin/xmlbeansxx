@@ -68,8 +68,8 @@ void namespaceTests() {
         p.xsetMoney(AmountType("10.254789"));
         CPPUNIT_ASSERT(p.xgetMoney().getSimpleContent()==std::string("10.25"));
         //root->serialize(cout);
-		LOG4CXX_DEBUG(logger,std::string("created:\n") + root.toString() + "\n~created\n");
-//		LOG4CXX_DEBUG(logger,root.digest());
+	LOG4CXX_DEBUG(logger,std::string("created:\n") + root.toString() + "\n~created\n");
+	LOG4CXX_DEBUG(logger,"digest:\n" + root.digest());
 
         ContentDocument root2 = ContentDocument::Factory::parse(root.toString());
         CPPUNIT_ASSERT(root2.getContent().getEmployee().getLastname() == std::string("_ln<>_"));
@@ -170,14 +170,19 @@ void parsing() {
     LOG4CXX_DEBUG(logger, doc.getContent().getEmployee().getDoubleElement());
     
 
-/* (stawel) zmienic    
     std::string d1, d2;
     doc.getContent().getEmployee().setAge(1000);
     d1 = doc.digest();
     doc.getContent().getEmployee().setAge(2000);
     d2 = doc.digest();
+    LOG4CXX_DEBUG(logger,"digest1: "+ d1);
+    LOG4CXX_DEBUG(logger,"digest2: "+ d2);
     CPPUNIT_ASSERT(d1 != d2);
-*/
+    doc.getContent().getEmployee().setAge(1000);
+    d2 = doc.digest();
+    LOG4CXX_DEBUG(logger,"digest2: "+ d2);
+    CPPUNIT_ASSERT(d1 == d2);
+
 
     //CPPUNIT_ASSERT(doc->getContent()->getEmployee()->getDef() == std::string("_def_"));
     //LOG_DEBUG << "doc serialized: " << doc->toString().c_str() << LOG4CXX_ENDMSG;

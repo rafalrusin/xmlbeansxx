@@ -170,6 +170,12 @@ namespace xmlbeansxx {
 		    s+= " } ";
 		    return s;
 		}
+		
+		std::string Contents::Walker::digest(const XmlObject& obj){
+			if(!obj.contents) return std::string("NULL");
+			return obj.contents->digest();
+		}
+		
 		XmlObjectPtr Contents::Walker::OrginalXmlObject(const ContentsPtr &p){
 			if(!p) return XmlObjectPtr(new XmlObject);
 			if(p->st->createFn==NULL) XmlObjectPtr(new XmlObject(p));

@@ -132,7 +132,7 @@ public:
     //----//
 
     //EWML extensions
-///    virtual std::string digest();
+    virtual std::string digest();
     bool setAnyElement(const QName& elementName,const std::string& content);
     //~EWML extensions
     
@@ -281,6 +281,7 @@ public:
     virtual void createContents();
     bool hasContents() const;
     virtual void swapContents(const ContentsPtr& p);
+//    virtual void swapContents(const constContentsPtr& p);
 
 %%class xmlbeansxx::XmlAnySimpleType
     std::string getStringValue() const;

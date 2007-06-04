@@ -205,6 +205,66 @@ vector<pair<QName,string> > Contents::getAttrs() const {
     return v;
 }
 
+vector<pair<QName,ContentsPtr> > Contents::getAttrs2() const {
+    SYNC(mutex)
+    vector<pair<QName,ContentsPtr> > v;
+    FOREACH(it,attrs.contents) {
+        v.push_back(pair<QName,ContentsPtr>(it->name,it->value));
+    }
+    return v;
+}
+
+
+std::string Contents::digest() const {
+    std::string r;
+    
+    std::vector<std::pair<QName,ContentsPtr > > as=getAttrs2();
+    std::vector<std::pair<QName,ContentsPtr > > es=getElems();
+
+    sort(as.begin(),as.end());
+    FOREACH(it,as) {
+    	if(it->second){
+        	r+=" ";
+	        r+=std::string(it->first);
+        	r+="=\"";
+	        r+=TextUtils::exchangeEntities(it->second->getCanonicalContent(),TextUtils::AttrEscapes);
+        	r+="\"";
+	}
+    }
+    r+=">";
+    r+=TextUtils::exchangeEntities(getCanonicalContent());
+    
+    std::map<std::pair<QName,int>, ContentsPtr> m;
+    std::map<std::string, int> counters;
+    FOREACH(it,es) {
+        if (it->second!=NULL) {
+            m[std::pair<QName,int>(it->first,counters[it->first])]=it->second;
+            counters[it->first]++;
+        }
+    }
+    FOREACH(it,m) {
+        r+="<";
+        r+=std::string(it->first.first);
+        r+=it->second->digest();
+        r+="</";
+        r+=std::string(it->first.first);
+        r+=">";
+    }
+    return r;
+}
+
+
+std::string Contents::getCanonicalContent() const {
+	if(!st->createFn) return getSimpleContent();
+	XmlObjectPtr o = st->createFn();
+	if(!o) return getSimpleContent();
+	ContentsPtr const c=boost::const_pointer_cast<Contents>(shared_from_this());
+	o->swapContents(c);
+	return o->getCanonicalContent();
+
+	return getSimpleContent();
+}
+
 
 
 } //namespace xmlbeansxx

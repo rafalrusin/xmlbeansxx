@@ -21,6 +21,7 @@
 #include <string>
 #include <vector>
 #include <boost/shared_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
 #include "Dict.h"
 #include "XmlOptions.h"
 #include "SchemaType.h"
@@ -52,13 +53,14 @@ class NSMap;
 
 class Contents;
 typedef boost::shared_ptr<Contents> ContentsPtr;
+typedef boost::shared_ptr<const Contents> constContentsPtr;
 typedef boost::shared_ptr<std::string> StringPtr;
 //typedef boost::intrusive_ptr<Contents> ContentsPtr;
 //typedef Contents * ContentsPtr;
 
 
 
-class Contents{
+class Contents : public boost::enable_shared_from_this<Contents> {
 private:
 	STATIC_LOGGER_PTR(log);
 public:
@@ -77,6 +79,7 @@ public:
 
 	void setSimpleContent(const std::string &c);
 	std::string getSimpleContent() const;
+	std::string getCanonicalContent() const;
 
 
 	ContentsPtr getAttr(const QName& attrName) const;
@@ -101,6 +104,7 @@ public:
 
 	std::vector<std::pair<QName,ContentsPtr> > getElems() const;
 	std::vector<std::pair<QName,std::string> > getAttrs() const;
+	std::vector<std::pair<QName,ContentsPtr> > getAttrs2() const;
 
 	/** Copies all contents from original object */
 //	void copyFrom(const ContentsPtr &orig);
@@ -113,6 +117,8 @@ public:
 //	void serialize2(int emptyNsID,bool printXsiType,const QName& elemName,std::ostream &o,const xmlbeansxx::SchemaType * st) const;
 	void serializeDocument(std::ostream &o,XmlOptions options) const;
 	void serialize(bool printXsiType,const QName &elemName,std::ostream &o,NSMap ns) const;
+
+	std::string digest() const;
 
 private:
 	void serializeAttrs(std::ostream &o,NSMap& ns) const;
@@ -161,6 +167,7 @@ public:
 		static std::string dump(const ContentsPtr& p);
 		
 		static XmlObjectPtr OrginalXmlObject(const ContentsPtr &p);
+		static std::string digest(const XmlObject& obj);
 	};
 };
 

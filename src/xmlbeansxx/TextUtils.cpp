@@ -87,9 +87,9 @@ namespace xmlbeansxx {
     int a=0,b=l-1;
     while (a<l && isWhite(str[a])) a++;
     while (b>=0 && isWhite(str[b])) b--;
-    if (b<a) {
+    if (a>=l || b<a) {
       LOG4CXX_DEBUG2(log,"ret:");
-      return std::string();
+      return std::string("");
     } else {
       LOG4CXX_DEBUG2(log,"ret:"+str.substr(a,b-a+1));
       return str.substr(a,b-a+1);
@@ -99,6 +99,7 @@ namespace xmlbeansxx {
     std::string TextUtils::exchangeEntities(const std::string& str, TextUtils::EscapeFlags escapeFlag) {
     
     xmlChar *retu;
+    if(str.size()<=0) return std::string("");
     if(escapeFlag == AttrEscapes)
 		retu = xmlEncodeSpecialChars(NULL,(xmlChar*)str.c_str());
     else	retu = xmlEncodeEntitiesReentrant(NULL,(xmlChar*)str.c_str());
