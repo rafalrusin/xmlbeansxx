@@ -256,5 +256,16 @@ void namespaceTests() {
         CPPUNIT_ASSERT(a[1] == 11);
         CPPUNIT_ASSERT(a[2] == 12);
     }
+    {
+    	//bool (==NULL)
+    
+    	XmlString test;
+    	XmlString test2("test");
+        LOG4CXX_DEBUG(logger,"NULL ptr:" + std::string(bool(test)? "true" : "false"));
+        CPPUNIT_ASSERT(!test);
+        LOG4CXX_DEBUG(logger,"NULL ptr:" + std::string(bool(test2)? "true" : "false"));
+        CPPUNIT_ASSERT(test2);
+	
+    }
 }
 

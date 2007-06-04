@@ -92,6 +92,9 @@ std::string XmlObject::digest() {
     	return contents->digest(); 
 }
 
+XmlObject::operator bool() const{
+	return hasContents();
+}
 
 bool XmlObject::setAnyElement(const QName& elementName,const std::string& anyContent) {
     NoExchangeEntitiesXmlObject obj;

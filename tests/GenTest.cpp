@@ -57,6 +57,7 @@ void namespaceTests() {
 		CPPUNIT_ASSERT(p.sizeOfTable()==3);
 		CPPUNIT_ASSERT(p.getTableArray(2)==std::string("mm"));
 		CPPUNIT_ASSERT(!p.xgetTableArray(20).hasContents());
+		CPPUNIT_ASSERT(!p.xgetTableArray(20));
 		
 		
         p.xsetCar(CarType("2"));

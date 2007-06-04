@@ -283,6 +283,9 @@ public:
     virtual void swapContents(const ContentsPtr& p);
 //    virtual void swapContents(const constContentsPtr& p);
 
+    operator bool() const; // == hasContents()
+
+
 %%class xmlbeansxx::XmlAnySimpleType
     std::string getStringValue() const;
     void setStringValue(const std::string &v);
