@@ -41,15 +41,20 @@ void namespaceTests() {
         Fullpersoninfo p=Fullpersoninfo::Factory::newInstance();
         ct.setEmployee(p);
         p.setCity(77);
-        p.xsetAddress(XmlString("_addr_"));
+        p.xsetAddress(XmlString());
         p.xsetLastname(CdataString("_ln<>_"));
         p.xsetFirstname(XmlString("_fn_"));
         p.setDt("\n\n 2004-01-30T22:50:11  ");
+	LOG4CXX_DEBUG(logger, "--table--");
         XmlArray<XmlString>  tab=p.dgetTableArray();
+	LOG4CXX_DEBUG(logger, "--table2--");
+	LOG4CXX_DEBUG(logger, "TableArray: " + tab.toString());
         tab.cgetArray(0);
         tab.cgetArray(1);
-		p.dsetTableArray(tab);
-		p.addNewTable();
+	LOG4CXX_DEBUG(logger, "--table3--");
+	p.dsetTableArray(tab);
+	LOG4CXX_DEBUG(logger, "--table4--");
+	p.addNewTable();
 		p.setTableArray(3,"mm");
 		
 		CPPUNIT_ASSERT(p.sizeOfTable()==4);
@@ -63,7 +68,7 @@ void namespaceTests() {
         p.xsetCar(CarType("2"));
         p.setCar2(CarType("3").getSimpleContent());
 
-        p.xsetAge(XmlInt(20));
+        p.xsetAge(XmlInt());
         p.xsetMoney(AmountType("10.256789"));
         CPPUNIT_ASSERT(p.xgetMoney().getSimpleContent()==std::string("10.26"));
         p.xsetMoney(AmountType("10.254789"));

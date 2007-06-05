@@ -165,7 +165,7 @@ void namespaceTests() {
         y=XmlPositiveInteger::Factory::parse(x.toString());
         CPPUNIT_ASSERT(x.getSimpleContent()==y.getSimpleContent());
 
-        XmlArray<XmlPositiveInteger> ar,ar2;
+        XmlArray<XmlPositiveInteger> ar=XmlArray<XmlPositiveInteger>::Factory::newInstance(),ar2;
         ar.setArray(0,XmlPositiveInteger("102"));
         ar.setArray(1,XmlPositiveInteger("103"));
         ar.setArray(2,XmlPositiveInteger("104"));
@@ -182,7 +182,7 @@ void namespaceTests() {
     }
     {
         //array cast
-      	XmlArray<XmlInteger>  a;
+      	XmlArray<XmlInteger>  a=XmlArray<XmlInteger>::Factory::newInstance();
 	XmlArray<XmlPositiveInteger> b;
         XmlArray<XmlObject>  c;
         a.append(XmlInteger("101"));

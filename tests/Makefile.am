@@ -23,9 +23,10 @@ BUILT_SOURCES = $(SCHEMAS_CPP) $(SCHEMAS_H)
 $(SCHEMAS_CPP) $(SCHEMAS_H): $(SCHEMAS_XSD) c.xh
 	${top_builddir}/generator/dist/bin/xmlbeansxx-gen $(SCHEMAS_XSD)
 
-TESTS=BeansTest GenTest EntitiesTest
+TESTS=BeansTest GenTest EntitiesTest ArrayTest
 check_PROGRAMS = $(TESTS)
 BeansTest_SOURCES=TestApp.cpp BeansTest.cpp BeansTest.h
+ArrayTest_SOURCES=TestApp.cpp ArrayTest.cpp ArrayTest.h
 GenTest_SOURCES=TestApp.cpp GenTest.cpp GenTest.h 
 EntitiesTest_SOURCES=TestApp.cpp EntitiesTest.cpp EntitiesTest.h entities.h entities.cpp
 nodist_GenTest_SOURCES = c.h c.cpp
