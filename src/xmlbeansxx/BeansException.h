@@ -89,6 +89,11 @@ class AssertionFailedException:public BeansException {
     public:
     AssertionFailedException(std::string msg);
 };
+
+class NullPtrException:public BeansException {
+    public:
+    NullPtrException(std::string msg);
+};
 }
 
 #endif//_XMLBEANSXX_EXCEPTION_H_

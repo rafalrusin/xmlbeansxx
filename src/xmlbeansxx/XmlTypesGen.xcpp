@@ -107,7 +107,7 @@ bool XmlObject::setAnyElement(const QName& elementName,const std::string& anyCon
 
 void XmlObject::serialize(std::ostream &o,XmlOptions options)  {
     TRACER(log,"serialize");
-    xmlbeansxx::definitions::XmlFragmentDocument doc;
+    xmlbeansxx::definitions::XmlFragmentDocument doc=xmlbeansxx::definitions::XmlFragmentDocument::Factory::newInstance();
     doc.cgetXmlFragment().setElement(*this);
     doc.serialize(o,options);
 
@@ -165,6 +165,7 @@ void XmlObject::setSimpleContent(const std::string &value) {
     //logger.debug("XmlObject::setSimpleContent");
     const SchemaType *st=getSchemaType();
     
+    createContents();
     SchemaType::CONTENT_TYPE ct=st->getContentType();
     if (ct==SchemaType::SIMPLE_CONTENT || ct==SchemaType::MIXED_CONTENT || ct==SchemaType::NOT_COMPLEX_TYPE) {
         if (getSchemaType()->whitespaceRule==SchemaType::WS_COLLAPSE) {

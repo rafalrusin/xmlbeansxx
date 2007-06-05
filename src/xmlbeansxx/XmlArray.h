@@ -62,14 +62,34 @@ static SchemaType XmlArray_initSchemaType() {
 
 template<class T>
 class XmlArray:public XmlObject {
-    
+public:
+    class Factory {
+    public:
+	static XmlArray<T> newInstance() {
+	    XmlArray<T> obj;
+	    obj.createContents();
+	    return obj;
+	}
+	static xmlbeansxx::XmlObjectPtr newInstanceXmlObject(){
+	    return xmlbeansxx::XmlObjectPtr(new XmlArray<T>());
+	}
+/*	static XmlArray<T> parse(std::istream &in,xmlbeansxx::XmlOptions options=xmlbeansxx::XmlOptions());
+	static XmlArray<T> parse(const std::string &str,xmlbeansxx::XmlOptions options=xmlbeansxx::XmlOptions());
+*/
+		
+	
+    };
+
+
     public:
     XmlArray() {}
     
     XmlArray(const std::vector<T> &a) {
+    	createContents();
         setArray(a);
     }
     XmlArray(const std::vector<ContentsPtr> &a) {
+    	createContents();
         setArray(a);
     }
     XmlArray(const XmlObject &a) {
@@ -85,15 +105,15 @@ class XmlArray:public XmlObject {
 
     
     T getArray(int i) const {
-        TRACER(XmlArray_log,"getArray");
+        TRACER(XmlArray_log,"getArrayAt");
         return xmlbeansxx::Contents::Walker::getElem(*this,XmlArray_elemName,i);
     }
     T cgetArray(int i) {
-        TRACER(XmlArray_log,"cgetArray");
+        TRACER(XmlArray_log,"cgetArrayAt");
         return xmlbeansxx::Contents::Walker::cgetElem(*this,XmlArray_elemName,i);
     }
     void setArray(int i,T value) {
-        TRACER(XmlArray_log,"setArray");
+        TRACER(XmlArray_log,"setArrayAt");
         xmlbeansxx::Contents::Walker::setElem(*this,XmlArray_elemName,value.contents,i);
     }
     
@@ -120,7 +140,7 @@ class XmlArray:public XmlObject {
     }
 
     void setArray(const std::vector<T> &vec) {
-        TRACER(XmlArray_log,"setArray");
+        TRACER(XmlArray_log,"setArrayT");
 	xmlbeansxx::Contents::Walker::setElemArray(*this,XmlArray_elemName,vec);
     }
     void setArray(const std::vector<ContentsPtr> &vec) {
@@ -139,7 +159,7 @@ class XmlArray:public XmlObject {
 
 template<class T2,class T>
 XmlArray<T2>  xmlarray_java_cast(const XmlArray<T> &from) {
-    XmlArray<T2> ret;
+    XmlArray<T2> ret=XmlArray<T2>::Factory::newInstance();
     std::vector<T> a=from.getArray();
     for(int it=0;it<a.size();it++) {
         ret.append(java_cast<T2>(a[it]));

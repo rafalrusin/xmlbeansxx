@@ -22,6 +22,7 @@
 #include "XmlOptions.h"
 #include "SchemaType.h"
 #include "XmlTypesGen.h"
+#include "BeansException.h"
 
 #include <boost/config.hpp>
 #ifdef BOOST_HAS_THREADS
@@ -41,29 +42,29 @@ namespace xmlbeansxx {
 
 
 		ContentsPtr Contents::Walker::getAttr(const XmlObject& obj,const QName & x){
-			if(!obj.hasContents()) return ContentsPtr();
+			if(!obj.hasContents()) throw NullPtrException("Cannot get an attribute from a empty XmlObject");
 			return obj.contents->getAttr(x);
 		};
 		 std::string Contents::Walker::getAttrString(const XmlObject& obj,const QName & x){
-			if(!obj.hasContents()) return std::string();
+			if(!obj.hasContents()) throw NullPtrException("Cannot get an attribute from a empty XmlObject");
 			return getSimpleContent(XmlObject(obj.contents->getAttr(x)));
 		};
 		 void Contents::Walker::setAttr(XmlObject& obj,const QName &x,const ContentsPtr& y){
-			obj.createContents();
+			if(!obj.hasContents()) throw NullPtrException("Cannot set an attribute on a empty XmlObject");
 			return obj.contents->setAttr(x,y);
 		};
 		 void Contents::Walker::setAttr(XmlObject& obj,const QName &x,const std::string& y){
-			obj.createContents();
+			if(!obj.hasContents()) throw NullPtrException("Cannot set an attribute on a empty XmlObject");
 			XmlString v(y);
 			return obj.contents->setAttr(x,v.contents);
 		};
 		
 		ContentsPtr Contents::Walker::getElem(const XmlObject& obj,const QName& x,int index){
-			if(!obj.hasContents()) return ContentsPtr();
+			if(!obj.hasContents()) throw NullPtrException("Cannot get an element from a empty XmlObject");
 			return obj.contents->getElem(x,index);
 		};
 		ContentsPtr Contents::Walker::cgetElem(XmlObject& obj,const QName& x,int index){
-			obj.createContents();
+			if(!obj.hasContents()) throw NullPtrException("Cannot cget an element from a empty XmlObject");
 			ContentsPtr n=obj.contents->getElem(x,index);
 			if(!n) {
 				XmlObjectPtr o=obj.contents->st->createSubObject(x);
@@ -74,32 +75,32 @@ namespace xmlbeansxx {
 			return n;
 		};
 		 void Contents::Walker::setElem(XmlObject& obj,const QName& x,const ContentsPtr& y,int index){
-			obj.createContents();
+			if(!obj.hasContents()) throw NullPtrException("Cannot set an element on a empty XmlObject");
 			obj.contents->setElem(x,y,index);
 		};
 		 void Contents::Walker::appendElem(XmlObject& obj,const QName& x,const ContentsPtr& y){
-			obj.createContents();			
+			if(!obj.hasContents()) throw NullPtrException("Cannot append an element on a empty XmlObject");
 			obj.contents->setElem(x,y,countElems(obj,x));
 		};
 		 bool Contents::Walker::isSetElem(const XmlObject& obj,const QName& x,int index){
-			if(!obj.hasContents()) return false;
+			if(!obj.hasContents()) throw NullPtrException("Cannot test for isSet on a empty XmlObject");
 			return obj.contents->isSetElem(x,index);
 		};
 		 void Contents::Walker::removeElems(XmlObject& obj,const QName& x){
-			if(!obj.hasContents()) return;
+			if(!obj.hasContents()) throw NullPtrException("Cannot remove an element from a empty XmlObject");
 			return obj.contents->removeElems(x);
 		};
 		 void Contents::Walker::removeElemAt(XmlObject& obj,const QName& x,int index){
-			if(!obj.hasContents()) return;
+			if(!obj.hasContents()) throw NullPtrException("Cannot removeAt an element from a empty XmlObject");
 			return obj.contents->removeElemAt(x,index);
 		};
 		
 		 int Contents::Walker::countElems(const XmlObject& obj,const QName& x){
-			if(!obj.hasContents()) return 0;
+			if(!obj.hasContents()) throw NullPtrException("Cannot count elements on a empty XmlObject");
 			return obj.contents->countElems(x);
 		};
 		 bool Contents::Walker::hasElements(const XmlObject& obj){
-			if(!obj.hasContents()) return false;
+			if(!obj.hasContents()) throw NullPtrException("Cannot test for elements on a empty XmlObject");
 			return obj.contents->hasElements();
 		};
 		
@@ -108,20 +109,21 @@ namespace xmlbeansxx {
 		}
 */
 		 std::vector<std::pair<QName,ContentsPtr> > Contents::Walker::getElems(const XmlObject& obj) {
-			if(!obj.hasContents()) return std::vector<std::pair<QName,ContentsPtr> >();
+			if(!obj.hasContents()) throw NullPtrException("Cannot get elements from a empty XmlObject");
 			return obj.contents->getElems();
 		}
 		 std::vector<std::pair<QName,std::string> > Contents::Walker::getAttrs(const XmlObject& obj) {
-			if(!obj.hasContents()) return std::vector<std::pair<QName,std::string> >();
+			if(!obj.hasContents()) throw NullPtrException("Cannot get attributes from a empty XmlObject");
 			return obj.contents->getAttrs();
 		}
 		
 		 std::vector<ContentsPtr> Contents::Walker::getElemArray(const XmlObject& obj,const QName& elemName) {
-			if(!obj.hasContents()) return std::vector<ContentsPtr>();
+			if(!obj.hasContents()) throw NullPtrException("Cannot get ElementArray from a empty XmlObject");
 			return obj.contents->getElemArray(elemName);		
 		};
 
 		 void Contents::Walker::setElemArray(XmlObject& obj,const QName& elemName,const std::vector<ContentsPtr>& v) {
+			if(!obj.hasContents()) throw NullPtrException("Cannot set ElementArray on a empty XmlObject");
 			removeElems(obj,elemName);
 			FOREACH(i,v) appendElem(obj,elemName,(*i));
 		};
@@ -145,6 +147,7 @@ namespace xmlbeansxx {
 			obj.contents->setSimpleContent(c);
 		}
 		 std::string Contents::Walker::getSimpleContent(const XmlObject& obj) {
+//			if(!obj.hasContents()) throw NullPtrException("Cannot getSimpleContent from a empty XmlObject");
 			if(!obj.hasContents()) return std::string();
 			return obj.contents->getSimpleContent();
 		}

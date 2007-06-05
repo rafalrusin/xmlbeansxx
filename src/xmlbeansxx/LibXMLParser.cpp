@@ -186,6 +186,7 @@ void LibXMLParser::parse(const std::string &doc, xmlbeansxx::XmlObject &document
     while (!nodesStack.empty())
 	nodesStack.pop();
 
+    documentRoot.createContents();
     XmlObjectPtr root_ptr=boost::shared_ptr<XmlObject>(&documentRoot,null_deleter());
     
     nodesStack.push(StackEl(root_ptr,documentRoot.getSchemaType()->processContents,QName()));
@@ -515,7 +516,7 @@ void startElementNs(void *ctx,
     
 
     {
-        LOG4CXX_DEBUG2(LOG, "add attributes to cursor")
+        LOG4CXX_DEBUG2(LOG, "add attributes")
         for (int current = 0;
                 current < ATTRTABSIZE * nb_attributes;
                 current += ATTRTABSIZE) {
