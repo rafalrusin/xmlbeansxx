@@ -17,8 +17,42 @@ using namespace com::p4::mind::mytest;
 using namespace std;
 
 
-void ArrayTest::arrayTest() {
-	LOG4CXX_DEBUG(logger,"begin");
+void ArrayTest::arrayTest() 
+{
+	{
+	      	XmlArray<XmlInteger>  a=XmlArray<XmlInteger>::Factory::newInstance();
+		XmlArray<XmlPositiveInteger> b;
+        	XmlArray<XmlObject>  c;
+	        a.append(XmlInteger("101"));
+        	a.append(XmlPositiveInteger("102"));
+	        a.append(XmlInteger("103"));
+        	LOG4CXX_DEBUG(logger,"!1");
+	        LOG4CXX_DEBUG(logger,a.toString());
+	/*        c=xmlarray_java_cast<XmlObject>(a);
+	        LOG4CXX_DEBUG(logger,"!2");
+	        b=xmlarray_java_cast<XmlPositiveInteger>(c);
+	        LOG4CXX_DEBUG(logger,"!3");
+	        LOG4CXX_DEBUG(logger,a.toString());
+        	LOG4CXX_DEBUG(logger,"!4");
+	        LOG4CXX_DEBUG(logger,b.toString());
+        	LOG4CXX_DEBUG(logger,std::string(a.getArray(0).getSchemaType()->className));
+	        LOG4CXX_DEBUG(logger,std::string(a.getArray(1).getSchemaType()->className));
+        	LOG4CXX_DEBUG(logger,std::string(a.getArray(2).getSchemaType()->className));
+	        CPPUNIT_ASSERT(std::string(a.getArray(0).getSchemaType()->className)=="xmlbeansxx::XmlInteger");
+        	CPPUNIT_ASSERT(std::string(a.getArray(1).getSchemaType()->className)=="xmlbeansxx::XmlPositiveInteger");
+	        CPPUNIT_ASSERT(std::string(a.getArray(2).getSchemaType()->className)=="xmlbeansxx::XmlInteger");
+	*/
+	}
+	
+	{
+		XmlString p2("10");
+		XmlPositiveInteger p("10");
+		XmlInteger a(p);
+		a.clone();
+        	LOG4CXX_DEBUG(logger,"!2");
+	        LOG4CXX_DEBUG(logger,a.toString());
+	}
+	
 }
 
 

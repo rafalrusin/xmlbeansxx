@@ -147,7 +147,6 @@ public class ClassGen {
 			Iterator it = dict.keySet().iterator();
 			while (it.hasNext()) {
 				String k = (String) it.next();
-				String v = (String) dict.get(k);
 				wt.println("    xmlbeansxx::StoreString::store("+nsFromTS(k)+");");
 			}
 		}
@@ -694,47 +693,7 @@ public class ClassGen {
 			return prop.getJavaTypeCode()!=SchemaProperty.XML_OBJECT;
 		}
 		
-		private String convertToRet(String what, String toVar) {
-			String d = userType + " " + toVar + "=" + what + ";";
-			if (method==M_X) {
-				return d;
-			} else if (method==M_NORMAL) {
-				if (hasHolder()) {
-					String t=nextTmpID();
-					
-					return 
-						type + " " + t + "=" + what + ";\n"
-						+ userType + " " + toVar + "=(" + t + "==NULL?" + constructorFor(userType)
-						+ ":" + t + "->get" + genJGetName(prop.getJavaTypeCode()) + "Value());\n";
-				} else return d;
-			} else throw new IllegalStateException();
-		}
 		
-		private String convertToRetArray(String what,String toVar) {
-			String d = vtype + " " + toVar + "=" + what + ";";
-			if (method==M_X) {
-				return d;
-			} else if (method==M_NORMAL) {
-				if (hasHolder()) {
-					String t1 = nextTmpID();
-					String len = nextTmpID();
-					return 
-						vtype + " " + t1 + "=" + what + ";\n"
-						+ "int " + len + "=" + t1 + ".size();\n" 
-						+ vuserType + " " + toVar + "(" + len + ");\n" 
-						+ "for(int i=0; i<" + len + "; i++) {\n" 
-						+ toVar + "[i]="
-
-						+ "(" + t1 + "[i]==NULL?" + constructorFor(userType)
-						+ ":" + t1 + "[i]->get" + genJGetName(prop.getJavaTypeCode()) + "Value());\n"
-						
-						+ "}\n"
-						;
-				} else {
-					return d;
-				}
-			} else throw new IllegalStateException();
-		}
 		private String getReturnArray(String what) {
 			String d = "  return " + what + ";";
 			if (method==M_X) {
@@ -758,44 +717,6 @@ public class ClassGen {
 		}
 
 		
-		private String convertFromGiven(String what,String toVar) {
-			String def = type + " " + toVar + "=" + what + ";\n";
-			if (method==M_X) {
-				return def;
-			} else if (method==M_NORMAL) {
-				if (hasHolder()) {
-					return type + " " + toVar + "(new " + btype + "());\n"
-					+ toVar + "->set" + genJGetName(prop.getJavaTypeCode()) + "Value(" + what + ");\n";
-				} else {
-					return def;
-				}
-			} else if (method==M_STRING) {
-				return type + " " + toVar + "(new " + btype + "(" + what + "));\n";
-			} else throw new IllegalStateException();
-		}
-
-		
-		private String convertFromGivenArray(String what,String toVar) {
-			String def = vtype + " " + toVar + "=" + what + ";\n";
-			if (method==M_X) {
-				return def;
-			} else if (method==M_NORMAL) {
-				if (hasHolder()) {
-					String len=nextTmpID();
-					String t=nextTmpID();
-					return
-						"int " + len + "=" + what + ".size();\n"
-						+ vtype + " " + toVar + "(" + len + ");\n"
-						+ "for(int i=0;i<" + len + ";i++) {\n"
-						+ type + " " + t + "(new " + btype + "());\n"
-						+ t + "->set" + genJGetName(prop.getJavaTypeCode()) + "Value(" + what + "[i]);\n"
-						+ toVar + "[i]=" + t + ";\n"
-						+ "}";
-				} else {
-					return def;
-				}
-			} else throw new IllegalStateException();
-		}
 
 		/** Accessor generation kind */ 
 		public void setGenMethod(int method) {
@@ -846,8 +767,7 @@ public class ClassGen {
 					x + "cget" + javaPropertyName(prop),
 //					"xmlbeansxx::ObjectCreatorFn createFn=NULL",
 					"",
-					"  " + type + " r="
-					+ "xmlbeansxx::Contents::Walker::cgetElem(*this,"
+					"  " + type + " r=xmlbeansxx::Contents::Walker::cgetElem(*this,"
 							+ genPropName(prop)
 							+ ")" + ";\n"
 					+ getReturn("r")
@@ -858,19 +778,19 @@ public class ClassGen {
 		public void genGetArrayAt() {
 			//getArrayAt
 			genMethod("", userType, className(currentType),
-					x + "get" + javaPropertyName(prop) + "Array", "int index",
-					"  " + type + " r="
-					+ "xmlbeansxx::Contents::Walker::getElem(*this,"
-							+ genPropName(prop)
-							+ ",index)" + ";\n"
+					x + "get" + javaPropertyName(prop) + "Array",
+					"int index",
+					"  " + type + " r=xmlbeansxx::Contents::Walker::getElem(*this,"
+									+ genPropName(prop)
+									+ ",index)" + ";\n"
 					+ getReturn("r")
 					);
 		}
 		
 		public void genCGetArrayAt() {
 			//cgetAt - for gentor xpath
-			genMethod("", userType, className(currentType),
-					x + "cget" + javaPropertyName(prop) + "Array", "int index",
+			genMethod("", userType, className(currentType),x + "cget" + javaPropertyName(prop) + "Array",
+					"int index",
 					"  " + type + " r="
 					+ "xmlbeansxx::Contents::Walker::cgetElem(*this,"
 							+ genPropName(prop)
@@ -985,23 +905,23 @@ public class ClassGen {
 					+ ",index);");
 		}
 		public void genSizeOf() {
-			genMethod("","int",className(currentType),"sizeOf"+javaPropertyName(prop),"",
-					"  return xmlbeansxx::Contents::Walker::countElems(*this,"
-					+ genPropName(prop)
-					+ ");"
+			genMethod("","int",className(currentType),"sizeOf"+javaPropertyName(prop),
+					"",
+					"  return xmlbeansxx::Contents::Walker::countElems(*this," + genPropName(prop) + ");"
 				);			
 		}
 		
 		public void genIsSet() {
 			genMethod("","bool",
-					className(currentType),"isSet" + javaPropertyName(prop), "", 
+					className(currentType),"isSet" + javaPropertyName(prop),
+					"", 
 					"  return xmlbeansxx::Contents::Walker::isSetElem(*this," + genPropName(prop) + ");"
 					);
 
 		}
 		public void genIsSetAttr() {
-			genMethod("","bool",
-					className(currentType),"isSet" + javaPropertyName(prop), "", 
+			genMethod("","bool", className(currentType),"isSet" + javaPropertyName(prop),
+					"", 
 					"return xmlbeansxx::Contents::Walker::getAttr(*this," + genPropName(prop) + ")!=NULL;"
 					);
 		}
@@ -1018,17 +938,15 @@ public class ClassGen {
 
 		}
 		public void genUnSet() {
-			out.h.println("  void unset" + javaPropertyName(prop)
-					+ "();");
-			out.cpp.println("void " + className(currentType)
-					+ "::unset" + javaPropertyName(prop) + "() {");
+			out.h.println("  void unset" + javaPropertyName(prop) + "();");
+			out.cpp.println("void " + className(currentType) + "::unset" + javaPropertyName(prop) + "() {");
 			out.cpp.println("  xmlbeansxx::Contents::Walker::removeElems(*this," + genPropName(prop) + ");");
 			out.cpp.println("}");
 
 		}
 		public void genUnSetAttr() {
-			genMethod("","void",className(currentType),"unset"
-					+ javaPropertyName(prop),"",
+			genMethod("","void",className(currentType),"unset" + javaPropertyName(prop),
+					"",
 					"  xmlbeansxx::Contents::Walker::setAttr(*this," + genPropName(prop) + ",xmlbeansxx::ContentsPtr());"
 					);
 		}
@@ -1038,7 +956,7 @@ public class ClassGen {
 			//set
 			genMethod("", "void", className(currentType), 
 					x + "set" + javaPropertyName(prop),
-					"const " + userType + "& value",
+					"const " + refAmp(userType) + "value",
 					convertFromGivenAndSet("value")
 					);
 		}
@@ -1048,7 +966,7 @@ public class ClassGen {
 			genMethod("", "void",
 					className(currentType),
 					x + "set" + javaPropertyName(prop)+ "Array",
-					"const " + vuserType + "& values",
+					"const " + refAmp(vuserType) + "values",
 					convertFromGivenArrayAndSet("values")
 					);
 		}
@@ -1058,7 +976,7 @@ public class ClassGen {
 			genMethod("", "void",
 					className(currentType),
 					"dset" + javaPropertyName(prop)+ "Array",
-					"const " + dvtype + "& values",
+					"const " + refAmp(dvtype) + "values",
 					"xmlbeansxx::Contents::Walker::setElemArray(*this,"
 					+ genPropName(prop)
 					+ ",values.getArray());");
@@ -1072,12 +990,18 @@ public class ClassGen {
 					);
 
 		}
+		
+		public String refAmp(String type){
+			if(type.equals("int")) return "int ";
+			return type + "& ";
+		}
+		
 		public void genAdd() {
 			//append
 			genMethod("", "void", 
 					className(currentType),
 					x + "add" + javaPropertyName(prop),
-					"const " + userType + "& value",
+					"const " + refAmp(userType) + "value",
 					convertFromGivenAndAppend("value")
 					);
 		}
@@ -1086,7 +1010,7 @@ public class ClassGen {
 			//setArray
 			genMethod("", "void", className(currentType), 
 					x + "set" + javaPropertyName(prop) + "Array",
-					"int index, const " + userType + "& value",
+					"int index, const " + refAmp(userType) + "value",
 					convertFromGivenAndSetAt("value","index"));
 		}
 		
@@ -1096,7 +1020,7 @@ public class ClassGen {
 			genMethod("", "void", 
 					className(currentType),
 					x + "set" + javaPropertyName(prop),
-					"const " + userType + "& value",
+					"const " + refAmp(userType) + "value",
 					convertFromGivenAndSetAttr("value")
 					);
 		}
@@ -1539,7 +1463,7 @@ public class ClassGen {
 		
 		out.h.println("    static const Enum& forString(const std::string& s);");
 		out.h.println("    static const Enum& forInt(int i);");
-		out.h.println("    operator std::string() const { return str; }");
+		out.h.println("    std::string toString() const { return str; }");
 		out.h.println("    operator int() const { return val; }");
 		
 		
@@ -1556,7 +1480,7 @@ public class ClassGen {
 		
 		out.h.println("  operator Enum() const { return Enum::forString(this->getStringValue()); }");
 	    out.h.println("  int getEnumValue() const { return Enum(*this); } ");
-	    out.h.println("  void setEnumValue(int s) { setStringValue(Enum::forInt(s)); }");
+	    out.h.println("  void setEnumValue(int s) { setStringValue(Enum::forInt(s).toString()); }");
 
 		for(int i=0;i < e.length; i++) out.h.println("  static const Enum "+ e[i].getEnumName() + ";");
 		out.h.println();

@@ -1,5 +1,5 @@
 SUBDIRS =
-EXTRA_DIST = a.xml b.xml c.xml c.xsd c.xh entities.xml entities.xsd log4j.xml
+EXTRA_DIST = a.xml b.xml c.xml c.xsd c.xh entities.xml entities.xsd log4j.xml pawel.xsd
 
 
 INCLUDES =
@@ -14,20 +14,21 @@ endif
 INCLUDES += -I ../src
 LDADD += ../src/xmlbeansxx/libxmlbeansxx.la
 
-SCHEMAS_XSD = c.xsd entities.xsd
-SCHEMAS_CPP = c.cpp entities.cpp
-SCHEMAS_H = c.h entities.h
+SCHEMAS_XSD = c.xsd entities.xsd pawel.xsd
+SCHEMAS_CPP = c.cpp entities.cpp pawel.cpp
+SCHEMAS_H = c.h entities.h pawel.h
 
 BUILT_SOURCES = $(SCHEMAS_CPP) $(SCHEMAS_H)
 
 $(SCHEMAS_CPP) $(SCHEMAS_H): $(SCHEMAS_XSD) c.xh
 	${top_builddir}/generator/dist/bin/xmlbeansxx-gen $(SCHEMAS_XSD)
 
-TESTS=BeansTest GenTest EntitiesTest ArrayTest
+TESTS=BeansTest GenTest EntitiesTest ArrayTest EnumTest
 check_PROGRAMS = $(TESTS)
 BeansTest_SOURCES=TestApp.cpp BeansTest.cpp BeansTest.h
 ArrayTest_SOURCES=TestApp.cpp ArrayTest.cpp ArrayTest.h
 GenTest_SOURCES=TestApp.cpp GenTest.cpp GenTest.h 
+EnumTest_SOURCES=TestApp.cpp EnumTest.cpp EnumTest.h pawel.h pawel.cpp
 EntitiesTest_SOURCES=TestApp.cpp EntitiesTest.cpp EntitiesTest.h entities.h entities.cpp
 nodist_GenTest_SOURCES = c.h c.cpp
 
