@@ -118,7 +118,7 @@ public:
     boost::recursive_mutex &mutex() const;
 #endif
 
-    virtual XmlObjectPtr clone() const;
+    virtual XmlObject clone() const;
 
     virtual std::string getSimpleContent() const;
     virtual void setSimpleContent(const std::string &value);

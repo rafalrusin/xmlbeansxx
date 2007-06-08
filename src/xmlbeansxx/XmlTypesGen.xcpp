@@ -147,13 +147,12 @@ void XmlObject::swapContents(const ContentsPtr& p)
 }
 */
 
-XmlObjectPtr XmlObject::clone() const {
+XmlObject XmlObject::clone() const {
     XmlObjectPtr n=getSchemaType()->createFn();
     n->swapContents(this->contents->clone());
 
 //    xmlbenasxx::Contents::Walker::copyFrom(n,this->contents);
-    n->setSimpleContent(getSimpleContent());
-    return n;
+    return XmlObject(n->contents);
 }
 
 std::string XmlObject::getSimpleContent() const {
