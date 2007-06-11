@@ -607,6 +607,11 @@ public class ClassGen {
 		out.h.println(" " + h_opts + " " + resultType + " " + methodName + "(" + params + ");");
 		out.cpp.println(resultType + " " + className + "::" + methodName + "(" + cutAssigns(params) + ") {\n" + body + "\n}" );
 	}
+	void genMethodConst(String h_opts,String resultType,String className,String methodName,String params,String body) {
+		out.h.println(" " + h_opts + " const " + resultType + " " + methodName + "(" + params + ") const;");
+		out.cpp.println("const " + resultType + " " + className + "::" + methodName + "(" + cutAssigns(params) + ") const {\n" + body + "\n}" );
+	}
+
 	
 	public static String genCreateFn(SchemaType st) {
 		return fullClassName(st)+"::Factory::newInstanceXmlObject";
@@ -752,6 +757,16 @@ public class ClassGen {
 		
 		
 		public void genGet() {
+			// const get() const
+			genMethodConst("", userType, className(currentType), 
+					x + "get" + javaPropertyName(prop), "", 
+					"  " + type + " r="
+					+ "xmlbeansxx::Contents::Walker::getElem(*this,"
+							+ genPropName(prop)
+							+ ")" + ";\n"
+					+ getReturn("r")
+					);
+
 			genMethod("", userType, className(currentType), 
 					x + "get" + javaPropertyName(prop), "", 
 					"  " + type + " r="
@@ -760,6 +775,7 @@ public class ClassGen {
 							+ ")" + ";\n"
 					+ getReturn("r")
 					);
+
 		}
 
 		public void genCGet() {
@@ -878,21 +894,23 @@ public class ClassGen {
 			String indexStr="";
 			if(index.length() > 0) indexStr=","+index;
 
-			String def = "  " + how + "(*this,"+genPropName(prop)+","+what+".contents"+indexStr+");";
-//			= type + " " + toVar + "=" + what + ";\n";
+			String def = 	  "  " + how + "(*this,"+genPropName(prop)+","+what+".contents"+indexStr+");\n";
+//							+ "  return value;";
 			if (method==M_X) {
 				return def;
 			} else if (method==M_NORMAL) {
 				if (hasHolder()) {
 					return "  " + type + " v;\n"
 					+ "  v.set" + genJGetName(prop.getJavaTypeCode()) + "Value(" + what + ");\n"
-					+ "  " + how +"(*this,"+genPropName(prop)+",v.contents"+indexStr+");";
+					+ "  " + how +"(*this,"+genPropName(prop)+",v.contents"+indexStr+");\n";
+//					+ "  return v;"; 
 				} else {
 					return def;
 				}
 			} else if (method==M_STRING) {
-				return  "  " + type + " v("+what+");\n"
+				return    "  " + type + " v("+what+");\n"
 				  		+ "  " + how +  "(*this,"+genPropName(prop)+",v.contents"+indexStr+");\n";
+//				  		+ "  return v;";
 
 			} else throw new IllegalStateException();
 		}

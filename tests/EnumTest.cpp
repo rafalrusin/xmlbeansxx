@@ -25,6 +25,9 @@ void EnumTest::enumTest()
 		k.setAla(12);
 		k.setEnumTest(Klient_EnumTest::ATOMEK);
 
+//		a= k.xgetEnumTest()
+//		a.setSimpleString(" ble ble ");
+
 	        LOG4CXX_DEBUG(logger,"Klient: " + k.toString());
 		CPPUNIT_ASSERT(k.getEnumTest() == Klient_EnumTest::ATOMEK);
 	        LOG4CXX_DEBUG(logger,"Klient int: " <<  k.getEnumTest() );
