@@ -793,6 +793,15 @@ public class ClassGen {
 		
 		public void genGetArrayAt() {
 			//getArrayAt
+			//const
+			genMethodConst("", userType, className(currentType),
+					x + "get" + javaPropertyName(prop) + "Array",
+					"int index",
+					"  " + type + " r=xmlbeansxx::Contents::Walker::getElem(*this,"
+									+ genPropName(prop)
+									+ ",index)" + ";\n"
+					+ getReturn("r")
+					);
 			genMethod("", userType, className(currentType),
 					x + "get" + javaPropertyName(prop) + "Array",
 					"int index",
@@ -818,6 +827,17 @@ public class ClassGen {
 		
 		
 		public void genGetAttr() {
+			//const 
+			genMethodConst("", userType, 
+					className(currentType),
+					x + "get" + javaPropertyName(prop),
+					"",
+					"  " + type + " c=xmlbeansxx::Contents::Walker::getAttr(*this,"
+							+ genPropName(prop) + ");\n"
+					+ getReturn("c")
+					);
+
+			
 			genMethod("", userType, 
 					className(currentType),
 					x + "get" + javaPropertyName(prop),
@@ -831,6 +851,18 @@ public class ClassGen {
 
 		public void genGetArray() {
 			//get_array
+			//const
+			genMethodConst("", vuserType, className(currentType), 
+					x + "get" + javaPropertyName(prop) + "Array",
+					"",
+					"  " + vtype + " a(" + genThrowingVectorConv(btype, 
+							"xmlbeansxx::Contents::Walker::getElemArray(*this,"
+							+ genPropName(prop)
+							+ "))" ) 
+							+ ";\n"
+					+ getReturnArray("a")
+					);
+
 			genMethod("", vuserType, className(currentType), 
 					x + "get" + javaPropertyName(prop) + "Array",
 					"",
@@ -845,6 +877,11 @@ public class ClassGen {
 
 		public void genDGetArray() {
 			//dget_array
+			genMethodConst("", dvtype, className(currentType), 
+					"dget" + javaPropertyName(prop) + "Array",
+					"",
+					"  return xmlbeansxx::Contents::Walker::getElemArray(*this," + genPropName(prop) + ");\n"
+					);
 			genMethod("", dvtype, className(currentType), 
 					"dget" + javaPropertyName(prop) + "Array",
 					"",
