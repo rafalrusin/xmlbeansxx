@@ -39,6 +39,9 @@ void EnumTest::enumTest()
 
 
 	}
+	{
+	
+	}
 	
 }
 

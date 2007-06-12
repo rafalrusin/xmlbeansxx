@@ -71,6 +71,15 @@ typedef XmlObject (*ObjectCreatorFn)();
 //--------------------------
 std::string istreamToString(std::istream &in);
 
+template<class T2,class T>
+bool _cast_test(const T &a) {
+	if(!a.hasContents()) return false;
+	boost::shared_ptr<xmlbeansxx::XmlObject> p = xmlbeansxx::Contents::Walker::OrginalXmlObject(a.contents);
+	if(boost::dynamic_pointer_cast<T2>(p)) return true;
+	return false;
+}
+
+
 class XmlAnySimpleType;
 DECLARE_PTR(XmlAnySimpleType,XmlAnySimpleTypePtr,constXmlAnySimpleTypePtr)
 

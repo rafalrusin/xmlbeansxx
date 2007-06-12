@@ -1551,12 +1551,15 @@ public class ClassGen {
 		out.cpp.println(className(st) + "::" + className(st) + "()" + parentConstructor(st, "xmlbeansxx::Void()") + " { "
 				+ // contents->insertDefaults(" + className(st) + "::type());
 				 " }");
-
+		
 		if(!isXmlObject(st)){
 			out.h.println("  " + className(st) + "(const xmlbeansxx::ContentsPtr& p);");
 			out.cpp.println(className(st) + "::" + className(st) + "(const xmlbeansxx::ContentsPtr& p)" + parentConstructor(st, "p") + " { } \n");
 			out.h.println("  " + className(st) + "(const xmlbeansxx::XmlObject& p);");
-			out.cpp.println(className(st) + "::" + className(st) + "(const xmlbeansxx::XmlObject& p)" + parentConstructor(st, "p") + " { } \n");
+			out.cpp.println(className(st) + "::" + className(st) + "(const xmlbeansxx::XmlObject& p) {\n" +
+					"  if(!xmlbeansxx::_cast_test<" + className(st) + ">(p)) throw xmlbeansxx::ClassCastException( ((p) ? p.contents->st->className : \"unknow\") + \" to " + className(st) + "\");\n" +
+					"  swapContents(p.contents);\n" +
+					"}");
 
 		}
 
@@ -1566,6 +1569,9 @@ public class ClassGen {
 				out.h.println("  " + className(st) + "(const std::string &value);");
 				out.cpp.println(className(st) + "::" + className(st)
 						+ "(const std::string &value) { setSimpleContent(value);}");
+				if(!className(st).equals("XmlAnySimpleType"))
+					out.h.println("  "+className(st)+"(const xmlbeansxx::XmlAnySimpleType &v) {  setSimpleContent(v.getSimpleContent()); }");  
+
 			}
 			
 			{
@@ -1574,8 +1580,6 @@ public class ClassGen {
 				out.cpp.println("  setSimpleContent(v.getSimpleContent());");  
 				out.cpp.println("}");  
 */	
-				if(!className(st).equals("XmlAnySimpleType"))
-					out.h.println("  "+className(st)+"(const xmlbeansxx::XmlAnySimpleType &v) {  setSimpleContent(v.getSimpleContent()); }");  
 //						out.h.println("  "+className(st)+"(const "+className(st)+" &v) "+ parentConstructor(st, "v") + " { } ");  
 
 			}

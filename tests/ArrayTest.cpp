@@ -47,12 +47,45 @@ void ArrayTest::arrayTest()
 		XmlPositiveInteger  pp("10");
 		XmlInteger aa(pp);
 		XmlInteger bb=p2;
+		XmlInteger cc("12");
+		XmlPositiveInteger dd(cc);
         	LOG4CXX_DEBUG(logger,"!2");
 	        LOG4CXX_DEBUG(logger,aa.toString());
 	        LOG4CXX_DEBUG(logger,bb.toString());
+	        LOG4CXX_DEBUG(logger,dd.toString());
 	}
-	
+
+	{
+	//cast
+	        LOG4CXX_DEBUG(logger,"cast!!");
+		Personinfo p=Personinfo::Factory::newInstance();
+		p.setFirstname("ala");
+		
+		try {
+			Fullpersoninfo p2(p);
+	        	LOG4CXX_DEBUG(logger,"invalid cast");
+			CPPUNIT_ASSERT(false);
+		} 
+		catch (xmlbeansxx::ClassCastException& e) {
+	        	LOG4CXX_DEBUG(logger,"catch exception");		
+		}
+		
+		Fullpersoninfo p2=Fullpersoninfo::Factory::newInstance();
+		p2.setAge("10");
+		
+		XmlObject o(p2);
+		Personinfo p3(o);
+		Fullpersoninfo p4(o);
+		
+		LOG4CXX_DEBUG(logger,p4.toString());
+		LOG4CXX_DEBUG(logger,p3.toString());
+		CPPUNIT_ASSERT(p4.digest()==p3.digest());
+		
+		
+	}	
 }
+
+
 
 
 

@@ -105,6 +105,8 @@ T2 java_cast(const T &a) {
 	return T2(a);
 }
 
+
+
 /*
 template<class T2,class T>
 std::vector<boost::shared_ptr<T2> > vector_java_cast(const std::vector<boost::shared_ptr<T> > &a) {

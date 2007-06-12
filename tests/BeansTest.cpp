@@ -191,7 +191,7 @@ void namespaceTests() {
         LOG4CXX_DEBUG(logger,"!1");
         c=xmlarray_java_cast<XmlObject>(a);
         LOG4CXX_DEBUG(logger,"!2");
-        b=xmlarray_java_cast<XmlPositiveInteger>(c);
+        b=xmlarray_java_cast<XmlPositiveInteger>(a);
         LOG4CXX_DEBUG(logger,"!3");
         LOG4CXX_DEBUG(logger,a.toString());
         LOG4CXX_DEBUG(logger,"!4");

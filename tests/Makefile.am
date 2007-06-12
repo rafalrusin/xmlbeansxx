@@ -26,7 +26,7 @@ $(SCHEMAS_CPP) $(SCHEMAS_H): $(SCHEMAS_XSD) c.xh
 TESTS=BeansTest GenTest EntitiesTest ArrayTest EnumTest
 check_PROGRAMS = $(TESTS)
 BeansTest_SOURCES=TestApp.cpp BeansTest.cpp BeansTest.h
-ArrayTest_SOURCES=TestApp.cpp ArrayTest.cpp ArrayTest.h
+ArrayTest_SOURCES=TestApp.cpp ArrayTest.cpp ArrayTest.h c.cpp
 GenTest_SOURCES=TestApp.cpp GenTest.cpp GenTest.h 
 EnumTest_SOURCES=TestApp.cpp EnumTest.cpp EnumTest.h pawel.h pawel.cpp
 EntitiesTest_SOURCES=TestApp.cpp EntitiesTest.cpp EntitiesTest.h entities.h entities.cpp
