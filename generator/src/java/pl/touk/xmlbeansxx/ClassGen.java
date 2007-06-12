@@ -889,74 +889,56 @@ public class ClassGen {
 			String indexStr="";
 			if(index.length() > 0) indexStr=","+index;
 
-			String def = 	  "  " + how + "(*this,"+genPropName(prop)+","+what+".contents"+indexStr+");\n";
+			String def = 	  "  " + how + "(*this,"+genPropName(prop)+","+what+".contents"+indexStr+");";
 			if (method==M_X) {
 				return def;
 			} else if (method==M_NORMAL) {
 				if (hasHolder()) {
 					return "  " + type + " v;\n"
 					+ "  v.set" + genJGetName(prop.getJavaTypeCode()) + "Value(" + what + ");\n"
-					+ "  " + how +"(*this,"+genPropName(prop)+",v.contents"+indexStr+");\n";
+					+ "  " + how +"(*this,"+genPropName(prop)+",v.contents"+indexStr+");";
 				} else {
 					return def;
 				}
 			} else if (method==M_STRING) {
 				return    "  " + type + " v("+what+");\n"
-				  		+ "  " + how +  "(*this,"+genPropName(prop)+",v.contents"+indexStr+");\n";
+				  		+ "  " + how +  "(*this,"+genPropName(prop)+",v.contents"+indexStr+");";
 
 			} else throw new IllegalStateException();
 		}
 
 		public void genRemove() {
-			genMethod("", "void", className(currentType), "remove" + javaPropertyName(prop),
-					"int index",
-					"  xmlbeansxx::Contents::Walker::removeElemAt(*this,"
-					+ genPropName(prop)
-					+ ",index);");
+			genMethodWithReturn("remove" + javaPropertyName(prop), "int index", 
+					"  xmlbeansxx::Contents::Walker::removeElemAt(*this," + genPropName(prop) + ",index);");
 		}
 		public void genSizeOf() {
-			genMethod("","int",className(currentType),"sizeOf"+javaPropertyName(prop),
-					"",
-					"  return xmlbeansxx::Contents::Walker::countElems(*this," + genPropName(prop) + ");"
-				);			
+			genMethod("", "int", className(currentType), "sizeOf" + javaPropertyName(prop), "",
+					"  return xmlbeansxx::Contents::Walker::countElems(*this," + genPropName(prop) + ");");			
 		}
 		
 		public void genIsSet() {
-			genMethod("","bool",
-					className(currentType),"isSet" + javaPropertyName(prop),
-					"", 
-					"  return xmlbeansxx::Contents::Walker::isSetElem(*this," + genPropName(prop) + ");"
-					);
+			genMethod("", "bool", className(currentType), "isSet" + javaPropertyName(prop), "", 
+					"  return xmlbeansxx::Contents::Walker::isSetElem(*this," + genPropName(prop) + ");");
 
 		}
 		public void genIsSetAttr() {
-			genMethod("","bool", className(currentType),"isSet" + javaPropertyName(prop),
-					"", 
-					"return xmlbeansxx::Contents::Walker::getAttr(*this," + genPropName(prop) + ")!=NULL;"
-					);
+			genMethod("", "bool", className(currentType), "isSet" + javaPropertyName(prop), "", 
+					"return xmlbeansxx::Contents::Walker::getAttr(*this," + genPropName(prop) + ")!=NULL;");
 		}
 		
 		public void genUnSetArray() {
 			//unset_array
-			genMethod("", "void", 
-					className(currentType),
-					"unset" + javaPropertyName(prop)+ "Array",
-					"",
-					"  xmlbeansxx::Contents::Walker::removeElems(*this,"
-					+ genPropName(prop) + ");"
-					);
+			genMethodWithReturn("unset" + javaPropertyName(prop)+ "Array","",
+					"  xmlbeansxx::Contents::Walker::removeElems(*this," + genPropName(prop) + ");");
 
 		}
 		public void genUnSet() {
-			out.h.println("  void unset" + javaPropertyName(prop) + "();");
-			out.cpp.println("void " + className(currentType) + "::unset" + javaPropertyName(prop) + "() {");
-			out.cpp.println("  xmlbeansxx::Contents::Walker::removeElems(*this," + genPropName(prop) + ");");
-			out.cpp.println("}");
+			genMethodWithReturn("unset" + javaPropertyName(prop),"",
+					"  xmlbeansxx::Contents::Walker::removeElems(*this," + genPropName(prop) + ");");
 
 		}
 		public void genUnSetAttr() {
-			genMethod("","void",className(currentType),"unset" + javaPropertyName(prop),
-					"",
+			genMethodWithReturn("unset" + javaPropertyName(prop),"",
 					"  xmlbeansxx::Contents::Walker::setAttr(*this," + genPropName(prop) + ",xmlbeansxx::ContentsPtr());"
 					);
 		}
@@ -964,7 +946,7 @@ public class ClassGen {
 		
 		public void genSet() {
 			//set
-			genMethod("", "void", className(currentType), 
+			genMethodWithReturn( 
 					x + "set" + javaPropertyName(prop),
 					"const " + refAmp(userType) + "value",
 					convertFromGivenAndSet("value")
@@ -973,8 +955,7 @@ public class ClassGen {
 	
 		public void genSetArray() {
 			//set_array
-			genMethod("", "void",
-					className(currentType),
+			genMethodWithReturn(
 					x + "set" + javaPropertyName(prop)+ "Array",
 					"const " + refAmp(vuserType) + "values",
 					convertFromGivenArrayAndSet("values")
@@ -983,8 +964,7 @@ public class ClassGen {
 		
 		public void genDSetArray() {
 			//set_array
-			genMethod("", "void",
-					className(currentType),
+			genMethodWithReturn(
 					"dset" + javaPropertyName(prop)+ "Array",
 					"const " + refAmp(dvtype) + "values",
 					"xmlbeansxx::Contents::Walker::setElemArray(*this,"
@@ -1006,11 +986,16 @@ public class ClassGen {
 			return type + "& ";
 		}
 		
+		public void genMethodWithReturn(String methodName,String params,String body) {
+			genMethod("", className(currentType) + "&",
+					className(currentType),
+					methodName,
+					params,
+					body + "\n  return *this;");
+		}
 		public void genAdd() {
 			//append
-			genMethod("", "void", 
-					className(currentType),
-					x + "add" + javaPropertyName(prop),
+			genMethodWithReturn(x + "add" + javaPropertyName(prop),
 					"const " + refAmp(userType) + "value",
 					convertFromGivenAndAppend("value")
 					);
@@ -1018,8 +1003,7 @@ public class ClassGen {
 
 		public void genSetArrayAt() {
 			//setArray
-			genMethod("", "void", className(currentType), 
-					x + "set" + javaPropertyName(prop) + "Array",
+			genMethodWithReturn(x + "set" + javaPropertyName(prop) + "Array",
 					"int index, const " + refAmp(userType) + "value",
 					convertFromGivenAndSetAt("value","index"));
 		}
@@ -1027,8 +1011,7 @@ public class ClassGen {
 		
 		
 		public void genSetAttr() {
-			genMethod("", "void", 
-					className(currentType),
+			genMethodWithReturn(
 					x + "set" + javaPropertyName(prop),
 					"const " + refAmp(userType) + "value",
 					convertFromGivenAndSetAttr("value")
