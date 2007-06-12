@@ -104,10 +104,6 @@ namespace xmlbeansxx {
 			return obj.contents->hasElements();
 		};
 		
-/*		 ContentsPtr create(){
-			return  ContentsPtr(new Contents);
-		}
-*/
 		 std::vector<std::pair<QName,ContentsPtr> > Contents::Walker::getElems(const XmlObject& obj) {
 			if(!obj.hasContents()) throw NullPtrException("Cannot get elements from a empty XmlObject");
 			return obj.contents->getElems();
@@ -137,12 +133,7 @@ namespace xmlbeansxx {
 			if(!obj.hasContents()) throw NullPtrException("Cannot serialize an empty XmlObject");
 			obj.contents->serializeDocument(o,options);
 		};
-/*		 void Contents::Walker::serialize2(XmlObject& obj,int emptyNsID,bool printXsiType,const QName& elemName,std::ostream &o,const xmlbeansxx::SchemaType * st) {
-			obj.createContents();
-			obj.contents->serialize2(emptyNsID,printXsiType,elemName,o,st);
-		}
-		
-*/		 void Contents::Walker::setSimpleContent(XmlObject& obj,const std::string &c) {
+		 void Contents::Walker::setSimpleContent(XmlObject& obj,const std::string &c) {
 			obj.createContents();
 			obj.contents->setSimpleContent(c);
 		}
@@ -162,11 +153,9 @@ namespace xmlbeansxx {
 		    if(!p) return " NULL ";
 		    std::string s(" { ");
 		    FOREACH(i,p->elems.contents){
-//			s+= i->name +" (" + i->name.first.buf ","+ i->name.second.buf+ ") = " + dump(i->value); 
 			s+= i->name +" = " + dump(i->value); 
 		    };
 		    FOREACH(i,p->attrs.contents){
-//			s+="@" + i->name +" (" + i->name.first.buf ","+ i->name.second.buf+ ") = " + dump(i->value); 
 			s+= "@" +i->name +" = " + dump(i->value); 
 		    };
 		    s+= p->value;

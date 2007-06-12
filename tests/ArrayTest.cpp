@@ -44,11 +44,12 @@ void ArrayTest::arrayTest()
 	
 	{
 		XmlString p2("10");
-		XmlPositiveInteger p("10");
-		XmlInteger a(p);
-		a.clone();
+		XmlPositiveInteger  pp("10");
+		XmlInteger aa(pp);
+		XmlInteger bb=p2;
         	LOG4CXX_DEBUG(logger,"!2");
-	        LOG4CXX_DEBUG(logger,a.toString());
+	        LOG4CXX_DEBUG(logger,aa.toString());
+	        LOG4CXX_DEBUG(logger,bb.toString());
 	}
 	
 }

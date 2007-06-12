@@ -1569,10 +1569,15 @@ public class ClassGen {
 			}
 			
 			{
-				out.h.println("  "+className(st)+"(const xmlbeansxx::XmlAnySimpleType &v);");
+/*				out.h.println("  "+className(st)+"(const xmlbeansxx::XmlAnySimpleType &v);");
 				out.cpp.println(className(st)+"::"+className(st)+"(const xmlbeansxx::XmlAnySimpleType &v) {");
 				out.cpp.println("  setSimpleContent(v.getSimpleContent());");  
 				out.cpp.println("}");  
+*/	
+				if(!className(st).equals("XmlAnySimpleType"))
+					out.h.println("  "+className(st)+"(const xmlbeansxx::XmlAnySimpleType &v) {  setSimpleContent(v.getSimpleContent()); }");  
+//						out.h.println("  "+className(st)+"(const "+className(st)+" &v) "+ parentConstructor(st, "v") + " { } ");  
+
 			}
 			
 			
