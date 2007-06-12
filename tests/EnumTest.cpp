@@ -21,9 +21,7 @@ void EnumTest::enumTest()
 
 		Klient k;
 		k.setSimpleContent("ala ma kota");
-		k.setNazwa("pawel");
-		k.setAla(12);
-		k.setEnumTest(Klient_EnumTest::ATOMEK);
+		k.setNazwa("pawel").setAla(12).setEnumTest(Klient_EnumTest::ATOMEK);
 
 //		a= k.xgetEnumTest()
 //		a.setSimpleString(" ble ble ");

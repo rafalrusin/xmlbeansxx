@@ -23,9 +23,7 @@ void ArrayTest::arrayTest()
 	      	XmlArray<XmlInteger>  a=XmlArray<XmlInteger>::Factory::newInstance();
 		XmlArray<XmlPositiveInteger> b;
         	XmlArray<XmlObject>  c;
-	        a.append(XmlInteger("101"));
-        	a.append(XmlPositiveInteger("102"));
-	        a.append(XmlInteger("103"));
+	        a.append(XmlInteger("101")).append(XmlPositiveInteger("102")).append(XmlInteger("103"));
         	LOG4CXX_DEBUG(logger,"!1");
 	        LOG4CXX_DEBUG(logger,a.toString());
 	/*        c=xmlarray_java_cast<XmlObject>(a);

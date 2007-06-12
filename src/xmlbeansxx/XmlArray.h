@@ -112,22 +112,25 @@ public:
         TRACER(XmlArray_log,"cgetArrayAt");
         return xmlbeansxx::Contents::Walker::cgetElem(*this,XmlArray_elemName,i);
     }
-    void setArray(int i,T value) {
+    XmlArray<T>& setArray(int i,T value) {
         TRACER(XmlArray_log,"setArrayAt");
         xmlbeansxx::Contents::Walker::setElem(*this,XmlArray_elemName,value.contents,i);
+	return *this;
     }
     
     T xgetArray(int i) const { return getArray(i); }
     T xcgetArray(int i) { return cgetArray(i); }
-    void xsetArray(int i,T value) { return setArray(i,value); }
+    XmlArray<T>& xsetArray(int i,T value) { return setArray(i,value); }
     
-    void append(T value) {
+    XmlArray<T>& append(T value) {
         TRACER(XmlArray_log,"append");
         xmlbeansxx::Contents::Walker::appendElem(*this,XmlArray_elemName,value.contents);
+	return *this;
     }
-    void unset() {
+    XmlArray<T>&  unset() {
         TRACER(XmlArray_log,"unset");
         xmlbeansxx::Contents::Walker::removeElems(*this,XmlArray_elemName);
+	return *this;
     }
     
     int size() const {
@@ -139,13 +142,15 @@ public:
         return XmlInteger(size());
     }
 
-    void setArray(const std::vector<T> &vec) {
+    XmlArray<T>& setArray(const std::vector<T> &vec) {
         TRACER(XmlArray_log,"setArrayT");
 	xmlbeansxx::Contents::Walker::setElemArray(*this,XmlArray_elemName,vec);
+	return *this;
     }
-    void setArray(const std::vector<ContentsPtr> &vec) {
+    XmlArray<T>&  setArray(const std::vector<ContentsPtr> &vec) {
         TRACER(XmlArray_log,"setArray");
 	xmlbeansxx::Contents::Walker::setElemArray(*this,XmlArray_elemName,vec);
+	return *this;
     }
 
     std::vector<T> getArray() const {
