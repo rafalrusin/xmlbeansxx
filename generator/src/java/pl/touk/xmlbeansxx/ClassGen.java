@@ -1342,14 +1342,14 @@ public class ClassGen {
 		out.cpp.println("xmlbeansxx::SchemaType "
 				+ className(st) + "::initSchemaType() {");
 	
-		{
+/*		{
 			SchemaProperty[] properties = st.getProperties();
 			for (int i = 0; i < properties.length; i++) {
 				SchemaProperty p = properties[i];
 				out.cpp.println("  " + genPropName(p) +  " = " + genQNameStore(p) + ";");
 			}
 		}
-
+*/
 		out.cpp.println();
 	
 		out.cpp.println("  xmlbeansxx::SchemaType st(typeid("+fullClassName(st)+"));");
@@ -1404,7 +1404,8 @@ public class ClassGen {
 				for (int i = 0; i < properties.length; i++) {
 					SchemaProperty p = properties[i];
 					out.cpp.println("  st.attributes[" + 
-							genPropName(p) //p.getName().getLocalPart()
+//							genPropName(p) //p.getName().getLocalPart()
+							genQNameStore(p)							
 							+ "]=xmlbeansxx::SchemaPropertyPtr(new xmlbeansxx::SchemaProperty(" + (i + 1) + ","+genTypeFn(p.getType())+", " + genDefaultSingletonStringPtr(p) + "));");
 				}
 			}
