@@ -46,7 +46,11 @@ public class TSLoader {
 	    //XmlErrorWatcher errorListener = new XmlErrorWatcher(new XmlErrorPrinter(true,null));
 	    XmlErrorWatcher errorListener = new XmlErrorWatcher(new MyXmlErrorPrinter());
 	    //XmlErrorWatcher errorListener = new XmlErrorWatcher(Collections.EMPTY_SET);
-        SchemaTypeSystem system = loadTypeSystem2(name, xsdFiles, null, false, false, false, Collections.EMPTY_SET, baseDir, new HashMap(), errorListener);
+        SchemaTypeSystem system = loadTypeSystem2(name, xsdFiles, null,
+        		System.getProperty("download") != null,
+        		System.getProperty("noUpa") != null,
+        		System.getProperty("noPvr") != null,
+        		Collections.EMPTY_SET, baseDir, new HashMap(), errorListener);
         if (errorListener.hasError())
             return null;
         return system;

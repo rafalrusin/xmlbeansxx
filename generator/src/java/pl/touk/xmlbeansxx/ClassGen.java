@@ -2152,6 +2152,7 @@ public class ClassGen {
 			} else {
 				String[] xsds = args;
 				SchemaTypeSystem ts = loadTS(baseFileName(args[0]), xsds);
+				log.info("SchemaTypeSystem: " + args[0]);
 
 				for (int i = 0; i < xsds.length; i++) {
 					String name = baseFileName(xsds[i]);
