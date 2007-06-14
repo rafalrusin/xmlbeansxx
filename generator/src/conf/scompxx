@@ -202,6 +202,7 @@ AC_CONFIG_FILES([Makefile $SRC_DIR/Makefile])
 AC_OUTPUT
 EOF
 RUN_CONFIGURE=1
+RUN_BOOTSTRAP=1
 fi
 
 if ! [ -e bootstrap ]; then
@@ -212,6 +213,7 @@ mkdir -p config m4 && aclocal -I m4 && autoheader && libtoolize --automake --cop
 EOF
 chmod +x bootstrap
 RUN_BOOTSTRAP=1
+RUN_CONFIGURE=1
 fi
 
 ## Launching makefiles generation ##
