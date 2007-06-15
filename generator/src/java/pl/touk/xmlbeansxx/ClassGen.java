@@ -519,25 +519,25 @@ public class ClassGen {
 	}*/
 
 	public static String genThrowingCast(String to, String fromPtr) {
-		//return "boost::dynamic_pointer_cast<" + to + ">("+fromPtr+")";
-		return "xmlbeansxx::java_cast<" + to + ">(" + fromPtr + ")";
+		//return "boost::dynamic_pointer_cast<" + to + " >("+fromPtr+")";
+		return "xmlbeansxx::java_cast<" + to + " >(" + fromPtr + ")";
 		//return to+"Ptr(("+to+" *)(("+fromPtr+").get()))";
-		//return "boost::static_pointer_cast<" + to + ">(" + fromPtr + ")";
+		//return "boost::static_pointer_cast<" + to + " >(" + fromPtr + ")";
 	}
 
 	public static String genThrowingArrayCast(String toElementType, String fromSharedArray) {
-		return "xmlbeansxx::java_array_cast<" + toElementType + ">("
+		return "xmlbeansxx::java_array_cast<" + toElementType + " >("
 				+ fromSharedArray + ")";
 	}
 	public static String genThrowingVectorConv(String toElementType, String fromSharedArray) {
-		return "xmlbeansxx::vector_conv<" + toElementType + ">("
+		return "xmlbeansxx::vector_conv<" + toElementType + " >("
 				+ fromSharedArray + ")";
 	}
 
 	
 	
 	public static String genStaticArrayCast(String to, String fromSharedArray) {
-		return "xmlbeansxx::static_array_cast<" + to + ">("
+		return "xmlbeansxx::static_array_cast<" + to + " >("
 				+ fromSharedArray + ")";
 		//return fromArrayPtr;
 	}
@@ -571,7 +571,7 @@ public class ClassGen {
 
 	public String genConvertSimpleType(SchemaType toType, String what) {
 		return "xmlbeansxx::convertSimpleType<"
-				+ fullClassName(toType) + ">(" + what + ")";
+				+ fullClassName(toType) + " >(" + what + ")";
 	}
 
 	String genDefaultStringPtr(SchemaProperty prop) {
@@ -692,10 +692,9 @@ public class ClassGen {
 			btype=fullClassName(skipNullTypes(prop.getType()));
 			type= btype;
 
-			vtype = "std::vector<" + type + ">";
+			vtype = "std::vector<" + type + " >";
 			
-			dvbtype = "xmlbeansxx::XmlArray<"
-					+ btype + ">";
+			dvbtype = "xmlbeansxx::XmlArray<" + btype + " >";
 			dvtype=dvbtype ;
 		}
 		
@@ -736,12 +735,12 @@ public class ClassGen {
 				x="x";
 				
 				userType = type;
-				vuserType = "std::vector<" + userType + ">"; 
+				vuserType = "std::vector<" + userType + " >"; 
 			} else if (method==M_NORMAL) {
 				x="";
 				
 				userType = cppTypeForProperty(prop);
-				vuserType = "std::vector<" + userType + ">"; 
+				vuserType = "std::vector<" + userType + " >"; 
 			} else if (method==M_STRING) {
 				x = "";
 				
@@ -1558,7 +1557,7 @@ public class ClassGen {
 			out.cpp.println(className(st) + "::" + className(st) + "(const xmlbeansxx::ContentsPtr& p)" + parentConstructor(st, "p") + " { } \n");
 			out.h.println("  " + className(st) + "(const xmlbeansxx::XmlObject& p);");
 			out.cpp.println(className(st) + "::" + className(st) + "(const xmlbeansxx::XmlObject& p) {\n" +
-					"  if(!xmlbeansxx::_cast_test<" + className(st) + ">(p)) throw xmlbeansxx::ClassCastException( ((p) ? p.contents->st->className : \"unknow\") + \" to " + className(st) + "\");\n" +
+					"  if(!xmlbeansxx::_cast_test<" + className(st) + " >(p)) throw xmlbeansxx::ClassCastException( ((p) ? p.contents->st->className : \"unknow\") + \" to " + className(st) + "\");\n" +
 					"  swapContents(p.contents);\n" +
 					"}");
 
@@ -1642,7 +1641,7 @@ public class ClassGen {
 				out.cpp.println(  "xmlbeansxx::XmlObjectPtr" + " "
 						+ className(st) + "::Factory::newXmlArrayInstance() { return "
 						+ "xmlbeansxx::XmlObjectPtr"
-						+ "(new xmlbeansxx::XmlArray<" + className(st) + ">()); }");
+						+ "(new xmlbeansxx::XmlArray<" + className(st) + " >()); }");
 			}
 	
 			//-------------
@@ -1793,7 +1792,7 @@ public class ClassGen {
 		String name = className(st);
 		out.enterNamespace(nsClassName(st));
 		out.h.println("class " + name + ";");
-//		out.h.println("typedef boost::shared_ptr<"+name+"> "+name+"Ptr;");
+//		out.h.println("typedef boost::shared_ptr<"+name+" > "+name+"Ptr;");
 //		out.h.println("typedef "+name+" * "+name+"Ptr;");
 		/*
 		out.h.println("DECLARE_PTR(" + name + "," + name + "Ptr,const" + name
@@ -1803,16 +1802,16 @@ public class ClassGen {
 		*/
 		/*
 		 * String p=name+"Ptr"; out.h.println("struct "+p+": boost::shared_ptr
-		 * <"+name+"> {"); out.h.println(" "+p+"();");
+		 * <"+name+" > {"); out.h.println(" "+p+"();");
 		 * out.cpp.println(p+"::"+p+"() {}");
 		 * 
 		 * out.h.println(" "+p+"(const "+p+"& b);");
 		 * out.cpp.println(p+"::"+p+"(const "+p+"& b): boost::shared_ptr
-		 * <"+name+">(b) {}");
+		 * <"+name+" >(b) {}");
 		 * 
 		 * out.h.println(" "+p+"("+name+" *b);");
 		 * out.cpp.println(p+"::"+p+"("+name+" *b): boost::shared_ptr
-		 * <"+name+">(b) {}"); out.h.println("};");
+		 * <"+name+" >(b) {}"); out.h.println("};");
 		 */
 		out.leaveNamespace();
 		//}

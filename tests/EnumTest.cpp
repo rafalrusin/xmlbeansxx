@@ -40,6 +40,14 @@ void EnumTest::enumTest()
 
 	}
 	{
+		Klient k;
+		try {
+			k.getNazwa();
+			CPPUNIT_ASSERT(true);
+		       	LOG4CXX_DEBUG(logger,"throw !! ");
+		} catch (NullPtrException &e) {
+		       	LOG4CXX_DEBUG(logger,"catch: " + std::string(e.what()));
+		}
 	
 	}
 	
