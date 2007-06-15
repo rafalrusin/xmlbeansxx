@@ -49,7 +49,6 @@ ARG_XSD=""
 SRC_DIR="src"
 XSD_PATH_PREFIX="../"
 LIB_NAME="xmltypes"
-LIB_FULLNAME="lib${LIB_NAME}"
 LIB_VERSION="1:0:0"
 DIRS=""
 XMLBEANSXX_OPTS=""
@@ -93,6 +92,8 @@ for i in $ARG_XSD; do
 	esac
 	ORGIN_XSD="$ORGIN_XSD $i"
 done 
+
+LIB_FULLNAME="lib${LIB_NAME}"
 
 mkdir $SRC_DIR
 cd $SRC_DIR
