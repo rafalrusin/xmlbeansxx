@@ -23,7 +23,7 @@ Generates C++ library from xsd files.
 
 Usage: $0 [-out lib_name] [-V lib_version] [dirs]* [files.xsd]*
 
--out lib_name	- Library name
+-out lib_name	- Library name (witout \"lib\" prefix)
 -V lib_version	- Library version
 -dl 		- permit network downloads for imports and includes (default is off)
 -noupa 		- do not enforce the unique particle attribution rule
@@ -33,7 +33,7 @@ files.xsd	- Type system schema files
 dirs		- directores with type system schema files (search recursively)
 
 example:
-$0 -out libmylibrary -V 2:1:3 file.xsd
+$0 -out mylibrary -V 2:1:3 file.xsd
 
 Report bugs to: <rr@touk.pl>
 Copyright (C) 2004 TouK"
@@ -48,7 +48,8 @@ BIN=`dirname $basefile`
 ARG_XSD=""
 SRC_DIR="src"
 XSD_PATH_PREFIX="../"
-LIB_NAME="libxmltypes"
+LIB_NAME="xmltypes"
+LIB_FULLNAME="lib${LIB_NAME}"
 LIB_VERSION="1:0:0"
 DIRS=""
 XMLBEANSXX_OPTS=""
@@ -90,6 +91,7 @@ for i in $ARG_XSD; do
 	*)	XSD_FILES="$XSD_FILES $XSD_PATH_PREFIX$i"
 		;;
 	esac
+	ORGIN_XSD="$ORGIN_XSD $i"
 done 
 
 mkdir $SRC_DIR
@@ -118,9 +120,9 @@ COMP_CPP=$COMP_CPP
 
 include_HEADERS = \$(COMP_H)
 
-lib_LTLIBRARIES = ${LIB_NAME}.la
-${LIB_NAME}_la_LDFLAGS = -version-info $LIB_VERSION -lxmlbeansxx
-${LIB_NAME}_la_SOURCES = \$(COMP_H) \$(COMP_CPP)
+lib_LTLIBRARIES = ${LIB_FULLNAME}.la
+${LIB_FULLNAME}_la_LDFLAGS = -version-info $LIB_VERSION -lxmlbeansxx
+${LIB_FULLNAME}_la_SOURCES = \$(COMP_H) \$(COMP_CPP)
 
 \$(COMP_H) \$(COMP_CPP): $XSD_FILES
 	$BIN/xmlbeansxx-gen $XMLBEANSXX_OPTS $XSD_FILES
@@ -137,6 +139,8 @@ ACLOCAL = aclocal -I m4
 EXTRA_DIST = bootstrap m4/acx_pthread.m4
 SUBDIRS = src
 
+schemasdir = \$(datadir)/${LIB_NAME}
+nobase_dist_schemas_DATA = ${ORGIN_XSD}
 
 EOF
 
@@ -215,6 +219,9 @@ chmod +x bootstrap
 RUN_BOOTSTRAP=1
 RUN_CONFIGURE=1
 fi
+
+RUN_BOOTSTRAP=1
+RUN_CONFIGURE=1
 
 ## Launching makefiles generation ##
 if [ "$RUN_BOOTSTRAP" = 1 ]; then ./bootstrap || exit 1; fi
