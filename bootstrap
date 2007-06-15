@@ -14,10 +14,13 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License. 
 
+# Tested with 
+# automake 1.9.6 autoconf 2.61 libtool 1.5.22
+
 set -x
 mkdir -p config m4
 aclocal -I m4
 autoheader
 libtoolize --automake --copy
-automake --foreign --add-missing --copy
+automake-1.9 --foreign --add-missing --copy
 autoconf
