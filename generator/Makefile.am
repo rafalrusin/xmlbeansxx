@@ -17,7 +17,7 @@
 
 all-local: stamp-build 
 
-stamp-build: $(shell find -regex '\./\(src\|lib\|build\.xml\).*' -not -regex '.*/\..*' | grep -v stamp)
+stamp-build: $(shell find . -regex '\./\(src\|lib\|build\.xml\).*' -not -regex '.*/\..*' | grep -v stamp)
 	cd ${srcdir}; ant dist -Ddist.dir=${PWD}/dist -Dbuild.dir=${PWD}/build
 	touch stamp-build
 
