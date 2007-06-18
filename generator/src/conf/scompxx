@@ -119,7 +119,8 @@ COMP_XSD=$COMP_XSD
 COMP_H=$COMP_H
 COMP_CPP=$COMP_CPP
 
-include_HEADERS = \$(COMP_H)
+schemaincludedir = \$(includedir)/${LIB_NAME}
+schemainclude_HEADERS = \$(COMP_H)
 
 lib_LTLIBRARIES = ${LIB_FULLNAME}.la
 ${LIB_FULLNAME}_la_LDFLAGS = -version-info $LIB_VERSION -lxmlbeansxx

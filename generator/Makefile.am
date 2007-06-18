@@ -31,6 +31,7 @@ install-data-local:
 	cp -r dist/* ${DESTDIR}${datadir}/xmlbeansxx
 	ln -fs ${datadir}/xmlbeansxx/bin/xmlbeansxx-gen ${DESTDIR}${bindir}/xmlbeansxx-gen
 	ln -fs ${datadir}/xmlbeansxx/bin/scompxx ${DESTDIR}${bindir}/scompxx
+	ln -fs ${datadir}/xmlbeansxx/bin/xmlbeansxx-split ${DESTDIR}${bindir}/xmlbeansxx-split
 
 dist-hook:
 	for file in `find . -regex '\./\(src\|lib\|build\.xml\).*' -not -regex '.*/\..*'`; do \
