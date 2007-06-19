@@ -22,5 +22,5 @@ mkdir -p config m4
 aclocal -I m4
 autoheader
 libtoolize --automake --copy
-automake-1.9 --foreign --add-missing --copy
+automake --foreign --add-missing --copy
 autoconf

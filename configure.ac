@@ -53,7 +53,7 @@ m4_ifdef([AM_PATH_CPPUNIT],[
     AM_CONDITIONAL(HAVE_CPPUNIT, test "$CPPUNIT_LIBS")
 ])
 
-#BB_ENABLE_DOXYGEN
+BB_ENABLE_DOXYGEN
 
 AC_CHECK_LIB(log4cxx,main,,AC_MSG_WARN([log4cxx library not found.]))
 AC_CHECK_LIB(gmp,main,,AC_MSG_ERROR([gmp library not found. Please install it.]))
@@ -66,6 +66,6 @@ AC_CHECK_HEADERS([boost/shared_ptr.hpp boost/shared_array.hpp boost/date_time/gr
 AC_SUBST(ac_aux_dir)
 AC_SUBST(xmlbeansxx_gen_dir)
 
-AC_CONFIG_FILES([Makefile generator/Makefile src/Makefile src/xmlbeansxx/Makefile tests/Makefile examples/Makefile examples/small/Makefile])
+AC_CONFIG_FILES([Makefile generator/Makefile src/Makefile src/xmlbeansxx/Makefile tests/Makefile examples/Makefile examples/small/Makefile docs/Doxyfile docs/Makefile])
 
 AC_OUTPUT
