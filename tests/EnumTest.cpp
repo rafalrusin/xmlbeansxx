@@ -50,6 +50,14 @@ void EnumTest::enumTest()
 		}
 	
 	}
+	{	
+		XmlString s = XmlString::Factory::parse(
+		"<d:xml-fragment xmlns:d='http://xmlbeans.apache.org/definitions' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xs='http://www.w3.org/2001/XMLSchema'>"
+			"<d:element xsi:type='xs:string'> Ola ma kota  </d:element>"
+		"</d:xml-fragment>");
+		CPPUNIT_ASSERT_EQUAL(s.getStringValue(), std::string(" Ola ma kota  "));
+		
+	}
 	
 }
 
