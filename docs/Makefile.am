@@ -10,7 +10,7 @@ html/index.html: Doxyfile
 
 install-data-local:
 	$(mkinstalldirs) $(docdir)
-	cp -r html/. $(docdir)
+	cp -r html/. $(docdir) ; true
 
 uninstall-local:
 	$(RM) -r -f $(docdir)
