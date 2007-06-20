@@ -56,9 +56,10 @@ void EnumTest::enumTest()
 			"<d:element xsi:type='xs:string'> Ola ma kota  </d:element>"
 		"</d:xml-fragment>");
 		CPPUNIT_ASSERT_EQUAL(s.getStringValue(), std::string(" Ola ma kota  "));
-		XmlString t("");
-		XmlString u = XmlString::Factory::parse(t.toString());
-		CPPUNIT_ASSERT_EQUAL(u.getStringValue(), std::string(""));
+		XmlString t("Ula");
+		XmlString u("Ala");
+		u = XmlString::Factory::parse(t.toString());
+		CPPUNIT_ASSERT_EQUAL(u.getStringValue(), std::string("Ula"));
 		
 		
 	}
