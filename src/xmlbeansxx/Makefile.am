@@ -50,7 +50,9 @@ libxmlbeansxx_la_SOURCES = \
 	XmlContext.h\
 	SchemaProperty.h\
 	SchemaProperty.cpp\
-	NullPtr.h
+	NullPtr.h\
+	XmlObjectDocument.h\
+	XmlObjectDocument.cpp
 
 nodist_libxmlbeansxx_la_SOURCES = \
 	XmlTypesGen.h\
@@ -66,6 +68,7 @@ BUILT_SOURCES = \
 
 libxmlbeansxxincludedir = $(includedir)/xmlbeansxx
 libxmlbeansxxinclude_HEADERS = \
+	XmlObjectDocument.h\
 	BoostAssert.h\
 	TypeSystem.h\
 	CoreTypes.h\

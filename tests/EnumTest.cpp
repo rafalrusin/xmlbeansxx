@@ -1,6 +1,7 @@
 #include "EnumTest.h"
 #include <string>
 #include <xmlbeansxx/logger.h>
+#include <xmlbeansxx/XmlObjectDocument.h>
 #include "pawel.h"
 
 
@@ -36,6 +37,10 @@ void EnumTest::enumTest()
 		k.setEnumTest(2);
 	        LOG4CXX_DEBUG(logger,"Klient: " + k.toString());
 		CPPUNIT_ASSERT(k.xgetEnumTest()== "tytus");
+		ZakupyDocument z=ZakupyDocument::Factory::newInstance();
+		z.cgetZakupy().setKlient(k);
+
+	        LOG4CXX_DEBUG(logger,"zakupy: " + z.toString());		
 
 
 	}
@@ -59,7 +64,24 @@ void EnumTest::enumTest()
 		XmlString t("Ula");
 		XmlString u("Ala");
 		u = XmlString::Factory::parse(t.toString());
-		CPPUNIT_ASSERT_EQUAL(u.getStringValue(), std::string("Ula"));
+		CPPUNIT_ASSERT_EQUAL(u.getStringValue(), std::string("Ula"));		
+	}
+	{
+		XmlObject o = XmlObjectDocument::Factory::parse(
+		"<zakupy xmlns='http://ala' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>"
+		"	<klient enumTest='tytus'>"
+		"		<nazwa>pawel</nazwa>"
+		"		<ala>12.000000</ala>"
+		"	</klient>"
+		"</zakupy>"
+		);
+	        LOG4CXX_DEBUG(logger,"zakupy class: " + o.getSchemaType()->className);
+	        LOG4CXX_DEBUG(logger,"zakupy: " + o.toString());
+		
+		ZakupyDocument z=ZakupyDocument::Factory::parse(o.toString());
+
+	        LOG4CXX_DEBUG(logger,"zakupy2: " + z.toString());
+		
 		
 		
 	}

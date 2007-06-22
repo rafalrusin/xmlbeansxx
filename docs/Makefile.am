@@ -3,7 +3,7 @@ EXTRA_DIST = Doxyfile.in
 
 docdir  = $(DESTDIR)/$(prefix)/doc/@PACKAGE_TARNAME@-@PACKAGE_VERSION@
 
-all-local: html/index.html
+docs: html/index.html
 
 html/index.html: Doxyfile
 	@DOXYGEN@

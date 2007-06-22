@@ -104,6 +104,11 @@ ContentsPtr Contents::clone()
 }
 
 
+const SchemaType * Contents::getSchemaType() const
+{
+	return st;
+}
+
 
 
 

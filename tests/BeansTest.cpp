@@ -200,7 +200,7 @@ void namespaceTests() {
         LOG4CXX_DEBUG(logger,std::string(a.getArray(1).getSchemaType()->className));
         LOG4CXX_DEBUG(logger,std::string(a.getArray(2).getSchemaType()->className));
         CPPUNIT_ASSERT(std::string(a.getArray(0).getSchemaType()->className)=="xmlbeansxx::XmlInteger");
-//        CPPUNIT_ASSERT(std::string(a.getArray(1).getSchemaType()->className)=="xmlbeansxx::XmlPositiveInteger");
+        CPPUNIT_ASSERT(std::string(a.getArray(1).getSchemaType()->className)=="xmlbeansxx::XmlPositiveInteger");
         CPPUNIT_ASSERT(std::string(a.getArray(2).getSchemaType()->className)=="xmlbeansxx::XmlInteger");
     }
     {

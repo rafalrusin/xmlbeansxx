@@ -26,6 +26,8 @@ package pl.touk.xmlbeansxx;
 import java.io.*;
 import java.util.*;
 
+import javax.xml.namespace.QName;
+
 import org.apache.xmlbeans.*;
 import org.apache.commons.logging.*;
 
@@ -1362,12 +1364,15 @@ public class ClassGen {
 			
 			out.cpp.println("  st.contentType=" + genContentType(st.getContentType()) + ";");
 
-			if (st.getName() == null) {
+			QName qname = st.getName();
+			if (st.isDocumentType()) qname = st.getDocumentElementName();
+			
+			if (qname == null) {
                 out.cpp.println("  st.name = xmlbeansxx::QName();");
 			} else {
 				out.cpp.println("  st.name = xmlbeansxx::QName::store(" 
-						+ nsLinks.getVarName(st.getName().getNamespaceURI()) + ", "
-						+ genString(st.getName().getLocalPart())+");");
+						+ nsLinks.getVarName(qname.getNamespaceURI()) + ", "
+						+ genString(qname.getLocalPart())+");");
 			}
 						
 			{
@@ -1557,11 +1562,16 @@ public class ClassGen {
 			out.cpp.println(className(st) + "::" + className(st) + "(const xmlbeansxx::ContentsPtr& p)" + parentConstructor(st, "p") + " { } \n");
 			out.h.println("  " + className(st) + "(const xmlbeansxx::XmlObject& p);");
 			out.cpp.println(className(st) + "::" + className(st) + "(const xmlbeansxx::XmlObject& p) {\n" +
-					"  if(!xmlbeansxx::_cast_test<" + className(st) + " >(p)) throw xmlbeansxx::ClassCastException( ((p) ? p.contents->st->className : \"unknow\") + \" to " + className(st) + "\");\n" +
-					"  swapContents(p.contents);\n" +
+					"  setXmlObject(p);\n" +
 					"}");
 
 		}
+
+		out.h.println("  virtual void setXmlObject(const xmlbeansxx::XmlObject& p);");
+		out.cpp.println("void " + className(st) + "::setXmlObject(const xmlbeansxx::XmlObject& p) {\n" +
+				"  if(!xmlbeansxx::_cast_test<" + className(st) + " >(p)) throw xmlbeansxx::ClassCastException( ((p) ? p.contents->st->className : \"unknow\") + \" to " + className(st) + "\");\n" +
+				"  swapContents(p.contents);\n" +
+				"}");
 
 
 		if (st.isSimpleType()) {
@@ -1589,10 +1599,10 @@ public class ClassGen {
 		//----------------
 
 		out.h.println("public:");
-		out.h.println("  virtual const xmlbeansxx::SchemaType *getSchemaType() const;");
+		out.h.println("  virtual const xmlbeansxx::SchemaType *getOrginSchemaType() const;");
 		out.cpp.println("const xmlbeansxx::SchemaType *"
-				+ className(st) + "::getSchemaType() const {");
-		out.cpp.println("return " + className(st) + "::type();");
+				+ className(st) + "::getOrginSchemaType() const {");
+		out.cpp.println("  return " + className(st) + "::type();");
 		out.cpp.println("}");
 
 		out.h.println("  static const xmlbeansxx::SchemaType *type();");
@@ -1778,7 +1788,12 @@ public class ClassGen {
 	}
 
 	void registration(SchemaType st) {
-		if (st.getName() != null) {
+	
+		
+		if (st.isDocumentType()) {
+			// i typy document
+			out.cpp.println("    xmlbeansxx::globalTypeSystem()->addDocumentType("+genTypeFn(st)+");");
+		} else if (st.getName() != null) {
 			//rejestrujemy tylko typy nie anonimowe
 			out.cpp.println("    xmlbeansxx::globalTypeSystem()->addType("+genTypeFn(st)+");");
 		} else {
@@ -2138,6 +2153,7 @@ public class ClassGen {
 	}
 
 	public static void main(String[] args) throws Exception {
+				
 		if (System.getProperty("genbuiltin") != null) {
 			log.info("Generating builtin types");
 			//currentName="XmlTypesGen";

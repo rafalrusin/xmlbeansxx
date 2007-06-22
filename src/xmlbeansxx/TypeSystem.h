@@ -32,15 +32,18 @@ class TypeSystem {
     STATIC_LOGGER_PTR(log);
     
     std::map<QName,const SchemaType *> typeCreators;
+    std::map<QName,const SchemaType *> documentTypeCreators;
 
 
 public:
 
     TypeSystem(){};
 
+    XmlObjectPtr createDocumentByName(const QName &typeName);    
     XmlObjectPtr createByName(const QName &typeName);
     XmlObjectPtr createArrayByName(const QName &typeName);
     
+    void addDocumentType(const SchemaType *st);
     void addType(const SchemaType *st);
 };
 

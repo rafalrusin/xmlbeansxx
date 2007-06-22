@@ -199,8 +199,16 @@ void Contents::serializeElems(ostream &o,NSMap ns) const {
 
 	// order sort
 	map<int,std::pair<QName,const SchemaType*> > m;
-	FOREACH(it,st->elements)
+	set<QName> left;
+	FOREACH(it,elems.contents) 
+		left.insert(it->name);
+	
+	FOREACH(it,st->elements){
 		m[it->second->order]=std::pair<QName,const SchemaType*>(it->first,it->second->schemaType);
+		left.erase(it->first);
+	}
+	FOREACH(it,left)
+		m[-1]=std::pair<QName,const SchemaType*>(*it,XmlObject::type());
 	
 		
 	FOREACH(it,m){

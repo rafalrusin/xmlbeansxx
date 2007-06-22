@@ -35,6 +35,27 @@ namespace xmlbeansxx {
 LOGGER_PTR_SET(TypeSystem::log,"xmlbeansxx.TypeSystem");
 
 
+
+XmlObjectPtr TypeSystem::createDocumentByName(const QName &typeName) {
+    TRACER(log,"createByName");
+    
+    
+    const SchemaType * st = documentTypeCreators[typeName];
+    if(!st) {
+        LOG4CXX_DEBUG(log,std::string("typeName:")+typeName+std::string(" Document Object not registered ,  returning NULL pointer"));
+        return XmlObjectPtr();
+    }
+    CreateObjFn f=st->createFn;
+    if (f==NULL) {
+        LOG4CXX_DEBUG(log,std::string("typeName:")+typeName+std::string(" returning NULL pointer"));
+        return XmlObjectPtr();
+    } else {
+        LOG4CXX_DEBUG(log,std::string("typeName:")+typeName+std::string(" using creator"));
+        return f();
+    }
+}
+
+
 XmlObjectPtr TypeSystem::createByName(const QName &typeName) {
     TRACER(log,"createByName");
     
@@ -74,6 +95,10 @@ XmlObjectPtr TypeSystem::createArrayByName(const QName &typeName) {
 
 void TypeSystem::addType(const SchemaType *st) {
     typeCreators[st->name]=st;
+}
+
+void TypeSystem::addDocumentType(const SchemaType *st) {
+    documentTypeCreators[st->name]=st;
 }
 
 //------------------------------------------------------------------------------------

@@ -420,7 +420,7 @@ void startElementNs(void *ctx,
     if (IMMEDIATE_RETURN)
         return;
     {
-        
+        // LOGS
         LOG4CXX_DEBUG2(LOG, "SAX2 - StartElementNS info")
         LOG4CXX_DEBUG2(LOG, string("localname: ") + (const char *) localname)
         LOG4CXX_DEBUG2(LOG, string("prefix   : ") + (prefix == NULL ? "" : (const char *) prefix))
@@ -457,6 +457,7 @@ void startElementNs(void *ctx,
     parser->xmlContext.remember();
 
     {
+    	//NAMESPACES
         LOG4CXX_DEBUG2(LOG, "store namespaces in xmlContext")
         for (int current = 0;
                 current < 2 * nb_namespaces;
@@ -478,10 +479,23 @@ void startElementNs(void *ctx,
     LOG4CXX_DEBUG2(LOG, "begin element: " + name)
     
     if(parser->nodesStack.empty())
-	throw XmlException(string("no XmlObject on LibXMLParser stack"));					   
+	throw XmlException(string("no XmlObject on LibXMLParser stack"));
+
+
     XmlObjectPtr top=parser->nodesStack.top().obj;
     XmlObjectPtr n;
     if(!top) throw XmlException(string("no XmlObjectPtr on LibXMLParser stack"));					   
+
+    if(parser->nodesStack.size()==1){
+	//this is the ROOT element
+	XmlObjectPtr root = globalTypeSystem()->createDocumentByName(name);
+	if (root) {
+	    root->createContents();
+	    top->setXmlObject(*root);
+	}
+	
+    }
+	
 	    
 ///        if (INSERT_INTO_CURSOR)
 ///            parser->cursor->beginElement(name);

@@ -151,15 +151,15 @@ namespace xmlbeansxx {
 		
 		std::string Contents::Walker::dump(const ContentsPtr& p){
 		    if(!p) return " NULL ";
-		    std::string s(" { ");
+		    std::string s("{");
 		    FOREACH(i,p->elems.contents){
-			s+= i->name +" = " + dump(i->value); 
+			s+= i->name +"=" + dump(i->value); 
 		    };
 		    FOREACH(i,p->attrs.contents){
-			s+= "@" +i->name +" = " + dump(i->value); 
+			s+= "@" +i->name +"=" + dump(i->value); 
 		    };
 		    s+= p->value;
-		    s+= " } ";
+		    s+= "}";
 		    return s;
 		}
 		

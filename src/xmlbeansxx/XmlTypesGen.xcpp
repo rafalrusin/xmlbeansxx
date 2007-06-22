@@ -57,6 +57,8 @@ Map_String_Int::Map_String_Int(const Map_String_Int &b): __gnu_cxx::hash_map<Sto
 
 }
 
+
+
 %%class xmlbeansxx::XmlObject
 LOGGER_PTR_SET(XmlObject::log,"xmlbeansxx.XmlObject");
 
@@ -103,21 +105,34 @@ bool XmlObject::setAnyElement(const QName& elementName,const std::string& anyCon
 }
 
 
-void XmlObject::	serialize(std::ostream &o,XmlOptions options)  {
+void XmlObject::serialize(std::ostream &o,XmlOptions options)  {
     TRACER(log,"serialize");
     if(!hasContents()) throw NullPtrException("Cannot serialize an empty XmlObject = " + getSchemaType()->className);
+
+    if(getSchemaType() != getOrginSchemaType()) {
+	TRACER(log,std::string("addres:") + long(getSchemaType()) + " != " + long(getOrginSchemaType()));
+
+        return Contents::Walker::OrginalXmlObject(contents)->serialize(o,options);
+    }
+
 
     xmlbeansxx::definitions::XmlFragmentDocument doc=xmlbeansxx::definitions::XmlFragmentDocument::Factory::newInstance();
     doc.cgetXmlFragment().setElement(*this);
     doc.serialize(o,options);
-
 }
 
-std::string XmlObject::toString(XmlOptions options){
+
+std::string XmlObject::toString(XmlOptions options) {
     std::ostringstream ss;
     serialize(ss,options);
     return ss.str();
 }
+
+const SchemaType * XmlObject::getSchemaType() const {
+    if(contents) return contents->getSchemaType();
+    else getOrginSchemaType();
+}
+
 
 /** STAWEL ??????????
 #ifdef BOOST_HAS_THREADS

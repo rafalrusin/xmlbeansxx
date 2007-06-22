@@ -119,6 +119,7 @@ public:
 	void serialize(bool printXsiType,const QName &elemName,std::ostream &o,NSMap ns) const;
 
 	std::string digest() const;
+	const SchemaType * getSchemaType() const;
 
 private:
 	void serializeAttrs(std::ostream &o,NSMap& ns) const;

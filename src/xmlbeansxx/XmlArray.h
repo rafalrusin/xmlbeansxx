@@ -96,10 +96,14 @@ public:
     	swapContents(a.contents);
     }
   
-    virtual const xmlbeansxx::SchemaType *getSchemaType() const {
-      static xmlbeansxx::SchemaType schemaType(XmlArray_initSchemaType<T>());
-      return &schemaType; 
+    virtual const xmlbeansxx::SchemaType *getOrginSchemaType() const {
+	return XmlArray<T>::type();
     }
+    static const xmlbeansxx::SchemaType *type() {
+        static xmlbeansxx::SchemaType schemaType(XmlArray_initSchemaType<T>());
+	return &schemaType; 
+    }
+
 
 
 

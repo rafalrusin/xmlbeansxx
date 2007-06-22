@@ -288,11 +288,13 @@ protected:
     
 public:
     virtual void createContents();
-    bool hasContents() const;
+    virtual bool hasContents() const;
     virtual void swapContents(const ContentsPtr& p);
+    virtual const xmlbeansxx::SchemaType * getSchemaType() const;
 //    virtual void swapContents(const constContentsPtr& p);
 
     operator bool() const; // == hasContents()
+    
 
 
 %%class xmlbeansxx::XmlAnySimpleType
