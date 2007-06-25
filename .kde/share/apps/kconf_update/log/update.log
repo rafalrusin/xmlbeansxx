@@ -1,0 +1,86 @@
+2007-06-25T19:27:52 Checking update-file '/usr/share/apps/kconf_update/kdeprintrc.upd' for new updates
+2007-06-25T19:27:52 kdeprintrc.upd: Found new update 'kde-3.1-toolbar'
+2007-06-25T19:27:52 kdeprintrc.upd: Skipping kdeprintrc:General:ViewMenuBar, already exists.
+2007-06-25T19:27:52 kdeprintrc.upd: RemoveKey removes kdeprintrc:General:ViewToolBar
+2007-06-25T19:27:52 Checking update-file '/usr/share/apps/kconf_update/kioslave.upd' for new updates
+2007-06-25T19:27:52 kioslave.upd: Found new update 'kde2.2/r1'
+2007-06-25T19:27:52 kioslave.upd: Skipping update 'kde2.2/r1'
+2007-06-25T19:27:52 kioslave.upd: Found new update 'kde2.2/r2'
+2007-06-25T19:27:52 kioslave.upd: Running script 'useragent.pl'
+2007-06-25T19:27:52 kioslave.upd: Script removes kioslaverc:UserAgent:EntriesCount
+2007-06-25T19:27:52 kioslave.upd: Found new update 'kde2.2/r3'
+2007-06-25T19:27:52 kioslave.upd: Running script 'proxytype.pl'
+2007-06-25T19:27:52 kioslave.upd: Script removes kioslaverc:Proxy Settings:UseProxy
+2007-06-25T19:27:52 Checking update-file '/usr/share/apps/kconf_update/khotkeys_printscreen.upd' for new updates
+2007-06-25T19:27:52 khotkeys_printscreen.upd: Found new update 'printscreen'
+2007-06-25T19:27:52 khotkeys_printscreen.upd: Running script 'khotkeys_update' with arguments '--id printscreen'
+2007-06-25T19:27:52 Checking update-file '/usr/share/apps/kconf_update/kded.upd' for new updates
+2007-06-25T19:27:52 kded.upd: Found new update 'kde3.0'
+2007-06-25T19:27:52 Checking update-file '/usr/share/apps/kconf_update/khotkeys_32b1_update.upd' for new updates
+2007-06-25T19:27:52 khotkeys_32b1_update.upd: Found new update 'kde32b1'
+2007-06-25T19:27:52 khotkeys_32b1_update.upd: Running script 'khotkeys_update' with arguments '--id kde32b1'
+2007-06-25T19:27:52 Checking update-file '/usr/share/apps/kconf_update/kcookiescfg.upd' for new updates
+2007-06-25T19:27:52 kcookiescfg.upd: Found new update 'kde2.2/b1'
+2007-06-25T19:27:52 kcookiescfg.upd: Found new update 'kde3.1/cvs'
+2007-06-25T19:27:53 Checking update-file '/usr/share/apps/kconf_update/kdev-gen-settings.upd' for new updates
+2007-06-25T19:27:53 kdev-gen-settings.upd: Found new update 'kdev-gen-settings-update/5'
+2007-06-25T19:27:53 kdev-gen-settings.upd: Running script 'kdev-gen-settings-kconf_update'
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:AStyle:Brackets, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:AStyle:Fill, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:AStyle:FillSpaces, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:AStyle:IndentBrackets, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:AStyle:IndentCases, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:AStyle:IndentClasses, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:AStyle:IndentLabels, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:AStyle:IndentNamespaces, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:AStyle:IndentSwitches, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:AStyle:KeepBlocks, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:AStyle:KeepStatements, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:AStyle:MaxStatement, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:AStyle:MinConditional, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:AStyle:PadOperators, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:AStyle:PadParentheses, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:AStyle:Style, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Editor:EmbeddedKTextEditor, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:General Options:Read Last Project On Startup, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Kate View Defaults:Icon Bar, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Mainwindow:Height 768, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Mainwindow:Width 1024, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Mainwindow Toolbar QextMdiTaskBar:Hidden, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Mainwindow Toolbar QextMdiTaskBar:IconSize, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Mainwindow Toolbar QextMdiTaskBar:IconText, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Mainwindow Toolbar QextMdiTaskBar:Index, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Mainwindow Toolbar QextMdiTaskBar:NewLine, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Mainwindow Toolbar QextMdiTaskBar:Offset, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Mainwindow Toolbar QextMdiTaskBar:Position, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Mainwindow Toolbar browserToolBar:Hidden, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Mainwindow Toolbar browserToolBar:IconSize, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Mainwindow Toolbar browserToolBar:IconText, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Mainwindow Toolbar browserToolBar:Index, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Mainwindow Toolbar browserToolBar:NewLine, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Mainwindow Toolbar browserToolBar:Offset, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Mainwindow Toolbar browserToolBar:Position, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Mainwindow Toolbar mainToolBar:Hidden, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Mainwindow Toolbar mainToolBar:IconSize, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Mainwindow Toolbar mainToolBar:IconText, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Mainwindow Toolbar mainToolBar:Index, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Mainwindow Toolbar mainToolBar:NewLine, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Mainwindow Toolbar mainToolBar:Offset, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Mainwindow Toolbar mainToolBar:Position, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:Plugins:KDevScripting, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:UI:CloseOnHover, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:UI:CloseOnHoverDelay, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:UI:MDIMode, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:UI:MDIStyle, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:UI:OpenNewTabAfterCurrent, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:UI:ShowCloseTabsButton, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:UI:ShowTabIcons, already exists.
+2007-06-25T19:27:53 kdev-gen-settings.upd: Skipping kdeveloprc:UI:TabVisibility, already exists.
+2007-06-25T19:27:53 Checking update-file '/usr/share/apps/kconf_update/kio_help.upd' for new updates
+2007-06-25T19:27:53 kio_help.upd: Found new update 'kde3_2'
+2007-06-25T19:27:53 kio_help.upd: Running script 'move_kio_help_cache.sh'
+2007-06-25T19:27:53 [Script] mv: nie można wykonać stat na `/home/piotrs/.kde/share/apps/kio_help/cache': Nie ma takiego pliku ani katalogu
+2007-06-25T19:27:53 [Script] rmdir: /home/piotrs/.kde/share/apps/kio_help: Nie ma takiego pliku ani katalogu
+2007-06-25T19:27:53 Checking update-file '/usr/share/apps/kconf_update/konqueror_gestures_kde321_update.upd' for new updates
+2007-06-25T19:27:53 konqueror_gestures_kde321_update.upd: Found new update 'kde321'
+2007-06-25T19:27:53 konqueror_gestures_kde321_update.upd: Running script 'khotkeys_update' with arguments '--id konqueror_gestures_kde321'

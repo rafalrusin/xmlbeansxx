@@ -1,0 +1,8 @@
+[General]
+Autosetup=true
+
+[Locations]
+Bonobo Activation API Reference Manual=/usr/share/gtk-doc/html/bonobo-activation/bonobo-activation.devhelp
+GNOME Dictionary Library Reference Manual=/usr/share/gtk-doc/html/gdict/gdict.devhelp
+Libbonobo Reference Manual=/usr/share/gtk-doc/html/libbonobo/libbonobo.devhelp
+Rhythmbox Development Reference Manual=/usr/share/gtk-doc/html/rhythmbox/rhythmbox.devhelp

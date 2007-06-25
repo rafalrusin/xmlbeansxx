@@ -1,0 +1,493 @@
+/etc/gdm/PreSession/Default: Registering your session with wtmp and utmp
+/etc/gdm/PreSession/Default: running: /usr/bin/sessreg -a -w /var/log/wtmp -u /var/run/utmp -x "/var/lib/gdm/:0.Xservers" -h "" -l ":0" "piotrs"
+/etc/gdm/Xsession: Beginning session setup...
+SESSION_MANAGER=local/psp:/tmp/.ICE-unix/3167
+Ostrzeżenie menedżera okien: Nie można odczytać zapisanego pliku sesji "/home/piotrs/.metacity/sessions/default0.ms": Failed to open file '/home/piotrs/.metacity/sessions/default0.ms': Nie ma takiego pliku ani katalogu
+** Message: Bez uruchamiania serwera zdalnego pulpitu
+CalDAV Eplugin starting up ...
+** Message: <information>	Połączono z siecią kablową.
+
+
+(evolution-2.6:3299): evolution-mail-WARNING **: Error occurred while existing dialogue active:
+Wyszukanie adresu nie powiodło się: touk.pl: Ta nazwa lub usługa jest nieznana
+Setting up initial mail tree
+addressbook_migrate (0.0.0)
+** Message: <information>	Forcing device '/org/freedesktop/NetworkManager/Devices/eth2'
+
+
+** Message: <information>	Połączono z siecią kablową.
+
+CalDAV Eplugin starting up ...
+** Message: plugin_get_value 1 (1)
+
+** Message: plugin_get_value 2 (2)
+
+** Message: plugin_get_value 1 (1)
+
+** Message: plugin_get_value 2 (2)
+
+** Message: plugin_get_value 1 (1)
+
+** Message: plugin_get_value 2 (2)
+
+** Message: plugin_get_value 1 (1)
+
+** Message: plugin_get_value 2 (2)
+
+** Message: plugin_get_value 1 (1)
+
+** Message: plugin_get_value 2 (2)
+
+CalDAV Eplugin starting up ...
+** Message: plugin_get_value 1 (1)
+
+** Message: plugin_get_value 2 (2)
+
+** Message: plugin_get_value 1 (1)
+
+** Message: plugin_get_value 2 (2)
+
+** Message: plugin_get_value 1 (1)
+
+** Message: plugin_get_value 2 (2)
+
+** Message: plugin_get_value 1 (1)
+
+** Message: plugin_get_value 2 (2)
+
+** Message: plugin_get_value 1 (1)
+
+** Message: plugin_get_value 2 (2)
+
+CalDAV Eplugin starting up ...
+
+(evolution-2.6:3606): evolution-mail-WARNING **: Cannot activate OAFIID:GNOME_Spell_Dictionary:0.3
+
+(evolution-2.6:3606): e-utils-WARNING **: Cannot resolve symbol 'org_gnome_new_mail_config' in plugin '/usr/lib/evolution/2.6/plugins/liborg-gnome-new-mail-notify.so' (not exported?)
+BBDB spinning up...
+
+(evolution-2.6:3606): evolution-mail-WARNING **: Cannot activate OAFIID:GNOME_Spell_Dictionary:0.3
+
+(evolution-2.6:3606): e-utils-WARNING **: Cannot resolve symbol 'org_gnome_new_mail_config' in plugin '/usr/lib/evolution/2.6/plugins/liborg-gnome-new-mail-notify.so' (not exported?)
+importing 928 bytes from `/home/piotrs/toukca.pem'
+CalDAV Eplugin starting up ...
+
+(gnome-panel:3239): Gtk-WARNING **: Cannot load drag icon from icon name iceweasel.png
+/usr/lib/python2.4/site-packages/apt/__init__.py:17: FutureWarning: apt API not stable yet
+  warnings.warn("apt API not stable yet", FutureWarning)
+Ostrzeżenie menedżera okien: last_user_time (1953526432) is greater than comparison timestamp (1675878649).  This most likely represents a buggy client sending inaccurate timestamps in messages such as _NET_ACTIVE_WINDOW.  Trying to work around...
+Ostrzeżenie menedżera okien: 0x3600003 (Aktualizac) appears to be one of the offending windows with a timestamp of 1953526432.  Working around...
+Ostrzeżenie menedżera okien: last_user_time (3130008224) is greater than comparison timestamp (1675897099).  This most likely represents a buggy client sending inaccurate timestamps in messages such as _NET_ACTIVE_WINDOW.  Trying to work around...
+Ostrzeżenie menedżera okien: 0x3600091 (Menedżer ) appears to be one of the offending windows with a timestamp of 3130008224.  Working around...
+Ostrzeżenie menedżera okien: 0x36015a9 (Krótki ws) appears to be one of the offending windows with a timestamp of 3130008224.  Working around...
+
+(synaptic:5438): Gtk-CRITICAL **: gtk_tree_view_unref_tree_helper: assertion `node != NULL' failed
+Creating link /home/piotrs/.kde/socket-psp.
+Created link from "/home/piotrs/.kde/socket-psp" to "/tmp/ksocket-piotrs"
+Creating link /home/piotrs/.kde/tmp-psp.
+Created link from "/home/piotrs/.kde/tmp-psp" to "/tmp/kde-piotrs"
+kbuildsycoca running...
+Creating link /home/piotrs/.kde/cache-psp.
+Created link from "/home/piotrs/.kde/cache-psp" to "/var/tmp/kdecache-piotrs"
+kio (KSycoca): ERROR: No database available!
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/x-extension-mp4'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/x-extension-m4a'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/x-shorten'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/x-smil'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/xspf+xml'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/x-quicktime-media-link'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/mp4v-es'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-m4v'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/dv'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-mpeg'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/msvideo'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-anim'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-avi'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-ms-wm'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-ms-wmx'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-ms-wvx'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-nsv'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-flc'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-fli'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/fli'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/vnd.divx'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/vnd.vivo'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/vivo'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/3gpp'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/3gpp'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/x-matroska'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-mpeg'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-m4a'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-ms-asf'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-ms-asx'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-ms-wax'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-real-audio'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/x-flac'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'misc/ultravox'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-pn-aiff'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-pn-au'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-pn-wav'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-pn-windows-acm'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'image/vnd.rn-realpix'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-pn-realaudio-plugin'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/x-flash-video'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-ogm+ogg'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-it'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-ape'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/AMR'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/AMR-WB'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-realaudio'
+kbuildsycoca: WARNING: '/usr/share/applications/themus-theme-applier.desktop' specifies undefined mimetype/servicetype 'application/x-gnome-theme-installed'
+kbuildsycoca: WARNING: '/usr/share/applications/iceweasel.desktop' specifies undefined mimetype/servicetype 'application/rss+xml'
+kbuildsycoca: WARNING: '/usr/share/applications/iceweasel.desktop' specifies undefined mimetype/servicetype 'application/rdf+xml'
+kbuildsycoca: WARNING: 'knotify.desktop' specifies undefined mimetype/servicetype 'KNotify'
+kbuildsycoca: WARNING: '/usr/share/applications/nautilus-folder-handler.desktop' specifies undefined mimetype/servicetype 'x-directory/gnome-default-handler'
+kbuildsycoca: WARNING: '/usr/share/applications/nautilus-folder-handler.desktop' specifies undefined mimetype/servicetype 'x-directory/normal'
+kbuildsycoca: WARNING: '/usr/share/applications/nautilus-folder-handler.desktop' specifies undefined mimetype/servicetype 'application/x-gnome-saved-search'
+kbuildsycoca: WARNING: '/usr/share/applications/rhythmbox.desktop' specifies undefined mimetype/servicetype 'audio/x-mpeg'
+kbuildsycoca: WARNING: '/usr/share/applications/rhythmbox.desktop' specifies undefined mimetype/servicetype 'application/x-flac'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-ar'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-bzip-compressed-tar'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-compressed-tar'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-gtar'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-lhz'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-zip-compressed'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/zip'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'multipart/x-zip'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-war'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-ear'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-java-archive'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-cd-image'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-7z-compressed'
+kbuildsycoca: WARNING: '/usr/share/applications/ooo-math.desktop' specifies undefined mimetype/servicetype 'application/vnd.sun.xml.math'
+kbuildsycoca: WARNING: 'kcertpart.desktop' specifies undefined mimetype/servicetype 'application/binary-certificate'
+kbuildsycoca: WARNING: '/usr/share/applications/evince.desktop' specifies undefined mimetype/servicetype 'image/vnd.djvu'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/bmp'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/g3fax'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-compressed-xcf'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-fits'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-gray'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-png'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-portable-anymap'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-portable-graymap'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-psd'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-sgi'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-sun-raster'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-tga'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-xbitmap'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-xcf'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-xpixmap'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-xwindowdump'
+kbuildsycoca: WARNING: 'kdevjavadebugger.desktop' specifies undefined mimetype/servicetype 'KDevelop/Part'
+kbuildsycoca: WARNING: '/usr/share/applications/ooo-base.desktop' specifies undefined mimetype/servicetype 'application/vnd.oasis.opendocument.database'
+kbuildsycoca: WARNING: 'qeditor_part.desktop' specifies undefined mimetype/servicetype 'text/english'
+kbuildsycoca: WARNING: 'qeditor_part.desktop' specifies undefined mimetype/servicetype 'text/x-c'
+kbuildsycoca: WARNING: 'qeditor_part.desktop' specifies undefined mimetype/servicetype 'text/x-c++'
+kbuildsycoca: WARNING: 'qeditor_part.desktop' specifies undefined mimetype/servicetype 'text/x-sql'
+kbuildsycoca: WARNING: '/usr/share/applications/gfloppy.desktop' specifies undefined mimetype/servicetype 'x-device/floppy'
+kbuildsycoca: WARNING: '/usr/share/applications/eog.desktop' specifies undefined mimetype/servicetype 'image/bmp'
+kbuildsycoca: WARNING: '/usr/share/applications/eog.desktop' specifies undefined mimetype/servicetype 'image/x-gray'
+kbuildsycoca: WARNING: '/usr/share/applications/eog.desktop' specifies undefined mimetype/servicetype 'image/x-icb'
+kbuildsycoca: WARNING: '/usr/share/applications/eog.desktop' specifies undefined mimetype/servicetype 'image/x-png'
+kbuildsycoca: WARNING: '/usr/share/applications/eog.desktop' specifies undefined mimetype/servicetype 'image/x-portable-anymap'
+kbuildsycoca: WARNING: '/usr/share/applications/eog.desktop' specifies undefined mimetype/servicetype 'image/x-portable-graymap'
+kbuildsycoca: WARNING: '/usr/share/applications/eog.desktop' specifies undefined mimetype/servicetype 'image/x-xbitmap'
+kbuildsycoca: WARNING: '/usr/share/applications/eog.desktop' specifies undefined mimetype/servicetype 'image/x-xpixmap'
+kbuildsycoca: WARNING: '/usr/share/applications/ooo-writer.desktop' specifies undefined mimetype/servicetype 'application/vnd.oasis.opendocument.text-web'
+kbuildsycoca: WARNING: '/usr/share/applications/ooo-writer.desktop' specifies undefined mimetype/servicetype 'application/vnd.oasis.opendocument.text-master'
+kbuildsycoca: WARNING: '/usr/share/applications/ooo-writer.desktop' specifies undefined mimetype/servicetype 'application/vnd.sun.xml.writer.global'
+kbuildsycoca: WARNING: '/usr/share/applications/ooo-writer.desktop' specifies undefined mimetype/servicetype 'application/x-doc'
+kbuildsycoca: WARNING: '/usr/share/applications/ooo-writer.desktop' specifies undefined mimetype/servicetype 'application/rtf'
+kbuildsycoca: WARNING: '/usr/share/applications/ooo-writer.desktop' specifies undefined mimetype/servicetype 'application/vnd.wordperfect'
+QLayout "unnamed" added to IndexView "unnamed", which already has a layout
+kio (KMimeType): WARNING: KServiceType::offers : servicetype ThumbCreator not found
+Launched ok, pid = 7743
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+QObject::connect: No such slot ClassViewPart::removeNamespace(const QString&)
+QObject::connect:  (sender name:   'ClassViewWidget')
+QObject::connect:  (receiver name: 'ClassViewPart')
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+ASSERT: "part && parent" in /build/buildd/kdevelop-3.3.5/./parts/fileview/partwidget.cpp (40)
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+
+(synaptic:5438): Gtk-CRITICAL **: gtk_tree_view_unref_tree_helper: assertion `node != NULL' failed
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+
+(synaptic:5438): Gtk-CRITICAL **: gtk_tree_view_unref_tree_helper: assertion `node != NULL' failed
+kbuildsycoca running...
+Reusing existing ksycoca
+kio (KSycoca): ERROR: No database available!
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/x-extension-mp4'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/x-extension-m4a'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/x-shorten'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/x-smil'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/xspf+xml'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/x-quicktime-media-link'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/mp4v-es'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-m4v'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/dv'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-mpeg'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/msvideo'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-anim'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-avi'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-ms-wm'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-ms-wmx'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-ms-wvx'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-nsv'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-flc'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-fli'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/fli'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/vnd.divx'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/vnd.vivo'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/vivo'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/3gpp'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/3gpp'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/x-matroska'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-mpeg'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-m4a'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-ms-asf'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-ms-asx'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-ms-wax'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-real-audio'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/x-flac'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'misc/ultravox'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-pn-aiff'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-pn-au'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-pn-wav'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-pn-windows-acm'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'image/vnd.rn-realpix'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-pn-realaudio-plugin'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/x-flash-video'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-ogm+ogg'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-it'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-ape'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/AMR'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/AMR-WB'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-realaudio'
+kbuildsycoca: WARNING: '/usr/share/applications/themus-theme-applier.desktop' specifies undefined mimetype/servicetype 'application/x-gnome-theme-installed'
+kbuildsycoca: WARNING: '/usr/share/applications/iceweasel.desktop' specifies undefined mimetype/servicetype 'application/rss+xml'
+kbuildsycoca: WARNING: '/usr/share/applications/iceweasel.desktop' specifies undefined mimetype/servicetype 'application/rdf+xml'
+kbuildsycoca: WARNING: 'knotify.desktop' specifies undefined mimetype/servicetype 'KNotify'
+kbuildsycoca: WARNING: '/usr/share/applications/nautilus-folder-handler.desktop' specifies undefined mimetype/servicetype 'x-directory/gnome-default-handler'
+kbuildsycoca: WARNING: '/usr/share/applications/nautilus-folder-handler.desktop' specifies undefined mimetype/servicetype 'x-directory/normal'
+kbuildsycoca: WARNING: '/usr/share/applications/nautilus-folder-handler.desktop' specifies undefined mimetype/servicetype 'application/x-gnome-saved-search'
+kbuildsycoca: WARNING: '/usr/share/applications/rhythmbox.desktop' specifies undefined mimetype/servicetype 'audio/x-mpeg'
+kbuildsycoca: WARNING: '/usr/share/applications/rhythmbox.desktop' specifies undefined mimetype/servicetype 'application/x-flac'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-ar'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-bzip-compressed-tar'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-compressed-tar'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-gtar'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-lhz'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-zip-compressed'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/zip'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'multipart/x-zip'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-war'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-ear'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-java-archive'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-cd-image'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-7z-compressed'
+kbuildsycoca: WARNING: '/usr/share/applications/ooo-math.desktop' specifies undefined mimetype/servicetype 'application/vnd.sun.xml.math'
+kbuildsycoca: WARNING: 'kcertpart.desktop' specifies undefined mimetype/servicetype 'application/binary-certificate'
+kbuildsycoca: WARNING: '/usr/share/applications/evince.desktop' specifies undefined mimetype/servicetype 'image/vnd.djvu'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/bmp'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/g3fax'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-compressed-xcf'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-fits'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-gray'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-png'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-portable-anymap'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-portable-graymap'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-psd'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-sgi'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-sun-raster'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-tga'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-xbitmap'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-xcf'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-xpixmap'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-xwindowdump'
+kbuildsycoca: WARNING: 'kdevjavadebugger.desktop' specifies undefined mimetype/servicetype 'KDevelop/Part'
+kbuildsycoca: WARNING: '/usr/share/applications/ooo-base.desktop' specifies undefined mimetype/servicetype 'application/vnd.oasis.opendocument.database'
+kbuildsycoca: WARNING: 'qeditor_part.desktop' specifies undefined mimetype/servicetype 'text/english'
+kbuildsycoca: WARNING: 'qeditor_part.desktop' specifies undefined mimetype/servicetype 'text/x-c'
+kbuildsycoca: WARNING: 'qeditor_part.desktop' specifies undefined mimetype/servicetype 'text/x-c++'
+kbuildsycoca: WARNING: 'qeditor_part.desktop' specifies undefined mimetype/servicetype 'text/x-sql'
+kbuildsycoca: WARNING: '/usr/share/applications/gfloppy.desktop' specifies undefined mimetype/servicetype 'x-device/floppy'
+kbuildsycoca: WARNING: '/usr/share/applications/eog.desktop' specifies undefined mimetype/servicetype 'image/bmp'
+kbuildsycoca: WARNING: '/usr/share/applications/eog.desktop' specifies undefined mimetype/servicetype 'image/x-gray'
+kbuildsycoca: WARNING: '/usr/share/applications/eog.desktop' specifies undefined mimetype/servicetype 'image/x-icb'
+kbuildsycoca: WARNING: '/usr/share/applications/eog.desktop' specifies undefined mimetype/servicetype 'image/x-png'
+kbuildsycoca: WARNING: '/usr/share/applications/eog.desktop' specifies undefined mimetype/servicetype 'image/x-portable-anymap'
+kbuildsycoca: WARNING: '/usr/share/applications/eog.desktop' specifies undefined mimetype/servicetype 'image/x-portable-graymap'
+kbuildsycoca: WARNING: '/usr/share/applications/eog.desktop' specifies undefined mimetype/servicetype 'image/x-xbitmap'
+kbuildsycoca: WARNING: '/usr/share/applications/eog.desktop' specifies undefined mimetype/servicetype 'image/x-xpixmap'
+kbuildsycoca: WARNING: '/usr/share/applications/ooo-writer.desktop' specifies undefined mimetype/servicetype 'application/vnd.oasis.opendocument.text-web'
+kbuildsycoca: WARNING: '/usr/share/applications/ooo-writer.desktop' specifies undefined mimetype/servicetype 'application/vnd.oasis.opendocument.text-master'
+kbuildsycoca: WARNING: '/usr/share/applications/ooo-writer.desktop' specifies undefined mimetype/servicetype 'application/vnd.sun.xml.writer.global'
+kbuildsycoca: WARNING: '/usr/share/applications/ooo-writer.desktop' specifies undefined mimetype/servicetype 'application/x-doc'
+kbuildsycoca: WARNING: '/usr/share/applications/ooo-writer.desktop' specifies undefined mimetype/servicetype 'application/rtf'
+kbuildsycoca: WARNING: '/usr/share/applications/ooo-writer.desktop' specifies undefined mimetype/servicetype 'application/vnd.wordperfect'
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+kbuildsycoca running...
+Reusing existing ksycoca
+kio (KSycoca): ERROR: No database available!
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/x-extension-mp4'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/x-extension-m4a'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/x-shorten'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/x-smil'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/xspf+xml'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/x-quicktime-media-link'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/mp4v-es'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-m4v'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/dv'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-mpeg'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/msvideo'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-anim'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-avi'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-ms-wm'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-ms-wmx'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-ms-wvx'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-nsv'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-flc'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-fli'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/fli'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/vnd.divx'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/vnd.vivo'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/vivo'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/3gpp'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/3gpp'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/x-matroska'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-mpeg'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-m4a'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-ms-asf'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-ms-asx'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-ms-wax'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-real-audio'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/x-flac'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'misc/ultravox'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-pn-aiff'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-pn-au'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-pn-wav'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-pn-windows-acm'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'image/vnd.rn-realpix'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-pn-realaudio-plugin'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'application/x-flash-video'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'video/x-ogm+ogg'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-it'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-ape'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/AMR'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/AMR-WB'
+kbuildsycoca: WARNING: '/usr/share/applications/totem.desktop' specifies undefined mimetype/servicetype 'audio/x-realaudio'
+kbuildsycoca: WARNING: '/usr/share/applications/themus-theme-applier.desktop' specifies undefined mimetype/servicetype 'application/x-gnome-theme-installed'
+kbuildsycoca: WARNING: '/usr/share/applications/iceweasel.desktop' specifies undefined mimetype/servicetype 'application/rss+xml'
+kbuildsycoca: WARNING: '/usr/share/applications/iceweasel.desktop' specifies undefined mimetype/servicetype 'application/rdf+xml'
+kbuildsycoca: WARNING: 'knotify.desktop' specifies undefined mimetype/servicetype 'KNotify'
+kbuildsycoca: WARNING: '/usr/share/applications/nautilus-folder-handler.desktop' specifies undefined mimetype/servicetype 'x-directory/gnome-default-handler'
+kbuildsycoca: WARNING: '/usr/share/applications/nautilus-folder-handler.desktop' specifies undefined mimetype/servicetype 'x-directory/normal'
+kbuildsycoca: WARNING: '/usr/share/applications/nautilus-folder-handler.desktop' specifies undefined mimetype/servicetype 'application/x-gnome-saved-search'
+kbuildsycoca: WARNING: '/usr/share/applications/rhythmbox.desktop' specifies undefined mimetype/servicetype 'audio/x-mpeg'
+kbuildsycoca: WARNING: '/usr/share/applications/rhythmbox.desktop' specifies undefined mimetype/servicetype 'application/x-flac'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-ar'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-bzip-compressed-tar'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-compressed-tar'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-gtar'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-lhz'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-zip-compressed'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/zip'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'multipart/x-zip'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-war'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-ear'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-java-archive'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-cd-image'
+kbuildsycoca: WARNING: '/usr/share/applications/file-roller.desktop' specifies undefined mimetype/servicetype 'application/x-7z-compressed'
+kbuildsycoca: WARNING: '/usr/share/applications/ooo-math.desktop' specifies undefined mimetype/servicetype 'application/vnd.sun.xml.math'
+kbuildsycoca: WARNING: 'kcertpart.desktop' specifies undefined mimetype/servicetype 'application/binary-certificate'
+kbuildsycoca: WARNING: '/usr/share/applications/evince.desktop' specifies undefined mimetype/servicetype 'image/vnd.djvu'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/bmp'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/g3fax'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-compressed-xcf'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-fits'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-gray'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-png'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-portable-anymap'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-portable-graymap'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-psd'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-sgi'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-sun-raster'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-tga'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-xbitmap'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-xcf'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-xpixmap'
+kbuildsycoca: WARNING: '/usr/share/applications/gimp-2.2.desktop' specifies undefined mimetype/servicetype 'image/x-xwindowdump'
+kbuildsycoca: WARNING: 'kdevjavadebugger.desktop' specifies undefined mimetype/servicetype 'KDevelop/Part'
+kbuildsycoca: WARNING: '/usr/share/applications/ooo-base.desktop' specifies undefined mimetype/servicetype 'application/vnd.oasis.opendocument.database'
+kbuildsycoca: WARNING: 'qeditor_part.desktop' specifies undefined mimetype/servicetype 'text/english'
+kbuildsycoca: WARNING: 'qeditor_part.desktop' specifies undefined mimetype/servicetype 'text/x-c'
+kbuildsycoca: WARNING: 'qeditor_part.desktop' specifies undefined mimetype/servicetype 'text/x-c++'
+kbuildsycoca: WARNING: 'qeditor_part.desktop' specifies undefined mimetype/servicetype 'text/x-sql'
+kbuildsycoca: WARNING: '/usr/share/applications/gfloppy.desktop' specifies undefined mimetype/servicetype 'x-device/floppy'
+kbuildsycoca: WARNING: '/usr/share/applications/eog.desktop' specifies undefined mimetype/servicetype 'image/bmp'
+kbuildsycoca: WARNING: '/usr/share/applications/eog.desktop' specifies undefined mimetype/servicetype 'image/x-gray'
+kbuildsycoca: WARNING: '/usr/share/applications/eog.desktop' specifies undefined mimetype/servicetype 'image/x-icb'
+kbuildsycoca: WARNING: '/usr/share/applications/eog.desktop' specifies undefined mimetype/servicetype 'image/x-png'
+kbuildsycoca: WARNING: '/usr/share/applications/eog.desktop' specifies undefined mimetype/servicetype 'image/x-portable-anymap'
+kbuildsycoca: WARNING: '/usr/share/applications/eog.desktop' specifies undefined mimetype/servicetype 'image/x-portable-graymap'
+kbuildsycoca: WARNING: '/usr/share/applications/eog.desktop' specifies undefined mimetype/servicetype 'image/x-xbitmap'
+kbuildsycoca: WARNING: '/usr/share/applications/eog.desktop' specifies undefined mimetype/servicetype 'image/x-xpixmap'
+kbuildsycoca: WARNING: '/usr/share/applications/ooo-writer.desktop' specifies undefined mimetype/servicetype 'application/vnd.oasis.opendocument.text-web'
+kbuildsycoca: WARNING: '/usr/share/applications/ooo-writer.desktop' specifies undefined mimetype/servicetype 'application/vnd.oasis.opendocument.text-master'
+kbuildsycoca: WARNING: '/usr/share/applications/ooo-writer.desktop' specifies undefined mimetype/servicetype 'application/vnd.sun.xml.writer.global'
+kbuildsycoca: WARNING: '/usr/share/applications/ooo-writer.desktop' specifies undefined mimetype/servicetype 'application/x-doc'
+kbuildsycoca: WARNING: '/usr/share/applications/ooo-writer.desktop' specifies undefined mimetype/servicetype 'application/rtf'
+kbuildsycoca: WARNING: '/usr/share/applications/ooo-writer.desktop' specifies undefined mimetype/servicetype 'application/vnd.wordperfect'
+QLayout "unnamed" added to IndexView "unnamed", which already has a layout
+kio (KMimeType): WARNING: KServiceType::offers : servicetype ThumbCreator not found
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+QObject::connect: No such slot ClassViewPart::removeNamespace(const QString&)
+QObject::connect:  (sender name:   'ClassViewWidget')
+QObject::connect:  (receiver name: 'ClassViewPart')
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+ASSERT: "part && parent" in /build/buildd/kdevelop-3.3.5/./parts/fileview/partwidget.cpp (40)
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+ICE default IO error handler doing an exit(), pid = 7740, errno = 0
+Ostrzeżenie menedżera okien: last_focus_time (1677220763) is greater than comparison timestamp (1655622604).  This most likely represents a buggy client sending inaccurate timestamps in messages such as _NET_ACTIVE_WINDOW.  Trying to work around...
+Ostrzeżenie menedżera okien: last_user_time (1677231593) is greater than comparison timestamp (1655622604).  This most likely represents a buggy client sending inaccurate timestamps in messages such as _NET_ACTIVE_WINDOW.  Trying to work around...
+Ostrzeżenie menedżera okien: 0xc00003 (Górny roz) appears to be one of the offending windows with a timestamp of 1677205408.  Working around...
+Ostrzeżenie menedżera okien: 0xc0002f (Dolny rozw) appears to be one of the offending windows with a timestamp of 1676968248.  Working around...
+Ostrzeżenie menedżera okien: 0x380001f (test - fil) appears to be one of the offending windows with a timestamp of 1677178702.  Working around...
+Ostrzeżenie menedżera okien: 0x1002bd4 (test1) appears to be one of the offending windows with a timestamp of 1677010289.  Working around...
+Ostrzeżenie menedżera okien: 0x260001e (piotrs@psp) appears to be one of the offending windows with a timestamp of 1676965605.  Working around...
+Ostrzeżenie menedżera okien: 0x32000dc (JSPWiki: P) appears to be one of the offending windows with a timestamp of 1676949925.  Working around...
+Ostrzeżenie menedżera okien: 0x2c0007a (Evolution ) appears to be one of the offending windows with a timestamp of 1676237908.  Working around...
+Ostrzeżenie menedżera okien: 0x3600091 (Menedżer ) appears to be one of the offending windows with a timestamp of 1676966845.  Working around...
+Ostrzeżenie menedżera okien: 0x3a0036d (RapidSVN) appears to be one of the offending windows with a timestamp of 1676427151.  Working around...
+Ostrzeżenie menedżera okien: 0x3a03097 (Import) appears to be one of the offending windows with a timestamp of 1676439927.  Working around...
+Ostrzeżenie menedżera okien: 0x1002897 (piotrs) appears to be one of the offending windows with a timestamp of 1677008505.  Working around...
+Ostrzeżenie menedżera okien: 0x1002d0e (test) appears to be one of the offending windows with a timestamp of 1677030885.  Working around...
+Ostrzeżenie menedżera okien: 0x2401464 (Kalendarz) appears to be one of the offending windows with a timestamp of 1677198580.  Working around...
+Ostrzeżenie menedżera okien: 0x4000003 (Ustawienia) appears to be one of the offending windows with a timestamp of 1677231593.  Working around...
+Ostrzeżenie menedżera okien: 0x1002a89 (progs) appears to be one of the offending windows with a timestamp of 1677009529.  Working around...
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+Ostrzeżenie menedżera okien: last_user_time (1676791714) is greater than comparison timestamp (1655815889).  This most likely represents a buggy client sending inaccurate timestamps in messages such as _NET_ACTIVE_WINDOW.  Trying to work around...
+Ostrzeżenie menedżera okien: 0x36039d3 (Szukaj) appears to be one of the offending windows with a timestamp of 1676791714.  Working around...
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+
+(synaptic:5438): Gtk-CRITICAL **: gtk_tree_view_unref_tree_helper: assertion `node != NULL' failed
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error
+kio (KTrader): WARNING: Parsing ' and [X-KDevelop-Version] == 3' gave syntax error

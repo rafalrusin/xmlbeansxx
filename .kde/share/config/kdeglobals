@@ -1,0 +1,9 @@
+[$Version]
+update_info=kded.upd:kde3.0
+
+[DirSelect Dialog]
+DirSelectDialog Size=482,450
+History Items=file://$HOME/progs/test1,file://$HOME/progs
+
+[Paths]
+Trash=$HOME/Desktop/Kosz/

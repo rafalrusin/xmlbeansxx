@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<gconf>
+        <entry name="timezone" mtime="1182791168" type="string">
+                <stringvalue>Europe/Warsaw</stringvalue>
+        </entry>
+        <entry name="selected_calendars" mtime="1182791049" type="list" ltype="string">
+                <li type="string">
+                        <stringvalue>1182791049.3299.2@psp</stringvalue>
+                </li>
+        </entry>
+        <entry name="primary_calendar" mtime="1182791049" type="string">
+                <stringvalue>1182791049.3299.2@psp</stringvalue>
+        </entry>
+</gconf>

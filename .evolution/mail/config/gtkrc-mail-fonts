@@ -1,0 +1,10 @@
+style "evolution-mail-custom-fonts" {
+        GtkHTML::spell_error_color = "#ff0000"
+        GtkHTML::cite_color = "#737373"
+}
+
+widget "*.EMFolderView.*.GtkHTML" style "evolution-mail-custom-fonts"
+widget "*.EMFolderBrowser.*.GtkHTML" style "evolution-mail-custom-fonts"
+widget "*.EMMessageBrowser.*.GtkHTML" style "evolution-mail-custom-fonts"
+widget "*.BonoboPlug.*.GtkHTML" style "evolution-mail-custom-fonts"
+widget "*.EvolutionMailPrintHTMLWidget" style "evolution-mail-custom-fonts"

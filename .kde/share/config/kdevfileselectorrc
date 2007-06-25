@@ -1,0 +1,18 @@
+[fileselector]
+AutoSyncEvents=0
+current filter=
+dir history=$HOME/progs/test1/test/
+filter history=
+filter history len=9
+last filter=
+location=$HOME/progs/test1/test/
+pathcombo history len=9
+
+[fileselector:dir]
+Separate Directories=false
+Show hidden files=false
+Sort by=Name
+Sort case insensitively=true
+Sort directories first=true
+Sort reversed=false
+View Style=Simple

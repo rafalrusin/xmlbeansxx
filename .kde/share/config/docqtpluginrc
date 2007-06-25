@@ -1,0 +1,15 @@
+[General]
+Autosetup=true
+
+[Index Settings]
+Qt Reference Documentation=true
+
+[Locations]
+Guide to the Qt Translation Tools=/usr/share/qt3/doc/html/linguist.dcf
+Qt Assistant Manual=/usr/share/qt3/doc/html/assistant.dcf
+Qt Designer Manual=/usr/share/qt3/doc/html/designer.dcf
+Qt Reference Documentation=/usr/share/qt3/doc/html/qt.dcf
+qmake User Guide=/usr/share/qt3/doc/html/qmake.dcf
+
+[Search Settings]
+Qt Reference Documentation=true

@@ -1,0 +1,43 @@
+[General]
+Autosetup=true
+
+[Locations]
+Ada=/usr/share/apps/kdevdocumentation/tocs/ada.toc
+Ada bugs (GCC)=/usr/share/apps/kdevdocumentation/tocs/ada_bugs_gcc.toc
+Bash Reference Manual=/usr/share/apps/kdevdocumentation/tocs/bash.toc
+Bash bugs=/usr/share/apps/kdevdocumentation/tocs/bash_bugs.toc
+C++ Annotations=/usr/share/apps/kdevdocumentation/tocs/cppannotations.toc
+C++ bugs (GCC)=/usr/share/apps/kdevdocumentation/tocs/c++_bugs_gcc.toc
+Clanlib=/usr/share/apps/kdevdocumentation/tocs/clanlib.toc
+Document Object Model (DOM) Level 2 HTML Specification=/usr/share/apps/kdevdocumentation/tocs/w3c-dom-level2-html.toc
+Fortran bugs (GCC)=/usr/share/apps/kdevdocumentation/tocs/fortran_bugs_gcc.toc
+GNOME 1.0 API Reference=/usr/share/apps/kdevdocumentation/tocs/gnome1.toc
+GNUstep=/usr/share/apps/kdevdocumentation/tocs/gnustep.toc
+GTK bugs=/usr/share/apps/kdevdocumentation/tocs/gtk_bugs.toc
+Haskell 98=/usr/share/apps/kdevdocumentation/tocs/haskell.toc
+Haskell bugs (ghc)=/usr/share/apps/kdevdocumentation/tocs/haskell_bugs_ghc.toc
+Java bugs (GCC)=/usr/share/apps/kdevdocumentation/tocs/java_bugs_gcc.toc
+Java bugs (Sun)=/usr/share/apps/kdevdocumentation/tocs/java_bugs_sun.toc
+KDE2 Development Book (kde.org)=/usr/share/apps/kdevdocumentation/tocs/kde2book.toc
+KDevelop API Documentation=/usr/share/apps/kdevdocumentation/tocs/kdev3api.toc
+LIBC (umn.edu)=/usr/share/apps/kdevdocumentation/tocs/libc.toc
+LIBSTDC++ (gcc.gnu.org)=/usr/share/apps/kdevdocumentation/tocs/libstdc++.toc
+OpenGL=/usr/share/apps/kdevdocumentation/tocs/opengl.toc
+PHP=/usr/share/apps/kdevdocumentation/tocs/php.toc
+PHP bugs=/usr/share/apps/kdevdocumentation/tocs/php_bugs.toc
+Pascal bugs (fp)=/usr/share/apps/kdevdocumentation/tocs/pascal_bugs_fp.toc
+Perl=/usr/share/apps/kdevdocumentation/tocs/perl.toc
+Perl bugs=/usr/share/apps/kdevdocumentation/tocs/perl_bugs.toc
+Python=/usr/share/apps/kdevdocumentation/tocs/python.toc
+Python bugs=/usr/share/apps/kdevdocumentation/tocs/python_bugs.toc
+Qt Designer-3 and KDevelop-3=/usr/share/apps/kdevdocumentation/tocs/qt-kdev3.toc
+QtRuby and Korundum=/usr/share/apps/kdevdocumentation/tocs/qtruby.toc
+Rails=/usr/share/apps/kdevdocumentation/tocs/rails.toc
+Ruby=/usr/share/apps/kdevdocumentation/tocs/ruby.toc
+Ruby bugs=/usr/share/apps/kdevdocumentation/tocs/ruby_bugs.toc
+SDL=/usr/share/apps/kdevdocumentation/tocs/sdl.toc
+STL (sgi.com)=/usr/share/apps/kdevdocumentation/tocs/stl.toc
+Scalable Vector Graphics (SVG) 1.1 Specification=/usr/share/apps/kdevdocumentation/tocs/w3c-svg.toc
+SuperWaba 3.4.1 API=/usr/share/apps/kdevdocumentation/tocs/sw.toc
+User Agent Accessibility Guidelines 1.0=/usr/share/apps/kdevdocumentation/tocs/w3c-uaag10.toc
+wxWidgets bugs=/usr/share/apps/kdevdocumentation/tocs/wxwidgets_bugs.toc
