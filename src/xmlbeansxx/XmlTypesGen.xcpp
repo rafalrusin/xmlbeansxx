@@ -109,11 +109,9 @@ void XmlObject::serialize(std::ostream &o,XmlOptions options)  {
     TRACER(log,"serialize");
     if(!hasContents()) throw NullPtrException("Cannot serialize an empty XmlObject = " + getSchemaType()->className);
 
-    if(getSchemaType() != getOrginSchemaType()) {
-	TRACER(log,std::string("addres:") + long(getSchemaType()) + " != " + long(getOrginSchemaType()));
-
+    if(getSchemaType() != getOrginSchemaType()) 
         return Contents::Walker::OrginalXmlObject(contents)->serialize(o,options);
-    }
+    
 
 
     xmlbeansxx::definitions::XmlFragmentDocument doc=xmlbeansxx::definitions::XmlFragmentDocument::Factory::newInstance();

@@ -52,7 +52,9 @@ libxmlbeansxx_la_SOURCES = \
 	SchemaProperty.cpp\
 	NullPtr.h\
 	XmlObjectDocument.h\
-	XmlObjectDocument.cpp
+	XmlObjectDocument.cpp\
+	XmlObjectXpaths.cpp\
+	NSMap.h
 
 nodist_libxmlbeansxx_la_SOURCES = \
 	XmlTypesGen.h\
@@ -96,7 +98,8 @@ libxmlbeansxxinclude_HEADERS = \
 	Query.h\
 	SchemaProperty.h\
 	StoreString.h\
-	NullPtr.h
+	NullPtr.h\
+	NSMap.h
 
 nodist_libxmlbeansxxinclude_HEADERS = \
 	XmlTypesGen.h\

@@ -17,13 +17,21 @@
 #include <sstream>
 
 #include <string>
+#include "logger.h"
 #include "XmlTypesGen.h"
 #include "geum_types.h"
 #include "defs.h"
 #include "BoostAssert.h"
-
+#include "NSMap.h"
 
 namespace xmlbeansxx {
+
+
+
+
+
+
+
 
 //---------------------------------------------------------------------------------------
 // Geum
@@ -43,9 +51,110 @@ static const std::string CDATA_PREFIX = "<![CDATA[";
  */
 static const std::string CDATA_SUFFIX = "]]>";
 
-using namespace std;
 //Xpath operations
 
+using namespace std;
+
+
+
+class NSMapXPath : public NSMap {
+public:
+	NSMapXPath() {}
+	std::string getXPathNamespace(const std::string& path) {
+		return path;
+	}
+};
+
+LOGGER_PTR_SET(log,"xmlbeansxx.XPath");
+
+class Path{
+public:
+
+	Path(const NSMap& ns):ns(ns){};
+
+	bool isAttr(const string& name) {
+		return name[0]=='@';
+	}
+    
+	
+	void addXmlObject(const XmlObject & o) {
+		if(o) obj.push_back(o);
+	}
+	
+	Path getPath(const std::string& path) {
+		if(path.size()<=0) return *this;
+		std::pair<std::string, std::string> part = getXPathPart(path);
+		Path p = doPart(part.first);
+		return p.getPath(part.second);
+	}
+	
+	pair<string,string> getXPathPart(const string& path){
+		int p=path.find('/');
+		if(p<0)	return pair<string,string>(path,"");
+		else	return pair<string,string>(path.substr(0,p),path.substr(p+1));
+	}
+	pair<string,int> decomposeElem(const std::string& name) {
+		int a,b;
+		if ((a=name.find('['))!=-1) {
+        		int pos=0;
+			a++;
+	        	b=name.find(']');
+        		BOOST_ASSERT(b!=-1);
+        		string n=name.substr(a,b-a);
+	        	pos=atoi(n.c_str())-1;
+        		return pair<string,int>(name.substr(0,a-1),pos);
+	    	} else {
+        		return pair<string,int>(name,0);
+	    	}
+	}
+
+	Path doPart(const std::string& part) {
+		if (part.size()<=0) return *this;
+		Path p(ns);
+		
+		LOG4CXX_DEBUG(log,"doPart: " + part);
+		pair<string,int> e=decomposeElem(part);
+		QName name;
+		if (isAttr(e.first))
+			name = ns.getQName(e.first.substr(1));
+		else	name = ns.getQName(e.first);
+		
+		if (isAttr(e.first)) {
+			FOREACH(i,obj) {
+				p.addXmlObject(Contents::Walker::getAttr(*i,name));
+			}
+		} else {
+			FOREACH(i,obj) {
+				p.addXmlObject(Contents::Walker::getElem(*i,name,e.second));
+			}
+		}
+		return p;
+	}
+	
+	std::vector<XmlObject> obj;
+
+	const NSMap &ns;
+};
+
+
+
+std::vector<XmlObject> XmlObject::selectPath(const std::string& path) {
+	NSMapXPath ns;
+	string s = ns.getXPathNamespace(path);
+	return selectPath(ns,s);
+}
+
+std::vector<XmlObject> XmlObject::selectPath(const NSMap& ns,const std::string& path) {
+	Path p(ns);
+	p.addXmlObject(*this);
+	Path retu = p.getPath(path);
+	return retu.obj;
+}
+
+}
+
+
+/*
 ContentsPtr XmlObject::walkXpath(const string xpath,string &lastName,bool createElems) {
     int delim=xpath.find('/');
     if (delim==0) {
@@ -281,4 +390,7 @@ XpathsMap* XmlObject::getXpathsLikeMap(const std::string xpath) {
     }
 }
 
+
 }
+*/
+

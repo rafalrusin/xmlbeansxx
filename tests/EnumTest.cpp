@@ -1,6 +1,7 @@
 #include "EnumTest.h"
 #include <string>
 #include <xmlbeansxx/logger.h>
+#include <xmlbeansxx/NSMap.h>
 #include <xmlbeansxx/XmlObjectDocument.h>
 #include "pawel.h"
 
@@ -71,7 +72,7 @@ void EnumTest::enumTest()
 		"<zakupy xmlns='http://ala' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>"
 		"	<klient enumTest='tytus'>"
 		"		<nazwa>pawel</nazwa>"
-		"		<ala>12.000000</ala>"
+		"		<ala>13</ala>"
 		"	</klient>"
 		"</zakupy>"
 		);
@@ -81,6 +82,28 @@ void EnumTest::enumTest()
 		ZakupyDocument z=ZakupyDocument::Factory::parse(o.toString());
 
 	        LOG4CXX_DEBUG(logger,"zakupy2: " + z.toString());
+		
+		NSMap ns;
+		ns.addNamespace("a","http://ala");
+	        LOG4CXX_DEBUG(logger,"QName: " + ns.getQName("a:nazwa"));
+		CPPUNIT_ASSERT_EQUAL(std::string(ns.getQName("a:nazwa")), std::string("nazwa@http://ala"));
+		
+		std::vector<XmlObject> retu=z.selectPath(ns,"/a:zakupy/a:klient/a:ala");
+		
+		XmlArray<XmlObject> a(retu);
+	        LOG4CXX_DEBUG(logger,"path: " + a.toString())
+		XmlDecimal d = a.xgetArray(0);
+	        LOG4CXX_DEBUG(logger,"element: " + d.toString());
+		CPPUNIT_ASSERT_EQUAL(d.getMpfValue(), mpf_class(13));
+
+		
+		ns.addNamespace("","http://ala");
+	        LOG4CXX_DEBUG(logger,"QName2: " + ns.getQName("nazwa"));
+		CPPUNIT_ASSERT_EQUAL(std::string(ns.getQName("nazwa")), std::string("nazwa@http://ala"));
+
+		std::vector<XmlObject> retu2=z.selectPath(ns,"/zakupy/a:klient/bolek/lolek/");
+	        LOG4CXX_DEBUG(logger,std::string("retu2 size: ") << retu2.size());
+		CPPUNIT_ASSERT_EQUAL(retu2.size(), size_t(0));
 		
 		
 		

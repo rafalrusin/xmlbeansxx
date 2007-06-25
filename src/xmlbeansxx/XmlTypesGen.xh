@@ -44,6 +44,7 @@
 
 namespace xmlbeansxx {
 
+class NSMap;
 class QueryNode;
 DECLARE_PTR(QueryNode,QueryNodePtr,constQueryNodePtr)
 
@@ -185,106 +186,11 @@ protected:
         return array_value;
     }
 
-protected:
+public:
 
-    /**
-     * Finds xpath value.
-     * @param xpath containing xpath
-     * @return char* containing xpath value or NULL if not found
-     * @throws XpathException if xpath was not found or has invalid format.
-     * This exception is also thrown when xpath is not a leaf or attribute.
-     * 
-     */
-    std::string getXpathValue(const std::string xpath);
+    std::vector<XmlObject> selectPath(const std::string& path);
+    std::vector<XmlObject> selectPath(const NSMap& ns,const std::string& path);
 
-    /**
-     * Returns vector of xpaths representing the same path. 
-     * <pre>
-    For example calling this method with xpath = /a/b/c for 
-    following xml :
-    <a>
-    <b>
-    <c>1</c>
-    <c>2</c>
-    <c>3</c>
-    </b>
-    <a>
-    will return list of xpaths : 
-    /a/b/c
-    /a/b/c[2]
-    /a/b/c[3]
-    </pre>
-     * @param std::string representing xpath 
-     * @return vector of xpaths collection 
-     * @throws XpathException if xpath was not found or has invalid format
-     */
-    std::vector<std::string>* getXpaths(const std::string xpath);
-
-    /**
-     * Returns vector of xpaths which begining match xpath string
-     * @param std::string representing begining of searching xpaths
-     * @return vector of xpaths collection
-     */
-    std::vector<std::string>* getXpathsLike(const std::string xpath);
-
-    /**
-     * Returns XpathsMap of xpaths which begining match xpath string
-     * @param std::string representing begining of searching xpaths
-     * @return Map of xpaths and their values 
-     */
-    XpathsMap* getXpathsLikeMap(const std::string xpath);
-
-    /**
-     * finds xpath values
-     * @param std::string representing xpath 
-     * @return vector of xpaths collection values 
-     * @throws XpathException if xpath was not found or has invalid format
-     * This exception is also thrown when xpath is not a leaf. You can not get
-     * attribute value with this method use getXpathValue instead.
-     */
-    std::vector<std::string>* getXpathsValues(const std::string xpath);
-
-    /**
-     * Sets xpath value.
-     * @param std::string containing xpath
-     * @param std::string containing xpath value
-     * @throws  XpathException if xpath was not found or has invalid format.
-     * This exception is also thrown when xpath is not a leaf or attribute.
-     * If there is list of xpath DON'T FORGET about [i] for specifing concrete
-     * list element.
-     */
-    void setXpathValue(const std::string xpath, const std::string value);
-
-    /**
-     * Removes xpath from current message.
-     * @param std::string containing xpath
-     * @throws  XpathException if xpath was not found or has invalid format.
-     * This exception is also thrown when xpath is not a leaf or attribute.
-     * If there is list of xpath DON'T FORGET about [i] for specifing concrete
-     * list element.
-     */
-    void removeXpath(const std::string xpath);
-
-    /**
-     * Add xpath to this xml. Xpath past to this method should have 
-     * all necessery information about orders in tag lists.
-     * For example you should past <i>/x/a[2]</i> as xpath if 
-     * you already have <i>/x/a</i> in this message. In case you
-     * already have <i>/x/a</i> and you add <i>/x/a</i> the old value
-     * will be replaced with its new value.
-     * @param xpath std::string representing xpath
-     * @param value std::string containing xpath value
-     */
-    void addXpath(const std::string xpath, const std::string value);
-
-    /**
-     * Add xpath with CDATA value to this xml.
-     * Work the same as addXpath, but encapsulates value in 
-     * <pre><![CDATA[ ... ]]></pre>
-     * @param xpath std::string representing xpath
-     * @param value std::string containing xpath value
-     */
-    void addCdataXpath(const std::string xpath, const std::string value);
     
 public:
     virtual void createContents();

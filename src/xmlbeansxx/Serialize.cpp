@@ -29,6 +29,7 @@
 #include "TextUtils.h"
 #include "SchemaProperty.h"
 #include "XmlBeans.h"
+#include "NSMap.h"
 
 using namespace std;
 
@@ -49,40 +50,93 @@ using namespace std;
 
 namespace xmlbeansxx {
 
+bool NSMap::isSetNamespace(StoreString ns) const {
+	FOREACH(i,prefixMap){
+		if (i->second == ns) return true;
+	}
+	return false;
+}
+bool NSMap::isSetPrefix(const std::string& prefix) const {
+	return prefixMap.find(prefix)!=prefixMap.end();
+}
 
-struct NSMap {
+bool NSMap::addNamespace(const std::string& prefix, StoreString ns) {
+	if(isSetPrefix(prefix)) return false;
+	std::pair<std::string, StoreString> a(prefix, ns);
+	prefixMap.insert(a);
+	return true;
+}
+
+StoreString NSMap::getNamespace(const std::string& prefix) const {
+	VAL(p,prefixMap.find(prefix));
+	if(p==prefixMap.end())
+		throw BeansException("Namespace prefix: " + prefix + " not set.");
 	
-	std::map<StoreString,std::string> prefixMap;
-	std::vector<std::pair<StoreString,std::string> > notPrinted;
+	return p->second;
+}
+
+std::string NSMap::getPrefix(StoreString ns) const {
+	FOREACH(i,prefixMap){
+		if (i->second == ns) return i->first;
+	}
+	throw BeansException(std::string("Namespace: ") + ns + " not set.");
+}
+
+
+QName NSMap::getQName(const std::string& name) const {
+	int p=name.find(':');
+	if(p<0) {
+		try {
+			StoreString ns = getNamespace("");
+			return QName(ns,name);
+		} catch(BeansException &e) {
+			return QName("",name);
+		}
+	}
+	return QName(getNamespace(name.substr(0,p)),name.substr(p+1));
+}
+
+
+
+
+struct NSMapSerializer : public NSMap {
+	
+	std::vector<std::pair<std::string, StoreString> > notPrinted;
 	int current;
 
-	NSMap():current(0){};
+	NSMapSerializer():current(0){};
+
+
+	virtual bool addNamespace(const std::string& prefix,StoreString ns) {
+	    if(!isSetNamespace(ns)) {
+	    	NSMap::addNamespace(prefix, ns);
+		std::pair<std::string, StoreString> a(prefix, ns);
+		notPrinted.push_back(a);
+	    	return true;
+	    }
+	    return false;
+	}
+
 	
 	std::string cprintQName(const QName& n) {
 		if(n.first==StoreString("")) return n.second;
 		
-		VAL(i,prefixMap.find(n.first));
-		if(i==prefixMap.end()) {
+		//VAL(i,prefixMap.find(n.first));
+		if(!isSetNamespace(n.first)) {
 			std::string prefix=getNextPrefix();
-			addNamespace(n.first,prefix);
+			addNamespace(prefix,n.first);
 			return printPrefixName(prefix, n.second);
 		}
-		return printPrefixName(i->second, n.second);
+		return printPrefixName(getPrefix(n.first), n.second);
 	};
 	
-	void addNamespace(StoreString ns,const std::string& prefix) {
-		if(prefixMap.find(ns)!=prefixMap.end()) return;
-		std::pair<StoreString,std::string> a(ns,prefix);
-		prefixMap.insert(a);
-		notPrinted.push_back(a);
-	}
 	
 	std::string printNewNS() {
 		std::string retu;
 		while(!notPrinted.empty()) {
-			std::pair<StoreString,std::string> a=notPrinted.back();
-			if(a.second.empty())	retu+=std::string(" xmlns=\"") + a.first + "\"";
-			else			retu+=std::string(" xmlns:") + a.second  + "=\"" + a.first + "\"";
+			std::pair<std::string, StoreString> a=notPrinted.back();
+			if(a.first.empty())	retu+=std::string(" xmlns=\"") + a.second + "\"";
+			else			retu+=std::string(" xmlns:") + a.first  + "=\"" + a.second + "\"";
 			
 			notPrinted.pop_back();
 		}
@@ -113,7 +167,7 @@ bool shallPrintXsiType(const SchemaType *xsdDefined,const SchemaType * st) {
 
 
 
-void Contents::serialize(bool printXsiType,const QName& elemName,std::ostream &o,NSMap ns ) const {
+void Contents::serialize(bool printXsiType,const QName& elemName,std::ostream &o,NSMapSerializer ns ) const {
 	TRACER(log,"serialize");
     	SYNC(mutex)
 
@@ -158,10 +212,10 @@ void Contents::serializeDocument(ostream &o,XmlOptions options) const {
     if (it==elems.contents.end() || it->value==NULL)
         return;
 
-    NSMap ns;
-    ns.addNamespace("http://www.w3.org/2001/XMLSchema-instance","xsi");
-    ns.addNamespace("http://www.w3.org/2001/XMLSchema","xs");
-    ns.addNamespace(it->name->first,"");
+    NSMapSerializer ns;
+    ns.addNamespace("xsi","http://www.w3.org/2001/XMLSchema-instance");
+    ns.addNamespace("xs","http://www.w3.org/2001/XMLSchema");
+//    ns.addNamespace("",it->name->first);
     
     const std::map<QName,SchemaPropertyPtr> *order=&(st->elements);
     std::map<QName,SchemaPropertyPtr>::const_iterator propIt=order->find(it->name);
@@ -183,7 +237,7 @@ void Contents::serializeDocument(ostream &o,XmlOptions options) const {
 }
 
 
-void Contents::serializeAttrs(ostream &o,NSMap& ns) const {
+void Contents::serializeAttrs(ostream &o,NSMapSerializer& ns) const {
 	SYNC(mutex)
 	FOREACH(it,attrs.contents) {
 		o << " " << ns.cprintQName(it->name) << "=\"" << TextUtils::exchangeEntities(xmlbeansxx::Contents::Walker::getSimpleContent(it->value), TextUtils::AttrEscapes) << "\"";
@@ -192,7 +246,7 @@ void Contents::serializeAttrs(ostream &o,NSMap& ns) const {
 }
 
 
-void Contents::serializeElems(ostream &o,NSMap ns) const {
+void Contents::serializeElems(ostream &o,NSMapSerializer ns) const {
 	SYNC(mutex)
 	TRACER(log,"serializeElems");
 

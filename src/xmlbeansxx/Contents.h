@@ -49,7 +49,7 @@ namespace xmlbeansxx {
 
 class SchemaType;
 class XmlObject;
-class NSMap;
+class NSMapSerializer;
 
 class Contents;
 typedef boost::shared_ptr<Contents> ContentsPtr;
@@ -116,14 +116,14 @@ public:
 
 //	void serialize2(int emptyNsID,bool printXsiType,const QName& elemName,std::ostream &o,const xmlbeansxx::SchemaType * st) const;
 	void serializeDocument(std::ostream &o,XmlOptions options) const;
-	void serialize(bool printXsiType,const QName &elemName,std::ostream &o,NSMap ns) const;
+	void serialize(bool printXsiType,const QName &elemName,std::ostream &o,NSMapSerializer ns) const;
 
 	std::string digest() const;
 	const SchemaType * getSchemaType() const;
 
 private:
-	void serializeAttrs(std::ostream &o,NSMap& ns) const;
-	void serializeElems(std::ostream &o,NSMap ns) const;
+	void serializeAttrs(std::ostream &o,NSMapSerializer& ns) const;
+	void serializeElems(std::ostream &o,NSMapSerializer ns) const;
 
 
 
