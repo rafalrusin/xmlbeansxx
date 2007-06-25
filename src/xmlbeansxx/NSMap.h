@@ -19,6 +19,7 @@ limitations under the License. */
 #include <string>
 #include <map>
 #include "QName.h"
+#include "logger.h"
 
 namespace xmlbeansxx {
 
@@ -28,9 +29,9 @@ public:
 	NSMap(){};
 	virtual ~NSMap(){};	
 	virtual bool addNamespace(const std::string& prefix, StoreString ns);
-	virtual bool isSetNamespace(StoreString ns) const;
+	virtual bool isSetNamespaceURI(StoreString ns) const;
 	virtual bool isSetPrefix(const std::string& prefix) const;
-	virtual StoreString getNamespace(const std::string& prefix) const;
+	virtual StoreString getNamespaceURI(const std::string& prefix) const;
 	virtual std::string getPrefix(StoreString ns) const;
 	virtual QName getQName(const std::string& name) const;
 	
@@ -38,6 +39,8 @@ public:
 private:
 	// prefix, namespace
 	std::map<std::string,StoreString> prefixMap;
+
+	STATIC_LOGGER_PTR(log);
 
 	
 };

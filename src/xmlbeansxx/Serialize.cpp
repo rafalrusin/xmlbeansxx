@@ -50,7 +50,9 @@ using namespace std;
 
 namespace xmlbeansxx {
 
-bool NSMap::isSetNamespace(StoreString ns) const {
+LOGGER_PTR_SET(NSMap::log,"xmlbeansxx.NSMap");
+
+bool NSMap::isSetNamespaceURI(StoreString ns) const {
 	FOREACH(i,prefixMap){
 		if (i->second == ns) return true;
 	}
@@ -61,13 +63,14 @@ bool NSMap::isSetPrefix(const std::string& prefix) const {
 }
 
 bool NSMap::addNamespace(const std::string& prefix, StoreString ns) {
+        LOG4CXX_DEBUG(log,"addNamespace: " + prefix + ": " + ns);
 	if(isSetPrefix(prefix)) return false;
 	std::pair<std::string, StoreString> a(prefix, ns);
 	prefixMap.insert(a);
 	return true;
 }
 
-StoreString NSMap::getNamespace(const std::string& prefix) const {
+StoreString NSMap::getNamespaceURI(const std::string& prefix) const {
 	VAL(p,prefixMap.find(prefix));
 	if(p==prefixMap.end())
 		throw BeansException("Namespace prefix: " + prefix + " not set.");
@@ -87,13 +90,13 @@ QName NSMap::getQName(const std::string& name) const {
 	int p=name.find(':');
 	if(p<0) {
 		try {
-			StoreString ns = getNamespace("");
+			StoreString ns = getNamespaceURI("");
 			return QName(ns,name);
 		} catch(BeansException &e) {
 			return QName("",name);
 		}
 	}
-	return QName(getNamespace(name.substr(0,p)),name.substr(p+1));
+	return QName(getNamespaceURI(name.substr(0,p)),name.substr(p+1));
 }
 
 
@@ -108,7 +111,7 @@ struct NSMapSerializer : public NSMap {
 
 
 	virtual bool addNamespace(const std::string& prefix,StoreString ns) {
-	    if(!isSetNamespace(ns)) {
+	    if(!isSetNamespaceURI(ns)) {
 	    	NSMap::addNamespace(prefix, ns);
 		std::pair<std::string, StoreString> a(prefix, ns);
 		notPrinted.push_back(a);
@@ -122,7 +125,7 @@ struct NSMapSerializer : public NSMap {
 		if(n.first==StoreString("")) return n.second;
 		
 		//VAL(i,prefixMap.find(n.first));
-		if(!isSetNamespace(n.first)) {
+		if(!isSetNamespaceURI(n.first)) {
 			std::string prefix=getNextPrefix();
 			addNamespace(prefix,n.first);
 			return printPrefixName(prefix, n.second);

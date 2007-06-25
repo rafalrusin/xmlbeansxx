@@ -60,8 +60,30 @@ using namespace std;
 class NSMapXPath : public NSMap {
 public:
 	NSMapXPath() {}
-	std::string getXPathNamespace(const std::string& path) {
-		return path;
+	std::string setXPathNamespaces(const std::string& path) {
+		std::stringstream ss(path);
+		std::string s;
+		
+		ss >> s;
+		while (s == "declare") {
+			ss >> s;
+			if(s != "namespace")
+				throw BeansException("bad xpath: excepted 'namespace' keyword");
+			ss >> s;
+			setNS(s);
+			ss >> s;
+		}
+		return s;
+	}
+private:
+	void setNS(const std::string& ns) {
+		int p=ns.find("=");
+		if(p<0) addNamespace("",getURI(ns));
+		else addNamespace(ns.substr(0,p),getURI(ns.substr(p+1)));
+		
+	}
+	std::string getURI(const std::string& ns) {
+		return ns.substr(1,ns.size()-2);
 	}
 };
 
@@ -110,14 +132,16 @@ public:
 
 	Path doPart(const std::string& part) {
 		if (part.size()<=0) return *this;
+		if (part == ".") return *this;
 		Path p(ns);
 		
-		LOG4CXX_DEBUG(log,"doPart: " + part);
 		pair<string,int> e=decomposeElem(part);
 		QName name;
 		if (isAttr(e.first))
 			name = ns.getQName(e.first.substr(1));
 		else	name = ns.getQName(e.first);
+
+		LOG4CXX_DEBUG(log,"doPart: " + name);
 		
 		if (isAttr(e.first)) {
 			FOREACH(i,obj) {
@@ -140,7 +164,7 @@ public:
 
 std::vector<XmlObject> XmlObject::selectPath(const std::string& path) {
 	NSMapXPath ns;
-	string s = ns.getXPathNamespace(path);
+	string s = ns.setXPathNamespaces(path);
 	return selectPath(ns,s);
 }
 
