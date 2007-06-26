@@ -1,9 +1,9 @@
 SUBDIRS =
 EXTRA_DIST = log4j.properties c.xml c2.xml c3.xml b.xsd c.xsd easypo.xml EasyPO.xsd
-AM_CPPFLAGS = -I ../../src
+INCLUDES = -I ${top_builddir}/src -I ${top_srcdir}/src -I ${top_srcdir}/src/xmlbeansxx -I ${top_builddir}/src/xmlbeansxx
 LDADD = ../../src/xmlbeansxx/libxmlbeansxx.la
 
-SCHEMAS_XSD = c.xsd EasyPO.xsd
+SCHEMAS_XSD = ${srcdir}/c.xsd ${srcdir}/EasyPO.xsd
 SCHEMAS_CPP = c.cpp EasyPO.cpp
 SCHEMAS_H = c.h EasyPO.h
 

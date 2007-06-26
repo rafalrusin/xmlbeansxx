@@ -71,7 +71,7 @@ void EnumTest::enumTest()
 		XmlObject o = XmlObjectDocument::Factory::parse(
 		"<zakupy xmlns='http://ala' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>"
 		"	<klient enumTest='tytus'>"
-		"		<nazwa>pawel</nazwa>"
+		"		<nazwa attr='olo'>pawel</nazwa>"
 		"		<ala>13</ala>"
 		"	</klient>"
 		"</zakupy>"
@@ -88,7 +88,7 @@ void EnumTest::enumTest()
 	        LOG4CXX_DEBUG(logger,"QName: " + ns.getQName("a:nazwa"));
 		CPPUNIT_ASSERT_EQUAL(std::string(ns.getQName("a:nazwa")), std::string("nazwa@http://ala"));
 		
-		std::vector<XmlObject> retu=z.selectPath(ns,"/a:zakupy/a:klient/a:ala");
+		std::vector<XmlObject> retu=z.selectPath(ns,"./a:zakupy/a:klient/a:ala");
 		
 		XmlArray<XmlObject> a(retu);
 	        LOG4CXX_DEBUG(logger,"path: " + a.toString())
@@ -104,6 +104,17 @@ void EnumTest::enumTest()
 		std::vector<XmlObject> retu2=z.selectPath(ns,"/zakupy/a:klient/bolek/lolek/");
 	        LOG4CXX_DEBUG(logger,std::string("retu2 size: ") << retu2.size());
 		CPPUNIT_ASSERT_EQUAL(retu2.size(), size_t(0));
+
+		std::string path = 	"declare namespace ale='http://ala' "
+					"declare namespace ble='http://ala' "
+					"./ble:zakupy/ale:klient/ble:nazwa/@attr";
+		std::vector<XmlObject> retu3=z.selectPath(path);
+		
+	        LOG4CXX_DEBUG(logger,std::string("path: ") + path);
+		XmlArray<XmlObject> a3(retu3);
+	        LOG4CXX_DEBUG(logger,"retu3: " + a3.toString())
+		CPPUNIT_ASSERT_EQUAL(XmlString(retu3[0]).getStringValue(), std::string("olo"));		
+		CPPUNIT_ASSERT_EQUAL(retu3.size(), size_t(1));
 		
 		
 		

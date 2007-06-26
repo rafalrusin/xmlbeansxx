@@ -120,9 +120,9 @@ public:
     virtual int documentElementNamespaceID() const;
     
     /** Serializes object to stream */
-    virtual void serialize(std::ostream &out,XmlOptions options=XmlOptions());
+    virtual void serialize(std::ostream &out,XmlOptions options=XmlOptions()) const;
     /** Serializes object to string */
-    virtual std::string toString(XmlOptions options=XmlOptions());
+    virtual std::string toString(XmlOptions options=XmlOptions()) const;
     
 #ifdef BOOST_HAS_THREADS
     boost::recursive_mutex &mutex() const;

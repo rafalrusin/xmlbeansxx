@@ -1,7 +1,7 @@
 SUBDIRS =
 EXTRA_DIST = xml-fragment.xsd
 
-AM_CPPFLAGS = -I../
+AM_CPPFLAGS = -I${top_srcdir}/src -I${top_builddir}/src
 
 lib_LTLIBRARIES = libxmlbeansxx.la
 libxmlbeansxx_la_LDFLAGS = -version-info $(library_version_info)
@@ -105,8 +105,8 @@ nodist_libxmlbeansxxinclude_HEADERS = \
 	XmlTypesGen.h\
 	xml-fragment.h
 
-XmlTypesGen.h XmlTypesGen.cpp: ${top_srcdir}/generator/dist/bin/xmlbeansxx-genbuiltin XmlTypesGen.xh XmlTypesGen.xcpp
-	${top_builddir}/generator/dist/bin/xmlbeansxx-genbuiltin
+XmlTypesGen.h XmlTypesGen.cpp: ${top_srcdir}/generator/dist/bin/xmlbeansxx-genbuiltin
+	${top_builddir}/generator/dist/bin/xmlbeansxx-genbuiltin ${srcdir}/
 
 xml-fragment.h xml-fragment.cpp: ${top_srcdir}/generator/dist/bin/xmlbeansxx-gen xml-fragment.xsd
 	${top_builddir}/generator/dist/bin/xmlbeansxx-gen ${srcdir}/xml-fragment.xsd

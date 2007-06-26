@@ -219,6 +219,13 @@ public class ClassGen {
 		return "tmp" + idNr;
 	}
 	
+	public static String dirName(String fileName) {
+		if (fileName.lastIndexOf('/') != -1) {
+			fileName = fileName.substring(0,fileName.lastIndexOf('/')+1);
+		} else return "./";
+		return fileName;
+		
+	}
 	public static String baseFileName(String fileName) {
 		if (fileName.lastIndexOf('.') != -1) {
 			fileName = fileName.substring(0, fileName.lastIndexOf('.'));
@@ -1703,11 +1710,11 @@ public class ClassGen {
 		if (st.isDocumentType()) {
 			out.h.println("  //Document methods");
 			out.h
-					.println("  virtual void serialize(std::ostream &out,xmlbeansxx::XmlOptions opts=xmlbeansxx::XmlOptions());");
+					.println("  virtual void serialize(std::ostream &out,xmlbeansxx::XmlOptions opts=xmlbeansxx::XmlOptions()) const;");
 			out.cpp
 					.println("void "
 							+ className(st)
-							+ "::serialize(std::ostream &out,xmlbeansxx::XmlOptions opts){");
+							+ "::serialize(std::ostream &out,xmlbeansxx::XmlOptions opts) const{");
 			out.cpp.println("  xmlbeansxx::Contents::Walker::serializeDocument(*this,out,opts,type());");
 			out.cpp.println("}");
 		}

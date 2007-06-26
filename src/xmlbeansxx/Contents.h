@@ -157,7 +157,7 @@ public:
 		};
 		static void setElemArray(XmlObject& obj,const QName& elemName,const std::vector<ContentsPtr>& v);
 
-		static void serializeDocument(XmlObject& obj,std::ostream &o,XmlOptions options,const xmlbeansxx::SchemaType * st);
+		static void serializeDocument(const XmlObject& obj,std::ostream &o,XmlOptions options,const xmlbeansxx::SchemaType * st);
 //		static void serialize2(XmlObject& obj,int emptyNsID,bool printXsiType,const QName& elemName,std::ostream &o,const xmlbeansxx::SchemaType * st);
 
 		static void setSimpleContent(XmlObject& obj,const std::string &c);

@@ -129,7 +129,7 @@ namespace xmlbeansxx {
 			p->insertDefaults(schemaType);
 		};
 */
-		 void Contents::Walker::serializeDocument(XmlObject& obj,std::ostream &o,XmlOptions options,const xmlbeansxx::SchemaType * st) {
+		 void Contents::Walker::serializeDocument(const XmlObject& obj,std::ostream &o,XmlOptions options,const xmlbeansxx::SchemaType * st) {
 			if(!obj.hasContents()) throw NullPtrException("Cannot serialize an empty XmlObject = " + obj.getSchemaType()->className);
 			obj.contents->serializeDocument(o,options);
 		};

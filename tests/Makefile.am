@@ -2,7 +2,6 @@ SUBDIRS =
 EXTRA_DIST = a.xml b.xml c.xml c.xsd c.xh entities.xml entities.xsd log4j.xml pawel.xsd
 
 
-INCLUDES =
 LIBADD =
 LDADD =
 
@@ -11,10 +10,10 @@ AM_CPPFLAGS = $(CPPUNIT_CFLAGS) -g
 LDADD += $(CPPUNIT_LIBS)
 endif
 
-INCLUDES += -I ../src
-LDADD += ../src/xmlbeansxx/libxmlbeansxx.la
+INCLUDES = -I ${top_srcdir}/src -I ${top_builddir}/src -I ${top_builddir}/src/xmlbeansxx -I ${top_srcdir}/src/xmlbeansxx 
+LDADD += ${top_builddir}/src/xmlbeansxx/libxmlbeansxx.la
 
-SCHEMAS_XSD = c.xsd entities.xsd pawel.xsd
+SCHEMAS_XSD = ${srcdir}/c.xsd ${srcdir}/entities.xsd ${srcdir}/pawel.xsd
 SCHEMAS_CPP = c.cpp entities.cpp pawel.cpp
 SCHEMAS_H = c.h entities.h pawel.h
 

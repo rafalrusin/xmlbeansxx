@@ -24,8 +24,9 @@ import java.io.*;
 public class Input {
 	private Map h_gaps,cpp_gaps;
 	public Input(String name) {
-		h_gaps=readGaps(name+".xh");
-		cpp_gaps=readGaps(name+".xcpp");
+		String inputPath = System.getProperty("inputPath");
+		h_gaps=readGaps(inputPath + name+".xh");
+		cpp_gaps=readGaps(inputPath + name+".xcpp");
 	}
 	
 	private Map readGaps(String fileName) {

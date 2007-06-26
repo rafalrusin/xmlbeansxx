@@ -105,7 +105,7 @@ bool XmlObject::setAnyElement(const QName& elementName,const std::string& anyCon
 }
 
 
-void XmlObject::serialize(std::ostream &o,XmlOptions options)  {
+void XmlObject::serialize(std::ostream &o,XmlOptions options)  const{
     TRACER(log,"serialize");
     if(!hasContents()) throw NullPtrException("Cannot serialize an empty XmlObject = " + getSchemaType()->className);
 
@@ -120,7 +120,7 @@ void XmlObject::serialize(std::ostream &o,XmlOptions options)  {
 }
 
 
-std::string XmlObject::toString(XmlOptions options) {
+std::string XmlObject::toString(XmlOptions options) const {
     std::ostringstream ss;
     serialize(ss,options);
     return ss.str();
