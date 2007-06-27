@@ -42,10 +42,10 @@ MOSTLYCLEANFILES = $(SCHEMAS_CPP) $(SCHEMAS_H)
 
 
 copy_data: 
-	if [ ${builddir} -a 'x${srcdir}' != 'x${builddir}' ]; then for i in $(DATA_FILES); do   cp ${srcdir}/$$i ${builddir} ; done ; true ;  fi 
+	if [ ${builddir} ]; then if [ 'x${srcdir}' != 'x${builddir}' ]; then for i in $(DATA_FILES); do   cp ${srcdir}/$$i ${builddir} ; done ; true ;  fi fi
 
 rm_data: 
-	if [ ${builddir} -a 'x${srcdir}' != 'x${builddir}' ]; then  rm -f $(DATA_FILES)  ; true ;  fi
+	if [ ${builddir} ]; then if [ 'x${srcdir}' != 'x${builddir}' ]; then  rm -f $(DATA_FILES)  ; true ;  fi fi
 
 check: copy_data
 
