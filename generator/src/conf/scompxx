@@ -28,6 +28,7 @@ Usage: $0 [-out lib_name] [-V lib_version] [dirs]* [files.xsd]*
 -dl 		- permit network downloads for imports and includes (default is off)
 -noupa 		- do not enforce the unique particle attribution rule
 -nopvr		- do not enforce the particle valid (restriction) rule
+-srconly 	- do not compile .cpp files.
 
 files.xsd	- Type system schema files
 dirs		- directores with type system schema files (search recursively)
@@ -48,10 +49,12 @@ BIN=`dirname $basefile`
 ARG_XSD=""
 SRC_DIR="src"
 XSD_PATH_PREFIX="../"
+MAKEFILE_XSD_PATH_PREFIX="\${top_srcdir}/"
 LIB_NAME="xmltypes"
 LIB_VERSION="1:0:0"
 DIRS=""
 XMLBEANSXX_OPTS=""
+SRCONLY_FLAG=""
 MAX_FILESIZE=3000000
 
 while test $# -gt 0; do
@@ -66,6 +69,9 @@ while test $# -gt 0; do
 		;;
 	-noupa)	XMLBEANSXX_OPTS="$XMLBEANSXX_OPTS -DnoUpa"
                 ;;
+	-srconly)
+		SRCONLY_FLAG="true"
+		;;
 	-nopvr) XMLBEANSXX_OPTS="$XMLBEANSXX_OPTS -DnoPvr"
 		;;
 	-*)	echo "$usage" ; exit 1
@@ -87,15 +93,17 @@ done
 for i in $ARG_XSD; do
 	case "$i" in
 	/*)	XSD_FILES="$XSD_FILES $i"
+		MAKEFILE_XSD_FILES="$MAKEFILE_XSD_FILES $i"
 		;;
 	*)	XSD_FILES="$XSD_FILES $XSD_PATH_PREFIX$i"
+		MAKEFILE_XSD_FILES="$MAKEFILE_XSD_FILES $MAKEFILE_XSD_PATH_PREFIX$i"
 		;;
 	esac
 	ORGIN_XSD="$ORGIN_XSD $i"
 done 
 
 LIB_FULLNAME="lib${LIB_NAME}"
-PKG_VERSION=`echo $LIB_VERSION | sed -e 's/\(.\):\(.\):\(.\)/\1.\3/'`
+PKG_VERSION=`echo $LIB_VERSION | sed -e 's/\([^:]*\):\([^:]*\):\([^:]*\)/\1.\3/'`
 
 mkdir $SRC_DIR
 cd $SRC_DIR
@@ -140,14 +148,14 @@ COMP_TO_SPLIT_CPP=$COMP_TO_SPLIT_CPP
 COMP_SPLITED_CPP=$COMP_SPLITED_CPP
 
 schemaincludedir = \$(includedir)/${LIB_NAME}
-schemainclude_HEADERS = \$(COMP_H)
+nodist_schemainclude_HEADERS = \$(COMP_H)
 
 lib_LTLIBRARIES = ${LIB_FULLNAME}.la
 ${LIB_FULLNAME}_la_LDFLAGS = -version-info $LIB_VERSION -lxmlbeansxx
-${LIB_FULLNAME}_la_SOURCES = \$(COMP_H) \$(COMP_SPLITED_CPP) \$(COMP_CPP)
+nodist_${LIB_FULLNAME}_la_SOURCES = \$(COMP_H) \$(COMP_SPLITED_CPP) \$(COMP_CPP)
 
-\$(COMP_H) \$(COMP_CPP) \$(COMP_TO_SPLIT_CPP): $XSD_FILES
-	$BIN/xmlbeansxx-gen $XMLBEANSXX_OPTS $XSD_FILES
+\$(COMP_H) \$(COMP_CPP) \$(COMP_TO_SPLIT_CPP): $MAKEFILE_XSD_FILES
+	$BIN/xmlbeansxx-gen $XMLBEANSXX_OPTS $MAKEFILE_XSD_FILES
 
 $SPLITS
 
@@ -248,15 +256,18 @@ RUN_BOOTSTRAP=1
 RUN_CONFIGURE=1
 
 ## Launching makefiles generation ##
-if [ "$RUN_BOOTSTRAP" = 1 ]; then ./bootstrap || exit 1; fi
-if [ "$RUN_CONFIGURE" = 1 ]; then ./configure || exit 1; fi
+if [ ! $SRCONLY_FLAG ]; then 
+	if [ "$RUN_BOOTSTRAP" = 1 ]; then ./bootstrap || exit 1; fi
+	if [ "$RUN_CONFIGURE" = 1 ]; then ./configure || exit 1; fi
 
-## Compilation ##
-make && cat <<EOF
+	## Compilation ##
+	make && cat <<EOF
 ###########################################
 # Type:
 # make install
 # in order to install library into system
 ###########################################
 EOF
+
+fi
 
