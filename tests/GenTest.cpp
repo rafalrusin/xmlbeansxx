@@ -121,6 +121,7 @@ void parsing() {
     //ifstream in("a.xml");
     //LOG4CXX_DEBUG(logger, "parsing a.xml");
     {
+    
       /*
         for (int i = 0; i<1000; i++) {
             XmlParser *p2 = new XmlParser();
