@@ -278,8 +278,7 @@ void LibXMLParser::loadGrammar(const string &filename) {
 
     schemaParserCtxt = xmlSchemaNewParserCtxt(filename.c_str());
     if (schemaParserCtxt == NULL) {
-        throw new BeansException("Can't create xmlSchemaParserContext");
-        return;
+        throw BeansException("Can't create xmlSchemaParserContext");
     }
 
     xmlSchemaSetParserErrors(schemaParserCtxt,
@@ -290,14 +289,12 @@ void LibXMLParser::loadGrammar(const string &filename) {
     schema = xmlSchemaParse(schemaParserCtxt);
     if (schema == NULL) {
         unloadGrammars();
-        throw new BeansException("Can't precompile schema");
-        return;
+        throw BeansException("Can't precompile schema");
     }
 
     if ((validationCtxt = xmlSchemaNewValidCtxt(schema)) == NULL) {
         unloadGrammars();
-        throw new BeansException("Can't create schema validation context");
-        return;
+        throw BeansException("Can't create schema validation context");
     }
 
     xmlSchemaSetValidErrors(validationCtxt,

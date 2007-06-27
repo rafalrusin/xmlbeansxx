@@ -9,7 +9,7 @@ SCHEMAS_H = c.h EasyPO.h
 
 BUILT_SOURCES = $(SCHEMAS_CPP) $(SCHEMAS_H)
 
-$(SCHEMAS_CPP) $(SCHEMAS_H): ${top_srcdir}/generator/dist/bin/xmlbeansxx-gen $(SCHEMAS_XSD)
+$(SCHEMAS_CPP) $(SCHEMAS_H): ${top_builddir}/generator/dist/bin/xmlbeansxx-gen $(SCHEMAS_XSD)
 	${top_builddir}/generator/dist/bin/xmlbeansxx-gen $(SCHEMAS_XSD)
 
 

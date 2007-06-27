@@ -1,4 +1,3 @@
-SUBDIRS =
 EXTRA_DIST = a.xml b.xml c.xml c.xsd c.xh entities.xml entities.xsd log4j.xml pawel.xsd
 
 
@@ -16,6 +15,7 @@ LDADD += ${top_builddir}/src/xmlbeansxx/libxmlbeansxx.la
 SCHEMAS_XSD = ${srcdir}/c.xsd ${srcdir}/entities.xsd ${srcdir}/pawel.xsd
 SCHEMAS_CPP = c.cpp entities.cpp pawel.cpp
 SCHEMAS_H = c.h entities.h pawel.h
+DATA_FILES = $(EXTRA_DIST)
 
 BUILT_SOURCES = $(SCHEMAS_CPP) $(SCHEMAS_H)
 
@@ -40,3 +40,13 @@ nodist_mem02_SOURCES = c.h c.cpp
 
 MOSTLYCLEANFILES = $(SCHEMAS_CPP) $(SCHEMAS_H)
 
+
+copy_data: 
+	if [ 'x${srcdir}' != 'x${builddir}' ]; then for i in $(DATA_FILES); do   cp ${srcdir}/$$i ${builddir} ; done ; true ;  fi 
+
+rm_data: 
+	if [ 'x${srcdir}' != 'x${builddir}' ]; then  rm -f $(DATA_FILES)  ; true ;  fi 
+
+check: copy_data
+
+clean-local: rm_data

@@ -65,7 +65,7 @@
 	</target>
 	<target name="clean" description="Cleaning">
 		<delete dir="${dist.dir}"/>
-		<delete dir="build"/>
+		<delete dir="${build.dir}"/>
 		<delete dir="doc"/>
 		<delete dir="release"/>
 	</target>

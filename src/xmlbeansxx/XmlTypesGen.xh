@@ -142,7 +142,7 @@ public:
     //----//
 
     //EWML extensions
-    virtual std::string digest();
+    virtual std::string digest() const;
     bool setAnyElement(const QName& elementName,const std::string& content);
     //~EWML extensions
     

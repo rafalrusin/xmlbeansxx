@@ -87,7 +87,7 @@ std::pair<std::string,std::string> XmlObject::getXpathToken(std::string xpath) c
 
 int XmlObject::documentElementNamespaceID() const { return -1; }
 
-std::string XmlObject::digest() {
+std::string XmlObject::digest() const{
 	if(!contents) return "NULL";
     	return contents->digest(); 
 }
