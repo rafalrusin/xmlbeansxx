@@ -111,10 +111,11 @@ cd $SRC_DIR
 rm -f xsd.txt
 if ! $BIN/xmlbeansxx-gen $XMLBEANSXX_OPTS -Dincludes=xsd.txt $XSD_FILES; then exit 1; fi
 
-COMP_XSD=`cat xsd.txt`
-COMP_XSD=`echo $COMP_XSD`
+#COMP_XSD=`cat xsd.txt`
+#COMP_XSD=`echo $COMP_XSD`
 
-for i in $COMP_XSD; do
+for i in $ORGIN_XSD; do
+	COMP_XSD="$COMP_XSD `basename $i`"
 	COMP_H="$COMP_H `basename $i .xsd`.h"
 	CPPFILE="`basename $i .xsd`.cpp"
 	CPPFILES=$CPPFILE
