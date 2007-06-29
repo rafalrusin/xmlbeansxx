@@ -1,6 +1,0 @@
-# HTTP Cookie File
-# http://www.netscape.com/newsref/std/cookie_spec.html
-# This is a generated file!  Do not edit.
-# To delete cookies, use the Cookie Manager.
-
-.google.com	TRUE	/	FALSE	2147390248	PREF	ID=2acee06699bf7b95:TM=1182770280:LM=1182770280:S=BUuyIhGZAAHiK-Sz
