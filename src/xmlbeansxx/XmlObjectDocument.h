@@ -23,6 +23,38 @@
 
 namespace xmlbeansxx {
 
+
+class XmlObjectDocument: public xmlbeansxx::XmlObject {
+  private:
+  static xmlbeansxx::SchemaType initSchemaType();
+  //Constructors
+  protected:
+  XmlObjectDocument(const xmlbeansxx::Void &v);
+  public:
+  XmlObjectDocument();
+  XmlObjectDocument(const xmlbeansxx::ContentsPtr& p);
+  XmlObjectDocument(const xmlbeansxx::XmlObject& p);
+  virtual void setXmlObject(const xmlbeansxx::XmlObject& p);
+public:
+  virtual const xmlbeansxx::SchemaType *getOrginSchemaType() const;
+  static const xmlbeansxx::SchemaType *type();
+  class Factory {
+  public:
+    //Empty Object Creation
+    static xmlbeansxx::XmlObjectDocument newInstance();
+    static xmlbeansxx::XmlObjectPtr newInstanceXmlObject();
+    //Empty Array Creation
+    static xmlbeansxx::XmlObjectPtr newXmlArrayInstance();
+    //Object Creation using parsing
+    static XmlObjectDocument parse(std::istream &in,xmlbeansxx::XmlOptions options=xmlbeansxx::XmlOptions());
+    static XmlObjectDocument parse(const std::string &str,xmlbeansxx::XmlOptions options=xmlbeansxx::XmlOptions());
+  };
+  //Document methods
+  virtual void serialize(std::ostream &out,xmlbeansxx::XmlOptions opts=xmlbeansxx::XmlOptions()) const;
+};
+
+/*
+
 class XmlObjectDocument {
 public:
   class Factory {
@@ -33,7 +65,7 @@ public:
   };
   
 };
-
+*/
 };
 #endif
 

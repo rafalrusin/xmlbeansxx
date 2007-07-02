@@ -226,13 +226,13 @@ void Contents::serializeDocument(ostream &o,XmlOptions options) const {
     if (propIt!=order->end())
         prop=propIt->second;
 
+    bool printXsiType;
     if (prop==NULL) {
         std::string msg=std::string("Serializing document of class: ")+std::string(st->className)+std::string(". It's root element name should not be '")+it->name+std::string("'");
         LOG4CXX_DEBUG(log,msg);
-        throw XmlException(msg);
-    }
-
-    bool printXsiType=shallPrintXsiType(prop->schemaType,it->value->st);
+	printXsiType=false;
+//        throw XmlException(msg);
+    } else printXsiType=shallPrintXsiType(prop->schemaType,it->value->st);
     //----------
     it->value->serialize(printXsiType,it->name,o,ns);
     o<<"\n";
