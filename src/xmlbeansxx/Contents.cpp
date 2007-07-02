@@ -189,6 +189,7 @@ void Contents::removeElemAt(const QName& elemName,int index) {
 }
 
 bool Contents::hasEmptyContent() const {
+    SYNC(mutex)
     return attrs.hasEmptyContent() && elems.hasEmptyContent();
 }
 
@@ -241,11 +242,14 @@ std::string Contents::digest() const {
     
     std::map<std::pair<QName,int>, ContentsPtr> m;
     std::map<std::string, int> counters;
-    FOREACH(it,es) {
-        if (it->second!=NULL) {
-            m[std::pair<QName,int>(it->first,counters[it->first])]=it->second;
-            counters[it->first]++;
-        }
+    {
+	SYNC(mutex)
+    	FOREACH(it,es) {
+        	if (it->second!=NULL) {
+	            m[std::pair<QName,int>(it->first,counters[it->first])]=it->second;
+        	    counters[it->first]++;
+	        }
+	}
     }
     FOREACH(it,m) {
         r+="<";
