@@ -1793,6 +1793,26 @@ public class ClassGen {
 			out.println(it.next());
 		}
 	}
+	
+	List<String> dependList() {
+		final List<String> files = new ArrayList<String>();
+		
+		
+		traverseAllTypes(new TypeTraversor() {
+			public void fn(SchemaType st) {
+				String n = st.getSourceName();
+				/*
+				 * log.info("source:"+n); File f; try { f = new File(new
+				 * URI(n)); } catch (URISyntaxException e) {
+				 * e.printStackTrace(); throw new RuntimeException(); }
+				 * log.info("file:"+f.getName());
+				 */
+				files.add(n.substring(n.lastIndexOf('/') + 1));
+			}
+		});
+		
+		return files;
+	}
 
 	void registration(SchemaType st) {
 	
@@ -2172,13 +2192,25 @@ public class ClassGen {
 			if (args.length == 0) {
 				usage();
 			} else {
-				String[] xsds = args;
-				SchemaTypeSystem ts = loadTS(baseFileName(args[0]), xsds);
+
+				SchemaTypeSystem ts = loadTS(baseFileName(args[0]), args);
 				log.info("SchemaTypeSystem: " + args[0]);
 
-				for (int i = 0; i < xsds.length; i++) {
-					String name = baseFileName(xsds[i]);
-					log.info("Processing " + xsds[i]);
+				
+				Set<String> xsds = new HashSet<String>();
+				
+				for (int i = 0; i < args.length; i++) {
+					String name = baseFileName(args[i]);
+					xsds.add(name);
+					ClassGen cg = new ClassGen(ts, name);
+					for (String name2 : cg.dependList()){
+						xsds.add(baseFileName(name2));	
+					}
+				} 
+				
+				for (String name : xsds) {
+
+					log.info("Processing " + name);
 					ClassGen cg = new ClassGen(ts, name);
 					if (System.getProperty("depend") != null) {
 						cg.depend(System.out);
