@@ -20,7 +20,7 @@ DATA_FILES = $(EXTRA_DIST)
 BUILT_SOURCES = $(SCHEMAS_CPP) $(SCHEMAS_H)
 
 $(SCHEMAS_CPP) $(SCHEMAS_H): $(SCHEMAS_XSD) c.xh
-	${top_builddir}/generator/dist/bin/xmlbeansxx-gen -Ddownload $(SCHEMAS_XSD)
+	${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen -Ddownload $(SCHEMAS_XSD)
 
 TESTS=BeansTest GenTest EntitiesTest ArrayTest EnumTest
 check_PROGRAMS = $(TESTS)

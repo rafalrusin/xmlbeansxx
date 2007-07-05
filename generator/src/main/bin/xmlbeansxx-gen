@@ -13,26 +13,34 @@
 #    distributed under the License is distributed on an "AS IS" BASIS,
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
-#    limitations under the License.
+#    limitations under the License. 
 #
 
 usage="\
-Validates xml given xsds
+Generates C++ classes from xsd files.
 
-Usage: $0 file.xml [file1.xsd file2.xsd ... ]
+Usage: $0 [file1.xsd file2.xsd ... ]
+
+name		- C++ name of type system
+files.xsd	- Type system schema files
 
 Report bugs to: <rr@touk.pl>
 Copyright (C) 2004 TouK"
-
-basefile=`readlink -f $0`
 
 if test $# -eq 0; then
   echo "$usage"; exit 1
 fi
 
-LIB=`dirname $basefile`/../lib
-BIN=`dirname $basefile`
-CLASSPATH=$LIB/xbean.jar:$LIB/xmlbeansxx-gen.jar:$LIB/commons-logging-1.0.4.jar:$LIB/log4j-1.2.8.jar:$BIN
+basefile=`readlink -f $0`
 
-java -classpath $CLASSPATH -Dlog4j.configuration=log4j.properties pl.touk.xmlbeansxx.Validator $@
+for i; do
+    if [ "`echo $i| dd count=1 ibs=1 2>/dev/null `" = "-" ]; then
+        opts="$opts $i"
+    else 
+        args="$args $i"
+    fi
+done
+
+java $opts -jar `dirname ${basefile}`/../xmlbeansxx-gen.jar $args
+#`dirname $0`/xmlbeans++split.pl $1.cpp
 

@@ -105,11 +105,11 @@ nodist_libxmlbeansxxinclude_HEADERS = \
 	XmlTypesGen.h\
 	xml-fragment.h
 
-XmlTypesGen.h XmlTypesGen.cpp: ${top_builddir}/generator/dist/bin/xmlbeansxx-genbuiltin
-	${top_builddir}/generator/dist/bin/xmlbeansxx-genbuiltin ${srcdir}/
+XmlTypesGen.h XmlTypesGen.cpp: ${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-genbuiltin
+	${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-genbuiltin ${srcdir}/
 
-xml-fragment.h xml-fragment.cpp: ${top_builddir}/generator/dist/bin/xmlbeansxx-gen xml-fragment.xsd
-	${top_builddir}/generator/dist/bin/xmlbeansxx-gen ${srcdir}/xml-fragment.xsd
+xml-fragment.h xml-fragment.cpp: ${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen xml-fragment.xsd
+	${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen ${srcdir}/xml-fragment.xsd
 
 MOSTLYCLEANFILES=XmlTypesGen.h XmlTypesGen.cpp xml-fragment.h xml-fragment.cpp
 
