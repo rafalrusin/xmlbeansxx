@@ -48,6 +48,7 @@
           
           <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
+	    <version>2.1</version>
             <executions>
               <execution>
                 <phase>package</phase>
@@ -57,7 +58,7 @@
                 <configuration>
                   <descriptor>${basedir}/src/main/assemblies/release.xml</descriptor>
                   <appendAssemblyId>false</appendAssemblyId>
-                  <finalName>${artifactId}</finalName>
+                  <finalName>xmlbeansxx-gen</finalName>
                 </configuration>
               </execution>
             </executions>
