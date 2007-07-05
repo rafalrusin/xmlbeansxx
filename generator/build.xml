@@ -99,7 +99,6 @@
         <copy file="src/conf/xmlbeansxx-gen" todir="${dist.dir}/bin"/>
         <copy file="src/conf/xmlbeansxx-split" todir="${dist.dir}/bin"/>
         <copy file="src/conf/xmlbeansxx-genbuiltin" todir="${dist.dir}/bin"/>
-        <copy file="src/conf/acx_pthread.m4" todir="${dist.dir}/bin"/>
 		<chmod perm="a+x" type="file" failonerror="false">
             <fileset dir="${dist.dir}/bin" includes="xmlvalidator xmlbeansxx-genbuiltin xmlbeansxx-gen scompxx xmlbeansxx-split"/>
 		</chmod>
