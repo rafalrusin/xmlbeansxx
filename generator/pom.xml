@@ -9,7 +9,7 @@
   <groupId>pl.touk.xmlbeansxx</groupId>
   <artifactId>xmlbeansxx-gen</artifactId>
   <version>0.6.2</version>
-  <name>XMLBeans Generator</name>
+  <name>XMLBeansxx Generator</name>
   <url>http://touk.pl</url>
   
   <build>
