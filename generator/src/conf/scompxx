@@ -99,7 +99,7 @@ for i in $ARG_XSD; do
 		MAKEFILE_XSD_FILES="$MAKEFILE_XSD_FILES $MAKEFILE_XSD_PATH_PREFIX$i"
 		;;
 	esac
-	ORGIN_XSD="$ORGIN_XSD $i"
+	ORGIN_BASENAME_XSD="$ORGIN_BASENAME_XSD `basename $i`"
 done 
 
 LIB_FULLNAME="lib${LIB_NAME}"
@@ -114,7 +114,23 @@ if ! $BIN/xmlbeansxx-gen $XMLBEANSXX_OPTS -Dincludes=xsd.txt $XSD_FILES; then ex
 #COMP_XSD=`cat xsd.txt`
 #COMP_XSD=`echo $COMP_XSD`
 
-for i in $ORGIN_XSD; do
+
+ALL_XSD="$ORGIN_XSD `cat xsd.txt`"
+TMP1_FILE=`tempfile`
+TMP2_FILE=`tempfile`
+cat xsd.txt > $TMP1_FILE 
+for i in $ORGIN_BASENAME_XSD; do
+	echo $i >> $TMP1_FILE
+done
+sort $TMP1_FILE | uniq > $TMP2_FILE
+
+ALL_XSD=`cat $TMP2_FILE`
+
+rm $TMP1_FILE
+rm $TMP2_FILE
+
+
+for i in $ALL_XSD; do
 	COMP_XSD="$COMP_XSD `basename $i`"
 	COMP_H="$COMP_H `basename $i .xsd`.h"
 	CPPFILE="`basename $i .xsd`.cpp"
