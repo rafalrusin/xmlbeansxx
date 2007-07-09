@@ -260,6 +260,20 @@ std::vector<XmlObject> XmlObject::selectPath(const NSMap& ns,const std::string& 
 	return retu.obj;
 }
 
+const std::vector<XmlObject> XmlObject::selectPath(const std::string& path) const {
+	NSMapXPath ns;
+	string s = ns.setXPathNamespaces(path);
+	return selectPath(ns,s);
+}
+
+const std::vector<XmlObject> XmlObject::selectPath(const NSMap& ns,const std::string& path) const {
+	Path p(ns);
+	p.addXmlObject(*this);
+	Path retu = p.getPath(path);
+	return retu.obj;
+}
+
+
 std::vector<XmlObject> XmlObject::cselectPath(const std::string& path) {
 	NSMapXPath ns;
 	string s = ns.setXPathNamespaces(path);
