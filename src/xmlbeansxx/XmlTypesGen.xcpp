@@ -30,10 +30,8 @@
 namespace xmlbeansxx {
 std::string istreamToString(std::istream &in) {
     std::string s,s2;
-    while (true) {
+    while (!in.eof()) {
         in>>s2;
-        if (in.eof())
-            break;
         s+=s2;
     }
     return s;

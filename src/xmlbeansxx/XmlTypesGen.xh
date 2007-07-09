@@ -191,6 +191,10 @@ public:
     std::vector<XmlObject> selectPath(const std::string& path);
     std::vector<XmlObject> selectPath(const NSMap& ns,const std::string& path);
 
+    std::vector<XmlObject> cselectPath(const std::string& path);
+    std::vector<XmlObject> cselectPath(const NSMap& ns,const std::string& path);
+
+
     
 public:
     virtual void createContents();

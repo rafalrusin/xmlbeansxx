@@ -23,6 +23,7 @@
 #include "defs.h"
 #include "BoostAssert.h"
 #include "NSMap.h"
+#include "QName.h"
 
 namespace xmlbeansxx {
 
@@ -92,7 +93,7 @@ LOGGER_PTR_SET(log,"xmlbeansxx.XPath");
 class Path{
 public:
 
-	Path(const NSMap& ns):ns(ns){};
+	Path(const NSMap& ns,bool create=false):ns(ns),create(create){};
 
 	bool isAttr(const string& name) {
 		return name[0]=='@';
@@ -129,27 +130,108 @@ public:
         		return pair<string,int>(name,0);
 	    	}
 	}
+	
+private:
+	std::string _getQNameString(const QName& name){
+		return name->first + std::string(":") + name->second;
+	}
+	std::string _getQNameStringWithStar(const std::string& part){
+		if(part.find(":")==-1) return part;
+		try {
+			return _getQNameString(ns.getQName(part));
+		} catch(...) {
+			return part;
+		}
+	}
+	std::vector<std::string> tokenize(const std::string& str,const std::string& t){
+		std::vector<std::string> retu;
+		std::string sub=str;
+		int p;
+		while((p = sub.find(t)) != -1) {
+			LOG4CXX_DEBUG(log,"tokenize: " + sub.substr(0,p));
+			retu.push_back(sub.substr(0,p));
+			sub = sub.substr(p+t.size());
+		}
+		LOG4CXX_DEBUG(log,"tokenize: " + sub);
+		retu.push_back(sub);		
+		return retu;
+	}
+	
+	bool matchQNameString(const std::string& qn,const std::vector<std::string>&  tab){
+		BOOST_ASSERT(tab.size()>1);
+		if(qn.find(tab.front())!=0) return false;
+		std::string sub=qn;
+		FOREACH(i,tab) {
+			LOG4CXX_DEBUG(log,"submatch: " << sub  << " ~= " << *i);
+			int p = sub.find(*i);
+			if(p<0) return false;
+			sub = sub.substr(p+i->size());
+		}
+		if(sub.size()>0) {
+		 	if(tab.back().size()>0) return false;
+			else true;
+		 }
+		return true;
+		
+	}
+
 
 	Path doPart(const std::string& part) {
-		if (part.size()<=0) return *this;
-		if (part == ".") return *this;
-		Path p(ns);
-		
-		pair<string,int> e=decomposeElem(part);
-		QName name;
-		if (isAttr(e.first))
-			name = ns.getQName(e.first.substr(1));
-		else	name = ns.getQName(e.first);
+		Path p(ns,create);
 
-		LOG4CXX_DEBUG(log,"doPart: " + name);
-		
-		if (isAttr(e.first)) {
+		LOG4CXX_DEBUG(log,"doPart: " + part);
+		if (part.size()<=0) { 
+			return *this;
+		} else if (part == ".") {
+			return *this;
+		} else if (part.find("*")!=-1) {
+			std::string partMatch = _getQNameStringWithStar(part);
+			VAL(tab,tokenize(partMatch,"*"));
 			FOREACH(i,obj) {
-				p.addXmlObject(Contents::Walker::getAttr(*i,name));
-			}
+				FOREACH(e,i->getSchemaType()->elements) {
+					QName elemName=e->first;
+					std:string elemMatch = _getQNameString(elemName);
+					LOG4CXX_DEBUG(log,"element matching: "  << elemMatch << " ~= " << partMatch);
+					
+					if(matchQNameString(elemMatch, tab)) {
+						LOG4CXX_DEBUG(log,"element matched: "   << elemMatch  << " ~= " << partMatch);
+						try {
+							LOG4CXX_DEBUG(log,"creating: "   << create);
+							if(create && !Contents::Walker::isSetElem(*i,elemName)) {
+								LOG4CXX_DEBUG(log,"creating element: "   << elemName.toString());
+								Contents::Walker::cgetElem(*i,elemName);
+							}
+							
+							for(int k=0;k<Contents::Walker::countElems(*i,elemName);k++)
+								p.addXmlObject(Contents::Walker::getElem(*i,elemName,k));
+						
+						} catch(...) {}
+					}
+				}
+			}	
 		} else {
-			FOREACH(i,obj) {
-				p.addXmlObject(Contents::Walker::getElem(*i,name,e.second));
+			pair<string,int> e=decomposeElem(part);
+			QName name;
+			if (isAttr(e.first))
+				name = ns.getQName(e.first.substr(1));
+			else	name = ns.getQName(e.first);
+
+		
+			if (isAttr(e.first)) {
+				FOREACH(i,obj) {
+					try {
+						p.addXmlObject(Contents::Walker::getAttr(*i,name));
+					} catch(...) {}
+//					p.addXmlObject(Contents::Walker::getAttr(*i,name));
+				}
+			} else {
+				FOREACH(i,obj) {
+					try {
+						if(create) 	p.addXmlObject(Contents::Walker::cgetElem(*i,name));
+						else		p.addXmlObject(Contents::Walker::getElem(*i,name));
+					} catch(...) {}
+//					p.addXmlObject(Contents::Walker::getElem(*i,name,e.second));
+				}
 			}
 		}
 		return p;
@@ -158,6 +240,9 @@ public:
 	std::vector<XmlObject> obj;
 
 	const NSMap &ns;
+	bool create;
+	
+	friend class XmlObject;
 };
 
 
@@ -174,6 +259,20 @@ std::vector<XmlObject> XmlObject::selectPath(const NSMap& ns,const std::string& 
 	Path retu = p.getPath(path);
 	return retu.obj;
 }
+
+std::vector<XmlObject> XmlObject::cselectPath(const std::string& path) {
+	NSMapXPath ns;
+	string s = ns.setXPathNamespaces(path);
+	return cselectPath(ns,s);
+}
+
+std::vector<XmlObject> XmlObject::cselectPath(const NSMap& ns,const std::string& path) {
+	Path p(ns,true);
+	p.addXmlObject(*this);
+	Path retu = p.getPath(path);
+	return retu.obj;
+}
+
 
 }
 
