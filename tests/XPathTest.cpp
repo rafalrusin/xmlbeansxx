@@ -20,6 +20,7 @@ using namespace ala;
 void XPathTest::xPathTest() 
 {
 	{
+		//selectPath
 		XmlObject o = XmlObjectDocument::Factory::parse(
 		"<zakupy xmlns='http://ala' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>"
 		"	<klient enumTest='tytus'>"
@@ -69,6 +70,7 @@ void XPathTest::xPathTest()
 		CPPUNIT_ASSERT_EQUAL(retu3.size(), size_t(1));		
 	}
 	{
+		//selectPath with *
 		XmlObject o = XmlObjectDocument::Factory::parse(
 		"<zakupy xmlns='http://ala' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>"
 		"	<klient enumTest='tytus'>"
@@ -120,6 +122,7 @@ void XPathTest::xPathTest()
 		CPPUNIT_ASSERT_EQUAL(retu4.size(), size_t(1));		
 	}
 	{
+		//cselectPath with *
 	
 		XmlObject o = XmlObjectDocument::Factory::parse(
 		"<zakupy xmlns='http://ala' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>"
@@ -147,6 +150,27 @@ void XPathTest::xPathTest()
 	
 	}
 
+	{	//cselectPath without namespace
+	
+		XmlObject o = XmlObjectDocument::Factory::parse(
+		"<zakupy xmlns='http://ala' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>"
+		"	<klient enumTest='tytus'>"
+		"		<nazwa attr='olo'>pawel</nazwa>"
+		"		<ala>13</ala>"
+		"	</klient>"
+		"</zakupy>"
+		);
+		ZakupyDocument z=ZakupyDocument::Factory::parse(o.toString());
+
+		std::vector<XmlObject> retu=z.cselectPath("./*/*:klient/*:nazwa");
+		
+		CPPUNIT_ASSERT_EQUAL(size_t(1), retu.size());		
+		
+		XmlArray<XmlObject> a(retu);
+	        LOG4CXX_DEBUG(logger,"path: " + a.toString());
+		CPPUNIT_ASSERT_EQUAL(retu[0].getSimpleContent(), std::string("pawel"));		
+	
+	}
 }
 
 
