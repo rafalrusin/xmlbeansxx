@@ -19,6 +19,7 @@
 
 //Additional language definitions
 #define FOREACH(it,c) for(__typeof((c).begin()) it=(c).begin(); it!=(c).end(); ++it)
+#define FOREACH_BACKWARD(it,c) for(__typeof((c).rbegin()) it=(c).rbegin(); it!=(c).rend(); ++it)
 #define FOR(i,n) for(int i=0;i<(n);++i)
 #define VAL(i,v) __typeof(v) i=(v)
 

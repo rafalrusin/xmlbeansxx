@@ -264,8 +264,10 @@ void Contents::serializeElems(ostream &o,NSMapSerializer ns) const {
 		m[it->second->order]=std::pair<QName,const SchemaType*>(it->first,it->second->schemaType);
 		left.erase(it->first);
 	}
-	FOREACH(it,left)
-		m[-1]=std::pair<QName,const SchemaType*>(*it,XmlObject::type());
+	int rest=-1;
+	FOREACH_BACKWARD(it,left) {
+		m[rest--]=std::pair<QName,const SchemaType*>(*it,XmlObject::type());
+	}
 	
 		
 	FOREACH(it,m){
