@@ -32,13 +32,15 @@ install-data-local:
 	ln -fs ${datadir}/xmlbeansxx/bin/xmlbeansxx-gen ${DESTDIR}${bindir}/xmlbeansxx-gen
 	ln -fs ${datadir}/xmlbeansxx/bin/scompxx ${DESTDIR}${bindir}/scompxx
 	ln -fs ${datadir}/xmlbeansxx/bin/xmlbeansxx-split ${DESTDIR}${bindir}/xmlbeansxx-split
+	ln -fs ${datadir}/xmlbeansxx/bin/xmlbeansxx-geninclude ${DESTDIR}${bindir}/xmlbeansxx-geninclude
 
 uninstall-local:
 	rm -fr ${DESTDIR}${datadir}/xmlbeansxx
 	rm -f ${DESTDIR}${bindir}/xmlbeansxx-gen
 	rm -f ${DESTDIR}${bindir}/scompxx
 	rm -f ${DESTDIR}${bindir}/xmlbeansxx-split
-	
+	rm -f ${DESTDIR}${bindir}/xmlbeansxx-geninclude
+
 dist-hook:
 	for file in `find . -regex '\./\(src\|pom\.xml\).*' -not -regex '.*/\..*'`; do \
 		if [ -d $$file ]; then \
