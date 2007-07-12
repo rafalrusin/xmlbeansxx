@@ -155,6 +155,8 @@ done
 
 #############################
 
+
+
 cat <<EOF >Makefile.am
 ACLOCAL = aclocal -I m4
 
@@ -175,6 +177,12 @@ nodist_${LIB_FULLNAME}_la_SOURCES = \$(COMP_H) \$(COMP_SPLITED_CPP) \$(COMP_CPP)
 	$BIN/xmlbeansxx-gen $XMLBEANSXX_OPTS $MAKEFILE_XSD_FILES
 
 $SPLITS
+
+${LIB_NAME}headerincludedir = \$(includedir)
+${LIB_NAME}headerinclude_HEADERS = ${LIB_NAME}_headers.h
+							
+${LIB_NAME}_headers.h: \$(COMP_H)
+	$BIN/xmlbeansxx-geninclude ${LIB_NAME}_headers.h ${LIB_NAME}
 
 MOSTLYCLEANFILES = \$(COMP_H) \$(COMP_CPP) \$(COMP_TO_SPLIT_CPP) \$(COMP_SPLITED_CPP)
 
