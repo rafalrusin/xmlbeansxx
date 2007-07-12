@@ -1,16 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <!--parent>
-    <groupId>pl.touk</groupId>
-    <artifactId>general</artifactId>
-    <version>1.0</version>
-  </parent-->
   <groupId>pl.touk.xmlbeansxx</groupId>
   <artifactId>xmlbeansxx-gen</artifactId>
   <version>0.6.2</version>
   <name>XMLBeansxx Generator</name>
   <url>http://touk.pl</url>
+  
+  <repositories>
+    <repository>
+      <id>touk.pl</id>
+      <name>TouK Central Repository</name>
+      <url>http://chaos/maven</url>
+    </repository>
+    <repository>
+      <snapshots />
+      <id>touk.snapshot</id>
+      <url>http://chaos/touk/snapshot</url>
+    </repository>
+    <repository>
+      <releases />
+      <id>touk.release</id>
+      <url>http://chaos/touk/release</url>
+    </repository>
+  </repositories>
+  
+  <distributionManagement>
+    <repository>
+      <id>touk.release</id>
+      <name>touk.pl</name>
+          <url>scp://chaos/var/www/touk/release</url>
+        </repository>
+        
+        <snapshotRepository>
+      <id>touk.snapshot</id>
+      <name>touk.pl</name>
+      <url>scp://chaos/var/www/touk/snapshot</url>
+      <!--uniqueVersion>true</uniqueVersion-->
+    </snapshotRepository>
+  </distributionManagement>
   
   <build>
     <defaultGoal>compile</defaultGoal>
