@@ -49,3 +49,4 @@ IllegalStateException::IllegalStateException(std::string msg): BeansException(st
 AssertionFailedException::AssertionFailedException(std::string msg): BeansException("Assertion Failed: "+msg) {}
 NullPtrException::NullPtrException(std::string msg): BeansException("NUllPtr exception: "+msg) {}
 }
+ 
