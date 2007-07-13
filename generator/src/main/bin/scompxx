@@ -107,6 +107,7 @@ PKG_VERSION=`echo $LIB_VERSION | sed -e 's/\([^:]*\):\([^:]*\):\([^:]*\)/\1.\3/'
 
 mkdir $SRC_DIR
 cd $SRC_DIR
+ln -s . $LIB_NAME
 
 rm -f xsd.txt
 if ! $BIN/xmlbeansxx-gen $XMLBEANSXX_OPTS -Dincludes=xsd.txt $XSD_FILES; then exit 1; fi
