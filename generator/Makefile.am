@@ -13,12 +13,10 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-
-
 all-local: stamp-build 
 
 stamp-build: $(shell find . -regex '\./\(src\|pom\.xml\).*' -not -regex '.*/\..*' | grep -v stamp)
-	mvn -P release package
+	cd ${srcdir}; mvn -Prelease -Dproject.build.directory=${PWD}/target package 
 	touch stamp-build
 
 clean-local:
