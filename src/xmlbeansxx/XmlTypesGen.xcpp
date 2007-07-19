@@ -176,30 +176,6 @@ std::string XmlObject::getCanonicalContent() const {
     return getSimpleContent();
 }
 
-XmlObject XmlObject::query(const QName &elementName,QueryNodePtr queryExpr) const {
-    TRACER(log,"query");
-    std::vector<ContentsPtr> elems=xmlbeansxx::Contents::Walker::getElemArray(*this,elementName);
-    
-    FOREACH(it,elems) {
-        if (*it) {
-            if (queryExpr->getBooleanValue(XmlObject(*it))) {
-                return XmlObject(*it);
-            }
-        }
-    }
-    return XmlObject();
-}
-
-XmlObject XmlObject::cquery(const QName & elementName,QueryNodePtr queryExpr,ObjectCreatorFn createFn) {
-    TRACER(log,"cquery");
-    
-    XmlObject r=query(elementName,queryExpr);
-    if (!r.hasContents()) {
-        r=createFn();
-        xmlbeansxx::Contents::Walker::appendElem(*this,elementName,r.contents);
-    }
-    return r;
-}
 
 
 void XmlObject::free() {

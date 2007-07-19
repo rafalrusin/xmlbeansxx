@@ -139,6 +139,40 @@ static std::vector<ContentsPtr> findElems(const XmlObject& o,const std::string& 
 }
 
 
+XmlObject XmlObject::query(const std::string &elementName,QueryNodePtr queryExpr) const {
+    TRACER(log,"query");
+    std::vector<ContentsPtr> elems=findElems(*this,elementName);
+    
+    FOREACH(it,elems) {
+        if (*it) {
+            if (queryExpr->getBooleanValue(XmlObject(*it))) {
+                return XmlObject(*it);
+            }
+        }
+    }
+    return XmlObject();
+}
+
+XmlObject XmlObject::cquery(const std::string & elementName,QueryNodePtr queryExpr,ObjectCreatorFn createFn) {
+    TRACER(log,"cquery");
+    
+    XmlObject r=query(elementName,queryExpr);
+    if (!r.hasContents()) {
+        r=createFn();
+	QName correctName=QName("",elementName);
+	// find the correct QName
+	FOREACH(i,getSchemaType()->elements){
+	    QName name=i->first;
+	    if(name->second==elementName)
+		correctName=name;
+	}
+        xmlbeansxx::Contents::Walker::appendElem(*this,correctName,r.contents);
+    }
+    return r;
+}
+
+
+
 std::vector<std::string> QueryAttribute::getValue(const XmlObject& object) {
     TRACER(log,"getValue");
     ContentsPtr a=findAttr(object,attrName);

@@ -137,8 +137,8 @@ public:
     virtual std::string getCanonicalContent() const;
 
     /** Selects first XmlObject that meets given criteria */
-    virtual XmlObject query(const QName& elementName,QueryNodePtr queryExpr) const;
-    virtual XmlObject cquery(const QName& elementName,QueryNodePtr queryExpr,ObjectCreatorFn createFn);
+    virtual XmlObject query(const std::string& elementName,QueryNodePtr queryExpr) const;
+    virtual XmlObject cquery(const std::string& elementName,QueryNodePtr queryExpr,ObjectCreatorFn createFn);
     //----//
 
     //EWML extensions
