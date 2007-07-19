@@ -121,7 +121,12 @@ static std::vector<ContentsPtr> findElems(const XmlObject& o,const std::string& 
 {
 	std::vector<ContentsPtr> retu;
 	ContentsPtr c=o.contents;
-	if(c){
+	if(elemName=="*") {
+		VAL(array,Contents::Walker::getElems(o));
+		FOREACH(i,array){
+			retu.push_back(i->second);
+		}
+	} else if(c){
 		VAL(array,Contents::Walker::getElems(o));
 		FOREACH(i,array){
 			QName name = i->first;
