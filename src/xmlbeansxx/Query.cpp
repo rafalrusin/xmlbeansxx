@@ -34,10 +34,10 @@ LOGGER_PTR_SET(QueryString::log,"xmlbeansxx.QueryString");
 QueryString::QueryString(const std::string& str):str(str) {}
 
 LOGGER_PTR_SET(QueryAttribute::log,"xmlbeansxx.QueryAttribute");
-QueryAttribute::QueryAttribute(const QName& attrName): attrName(attrName) {}
+QueryAttribute::QueryAttribute(const std::string& attrName): attrName(attrName) {}
 
 LOGGER_PTR_SET(QueryElement::log,"xmlbeansxx.QueryElement");
-QueryElement::QueryElement(const QName & elemName,QueryNodePtr next): elemName(elemName),next(next) {}
+QueryElement::QueryElement(const std::string & elemName,QueryNodePtr next): elemName(elemName),next(next) {}
 
 QueryNode::~QueryNode() {}
 
@@ -103,9 +103,40 @@ std::vector<std::string> QueryString::getValue(const XmlObject& object) {
     return singleString(str);
 }
 
+static ContentsPtr findAttr(const XmlObject& o,const std::string& attrName)
+{
+	ContentsPtr c=o.contents;
+	if(c){
+		VAL(array,Contents::Walker::getAttrObjects(o));
+		FOREACH(i,array){
+			QName name = i->first;
+			if(name->second==attrName)
+				return i->second;
+		}
+	} 		
+	return ContentsPtr();
+}
+
+static std::vector<ContentsPtr> findElems(const XmlObject& o,const std::string& elemName)
+{
+	std::vector<ContentsPtr> retu;
+	ContentsPtr c=o.contents;
+	if(c){
+		VAL(array,Contents::Walker::getElems(o));
+		FOREACH(i,array){
+			QName name = i->first;
+			if(name->second==elemName)
+				retu.push_back(i->second);
+		}
+	} 		
+	return retu;
+
+}
+
+
 std::vector<std::string> QueryAttribute::getValue(const XmlObject& object) {
     TRACER(log,"getValue");
-    ContentsPtr a=xmlbeansxx::Contents::Walker::getAttr(object,attrName);
+    ContentsPtr a=findAttr(object,attrName);
 
     XmlObjectPtr p=Contents::Walker::OrginalXmlObject(a);
     std::vector<std::string> r;
@@ -115,7 +146,7 @@ std::vector<std::string> QueryAttribute::getValue(const XmlObject& object) {
 
 std::vector<std::string> QueryElement::getValue(const XmlObject& object) {
     std::vector<std::string> r;
-    std::vector<ContentsPtr> v=xmlbeansxx::Contents::Walker::getElemArray(object,elemName);
+    std::vector<ContentsPtr> v=findElems(object,elemName);
     FOREACH(it,v) {
         if (*it) {
             if (next==NULL) {

@@ -148,6 +148,7 @@ public:
 		
 		static std::vector<std::pair<QName,ContentsPtr> > getElems(const XmlObject& obj);
 		static std::vector<std::pair<QName,std::string> > getAttrs(const XmlObject& obj);		
+		static std::vector<std::pair<QName,ContentsPtr> > getAttrObjects(const XmlObject& obj);		
 		static std::vector<ContentsPtr> getElemArray(const XmlObject& obj,const QName& elemName);
 //		static std::vector<XmlObject> getElemArray(const XmlObject& obj,const QName& elemName);
 		template <class T>

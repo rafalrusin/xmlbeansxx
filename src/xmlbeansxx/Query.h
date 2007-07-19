@@ -87,19 +87,19 @@ class QueryString: public QueryNode {
 class QueryAttribute: public QueryNode {
     private:
     STATIC_LOGGER_PTR(log);
-    xmlbeansxx::QName attrName;
+    std::string attrName;
     public:
-    QueryAttribute(const xmlbeansxx::QName & attrName);
+    QueryAttribute(const std::string & attrName);
     virtual std::vector<std::string> getValue(const XmlObject& object);
 };
 
 class QueryElement: public QueryNode {
     private:
     STATIC_LOGGER_PTR(log);
-    QName elemName;
+    std::string elemName;
     QueryNodePtr next;
     public:
-    QueryElement(const QName & elemName,QueryNodePtr next);
+    QueryElement(const std::string & elemName,QueryNodePtr next);
     virtual std::vector<std::string> getValue(const XmlObject& object);
 };
 

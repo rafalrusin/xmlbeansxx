@@ -112,6 +112,10 @@ namespace xmlbeansxx {
 			if(!obj.hasContents()) throw NullPtrException("Cannot get attributes from a empty XmlObject: " + obj.getSchemaType()->className);
 			return obj.contents->getAttrs();
 		}
+		 std::vector<std::pair<QName,ContentsPtr> > Contents::Walker::getAttrObjects(const XmlObject& obj) {
+			if(!obj.hasContents()) throw NullPtrException("Cannot get attributes from a empty XmlObject: " + obj.getSchemaType()->className);
+			return obj.contents->getAttrs2();
+		}
 		
 		 std::vector<ContentsPtr> Contents::Walker::getElemArray(const XmlObject& obj,const QName& elemName) {
 			if(!obj.hasContents()) throw NullPtrException("Cannot get ElementArray from a empty XmlObject: " + obj.getSchemaType()->className);
