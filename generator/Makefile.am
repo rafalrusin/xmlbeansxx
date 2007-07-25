@@ -16,6 +16,7 @@
 all-local: stamp-build 
 
 stamp-build: $(shell find . -regex '\./\(src\|pom\.xml\).*' -not -regex '.*/\..*' | grep -v stamp)
+	echo AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaa ${PWD}
 	cd ${srcdir}; mvn -Prelease -Dproject.build.directory=${PWD}/target package 
 	touch stamp-build
 

@@ -3,27 +3,9 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>pl.touk.xmlbeansxx</groupId>
   <artifactId>xmlbeansxx-gen</artifactId>
-  <version>0.6.2</version>
+  <version>0.8.0</version>
   <name>XMLBeansxx Generator</name>
   <url>http://touk.pl</url>
-  
-  <repositories>
-    <repository>
-      <id>touk.pl</id>
-      <name>TouK Central Repository</name>
-      <url>http://chaos/maven</url>
-    </repository>
-    <repository>
-      <snapshots />
-      <id>touk.snapshot</id>
-      <url>http://chaos/touk/snapshot</url>
-    </repository>
-    <repository>
-      <releases />
-      <id>touk.release</id>
-      <url>http://chaos/touk/release</url>
-    </repository>
-  </repositories>
   
   <distributionManagement>
     <repository>
