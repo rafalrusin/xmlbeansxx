@@ -46,7 +46,7 @@ copy_data:
 	if [ ${builddir} ]; then if [ 'x${srcdir}' != 'x${builddir}' ]; then for i in $(DATA_FILES); do   cp ${srcdir}/$$i ${builddir} ; done ; true ;  fi fi
 
 rm_data: 
-	if [ ${builddir} ]; then if [ 'x${srcdir}' != 'x${builddir}' ]; then  rm -f $(DATA_FILES)  ; true ;  fi fi
+	if [ ${builddir} ]; then if [ 'x${srcdir}' != 'x${builddir}' ]; then  rm -f $(DATA_FILES) xmldsig-core-schema.h xmldsig-core-schema.cpp  ; true ;  fi fi
 
 check: copy_data
 
