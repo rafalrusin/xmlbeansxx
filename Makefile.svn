@@ -5,6 +5,8 @@ all: build
 update:
 	if svn update | grep Updated || [ ! -f update-stamp ]; then touch update-stamp; fi
 
+update-stamp: update
+
 configure:
 	make -f Makefile.svn configure-stamp
 
