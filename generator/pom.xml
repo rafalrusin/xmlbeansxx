@@ -23,7 +23,9 @@
   </distributionManagement>
   
   <properties>
-    <base>${env.PWD}</base>
+    <base>${env.PWD}</base> <!-- base property is a little work-around
+                                 of troubles with create evnironment to
+                                 do make dist without copying all source files -->
   </properties>
   
   <build>
