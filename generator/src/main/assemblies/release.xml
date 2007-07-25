@@ -17,7 +17,7 @@
       </includes>
     </fileSet>
     <fileSet>
-      <directory>src/main/bin</directory>
+      <directory>${base}/src/main/bin</directory>
       <outputDirectory>bin</outputDirectory>
       <fileMode>755</fileMode>
     </fileSet>
