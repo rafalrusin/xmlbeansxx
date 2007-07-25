@@ -22,6 +22,10 @@
     </snapshotRepository>
   </distributionManagement>
   
+  <properties>
+    <base>${env.PWD}</base>
+  </properties>
+  
   <build>
     <defaultGoal>compile</defaultGoal>
     <sourceDirectory>${base}/src/main/java</sourceDirectory>
