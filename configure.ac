@@ -2,7 +2,7 @@
 # V_1_1
 AC_PREREQ(2.57)
 
-AC_INIT(XMLBEANSXX, 0.8.0, support@TouK.pl)
+AC_INIT(XMLBEANSXX, 0.8.1, support@TouK.pl)
 #Before release, change library versions 
 #Read http://www.gnu.org/software/libtool/manual.html#SEC32 before doing this
 AC_SUBST(library_version_info, 1:3:0)
@@ -55,7 +55,7 @@ m4_ifdef([AM_PATH_CPPUNIT],[
 
 BB_ENABLE_DOXYGEN
 
-AC_CHECK_LIB(log4cxx,main,,AC_MSG_WARN([log4cxx library not found.]))
+AC_CHECK_LIB(log4cxx,main,,AC_MSG_ERROR([log4cxx library not found.]))
 AC_CHECK_LIB(gmp,main,,AC_MSG_ERROR([gmp library not found. Please install it.]))
 AC_CHECK_LIB(gmpxx,main,,AC_MSG_ERROR([gmpxx library not found. Please install gmp with gmpxx option enabled.]))
 AC_CHECK_LIB(boost_date_time,main,,AC_MSG_ERROR([boost_date_time library not found. Please install it.]))
