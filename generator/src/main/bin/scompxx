@@ -104,6 +104,7 @@ for i in $ARG_XSD; do
 done 
 
 LIB_FULLNAME="lib${LIB_NAME}"
+COMPOSITE_SCHEMA="${LIB_NAME}.xsd"
 PKG_VERSION=`echo $LIB_VERSION | sed -e 's/\([^:]*\):\([^:]*\):\([^:]*\)/\1.\3/'`
 
 mkdir $SRC_DIR
@@ -118,8 +119,8 @@ if ! $BIN/xmlbeansxx-gen $XMLBEANSXX_OPTS -Dincludes=xsd.txt $XSD_FILES; then ex
 
 
 ALL_XSD="$ORGIN_XSD `cat xsd.txt`"
-TMP1_FILE=`tempfile`
-TMP2_FILE=`tempfile`
+TMP1_FILE=`mktemp`
+TMP2_FILE=`mktemp`
 cat xsd.txt > $TMP1_FILE 
 for i in $ORGIN_BASENAME_XSD; do
 	echo $i >> $TMP1_FILE
@@ -155,7 +156,7 @@ $CPPFILES: $CPPFILE
 done
 
 
-#############################
+
 
 
 
@@ -186,20 +187,38 @@ ${LIB_NAME}headerinclude_HEADERS = ${LIB_NAME}_headers.h
 ${LIB_NAME}_headers.h: \$(COMP_H)
 	$BIN/xmlbeansxx-geninclude ${LIB_NAME}_headers.h ${LIB_NAME}
 
-MOSTLYCLEANFILES = \$(COMP_H) \$(COMP_CPP) \$(COMP_TO_SPLIT_CPP) \$(COMP_SPLITED_CPP)
+MOSTLYCLEANFILES = \$(COMP_H) \$(COMP_CPP) \$(COMP_TO_SPLIT_CPP) \$(COMP_SPLITED_CPP) ${LIB_NAME}_headers.h
 
 EOF
 
 cd ..
 
+#############################
+
+if [ ! -e $COMPOSITE_SCHEMA ]; then
+	echo '<?xml version="1.0" encoding="UTF-8"?>
+	<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://test.com">
+	' > $COMPOSITE_SCHEMA
+
+	for i in $ORGIN_XSD; do 
+		echo -n "<xs:import schemaLocation=\"$i\"" >> $COMPOSITE_SCHEMA
+		cat $i | grep targetNamespace | sed "s/.*targetNamespace\(=\"[^\"]*\"\).*/  namespace\\1\/>/" >> $COMPOSITE_SCHEMA
+	done
+
+	echo '</xs:schema>' >> $COMPOSITE_SCHEMA
+fi
+
+#############################
+
+
 cat <<EOF >Makefile.am
 
 ACLOCAL = aclocal -I m4
-EXTRA_DIST = bootstrap m4/acx_pthread.m4
+EXTRA_DIST = bootstrap m4/acx_pthread.m4 
 SUBDIRS = src
 
 schemasdir = \$(datadir)/${LIB_NAME}
-nobase_dist_schemas_DATA = ${ORGIN_XSD}
+nobase_dist_schemas_DATA = ${ORGIN_XSD} ${COMPOSITE_SCHEMA}
 
 EOF
 
