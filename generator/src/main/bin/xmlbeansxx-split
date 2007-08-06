@@ -34,7 +34,7 @@ basefile=$1
 filename=`basename $basefile .cpp`
 
 CPPFILE="$filename.cpp"
-PREFIX=`/bin/tempfile`
+PREFIX=`/bin/mktemp`
 
 csplit -f $PREFIX $CPPFILE /^\/\/\-\-split\-\-/+1 {\*} > /dev/null
 
