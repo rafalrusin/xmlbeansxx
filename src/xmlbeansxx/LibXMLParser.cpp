@@ -328,8 +328,11 @@ void LibXMLParser::unloadGrammars() {
         xmlSchemaFree(schema);
         schema = NULL;
     }
-    if (schemaParserCtxt)
+    if (schemaParserCtxt) {
         xmlSchemaFreeParserCtxt(schemaParserCtxt);
+	schemaParserCtxt = NULL;
+    }
+	
 }
 
 
