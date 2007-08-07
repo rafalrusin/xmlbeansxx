@@ -197,7 +197,7 @@ cd ..
 
 if [ ! -e $COMPOSITE_SCHEMA ]; then
 	echo '<?xml version="1.0" encoding="UTF-8"?>
-	<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://test.com">
+	<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 	' > $COMPOSITE_SCHEMA
 
 	for i in $ORGIN_XSD; do 
