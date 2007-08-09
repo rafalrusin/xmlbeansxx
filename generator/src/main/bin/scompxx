@@ -170,11 +170,11 @@ COMP_TO_SPLIT_CPP=$COMP_TO_SPLIT_CPP
 COMP_SPLITED_CPP=$COMP_SPLITED_CPP
 
 schemaincludedir = \$(includedir)/${LIB_NAME}
-nodist_schemainclude_HEADERS = \$(COMP_H)
+schemainclude_HEADERS = \$(COMP_H)
 
 lib_LTLIBRARIES = ${LIB_FULLNAME}.la
 ${LIB_FULLNAME}_la_LDFLAGS = -version-info $LIB_VERSION -lxmlbeansxx
-nodist_${LIB_FULLNAME}_la_SOURCES = \$(COMP_H) \$(COMP_SPLITED_CPP) \$(COMP_CPP)
+dist_${LIB_FULLNAME}_la_SOURCES = \$(COMP_H) \$(COMP_SPLITED_CPP) \$(COMP_CPP)
 
 \$(COMP_H) \$(COMP_CPP) \$(COMP_TO_SPLIT_CPP): $MAKEFILE_XSD_FILES
 	$BIN/xmlbeansxx-gen $XMLBEANSXX_OPTS $MAKEFILE_XSD_FILES
@@ -186,6 +186,8 @@ ${LIB_NAME}headerinclude_HEADERS = ${LIB_NAME}_headers.h
 							
 ${LIB_NAME}_headers.h: \$(COMP_H)
 	$BIN/xmlbeansxx-geninclude ${LIB_NAME}_headers.h ${LIB_NAME}
+
+EXTRA_DIST = ${LIB_NAME}
 
 MOSTLYCLEANFILES = \$(COMP_H) \$(COMP_CPP) \$(COMP_TO_SPLIT_CPP) \$(COMP_SPLITED_CPP) ${LIB_NAME}_headers.h
 
