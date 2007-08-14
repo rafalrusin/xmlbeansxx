@@ -20,7 +20,12 @@
 #include "BoostAssert.h"
 #include <string>
 #include <vector>
+#include <list>
+
 #include "XmlOptions.h"
+#include "XmlContext.h"
+#include "QName.h"
+#include "XmlTypesGen.h"
 
 namespace xmlbeansxx {
 
@@ -53,6 +58,79 @@ public:
 //    static XmlParser * create(const XmlOptions &opts);
 
 };
+
+class EmptyParser : public XmlParser {
+protected:
+        std::list<std::string> errors;           // schema validity errors
+        std::list<std::string> warnings;         // schema validity warnings
+        XmlOptions options;
+
+    public:
+        XmlContext xmlContext;
+	
+	struct StackEl {
+            xmlbeansxx::XmlObjectPtr obj;
+	    std::string str;
+    	    bool processContents;
+	    xmlbeansxx::QName name;
+    	    StackEl(XmlObjectPtr o,bool processContents,const QName& n)
+        	: obj(o),processContents(processContents),name(n)
+        	{}
+	};
+	std::stack<StackEl> nodesStack;
+	std::string currentString;
+
+
+
+        EmptyParser() {};
+        EmptyParser(const XmlOptions &options): options(options){};
+        virtual ~EmptyParser() {};
+
+        // Overrides
+
+
+        virtual XmlOptions getXmlOptions() const { return options; }
+
+        virtual void setXmlOptions(const XmlOptions &options) {
+            this->options = options;
+        }
+
+
+        /** converts eg. "xs:string" to <nr,"string">, where nr is namespace ID in globalTypeSystem */
+        virtual QName nsSplit(const std::string &str, bool isAttr = false);
+        virtual QName getQName(const char *prefix, const char *localname, bool isAttr = false);
+        /** converts "xs:string" to <"xs","string"> */
+        virtual std::pair<std::string, std::string> tagSplit(const std::string &str);
+
+        // add schema validity error message
+        virtual void addError(const char *msg) {
+            errors.push_back(std::string(msg));
+        }
+
+        // get schema validity error messages
+        virtual std::list<std::string> getSchemaValidityErrors() const {
+            return errors;
+        }
+
+        // add schema validity warning message
+        virtual void addWarning(const char *msg) {
+            warnings.push_back(std::string(msg));
+        }
+
+        // get schema validity warning messages
+        virtual std::list<std::string> getSchemaValidityWarnings() const {
+            return warnings;
+        }
+
+
+
+};
+
+
+
+
+
+
 
 }
 

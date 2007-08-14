@@ -54,7 +54,9 @@ libxmlbeansxx_la_SOURCES = \
 	XmlObjectDocument.h\
 	XmlObjectDocument.cpp\
 	XmlObjectXpaths.cpp\
-	NSMap.h
+	NSMap.h\
+	XercesParser.cpp\
+	XercesUtils.cpp
 
 nodist_libxmlbeansxx_la_SOURCES = \
 	XmlTypesGen.h\
@@ -66,7 +68,8 @@ BUILT_SOURCES = \
 	XmlTypesGen.h\
 	XmlTypesGen.cpp\
 	xml-fragment.h\
-	xml-fragment.cpp
+	xml-fragment.cpp\
+	XercesUtils.cpp
 
 libxmlbeansxxincludedir = $(includedir)/xmlbeansxx
 libxmlbeansxxinclude_HEADERS = \
@@ -99,7 +102,10 @@ libxmlbeansxxinclude_HEADERS = \
 	SchemaProperty.h\
 	StoreString.h\
 	NullPtr.h\
-	NSMap.h
+	NSMap.h\
+	XercesUtils.h\
+	XercesParser.h\
+	XercesUtils.h
 
 nodist_libxmlbeansxxinclude_HEADERS = \
 	XmlTypesGen.h\

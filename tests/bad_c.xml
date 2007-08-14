@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <test2:content xmlns="http://mind.p4.com/mytest" xmlns:test2="http://mind.p4.com/mytest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
   <test2:employee age="10" >
-    <test2:firstname xmlns:test2="http://mind.p4.com/mytest">Name1</test2:firstname>
+    <test2:firstname xmlns:test2="http://mind.p4.com/mytest22">Name1</test2:firstname>
     <lastname>Name2</lastname>
     <dane>bleble</dane>
     <def>myval</def>

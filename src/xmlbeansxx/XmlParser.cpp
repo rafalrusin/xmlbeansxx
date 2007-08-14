@@ -30,5 +30,38 @@ XmlParser XmlParser::create(const XmlOptions &opts) {
 
 */
 
+
+
+// return namespace number bound to prefix or default namespace if
+// no prefix was given
+QName EmptyParser::nsSplit(const std::string &str, bool isAttr) {
+    std::string::size_type pos=str.find(':');
+    if (pos == std::string::npos) {
+        if (isAttr) {
+            return QName(std::string(""), str);
+        } else {
+            return QName(xmlContext.getLink(""), str);
+        }
+    } else {
+        return QName(xmlContext.getLink(str.substr(0,pos)) ,str.substr(pos+1));
+    }
+
+}
+
+QName EmptyParser::getQName(const char *prefix, const char *localname, bool isAttr) {
+    if (isAttr && prefix == NULL) return QName("", localname);
+    else return QName(xmlContext.getLink(prefix == NULL ? "" : prefix), localname);
+}
+
+std::pair<std::string, std::string> EmptyParser::tagSplit(const std::string &str) {
+    std::string::size_type pos = str.find(':');
+    if (pos==std::string::npos) {
+        return std::pair<std::string, std::string>("",str);
+    } else {
+        return std::pair<std::string, std::string>(str.substr(0,pos),str.substr(pos+1));
+    }
+}
+
+
 }
 

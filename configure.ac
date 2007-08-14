@@ -55,6 +55,7 @@ m4_ifdef([AM_PATH_CPPUNIT],[
 
 BB_ENABLE_DOXYGEN
 
+AC_CHECK_LIB(xerces-c,main,,AC_MSG_ERROR([xerces-c library not found. Please install it.]))
 AC_CHECK_LIB(log4cxx,main,,AC_MSG_ERROR([log4cxx library not found.]))
 AC_CHECK_LIB(gmp,main,,AC_MSG_ERROR([gmp library not found. Please install it.]))
 AC_CHECK_LIB(gmpxx,main,,AC_MSG_ERROR([gmpxx library not found. Please install gmp with gmpxx option enabled.]))

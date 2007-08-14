@@ -1,4 +1,4 @@
-EXTRA_DIST = a.xml b.xml c.xml c.xsd c.xh entities.xml entities.xsd log4j.xml pawel.xsd
+EXTRA_DIST = a.xml b.xml bad_c.xml c.xml c.xsd c.xh entities.xml entities.xsd log4j.xml pawel.xsd
 
 
 LIBADD =
@@ -22,7 +22,7 @@ BUILT_SOURCES = $(SCHEMAS_CPP) $(SCHEMAS_H)
 $(SCHEMAS_CPP) $(SCHEMAS_H): $(SCHEMAS_XSD) c.xh ${top_builddir}/generator/stamp-build
 	${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen -Ddownload $(SCHEMAS_XSD)
 
-TESTS=BeansTest GenTest EntitiesTest ArrayTest EnumTest XPathTest
+TESTS=BeansTest GenTest EntitiesTest ArrayTest EnumTest XPathTest ParseTest
 check_PROGRAMS = $(TESTS)
 
 BeansTest_SOURCES=TestApp.cpp BeansTest.cpp BeansTest.h
@@ -32,6 +32,9 @@ nodist_ArrayTest_SOURCES = c.cpp
 
 GenTest_SOURCES=TestApp.cpp GenTest.cpp GenTest.h 
 nodist_GenTest_SOURCES = c.h c.cpp pawel.h pawel.cpp
+
+ParseTest_SOURCES=TestApp.cpp ParseTest.cpp ParseTest.h 
+nodist_ParseTest_SOURCES = c.h c.cpp
 
 EnumTest_SOURCES=TestApp.cpp EnumTest.cpp EnumTest.h
 nodist_EnumTest_SOURCES=pawel.h pawel.cpp

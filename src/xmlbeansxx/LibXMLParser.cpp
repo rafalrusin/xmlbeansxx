@@ -108,13 +108,11 @@ extern "C" {
 
 LOGGER_PTR_SET(LOG,"xmlbeansxx.LibXMLParser");
 
-LibXMLParser::LibXMLParser()
-        : options() {
+LibXMLParser::LibXMLParser() {
     init();
 }
 
-LibXMLParser::LibXMLParser(const XmlOptions &options) {
-    this->options = options;
+LibXMLParser::LibXMLParser(const XmlOptions &options) : EmptyParser(options) {
     init();
 }
 
@@ -136,7 +134,6 @@ void LibXMLParser::init() {
             }
     #endif
     */
-    user_data = this;
 
     schemaParserCtxt = NULL;
     schema           = NULL;
@@ -337,36 +334,6 @@ void LibXMLParser::unloadGrammars() {
 
 
 
-// return namespace number bound to prefix or default namespace if
-// no prefix was given
-QName LibXMLParser::nsSplit(const std::string &str, bool isAttr) {
-    string::size_type pos=str.find(':');
-    if (pos == string::npos) {
-        if (isAttr) {
-            return QName(std::string(""), str);
-        } else {
-            return QName(xmlContext.getLink(""), str);
-        }
-    } else {
-        return QName(xmlContext.getLink(str.substr(0,pos)) ,str.substr(pos+1));
-    }
-
-}
-
-QName LibXMLParser::getQName(const char *prefix, const char *localname, bool isAttr) {
-    if (isAttr && prefix == NULL) return QName("", localname);
-    else return QName(xmlContext.getLink(prefix == NULL ? "" : prefix), localname);
-}
-
-std::pair<std::string, std::string> LibXMLParser::tagSplit(const std::string &str) {
-    std::string::size_type pos = str.find(':');
-    if (pos==string::npos) {
-        return pair<std::string, std::string>("",str);
-    } else {
-        return pair<std::string, std::string>(str.substr(0,pos),str.substr(pos+1));
-    }
-}
-
 //////////////////////////////////////////////////////////////////////////
 /////////////////////// SAX callback routines ////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -539,6 +506,7 @@ void startElementNs(void *ctx,
     	    LOG4CXX_DEBUG2(LOG, "attribute name: "+ name)
 	    
 	    if (name == XmlBeans::xsi_type()) continue;
+	    if (name == XmlBeans::xsi_array()) continue;
 	    std::string value(getAttrValue(attributes + current));
             xmlbeansxx::Contents::Walker::setAttr(*n,name, value);
         }
