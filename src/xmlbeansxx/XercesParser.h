@@ -99,7 +99,7 @@ public:
     virtual void error(const XERCES_CPP_NAMESPACE::SAXParseException& exc);
     virtual void fatalError(const XERCES_CPP_NAMESPACE::SAXParseException& exc);
     
-    static std::string transcode(const XMLCh* const chars,const unsigned int length = -1);
+    static std::string transcode(const XMLCh* const chars,const int length = -1);
 
 private:
     void updateValidation();

@@ -199,7 +199,7 @@ void MySAX2Handler::fatalError(const SAXParseException& exc) {
     throw XmlParseException(string("Xerces-c fatal error: ")+getErrorStr(exc));
 }
 
-std::string MySAX2Handler::transcode(const XMLCh* const chars,const unsigned int length)
+std::string MySAX2Handler::transcode(const XMLCh* const chars,const int length)
 {
 	char* message = XMLString::transcode(chars);
 	std::string retu(message);
