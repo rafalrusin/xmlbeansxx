@@ -256,17 +256,17 @@ void Contents::serializeElems(ostream &o,NSMapSerializer ns) const {
 
 	// order sort
 	map<int,std::pair<QName,const SchemaType*> > m;
-	set<QName> left;
-	FOREACH(it,elems.contents) 
-		left.insert(it->name);
+	map<QName,int> left;
+	int order=-1;
+	FOREACH_BACKWARD(it,elems.contents) 
+		left.insert(make_pair(it->name,order--));
 	
 	FOREACH(it,st->elements){
 		m[it->second->order]=std::pair<QName,const SchemaType*>(it->first,it->second->schemaType);
 		left.erase(it->first);
 	}
-	int rest=-1;
-	FOREACH_BACKWARD(it,left) {
-		m[rest--]=std::pair<QName,const SchemaType*>(*it,XmlObject::type());
+	FOREACH(it,left) {
+		m[it->second]=std::pair<QName,const SchemaType*>(it->first,XmlObject::type());
 	}
 	
 		
