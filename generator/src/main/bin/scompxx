@@ -104,8 +104,17 @@ for i in $ARG_XSD; do
 done 
 
 LIB_FULLNAME="lib${LIB_NAME}"
-COMPOSITE_SCHEMA="${LIB_NAME}.xsd"
 PKG_VERSION=`echo $LIB_VERSION | sed -e 's/\([^:]*\):\([^:]*\):\([^:]*\)/\1.\3/'`
+LINK_NAME=${LIB_NAME}
+
+# generate a composite schema. (a schema with all other shemas)
+# generating a new schema is a bad idea
+# since if you do:
+# scompxx .
+# scompxx .
+# (two times) you get two different results.
+
+#COMPOSITE_SCHEMA="${LIB_NAME}.xsd"
 
 mkdir $SRC_DIR
 cd $SRC_DIR
@@ -183,13 +192,15 @@ $SPLITS
 
 ${LIB_NAME}headerincludedir = \$(includedir)
 ${LIB_NAME}headerinclude_HEADERS = ${LIB_NAME}_headers.h
-							
-${LIB_NAME}_headers.h: \$(COMP_H)
-	$BIN/xmlbeansxx-geninclude ${LIB_NAME}_headers.h ${LIB_NAME}
 
-EXTRA_DIST = ${LIB_NAME}
+${LINK_NAME}:
+	ln -s . ${LINK_NAME}
 
-MOSTLYCLEANFILES = \$(COMP_H) \$(COMP_CPP) \$(COMP_TO_SPLIT_CPP) \$(COMP_SPLITED_CPP) ${LIB_NAME}_headers.h
+${LIB_NAME}_headers.h: \$(COMP_H) ${LINK_NAME}
+	$BIN/xmlbeansxx-geninclude ${LIB_NAME}_headers.h ${LINK_NAME}
+
+
+MOSTLYCLEANFILES = \$(COMP_H) \$(COMP_CPP) \$(COMP_TO_SPLIT_CPP) \$(COMP_SPLITED_CPP) ${LIB_NAME}_headers.h ${LINK_NAME}
 
 EOF
 
@@ -197,17 +208,19 @@ cd ..
 
 #############################
 
-if [ ! -e $COMPOSITE_SCHEMA ]; then
-	echo '<?xml version="1.0" encoding="UTF-8"?>
-	<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-	' > $COMPOSITE_SCHEMA
+if [ $COMPOSITE_SCHEMA ]; then 
+	if [ ! -e $COMPOSITE_SCHEMA ]; then
+		echo '<?xml version="1.0" encoding="UTF-8"?>
+		<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+		' > $COMPOSITE_SCHEMA
 
-	for i in $ORGIN_XSD; do 
-		echo -n "<xs:import schemaLocation=\"$i\"" >> $COMPOSITE_SCHEMA
-		cat $i | grep targetNamespace | sed "s/.*targetNamespace\(=\"[^\"]*\"\).*/  namespace\\1\/>/" >> $COMPOSITE_SCHEMA
-	done
+		for i in $ORGIN_XSD; do 
+			echo -n "<xs:import schemaLocation=\"$i\"" >> $COMPOSITE_SCHEMA
+			cat $i | grep targetNamespace | sed "s/.*targetNamespace\(=\"[^\"]*\"\).*/  namespace\\1\/>/" >> $COMPOSITE_SCHEMA
+		done
 
-	echo '</xs:schema>' >> $COMPOSITE_SCHEMA
+		echo '</xs:schema>' >> $COMPOSITE_SCHEMA
+	fi
 fi
 
 #############################
