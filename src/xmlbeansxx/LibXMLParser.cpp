@@ -556,6 +556,17 @@ void characters(void *ctx, const xmlChar *ch, int length) {
 }
 
 void serror(void *ctx, xmlErrorPtr error) {
-    LOG4CXX_ERROR(LOG, string("serror: ") + error->message);
+	std::stringstream err;
+	
+	err << "serror:"	<< error->message;
+    	err << ", line:"  	<< error->line;
+	err << ", column:" 	<< error->int2;
+	if(error->str1)
+	err << " ,str1:" 	<< error->str1;
+	if(error->str2)
+	err << " ,str2:" 	<< error->str2;
+	if(error->str3)
+	err << " ,str3:" 	<< error->str3;
+    LOG4CXX_ERROR(LOG,err.str());
 }
 }
