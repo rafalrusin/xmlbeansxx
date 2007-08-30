@@ -107,6 +107,10 @@ public:
 	Path getPath(const std::string& path) {
 		if(path.size()<=0) return *this;
 		std::pair<std::string, std::string> part = getXPathPart(path);
+		if (obj.size()<=0) {
+			LOG4CXX_DEBUG(log,"no more XmlObjects in buffer");
+			return *this;
+		}
 		Path p = doPart(part.first);
 		return p.getPath(part.second);
 	}
