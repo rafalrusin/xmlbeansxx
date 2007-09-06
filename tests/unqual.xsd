@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<xs:schema elementFormDefault="unqualified" targetNamespace="http://mind.p4.com/mytest" xmlns="http://mind.p4.com/mytest" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema elementFormDefault="unqualified" targetNamespace="http://mind.p4.com/mytest/unqualified" xmlns="http://mind.p4.com/mytest/unqualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 <!--xs:import namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="http://www.w3.org/TR/xmldsig-core/xmldsig-core-schema.xsd"/-->
   <xs:element name="content" type="content-type"/>
   <xs:complexType name="content-type">

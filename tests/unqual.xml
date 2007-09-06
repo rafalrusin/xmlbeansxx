@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<test2:content xmlns:aka="http://mind.p4.com/mytest" xmlns:test2="http://mind.p4.com/mytest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+<test2:content xmlns:aka="http://mind.p4.com/mytest/unqualified" xmlns:test2="http://mind.p4.com/mytest/unqualified" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
   <employee age="10" >
     <firstname xmlns:test2="http://mind.p4.com/mytest">Name1</firstname>
     <lastname>Name2</lastname>

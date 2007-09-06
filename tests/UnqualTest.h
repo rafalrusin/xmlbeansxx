@@ -12,7 +12,7 @@ class UnqualTest : public CppUnit::TestFixture
     CPPUNIT_TEST_SUITE_END();
 
 public:
-    void parseTest();
+    void unqualTest();
 };
 
 #endif  // SIMPLE_TEST_H
