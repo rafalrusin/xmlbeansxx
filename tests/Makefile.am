@@ -1,4 +1,4 @@
-EXTRA_DIST = a.xml b.xml bad_c.xml c.xml c.xsd c.xh entities.xml entities.xsd log4j.xml pawel.xsd
+EXTRA_DIST = a.xml b.xml bad_c.xml c.xml c.xsd c.xh entities.xml entities.xsd log4j.xml pawel.xsd unqual.xml unqual.xsd
 
 
 LIBADD =
@@ -12,9 +12,9 @@ endif
 INCLUDES = -I ${top_srcdir}/src -I ${top_builddir}/src -I ${top_builddir}/src/xmlbeansxx -I ${top_srcdir}/src/xmlbeansxx 
 LDADD += ${top_builddir}/src/xmlbeansxx/libxmlbeansxx.la
 
-SCHEMAS_XSD = ${srcdir}/c.xsd ${srcdir}/entities.xsd ${srcdir}/pawel.xsd
-SCHEMAS_CPP = c.cpp entities.cpp pawel.cpp
-SCHEMAS_H = c.h entities.h pawel.h
+SCHEMAS_XSD = ${srcdir}/c.xsd ${srcdir}/entities.xsd ${srcdir}/pawel.xsd ${srcdir}/unqual.xsd
+SCHEMAS_CPP = c.cpp entities.cpp pawel.cpp unqual.cpp
+SCHEMAS_H = c.h entities.h pawel.h unqual.h
 DATA_FILES = $(EXTRA_DIST)
 
 BUILT_SOURCES = $(SCHEMAS_CPP) $(SCHEMAS_H)
@@ -22,7 +22,7 @@ BUILT_SOURCES = $(SCHEMAS_CPP) $(SCHEMAS_H)
 $(SCHEMAS_CPP) $(SCHEMAS_H): $(SCHEMAS_XSD) c.xh ${top_builddir}/generator/stamp-build
 	${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen -Ddownload $(SCHEMAS_XSD)
 
-TESTS=BeansTest GenTest EntitiesTest ArrayTest EnumTest XPathTest ParseTest
+TESTS=BeansTest GenTest EntitiesTest ArrayTest EnumTest XPathTest ParseTest UnqualTest
 check_PROGRAMS = $(TESTS)
 
 BeansTest_SOURCES=TestApp.cpp BeansTest.cpp BeansTest.h
@@ -35,6 +35,9 @@ nodist_GenTest_SOURCES = c.h c.cpp pawel.h pawel.cpp
 
 ParseTest_SOURCES=TestApp.cpp ParseTest.cpp ParseTest.h 
 nodist_ParseTest_SOURCES = c.h c.cpp
+
+UnqualTest_SOURCES=TestApp.cpp UnqualTest.cpp UnqualTest.h 
+nodist_UnqualTest_SOURCES = unqual.h unqual.cpp
 
 EnumTest_SOURCES=TestApp.cpp EnumTest.cpp EnumTest.h
 nodist_EnumTest_SOURCES=pawel.h pawel.cpp
