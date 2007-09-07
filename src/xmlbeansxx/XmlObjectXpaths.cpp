@@ -264,6 +264,7 @@ std::vector<XmlObject> XmlObject::selectPath(const NSMap& ns,const std::string& 
 	Path p(ns);
 	p.addXmlObject(*this);
 	Path retu = p.getPath(path);
+	LOG4CXX_DEBUG(log,"selectPath end: "  << retu.obj.size());
 	return retu.obj;
 }
 
@@ -292,6 +293,7 @@ std::vector<XmlObject> XmlObject::cselectPath(const NSMap& ns,const std::string&
 	Path p(ns,true);
 	p.addXmlObject(*this);
 	Path retu = p.getPath(path);
+	LOG4CXX_DEBUG(log,"selectPath end: "  << retu.obj.size());	
 	return retu.obj;
 }
 
