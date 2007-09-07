@@ -245,6 +245,7 @@ XercesParser::~XercesParser() {}
 
 void XercesParser::updateOptions() {
 	sax2->setFeature(XMLUni::fgSAX2CoreValidation, options.getValidation());
+	sax2->setFeature(XMLUni::fgXercesCacheGrammarFromParse, true);
 //	sax2->setFeature(XMLUni::fgXercesDynamic, true);
 }
 
