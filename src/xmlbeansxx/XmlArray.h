@@ -46,19 +46,19 @@ template<class T>
 static SchemaType XmlArray_initSchemaType() {
       	xmlbeansxx::SchemaType st(typeid(T));
       	st.createFn=T::Factory::newXmlArrayInstance;
-        st.createArrayFn=NULL;
+        st.createArrayFn=T::Factory::newInstanceXmlObject;
       	st.whitespaceRule=xmlbeansxx::SchemaType::WS_COLLAPSE;
       	T o=T::Factory::newInstance();
       	st.className=o.getSchemaType()->className;
       	st.name=o.getSchemaType()->name;
 	
 	st.isArray=true;
-      	st.processContents=true;
+	st.processContents=true;
 	
 	st.elements[QName::store("http://xmlbeans.apache.org/definitions","e")]=xmlbeansxx::SchemaPropertyPtr(new xmlbeansxx::SchemaProperty(1 ,T::type(), xmlbeansxx::StringPtr()));
-      	return st;
+	return st;
 }
-    
+
 
 template<class T>
 class XmlArray:public XmlObject {
@@ -92,8 +92,18 @@ public:
     	createContents();
         setArray(a);
     }
-    XmlArray(const XmlObject &a) {
-    	swapContents(a.contents);
+    XmlArray(const XmlObject &p) {
+    	if(!p.getSchemaType()->isArray) {
+		throw xmlbeansxx::ClassCastException( ((p) ? p.getSchemaType()->className : "unknow") + " to XmlArray");
+	}
+	if(!p.hasContents()) {
+		throw xmlbeansxx::ClassCastException("Empty XmlObject to XmlArray");
+	}
+	
+	boost::shared_ptr<xmlbeansxx::XmlObject> o = p.getSchemaType()->createArrayFn();
+	if(boost::dynamic_pointer_cast<T>(o)) {
+		swapContents(p.contents);
+	} else throw xmlbeansxx::ClassCastException( ((p) ? p.getSchemaType()->className : "unknow") + " to XmlArray");
     }
   
     virtual const xmlbeansxx::SchemaType *getOrginSchemaType() const {
