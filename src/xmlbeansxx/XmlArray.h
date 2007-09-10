@@ -103,7 +103,7 @@ public:
 	boost::shared_ptr<xmlbeansxx::XmlObject> o = p.getSchemaType()->createArrayFn();
 	if(boost::dynamic_pointer_cast<T>(o)) {
 		swapContents(p.contents);
-	} else throw xmlbeansxx::ClassCastException( ((p) ? p.getSchemaType()->className : "unknow") + " to XmlArray");
+	} else throw xmlbeansxx::ClassCastException( "XmlArray<" + ((p) ? p.getSchemaType()->className : "unknow") + "> to XmlArray");
     }
   
     virtual const xmlbeansxx::SchemaType *getOrginSchemaType() const {

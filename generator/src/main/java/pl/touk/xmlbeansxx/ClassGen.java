@@ -1576,7 +1576,17 @@ public class ClassGen {
 
 		out.h.println("  virtual void setXmlObject(const xmlbeansxx::XmlObject& p);");
 		out.cpp.println("void " + className(st) + "::setXmlObject(const xmlbeansxx::XmlObject& p) {\n" +
-				"  if(!xmlbeansxx::_cast_test<" + className(st) + " >(p)) throw xmlbeansxx::ClassCastException( ((p) ? p.contents->st->className : \"unknow\") + \" to " + className(st) + "\");\n" +
+				"  if(!xmlbeansxx::_cast_test<" + className(st) + " >(p)) {");
+		if(st.isSimpleType()) {
+					out.cpp.println(
+				"    if(xmlbeansxx::_cast_test<xmlbeansxx::XmlAnySimpleType>(p)) {\n" +
+				"      setSimpleContent(p.getSimpleContent()); \n" +
+				"      return;\n" +
+				"    } else " );
+		} 
+		out.cpp.println("    throw xmlbeansxx::ClassCastException( ((p) ? p.contents->st->className : \"unknow\") + \" to " + className(st) + "\");" );
+		out.cpp.println(
+				"  }" +
 				"  swapContents(p.contents);\n" +
 				"}");
 
