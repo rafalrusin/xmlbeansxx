@@ -230,6 +230,7 @@ bool XmlBoolean::getBooleanValue() const {
     LOG4CXX_DEBUG(log,"value:"+getSimpleContent());
     std::string s = getSimpleContent();
 //    std::transform(s.begin(), s.end(), s.begin(), tolower);
+    boost::to_lower(s);
     bool boolVal;
     if (s=="0") {
         boolVal=false;

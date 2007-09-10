@@ -65,5 +65,21 @@ void XmlArrayTest::xmlArrayTest()
 	       	LOG4CXX_DEBUG(logger,"s1 string:" + s2.toString());		
 		CPPUNIT_ASSERT_EQUAL(s1.toString(),s2.toString());
 	}
+	{
+	       	LOG4CXX_DEBUG(logger,"testing boolean true:");		
+		XmlString b("TruE");
+		XmlObject o(b);
+		XmlBoolean s2(o);
+	       	LOG4CXX_DEBUG(logger,"s1 string:" + s2.toString());		
+		CPPUNIT_ASSERT_EQUAL(bool(s2),true);
+	}
+	{
+	       	LOG4CXX_DEBUG(logger,"testing boolean false:");		
+		XmlString b("FalSe");
+		XmlObject o(b);
+		XmlBoolean s2(o);
+	       	LOG4CXX_DEBUG(logger,"s1 string:" + s2.toString());		
+		CPPUNIT_ASSERT_EQUAL(bool(s2),false);
+	}
 
 }
