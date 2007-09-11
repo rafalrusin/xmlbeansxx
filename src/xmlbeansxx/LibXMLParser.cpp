@@ -261,6 +261,8 @@ void LibXMLParser::loadGrammars(const vector<string>& files) {
  * Load schema and create internal representation.
  * Plug schema validation context to SAX parser.
  */
+ 
+ blelelele
 void LibXMLParser::loadGrammar(const string &filename) {
     {
         // prevent memory leak from previous load
