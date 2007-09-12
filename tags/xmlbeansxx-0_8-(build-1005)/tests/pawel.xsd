@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<xs:schema  xmlns="http://ala" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ala" elementFormDefault="qualified">
+
+
+
+	<xs:element name="zakupy">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="klient" 	type="klient"/>
+				<xs:element name="data" 	type="xs:string"/>	
+				<!-- type="xs:dateTime" /> -->
+				<xs:element name="produkt" 	type="produkt"	minOccurs="0" maxOccurs="unbounded" /> 
+				<xs:element name="produkt2" 	type="xs:string" minOccurs="0" maxOccurs="unbounded" /> 
+				
+				<xs:element name="dostawca" 	type="dostawca"	  />
+				<!--	minOccurs="0"/> -->
+				<xs:any  />
+			</xs:sequence>
+			<xs:attribute name="kolor"	type="xs:string" />
+			<xs:attribute name="kolor2"	type="xs:int" />
+		</xs:complexType>
+	</xs:element>
+	
+		
+	<xs:complexType name="klient">
+		<xs:sequence>
+			<xs:element name="nazwa" 		type="xs:string"/>
+			<xs:element name="adres" 		type="xs:string"/>
+			<xs:element name="ala"			type="xs:decimal"/>
+		</xs:sequence>
+		<xs:attribute name="enumTest">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="bolek"/>
+					<xs:enumeration value="lolek"/>
+					<xs:enumeration value="tytus"/>
+					<xs:enumeration value="romek"/>
+					<xs:enumeration value="atomek"/>
+		                </xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="produkt">
+		<xs:sequence>
+			<xs:element name="opis" 		type="xs:string"/>
+			<xs:element name="jednostek-na-gram" 	type="xs:decimal"/>
+			<xs:element name="cena" 		type="xs:double"/>
+			<xs:element name="ilosc" 		type="xs:int"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="dostawca">
+		<xs:sequence>
+			<xs:element name="nazwa" 		type="xs:string"/>
+			<xs:element name="cena-grama"		type="xs:decimal"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

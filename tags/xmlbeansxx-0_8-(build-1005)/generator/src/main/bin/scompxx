@@ -1,0 +1,334 @@
+#!/bin/bash
+
+#
+#    Copyright 2004-2005 TouK s.c.
+#    
+#    Licensed under the Apache License, Version 2.0 (the "License");
+#    you may not use this file except in compliance with the License.
+#    You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#    See the License for the specific language governing permissions and
+#    limitations under the License.
+#
+
+#set -x
+
+usage="\
+Generates C++ library from xsd files.
+
+Usage: $0 [-out lib_name] [-V lib_version] [dirs]* [files.xsd]*
+
+-out lib_name	- Library name (witout \"lib\" prefix)
+-V lib_version	- Library version
+-dl 		- permit network downloads for imports and includes (default is off)
+-noupa 		- do not enforce the unique particle attribution rule
+-nopvr		- do not enforce the particle valid (restriction) rule
+-srconly 	- do not compile .cpp files.
+
+files.xsd	- Type system schema files
+dirs		- directores with type system schema files (search recursively)
+
+example:
+$0 -out mylibrary -V 2:1:3 file.xsd
+
+Report bugs to: <rr@touk.pl>
+Copyright (C) 2004 TouK"
+
+if test $# -eq 0; then
+  echo "$usage"; exit 1
+fi
+
+basefile=`readlink -f $0`
+BIN=`dirname $basefile`
+
+ARG_XSD=""
+SRC_DIR="src"
+XSD_PATH_PREFIX="../"
+MAKEFILE_XSD_PATH_PREFIX="\${top_srcdir}/"
+LIB_NAME="xmltypes"
+LIB_VERSION="1:0:0"
+DIRS=""
+XMLBEANSXX_OPTS=""
+SRCONLY_FLAG=""
+MAX_FILESIZE=3000000
+
+while test $# -gt 0; do
+	case "$1" in
+	-out)	shift
+		LIB_NAME="$1"
+		;;
+	-V)	shift
+		LIB_VERSION="$1"
+		;;
+	-dl)	XMLBEANSXX_OPTS="$XMLBEANSXX_OPTS -Ddownload"
+		;;
+	-noupa)	XMLBEANSXX_OPTS="$XMLBEANSXX_OPTS -DnoUpa"
+                ;;
+	-srconly)
+		SRCONLY_FLAG="true"
+		;;
+	-nopvr) XMLBEANSXX_OPTS="$XMLBEANSXX_OPTS -DnoPvr"
+		;;
+	-*)	echo "$usage" ; exit 1
+		;;
+	*.xsd)	ARG_XSD="$ARG_XSD $1"
+		;;
+	*)	DIRS="$DIRS $1"
+		;;
+	esac
+	shift
+done
+
+
+for i in $DIRS; do
+	 ARG_XSD="$ARG_XSD `find $i -name \*.xsd`"
+done
+
+
+for i in $ARG_XSD; do
+	case "$i" in
+	/*)	XSD_FILES="$XSD_FILES $i"
+		MAKEFILE_XSD_FILES="$MAKEFILE_XSD_FILES $i"
+		;;
+	*)	XSD_FILES="$XSD_FILES $XSD_PATH_PREFIX$i"
+		MAKEFILE_XSD_FILES="$MAKEFILE_XSD_FILES $MAKEFILE_XSD_PATH_PREFIX$i"
+		;;
+	esac
+	ORGIN_XSD="$ORGIN_XSD $i"
+	ORGIN_BASENAME_XSD="$ORGIN_BASENAME_XSD `basename $i`"
+done 
+
+LIB_FULLNAME="lib${LIB_NAME}"
+PKG_VERSION=`echo $LIB_VERSION | sed -e 's/\([^:]*\):\([^:]*\):\([^:]*\)/\1.\3/'`
+LINK_NAME=${LIB_NAME}
+
+# generate a composite schema. (a schema with all other shemas)
+# generating a new schema is a bad idea
+# since if you do:
+# scompxx .
+# scompxx .
+# (two times) you get two different results.
+
+#COMPOSITE_SCHEMA="${LIB_NAME}.xsd"
+
+mkdir $SRC_DIR
+cd $SRC_DIR
+ln -s . $LIB_NAME
+
+rm -f xsd.txt
+if ! $BIN/xmlbeansxx-gen $XMLBEANSXX_OPTS -Dincludes=xsd.txt $XSD_FILES; then exit 1; fi
+
+#COMP_XSD=`cat xsd.txt`
+#COMP_XSD=`echo $COMP_XSD`
+
+
+ALL_XSD="$ORGIN_XSD `cat xsd.txt`"
+TMP1_FILE=`mktemp`
+TMP2_FILE=`mktemp`
+cat xsd.txt > $TMP1_FILE 
+for i in $ORGIN_BASENAME_XSD; do
+	echo $i >> $TMP1_FILE
+done
+sort $TMP1_FILE | uniq > $TMP2_FILE
+
+ALL_XSD=`cat $TMP2_FILE`
+
+rm $TMP1_FILE
+rm $TMP2_FILE
+
+
+for i in $ALL_XSD; do
+	COMP_XSD="$COMP_XSD `basename $i`"
+	COMP_H="$COMP_H `basename $i .xsd`.h"
+	CPPFILE="`basename $i .xsd`.cpp"
+	CPPFILES=$CPPFILE
+	if [ `du -s -b $CPPFILE | sed -e 's/^\([0-9]*\)[^0-9].*/\1/'` -ge $MAX_FILESIZE ] ; then 
+		# split
+		CPPFILES=`$BIN/xmlbeansxx-split  $CPPFILE`
+		echo "spliting: $CPPFILE into: $CPPFILES"
+		SPLITS="\
+$SPLITS 
+$CPPFILES: $CPPFILE
+	$BIN/xmlbeansxx-split $CPPFILE
+
+"
+		COMP_TO_SPLIT_CPP="$COMP_TO_SPLIT_CPP $CPPFILE"
+		COMP_SPLITED_CPP="$COMP_SPLITED_CPP $CPPFILES"
+	else
+    		COMP_CPP="$COMP_CPP $CPPFILE"
+	fi
+done
+
+
+
+
+
+
+cat <<EOF >Makefile.am
+ACLOCAL = aclocal -I m4
+
+COMP_XSD=$COMP_XSD
+COMP_H=$COMP_H
+COMP_CPP=$COMP_CPP
+COMP_TO_SPLIT_CPP=$COMP_TO_SPLIT_CPP
+COMP_SPLITED_CPP=$COMP_SPLITED_CPP
+
+schemaincludedir = \$(includedir)/${LIB_NAME}
+schemainclude_HEADERS = \$(COMP_H)
+
+lib_LTLIBRARIES = ${LIB_FULLNAME}.la
+${LIB_FULLNAME}_la_LDFLAGS = -version-info $LIB_VERSION -lxmlbeansxx
+dist_${LIB_FULLNAME}_la_SOURCES = \$(COMP_H) \$(COMP_SPLITED_CPP) \$(COMP_CPP)
+
+\$(COMP_H) \$(COMP_CPP) \$(COMP_TO_SPLIT_CPP): $MAKEFILE_XSD_FILES
+	$BIN/xmlbeansxx-gen $XMLBEANSXX_OPTS $MAKEFILE_XSD_FILES
+
+$SPLITS
+
+${LIB_NAME}headerincludedir = \$(includedir)
+${LIB_NAME}headerinclude_HEADERS = ${LIB_NAME}_headers.h
+
+${LINK_NAME}:
+	ln -s . ${LINK_NAME}
+
+${LIB_NAME}_headers.h: \$(COMP_H) ${LINK_NAME}
+	$BIN/xmlbeansxx-geninclude ${LIB_NAME}_headers.h ${LINK_NAME}
+
+
+MOSTLYCLEANFILES = \$(COMP_H) \$(COMP_CPP) \$(COMP_TO_SPLIT_CPP) \$(COMP_SPLITED_CPP) ${LIB_NAME}_headers.h ${LINK_NAME}
+
+EOF
+
+cd ..
+
+#############################
+
+if [ $COMPOSITE_SCHEMA ]; then 
+	if [ ! -e $COMPOSITE_SCHEMA ]; then
+		echo '<?xml version="1.0" encoding="UTF-8"?>
+		<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+		' > $COMPOSITE_SCHEMA
+
+		for i in $ORGIN_XSD; do 
+			echo -n "<xs:import schemaLocation=\"$i\"" >> $COMPOSITE_SCHEMA
+			cat $i | grep targetNamespace | sed "s/.*targetNamespace\(=\"[^\"]*\"\).*/  namespace\\1\/>/" >> $COMPOSITE_SCHEMA
+		done
+
+		echo '</xs:schema>' >> $COMPOSITE_SCHEMA
+	fi
+fi
+
+#############################
+
+
+cat <<EOF >Makefile.am
+
+ACLOCAL = aclocal -I m4
+EXTRA_DIST = bootstrap m4/acx_pthread.m4 
+SUBDIRS = src
+
+schemasdir = \$(datadir)/${LIB_NAME}
+nobase_dist_schemas_DATA = ${ORGIN_XSD} ${COMPOSITE_SCHEMA}
+
+EOF
+
+
+## Creating default make files
+
+if ! [ -e m4/acx_pthread.m4 ]; then
+	if ! [ -e m4 ]; then mkdir m4 ; fi
+    cp $BIN/acx_pthread.m4 m4
+fi
+
+if ! [ -e configure.ac ]; then
+
+cat <<EOF >configure.ac
+AC_PREREQ(2.57)
+
+AC_INIT( $LIB_NAME, $PKG_VERSION, support@TouK.pl)
+# When changing version number make sure to change version-info argument in i
+#   Makefile.am 
+# according to libtool documentation
+
+AC_CONFIG_AUX_DIR([config])
+#AC_CONFIG_MACRO_DIR([m4])
+
+AC_CONFIG_HEADER([config.h])
+AM_INIT_AUTOMAKE([1.7])
+
+AC_PROG_CC
+AC_PROG_CXX
+AC_LANG(C++)
+
+AC_DISABLE_STATIC
+AC_LIB_LTDL
+AC_LIBLTDL_CONVENIENCE
+AC_SUBST(LTDLINCL)
+AC_SUBST(LIBLTDL)
+AC_LIBTOOL_DLOPEN
+AC_PROG_LIBTOOL
+
+ACX_PTHREAD([
+		LIBS="\$PTHREAD_LIBS \$LIBS"
+		CPPFLAGS="\$CPPFLAGS \$PTHREAD_CFLAGS"
+		CC="\$PTHREAD_CC"
+	],[
+		AC_MSG_WARN([Compiling without thread support])
+	])
+
+AC_PATH_PROG(XML2_CONFIG, xml2-config, no)
+if test "\$XML2_CONFIG" = "no" ; then
+    AC_CHECK_LIB([xml2], [main])
+    AC_CHECK_HEADER([libxml/xmlversion.h])
+else
+    CPPFLAGS="\$CPPFLAGS \`\$XML2_CONFIG --cflags\`"
+    LIBS="\$LIBS \`\$XML2_CONFIG --libs\`"
+fi
+
+AC_CHECK_HEADERS([boost/smart_ptr.hpp boost/any.hpp], , AC_MSG_ERROR([boost library is required]))
+
+AC_SUBST(ac_aux_dir)
+
+AC_CONFIG_FILES([Makefile $SRC_DIR/Makefile])
+
+AC_OUTPUT
+EOF
+RUN_CONFIGURE=1
+RUN_BOOTSTRAP=1
+fi
+
+if ! [ -e bootstrap ]; then
+    cat <<EOF >bootstrap
+#!/bin/sh
+set -x
+mkdir -p config m4 && aclocal -I m4 && autoheader && libtoolize --automake --copy && automake --foreign --add-missing --copy && autoconf
+EOF
+chmod +x bootstrap
+RUN_BOOTSTRAP=1
+RUN_CONFIGURE=1
+fi
+
+RUN_BOOTSTRAP=1
+RUN_CONFIGURE=1
+
+## Launching makefiles generation ##
+if [ ! $SRCONLY_FLAG ]; then 
+	if [ "$RUN_BOOTSTRAP" = 1 ]; then ./bootstrap || exit 1; fi
+	if [ "$RUN_CONFIGURE" = 1 ]; then ./configure || exit 1; fi
+
+	## Compilation ##
+	make && cat <<EOF
+###########################################
+# Type:
+# make install
+# in order to install library into system
+###########################################
+EOF
+
+fi
+

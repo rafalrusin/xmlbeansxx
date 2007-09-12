@@ -1,0 +1,30 @@
+.PHONY: all update configure build install release
+
+all: build
+
+update:
+	if svn update | grep Updated || [ ! -f update-stamp ]; then touch update-stamp; fi
+
+update-stamp: update
+
+configure:
+	make -f Makefile.svn configure-stamp
+
+configure-stamp: update-stamp
+	./bootstrap && ./configure
+	touch configure-stamp
+
+build: configure
+	make -j4
+	touch build-stamp
+
+#install: configure
+#	make -j4 install
+#	touch install-stamp
+
+tag: build
+	TAG=`grep AC_INIT configure.ac | sed -e 's/^[^,]*, *\([^, ]*\).*$$/\1/'`;\
+	echo $$TAG; \
+	TAG_URL=`svn info | grep URL | sed -e "s/URL: //;s/trunk/tags/"`/$$TAG;\
+	echo $$TAG_URL; \
+	if ! svn ls $$TAG_URL 2>&1 > /dev/null; then svn cp . $$TAG_URL -m "Tagged version $$TAG"; else echo "Tag already exists"; fi

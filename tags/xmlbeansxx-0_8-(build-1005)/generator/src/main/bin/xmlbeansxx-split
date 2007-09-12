@@ -1,0 +1,61 @@
+#!/bin/bash
+
+#
+#    Copyright 2004-2005 TouK s.c.
+#    
+#    Licensed under the Apache License, Version 2.0 (the "License");
+#    you may not use this file except in compliance with the License.
+#    You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#    See the License for the specific language governing permissions and
+#    limitations under the License. 
+#
+
+usage="\
+Split C++ (.cpp) files.
+
+Usage: $0 file.cpp
+
+file.cpp	- .cpp file to split
+
+Report bugs to: <pst@touk.pl>
+Copyright (C) 2004 TouK"
+
+if test $# -eq 0; then
+  echo "$usage"; exit 1
+fi
+
+basefile=$1
+filename=`basename $basefile .cpp`
+
+CPPFILE="$filename.cpp"
+PREFIX=`/bin/mktemp`
+
+csplit -f $PREFIX $CPPFILE /^\/\/\-\-split\-\-/+1 {\*} > /dev/null
+
+NFILE="${PREFIX}??"
+N0FILE="${PREFIX}00"
+
+
+for i in $NFILE ;  do
+	if [ $i = $N0FILE ] ; then 
+		header=$i
+		
+		continue
+	fi
+	
+	nr=`echo $i | sed -e 's/.*\(.\)\(.\)$/\1\2/'`
+	cppfile="$filename$nr.cpp"
+	CPPFILES="$CPPFILES $cppfile"
+	cat $header > $cppfile
+	cat $i >> $cppfile
+	rm $i 
+done
+
+rm $header
+echo $CPPFILES

@@ -1,0 +1,2 @@
+SUBDIRS = small
+EXTRA_DIST = 

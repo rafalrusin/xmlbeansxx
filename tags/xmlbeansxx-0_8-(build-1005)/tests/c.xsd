@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<xs:schema elementFormDefault="qualified" targetNamespace="http://mind.p4.com/mytest" xmlns="http://mind.p4.com/mytest" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<!--xs:import namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="http://www.w3.org/TR/xmldsig-core/xmldsig-core-schema.xsd"/-->
+  <xs:element name="content" type="content-type"/>
+  <xs:complexType name="content-type">
+    <xs:sequence>
+      <xs:element name="employee" type="personinfo"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="AmountType">
+    <xs:restriction base="xs:decimal">
+      <xs:totalDigits value="14"/>
+      <xs:fractionDigits value="2"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <xs:complexType name="DaneType">
+    <xs:complexContent>
+      <xs:extension base="xs:anyType"/>
+    </xs:complexContent>
+  </xs:complexType>
+  
+  <xs:simpleType name="StringType">
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="collapse"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="PatternType">
+    <xs:restriction base="StringType">
+      <xs:minLength value="1"/>
+      <xs:pattern value="[\d\.\*]*"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cdata-string">
+    <xs:restriction base="StringType">
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <xs:complexType name="personinfo">
+    <xs:sequence>
+      <xs:element name="firstname" type="xs:string"/>
+      <xs:element name="lastname" type="cdata-string"/>
+      <xs:element name="dane" type="DaneType"/>
+      <xs:element name="def" type="xs:string" minOccurs="0" maxOccurs="1" default="_def_"/>
+      <xs:element name="choice">
+        <xs:complexType>
+          <xs:choice>
+            <xs:element name="a" type="xs:int" fixed="10"/>
+            <xs:element name="b" type="xs:int" fixed="20"/>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      
+      <xs:element name="pattern" type="PatternType"/>
+      <xs:element name="floatElement" type="xs:float" minOccurs="0"/>
+      <xs:element name="doubleElement" type="xs:double" minOccurs="0"/>
+      <xs:element name="default" type="xs:int" default="101" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="age" type="xs:int"/>
+    <xs:attribute name="money" type="AmountType"/>
+  </xs:complexType>
+  <xs:complexType name="fullpersoninfo">
+    <xs:complexContent>
+      <xs:extension base="personinfo">
+        <xs:sequence>
+          <xs:element name="address" type="xs:string"/>
+          <xs:element name="city">
+            <xs:simpleType>
+              <xs:restriction base="xs:integer">
+                <xs:minInclusive value="0"/>
+                <xs:maxInclusive value="100"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element default="_default_" maxOccurs="unbounded" name="table" type="xs:string"/>
+          <xs:element minOccurs="0" name="dt" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="t" type="xs:time"/>
+          <xs:element minOccurs="0" name="d" type="xs:date"/>
+          <xs:element name="car" type="car-type"/>
+        </xs:sequence>
+        <xs:attribute name="car" type="car-type"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="car-type">
+    <xs:restriction base="xs:int">
+      <xs:enumeration value="1"/>
+      <xs:enumeration value="2"/>
+      <xs:enumeration value="3"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

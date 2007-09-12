@@ -1,0 +1,502 @@
+/*
+    Copyright 2004-2005 TouK s.c.
+    
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License. */
+
+
+%%preamble
+#include "BoostAssert.h"
+#include <map>
+#include <ext/hash_map>
+#include <string>
+#include <vector>
+#include <boost/shared_ptr.hpp>
+#include <sstream>
+
+#include "CoreTypes.h"
+
+#include "XmlOptions.h"
+#include "geum_types.h"
+#include "macros.h"
+#include "Contents.h"
+#include "TypeSystem.h"
+#include "TextUtils.h"
+#include "SchemaProperty.h"
+#include "SchemaType.h"
+#include "StoreString.h"
+
+#include <boost/config.hpp>
+#ifdef BOOST_HAS_THREADS
+#include <boost/thread/recursive_mutex.hpp>
+#endif
+
+
+
+namespace xmlbeansxx {
+
+class NSMap;
+class QueryNode;
+DECLARE_PTR(QueryNode,QueryNodePtr,constQueryNodePtr)
+
+//class SchemaProperty;
+//DECLARE_PTR(SchemaProperty,SchemaPropertyPtr,constSchemaPropertyPtr)
+
+DECLARE_PTR(std::string,StringPtr,constStringPtr)
+
+/*
+struct Map_String_Int: std::map<std::string,int> {
+    Map_String_Int();
+    Map_String_Int(const Map_String_Int &b);
+};*/
+
+struct Map_String_Int: __gnu_cxx::hash_map<StoreString,int,StoreStringHashFn> {
+    Map_String_Int();
+    Map_String_Int(const Map_String_Int &b);
+};
+
+
+class XmlObject;
+
+typedef XmlObject (*ObjectCreatorFn)();
+
+//--------------------------
+std::string istreamToString(std::istream &in);
+
+template<class T2,class T>
+bool _cast_test(const T &a) {
+	if(!a.hasContents()) return false;
+	boost::shared_ptr<xmlbeansxx::XmlObject> p = xmlbeansxx::Contents::Walker::OrginalXmlObject(a.contents);
+	if(boost::dynamic_pointer_cast<T2>(p)) return true;
+	return false;
+}
+
+
+class XmlAnySimpleType;
+DECLARE_PTR(XmlAnySimpleType,XmlAnySimpleTypePtr,constXmlAnySimpleTypePtr)
+
+//template<class T>
+//boost::shared_ptr<T> convertSimpleType(boost::shared_ptr<const XmlAnySimpleType> from) {
+//    if (from==NULL) return boost::shared_ptr<T>();
+//    else return boost::shared_ptr<T>(new T(from->getSimpleContent()));
+//}
+
+const int DECIMAL_PRECISION = 4;
+const int BIT_PRECISION = 100;
+
+class Void {};
+
+}
+
+%%class xmlbeansxx::XmlObject
+private:
+    friend class MyHandler;
+    friend class Contents;
+    friend class Contents::Walker;
+    
+    template<class T2>
+    friend class XmlArray;
+    friend class QueryAttribute;
+    friend class QueryElement;
+    
+protected:
+    STATIC_LOGGER_PTR(log);
+    
+public:
+    ContentsPtr contents;
+
+    XmlObject(const ContentsPtr &p);
+    virtual ~XmlObject();
+    //virtual functions
+    virtual int documentElementNamespaceID() const;
+    
+    /** Serializes object to stream */
+    virtual void serialize(std::ostream &out,XmlOptions options=XmlOptions()) const;
+    /** Serializes object to string */
+    virtual std::string toString(XmlOptions options=XmlOptions()) const;
+    
+#ifdef BOOST_HAS_THREADS
+    boost::recursive_mutex &mutex() const;
+#endif
+
+    virtual XmlObject clone() const;
+
+    virtual std::string getSimpleContent() const;
+    virtual void setSimpleContent(const std::string &value);
+
+    /** Returns canonical simple content of XmlObject */
+    virtual std::string getCanonicalContent() const;
+
+    /** Selects first XmlObject that meets given criteria */
+    virtual XmlObject query(const std::string& elementName,QueryNodePtr queryExpr) const;
+    virtual XmlObject cquery(const std::string& elementName,QueryNodePtr queryExpr,ObjectCreatorFn createFn);
+    //----//
+
+    //EWML extensions
+    virtual std::string digest() const;
+    bool setAnyElement(const QName& elementName,const std::string& content);
+    //~EWML extensions
+    
+public:
+    virtual std::string exchangeEntities(const std::string& str) const;
+
+    /**
+     * Frees contents of whole subtree of this object.
+     * After this, object remains empty.
+     */
+    void free();
+
+private:
+    std::pair<std::string,std::string> getXpathToken(std::string xpath) const;
+
+private:
+    ContentsPtr walkXpath(const std::string xpath,std::string &lastName,bool createElems);
+    bool isAttr(const std::string name);
+    std::pair<std::string,int> decomposeElem(const std::string name);
+    void getXpathsLikeMapRec(XpathsMap &v,const std::string prefix);
+
+protected:
+    template<class T>
+    boost::shared_ptr<T> defaultValue(boost::shared_ptr<T> value,std::string defaultText) const {
+        if (value==NULL) { 
+            value=boost::shared_ptr<T>(new T());
+            value->setSimpleContent(defaultText);
+        }
+        return value;
+    }
+    
+    template<class T>
+    std::vector<boost::shared_ptr<T> > &defaultArrayValue(std::vector<boost::shared_ptr<T> > &array_value,std::string defaultText) const {
+        typename std::vector<boost::shared_ptr<T> >::iterator it;
+        for(it=array_value.begin();it!=array_value.end();it++) {
+            if (*it==NULL) {
+                *it=boost::shared_ptr<T>(new T());
+                it->setSimpleContent(defaultText);
+            }
+        }
+        return array_value;
+    }
+
+public:
+
+    std::vector<XmlObject> selectPath(const std::string& path);
+    std::vector<XmlObject> selectPath(const NSMap& ns,const std::string& path);
+
+    const std::vector<XmlObject> selectPath(const std::string& path) const;
+    const std::vector<XmlObject> selectPath(const NSMap& ns,const std::string& path) const;
+
+    std::vector<XmlObject> cselectPath(const std::string& path);
+    std::vector<XmlObject> cselectPath(const NSMap& ns,const std::string& path);
+
+
+    
+public:
+    virtual void createContents();
+    virtual bool hasContents() const;
+    virtual void swapContents(const ContentsPtr& p);
+    virtual const xmlbeansxx::SchemaType * getSchemaType() const;
+//    virtual void swapContents(const constContentsPtr& p);
+
+    operator bool() const; // == hasContents()
+    
+
+
+%%class xmlbeansxx::XmlAnySimpleType
+    std::string getStringValue() const;
+    void setStringValue(const std::string &v);
+
+%%class xmlbeansxx::XmlBoolean
+private:
+    STATIC_LOGGER_PTR(log);
+public:
+    XmlBoolean(bool value) { setBooleanValue(value); }
+    XmlBoolean(const char *value) {
+        setSimpleContent(value);
+    }
+
+    bool getBooleanValue() const;
+    void setBooleanValue(bool v);
+
+    virtual std::string getCanonicalContent() const;
+    
+    XmlBoolean operator==(const XmlBoolean &b) const;
+    XmlBoolean operator !() const;
+    XmlBoolean operator ||(const XmlBoolean &b) const;
+    XmlBoolean operator &&(const XmlBoolean &b) const;
+
+    operator bool() const;
+
+%%class xmlbeansxx::XmlString
+private:
+    STATIC_LOGGER_PTR(log);
+public:
+    operator std::string() const;
+    bool operator==(const XmlString &b) const;
+    bool operator!=(const XmlString &b) const;
+    XmlString operator+(const XmlString &b) const;
+    XmlString substring(int beginIndex) const;
+    XmlString substring(int beginIndex,int endIndex) const;
+    bool endsWith(const XmlString &b) const;
+    int length() const;
+
+%%class xmlbeansxx::XmlInteger
+private:
+    friend class XmlDecimal;
+    STATIC_LOGGER_PTR(log);
+public:
+    XmlInteger(const char *value) {
+        setSimpleContent(value);
+    }
+    XmlInteger(int v) { setSimpleContent(xmlbeansxx::TextUtils::intToString(v)); }
+    XmlInteger(const mpz_class &v) { setMpzValue(v); }
+
+    virtual void setSimpleContent(const std::string &value);
+
+    operator int() const;
+    operator mpz_class() const;
+
+    XmlInteger operator+(const XmlInteger &b) const {
+        return XmlInteger(getMpzValue()+b.getMpzValue());
+    }
+    XmlInteger operator-(const XmlInteger &b) const {
+        return XmlInteger(getMpzValue()-b.getMpzValue());
+    }
+    XmlInteger operator*(const XmlInteger &b) const {
+        return XmlInteger(getMpzValue()*b.getMpzValue());
+    }
+    XmlInteger operator/(const XmlInteger &b) const {
+        return XmlInteger(getMpzValue()/b.getMpzValue());
+    }
+
+    XmlInteger operator+=(const XmlInteger &b) {
+        setMpzValue(getMpzValue()+b.getMpzValue());
+        return *this;
+    }
+    XmlInteger operator-=(const XmlInteger &b) {
+        setMpzValue(getMpzValue()-b.getMpzValue());
+        return *this;
+    }
+    XmlInteger operator*=(const XmlInteger &b) {
+        setMpzValue(getMpzValue()*b.getMpzValue());
+        return *this;
+    }
+    XmlInteger operator/=(const XmlInteger &b) {
+        setMpzValue(getMpzValue()/b.getMpzValue());
+        return *this;
+    }
+
+    bool operator==(const XmlInteger &b) const {
+        return getMpzValue()==b.getMpzValue();
+    }
+    bool operator!=(const XmlInteger &b) const {
+        return getMpzValue()!=b.getMpzValue();
+    }
+    bool operator<=(const XmlInteger &b) const {
+        return getMpzValue()<=b.getMpzValue();
+    }
+    bool operator>=(const XmlInteger &b) const {
+        return getMpzValue()>=b.getMpzValue();
+    }
+    bool operator<(const XmlInteger &b) const {
+        return getMpzValue()<b.getMpzValue();
+    }
+    bool operator>(const XmlInteger &b) const {
+        return getMpzValue()>b.getMpzValue();
+    }
+
+%%class xmlbeansxx::XmlDecimal
+private:
+    STATIC_LOGGER_PTR(log);
+public:
+    XmlDecimal(const char *value) {
+        setSimpleContent(value);
+    }
+    XmlDecimal(double v) { setMpfValue(v); }
+    XmlDecimal(const mpf_class &v) { setMpfValue(v); }
+
+    mpf_class getMpfValue() const;
+    void setMpfValue(const mpf_class &v);
+    mpz_class getMpzValue() const;
+    void setMpzValue(const mpz_class &v);
+    virtual int getIntValue() const;
+    virtual void setIntValue(int v);
+    virtual mpz_class getLongValue() const;
+    virtual void setLongValue(mpz_class v);
+    virtual short getShortValue() const;
+    virtual void setShortValue(short v);
+    virtual unsigned char getByteValue() const;
+    virtual void setByteValue(unsigned char v);
+
+    virtual void setSimpleContent(const std::string &value);
+
+    operator mpf_class() const;
+
+    XmlDecimal operator+(const XmlDecimal &b) const {
+        return XmlDecimal(getMpfValue()+b.getMpfValue());
+    }
+    XmlDecimal operator-(const XmlDecimal &b) const {
+        return XmlDecimal(getMpfValue()-b.getMpfValue());
+    }
+    XmlDecimal operator*(const XmlDecimal &b) const {
+        return XmlDecimal(getMpfValue()*b.getMpfValue());
+    }
+    XmlDecimal operator/(const XmlDecimal &b) const {
+        return XmlDecimal(getMpfValue()/b.getMpfValue());
+    }
+
+    XmlDecimal operator+=(const XmlDecimal &b) {
+        setMpfValue(getMpfValue()+b.getMpfValue());
+        return *this;
+    }
+    XmlDecimal operator-=(const XmlDecimal &b) {
+        setMpfValue(getMpfValue()-b.getMpfValue());
+        return *this;
+    }
+    XmlDecimal operator*=(const XmlDecimal &b) {
+        setMpfValue(getMpfValue()*b.getMpfValue());
+        return *this;
+    }
+    XmlDecimal operator/=(const XmlDecimal &b) {
+        setMpfValue(getMpfValue()/b.getMpfValue());
+        return *this;
+    }
+
+    bool operator==(const XmlDecimal &b) const {
+        return getMpfValue()==b.getMpfValue();
+    }
+    bool operator!=(const XmlDecimal &b) const {
+        return getMpfValue()!=b.getMpfValue();
+    }
+    bool operator<=(const XmlDecimal &b) const {
+        return getMpfValue()<=b.getMpfValue();
+    }
+    bool operator>=(const XmlDecimal &b) const {
+        return getMpfValue()>=b.getMpfValue();
+    }
+    bool operator<(const XmlDecimal &b) const {
+        return getMpfValue()<b.getMpfValue();
+    }
+    bool operator>(const XmlDecimal &b) const {
+        return getMpfValue()>b.getMpfValue();
+    }
+
+%%class xmlbeansxx::XmlLong
+public:
+    XmlLong(const char *value) {
+        setSimpleContent(value);
+    }
+    XmlLong(mpz_class v) { setMpzValue(v); }
+
+%%class xmlbeansxx::XmlInt
+    XmlInt(const char *value) {
+        setSimpleContent(value);
+    }
+    XmlInt(int v) { setSimpleContent(xmlbeansxx::TextUtils::intToString(v)); }
+    
+%%class xmlbeansxx::XmlDateTime
+public:
+    //operators
+    bool operator==(const XmlDateTime &b) const;
+    bool operator!=(const XmlDateTime &b) const;
+    bool operator<=(const XmlDateTime &b) const;
+    bool operator>=(const XmlDateTime &b) const;
+    bool operator>(const XmlDateTime &b) const;
+    bool operator<(const XmlDateTime &b) const;
+    //---------------------------------
+    //specific methods
+private:
+    STATIC_LOGGER_PTR(log);
+public:
+    XmlTime timePart() const;
+    XmlDate datePart() const;
+    virtual boost::shared_ptr<xmlbeansxx::Calendar> getCalendarValue() const;
+    virtual void setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v);
+
+%%class xmlbeansxx::XmlTime
+public:
+    bool operator==(const XmlTime &b) const;
+    bool operator!=(const XmlTime &b) const;
+    bool operator<=(const XmlTime &b) const;
+    bool operator>=(const XmlTime &b) const;
+    bool operator>(const XmlTime &b) const;
+    bool operator<(const XmlTime &b) const;
+    //----------------------------
+    virtual boost::shared_ptr<xmlbeansxx::Calendar> getCalendarValue() const;
+    virtual void setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v);
+private:
+    STATIC_LOGGER_PTR(log);
+
+%%class xmlbeansxx::XmlDate
+public:
+    operator boost::gregorian::date() const;
+    bool operator==(const XmlDate &b) const;
+    bool operator!=(const XmlDate &b) const;
+    bool operator<=(const XmlDate &b) const;
+    bool operator>=(const XmlDate &b) const;
+    bool operator>(const XmlDate &b) const;
+    bool operator<(const XmlDate &b) const;
+    //----------------------------
+    //specific methods
+    boost::gregorian::date getDateValue() const;
+    void setDateValue(const boost::gregorian::date &d);
+    
+    virtual CalendarPtr getCalendarValue() const;
+    virtual void setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v);
+    
+    XmlInteger daysFrom(const XmlDate &from) const;
+
+private:
+    STATIC_LOGGER_PTR(log);
+
+
+%%class xmlbeansxx::XmlGDay
+    virtual boost::shared_ptr<xmlbeansxx::Calendar> getCalendarValue() const;
+    virtual void setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v);
+    
+%%class xmlbeansxx::XmlGMonth
+    virtual boost::shared_ptr<xmlbeansxx::Calendar> getCalendarValue() const;
+    virtual void setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v);
+    
+%%class xmlbeansxx::XmlGMonthDay
+    virtual boost::shared_ptr<xmlbeansxx::Calendar> getCalendarValue() const;
+    virtual void setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v);
+    
+%%class xmlbeansxx::XmlGYear
+    virtual boost::shared_ptr<xmlbeansxx::Calendar> getCalendarValue() const;
+    virtual void setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v);
+    
+%%class xmlbeansxx::XmlGYearMonth
+    virtual boost::shared_ptr<xmlbeansxx::Calendar> getCalendarValue() const;
+    virtual void setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v);
+    
+%%class xmlbeansxx::XmlBase64Binary
+    virtual xmlbeansxx::shared_array<unsigned char> getByteArrayValue() const;
+    virtual void setByteArrayValue(xmlbeansxx::shared_array<unsigned char> v);
+    
+%%class xmlbeansxx::XmlHexBinary
+    virtual xmlbeansxx::shared_array<unsigned char> getByteArrayValue() const;
+    virtual void setByteArrayValue(xmlbeansxx::shared_array<unsigned char> v);
+    
+%%class xmlbeansxx::XmlQName
+    virtual boost::shared_ptr<xmlbeansxx::QName> getQNameValue() const;
+    virtual void setQNameValue(boost::shared_ptr<xmlbeansxx::QName> v);
+
+%%class xmlbeansxx::XmlFloat
+    virtual float getFloatValue() const;
+    virtual void setFloatValue(float v);
+
+%%class xmlbeansxx::XmlDouble
+    virtual double getDoubleValue() const;
+    virtual void setDoubleValue(double v);
+    
+%%
+

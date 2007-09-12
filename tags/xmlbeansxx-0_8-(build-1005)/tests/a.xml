@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<c:content xmlns:c="http://mind.p4.com/mytest">
+    <c:employee age="10">
+        <c:firstname><![CDATA[Name1]]></c:firstname>
+        <c:lastname>Name2</c:lastname>
+        <c:dane>bleble</c:dane>
+        <c:choice>
+            <c:b>20</c:b>
+        </c:choice>
+        <c:pattern>.*</c:pattern>	
+	<c:floatElement>3.14</floatElement>
+	<c:doubleElement>3e14</doubleElement>
+    </c:employee>
+</c:content>
+
