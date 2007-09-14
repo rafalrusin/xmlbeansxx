@@ -26,6 +26,7 @@ using namespace std;
 namespace xmlbeansxx {
 
 
+
 LOGGER_PTR_SET(BeansException::log,"xmlbeansxx.BeansException");
 
 BeansException::BeansException(const std::string msg) throw() :msg(msg) { 
