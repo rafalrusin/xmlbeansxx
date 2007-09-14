@@ -22,7 +22,7 @@ stamp-build: $(shell find . -regex '\./\(src\|pom\.xml\).*' -not -regex '.*/\..*
 clean-local:
 	mvn clean
 	rm -f stamp-build
-	if [ ${builddir} ]; then if [ 'x${srcdir}' != 'x${builddir}' ]; then rm -f pom.xml; true ; fi fi
+	if [ "x`readlink -f ${srcdir}`" != "x`readlink -f .`" ]; then rm -f pom.xml; true ; fi 
 
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(datadir)/xmlbeansxx
