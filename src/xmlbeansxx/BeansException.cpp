@@ -20,7 +20,9 @@
 using namespace std;
 
 
-	
+
+
+
 namespace xmlbeansxx {
 
 LOGGER_PTR_SET(BeansException::log,"xmlbeansxx.BeansException");
