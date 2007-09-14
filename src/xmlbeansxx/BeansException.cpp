@@ -15,7 +15,6 @@
   */
 
 
-
 #include "BeansException.h"
 using namespace std;
 
