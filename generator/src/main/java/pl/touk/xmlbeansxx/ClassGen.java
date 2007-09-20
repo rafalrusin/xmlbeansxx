@@ -487,13 +487,21 @@ public class ClassGen {
 		}
 		return b.substring(2);
 	}
-
+	public static String cppToToken(String x) {
+		x = x.replace(':', '_');
+		return x; 
+	}
 	/**
 	 * Returns full C++ path of namespace keywords and a class name of given
 	 * type
 	 */
 	public static String fullClassName(SchemaType type) {
 		return javaToCpp(getFullJavaName(type));
+	}
+	public static QName innerTypeName(SchemaType type) {
+		return new QName("http://xmlbeansxx.touk.pl/xmlbeansxx/innerType",cppToToken(fullClassName(type)));
+		
+		
 	}
 
 	public static String genString(String s) {
@@ -1374,13 +1382,14 @@ public class ClassGen {
 			QName qname = st.getName();
 			if (st.isDocumentType()) qname = st.getDocumentElementName();
 			
-			if (qname == null) {
-                out.cpp.println("  st.name = xmlbeansxx::QName();");
-			} else {
-				out.cpp.println("  st.name = xmlbeansxx::QName::store(" 
+			
+			if (qname == null) 
+				qname = innerTypeName(st);
+			
+			out.cpp.println("  st.name = xmlbeansxx::QName::store(" 
 						+ nsLinks.getVarName(qname.getNamespaceURI()) + ", "
 						+ genString(qname.getLocalPart())+");");
-			}
+			
 						
 			{
 				String r="true";
@@ -1830,13 +1839,15 @@ public class ClassGen {
 		if (st.isDocumentType()) {
 			// i typy document
 			out.cpp.println("    xmlbeansxx::globalTypeSystem()->addDocumentType("+genTypeFn(st)+");");
-		} else if (st.getName() != null) {
-			//rejestrujemy tylko typy nie anonimowe
-			out.cpp.println("    xmlbeansxx::globalTypeSystem()->addType("+genTypeFn(st)+");");
 		} else {
+			//rejestrujemy tylko typy nie anonimowe 
+			out.cpp.println("    xmlbeansxx::globalTypeSystem()->addType("+genTypeFn(st)+");");
+		}
+		//atualnie nie mamy anonimowych typow (serializacja <--> parsowanie) 
+/*		else {
 			//natomiast dla anonimowych wykonujemy statyczna inicjalizacje schemaType
 			out.cpp.println("    " + genTypeFn(st) + ";");
-		}
+		} */
 	}
 
 	void printDeclarations(SchemaType st) {
