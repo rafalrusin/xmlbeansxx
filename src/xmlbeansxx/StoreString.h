@@ -19,7 +19,6 @@
 
 //#include <set>
 #include <string>
-#include "logger.h"
 #include <ext/hash_map>
 
 
@@ -103,7 +102,6 @@ public:
 /** Immutable string with ability to remember globally some strings. User can use static method 'store' to remember some strings. */
 class StoreString {
 private:
-    STATIC_LOGGER_PTR(log);
 
     unsigned long buf;
     inline bool isStored() const;
@@ -151,7 +149,6 @@ inline bool operator==(const StoreString &a,const std::string &b);
 
 //Inline functions
 inline StoreString &StoreString::operator=(const StoreString &b) {
-    //TRACER(log,"operator=");
     copyFrom(b);
     return *this;
 }

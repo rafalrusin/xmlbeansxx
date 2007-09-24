@@ -32,63 +32,68 @@ namespace xmlbeansxx {
 
 //------------------------------------------------------------------------------------
 // Type system
-LOGGER_PTR_SET(TypeSystem::log,"xmlbeansxx.TypeSystem");
-
+//LOGGER_PTR_SET(TypeSystem::log,"xmlbeansxx.TypeSystem");
+static log4cxx::LoggerPtr log()
+{
+	STATIC_LOGGER_PTR_SET(slog,"xmlbeansxx.TypeSystem");
+	return slog;
+	
+}
 
 
 XmlObjectPtr TypeSystem::createDocumentByName(const QName &typeName) {
-    TRACER(log,"createByName");
+    TRACER(log(),"createByName");
     
     
     const SchemaType * st = documentTypeCreators[typeName];
     if(!st) {
-        LOG4CXX_DEBUG(log,std::string("typeName:")+typeName+std::string(" Document Object not registered ,  returning NULL pointer"));
+        LOG4CXX_DEBUG(log(),std::string("typeName:")+typeName+std::string(" Document Object not registered ,  returning NULL pointer"));
         return XmlObjectPtr();
     }
     CreateObjFn f=st->createFn;
     if (f==NULL) {
-        LOG4CXX_DEBUG(log,std::string("typeName:")+typeName+std::string(" returning NULL pointer"));
+        LOG4CXX_DEBUG(log(),std::string("typeName:")+typeName+std::string(" returning NULL pointer"));
         return XmlObjectPtr();
     } else {
-        LOG4CXX_DEBUG(log,std::string("typeName:")+typeName+std::string(" using creator"));
+        LOG4CXX_DEBUG(log(),std::string("typeName:")+typeName+std::string(" using creator"));
         return f();
     }
 }
 
 
 XmlObjectPtr TypeSystem::createByName(const QName &typeName) {
-    TRACER(log,"createByName");
+    TRACER(log(),"createByName");
     
     
     const SchemaType * st = typeCreators[typeName];
     if(!st) {
-        LOG4CXX_DEBUG(log,std::string("typeName:")+typeName+std::string(" Object not registered ,  returning NULL pointer"));
+        LOG4CXX_DEBUG(log(),std::string("typeName:")+typeName+std::string(" Object not registered ,  returning NULL pointer"));
         return XmlObjectPtr();
     }
     CreateObjFn f=st->createFn;
     if (f==NULL) {
-        LOG4CXX_DEBUG(log,std::string("typeName:")+typeName+std::string(" returning NULL pointer"));
+        LOG4CXX_DEBUG(log(),std::string("typeName:")+typeName+std::string(" returning NULL pointer"));
         return XmlObjectPtr();
     } else {
-        LOG4CXX_DEBUG(log,std::string("typeName:")+typeName+std::string(" using creator"));
+        LOG4CXX_DEBUG(log(),std::string("typeName:")+typeName+std::string(" using creator"));
         return f();
     }
 }
 
 XmlObjectPtr TypeSystem::createArrayByName(const QName &typeName) {
-    TRACER(log,"createArrayByName");
+    TRACER(log(),"createArrayByName");
 
     const SchemaType * st = typeCreators[typeName];
     if(!st) {
-        LOG4CXX_DEBUG(log,std::string("typeName:")+typeName+std::string(" Object not registered ,  returning NULL pointer"));
+        LOG4CXX_DEBUG(log(),std::string("typeName:")+typeName+std::string(" Object not registered ,  returning NULL pointer"));
         return XmlObjectPtr();
     }
     CreateObjFn f=st->createArrayFn;
     if (f==NULL) {
-        LOG4CXX_DEBUG(log,std::string("typeName:")+typeName+std::string(" returning NULL pointer"));
+        LOG4CXX_DEBUG(log(),std::string("typeName:")+typeName+std::string(" returning NULL pointer"));
         return XmlObjectPtr();
     } else {
-        LOG4CXX_DEBUG(log,std::string("typeName:")+typeName+std::string(" using creator"));
+        LOG4CXX_DEBUG(log(),std::string("typeName:")+typeName+std::string(" using creator"));
         return f();
     }
 }
@@ -106,12 +111,14 @@ namespace {
 bool initialized=false;
 
 void initializeBeans() {
+
+    if(initialized) return;
     
     const char *locale=setlocale(LC_CTYPE, "");
     if (!locale) {
         throw XmlException( "Locale not specified. Check LANG, LC_CTYPE, LC_ALL." );
     } else {
-        LOG4CXX_INFO(log4cxx::Logger::getLogger(std::string("xmlbeansxx")),"Locale: " << locale);
+//        LOG4CXX_INFO(log(),"Locale: " << locale);
     }
     
     initialized=true;
@@ -127,18 +134,18 @@ private:
     
 public:
     BeansExistence() {
-//        LOG4CXX_DEBUG(log,"Initializing xmlbeansxx");
+//        LOG4CXX_DEBUG(log(),"Initializing xmlbeansxx");
         initializeBeans();
-//        LOG4CXX_DEBUG(log,"Initialized xmlbeansxx");
+//        LOG4CXX_DEBUG(log(),"Initialized xmlbeansxx");
     }
     
     ~BeansExistence() {
-//        LOG4CXX_DEBUG(log,"Terminating xmlbeansxx");
+//        LOG4CXX_DEBUG(log(),"Terminating xmlbeansxx");
         terminateBeans();
-//        LOG4CXX_DEBUG(log,"Terminated xmlbeansxx");
+//        LOG4CXX_DEBUG(log(),"Terminated xmlbeansxx");
     }
 };
-
+ 
 //LOGGER_PTR_SET(BeansExistence::log,"xmlbeansxx.BeansExistence");
 
 }

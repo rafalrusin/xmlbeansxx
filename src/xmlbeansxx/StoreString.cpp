@@ -30,17 +30,13 @@ namespace xmlbeansxx {
 namespace {
 
 char *duplicate(const char *str) {
-    STATIC_LOGGER_PTR_SET(logger,"xmlbeansxx.duplicate");
-    //TRACER(logger,"duplicate");
 
     char *buf;
     int l=strlen(str)+1;
     buf=new char[l];
 
-    //LOG4CXX_DEBUG(logger,"duplicate:"<<str<<" ptr:"<<TextUtils::ptrToString(buf));
 
     if (!((((unsigned long)buf)&1)==0)) {
-        LOG4CXX_FATAL(logger,"Memory allocation using new operator returned odd pointer. This is not supported.");
         throw IllegalStateException();
     }
     //strcpy(buf,str);
@@ -49,8 +45,6 @@ char *duplicate(const char *str) {
 }
 
 void freeDuplicate(char *str) {
-    STATIC_LOGGER_PTR_SET(logger,"xmlbeansxx.freeDuplicate");
-    //LOG4CXX_DEBUG(logger,"freeDuplicate:"<<str<<" ptr:"<<TextUtils::ptrToString(str));
     delete[] str;
 }
 }
@@ -134,8 +128,6 @@ StringStorage::~StringStorage() {
 }
 
 //------------------------------------------------
-LOGGER_PTR_SET(StoreString::log,"xmlbeansxx.StoreString");
-//log4cxx::LoggerPtr StoreString::log = log4cxx::Logger::getLogger("xmlbeansxx.StoreString");
 
 void StoreString::construct(const std::string &str) {
     buf=getStorage()->get(str.c_str());
@@ -150,29 +142,22 @@ StringStorage *StoreString::getStorage() {
 }
 
 StoreString::StoreString() {
-    //TRACER(log,"StoreString");
     construct(std::string());
 }
 
 StoreString::StoreString(const std::string &str) {
-    //TRACER(log,"StoreString");
     construct(str);
 }
 StoreString::StoreString(const char *str) {
-    //TRACER(log,"StoreString");
     construct(std::string(str));
 }
 
 StoreString::StoreString(const StoreString &from) {
-    //TRACER(log,"StoreString");
     copyFrom(from);
 }
 
 StoreString::~StoreString() {
-    //TRACER(log,"~StoreString");
-    //LOG4CXX_DEBUG(log,"str:"<<c_str());
     if (!isStored()) {
-        //LOG4CXX_DEBUG(log,"Deleting "<<TextUtils::ptrToString(buf));
         delete[] ((char *)buf);
     }
     buf=0;

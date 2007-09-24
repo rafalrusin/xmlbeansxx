@@ -29,7 +29,6 @@
 namespace xmlbeansxx {
 
 class TypeSystem {
-    STATIC_LOGGER_PTR(log);
     
     std::map<QName,const SchemaType *> typeCreators;
     std::map<QName,const SchemaType *> documentTypeCreators;
