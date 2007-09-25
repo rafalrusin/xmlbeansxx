@@ -55,6 +55,7 @@ public:
     
     std::string className;
     QName name;
+    QName documentElementName;
     bool processContents;
     bool isArray;
 

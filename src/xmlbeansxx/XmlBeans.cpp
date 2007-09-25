@@ -31,6 +31,11 @@ StoreString XmlBeans::xsi_ns() {
     return ns;
 }
 
+StoreString XmlBeans::innerType_ns() {
+    static StoreString ns = StoreString::store("http://xmlbeansxx.touk.pl/xmlbeansxx/innerType");
+    return ns;
+}
+
 QName XmlBeans::xsi_type() {
     static QName n = QName::store("http://www.w3.org/2001/XMLSchema-instance","type");
     return n;

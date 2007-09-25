@@ -103,7 +103,8 @@ void TypeSystem::addType(const SchemaType *st) {
 }
 
 void TypeSystem::addDocumentType(const SchemaType *st) {
-    documentTypeCreators[st->name]=st;
+    addType(st);
+    documentTypeCreators[st->documentElementName]=st;
 }
 
 //------------------------------------------------------------------------------------

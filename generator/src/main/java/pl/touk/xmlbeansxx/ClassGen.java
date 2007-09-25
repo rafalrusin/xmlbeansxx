@@ -1380,7 +1380,13 @@ public class ClassGen {
 			out.cpp.println("  st.contentType=" + genContentType(st.getContentType()) + ";");
 
 			QName qname = st.getName();
-			if (st.isDocumentType()) qname = st.getDocumentElementName();
+			
+			if (st.isDocumentType()) {
+				 QName DEname = st.getDocumentElementName();
+				 out.cpp.println("  st.documentElementName = xmlbeansxx::QName::store(" 
+						+ nsLinks.getVarName(DEname.getNamespaceURI()) + ", "
+						+ genString(DEname.getLocalPart())+");");
+			}
 			
 			
 			if (qname == null) 

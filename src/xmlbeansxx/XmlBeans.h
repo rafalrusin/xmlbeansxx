@@ -28,6 +28,8 @@ public:
     static StoreString xs_ns();
     /** Schema instance namespace name. */
     static StoreString xsi_ns();
+    /** inner Type namespace name */
+    static StoreString innerType_ns();
     /** xsi:type QName */
     static QName xsi_type();
 

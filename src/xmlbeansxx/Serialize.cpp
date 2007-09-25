@@ -170,7 +170,7 @@ bool shallPrintXsiType(const SchemaType *xsdDefined,const SchemaType * st) {
 
 
 
-void Contents::serialize(bool printXsiType,const QName& elemName,std::ostream &o,NSMapSerializer ns ) const {
+void Contents::serialize(bool printXsiType,const QName& elemName,std::ostream &o,NSMapSerializer ns,XmlOptions options) const {
 	TRACER(log,"serialize");
     	SYNC(mutex)
 
@@ -180,16 +180,18 @@ void Contents::serialize(bool printXsiType,const QName& elemName,std::ostream &o
 
         //it's an object
     	if (printXsiType) {
-		if(st->isArray) {
-			o << " xsi:array=\"" << ns.cprintQName(st->name) << "\"";
-			o << ns.printNewNS();			
-		} else {
-			o << " xsi:type=\"" << ns.cprintQName(st->name) << "\"";
-			o << ns.printNewNS();
+		if( options.getSerializeInnerTypes() || !(st->name.first == XmlBeans::innerType_ns()) ) {
+			if(st->isArray) {
+				o << " xsi:array=\"" << ns.cprintQName(st->name) << "\"";
+				o << ns.printNewNS();			
+			} else {
+				o << " xsi:type=\"" << ns.cprintQName(st->name) << "\"";
+				o << ns.printNewNS();
+			}
 		}
         }
     
-    	serializeAttrs(o,ns);
+    	serializeAttrs(o,ns,options);
 	
     	{
         	std::string cnt=TextUtils::exchangeEntities(getSimpleContent());
@@ -198,7 +200,7 @@ void Contents::serialize(bool printXsiType,const QName& elemName,std::ostream &o
         	} else {
         		o<<">";
             		o<<cnt;
-            		serializeElems(o,ns);
+            		serializeElems(o,ns,options);
             		o<<"</"<<ns.cprintQName(elemName)<<">";
         	}
     	}
@@ -234,13 +236,13 @@ void Contents::serializeDocument(ostream &o,XmlOptions options) const {
 //        throw XmlException(msg);
     } else printXsiType=shallPrintXsiType(prop->schemaType,it->value->st);
     //----------
-    it->value->serialize(printXsiType,it->name,o,ns);
+    it->value->serialize(printXsiType,it->name,o,ns,options);
     o<<"\n";
     
 }
 
 
-void Contents::serializeAttrs(ostream &o,NSMapSerializer& ns) const {
+void Contents::serializeAttrs(ostream &o,NSMapSerializer& ns, XmlOptions options) const {
 	SYNC(mutex)
 	FOREACH(it,attrs.contents) {
 		o << " " << ns.cprintQName(it->name) << "=\"" << TextUtils::exchangeEntities(xmlbeansxx::Contents::Walker::getSimpleContent(it->value), TextUtils::AttrEscapes) << "\"";
@@ -249,7 +251,7 @@ void Contents::serializeAttrs(ostream &o,NSMapSerializer& ns) const {
 }
 
 
-void Contents::serializeElems(ostream &o,NSMapSerializer ns) const {
+void Contents::serializeElems(ostream &o,NSMapSerializer ns, XmlOptions options) const {
 	SYNC(mutex)
 	TRACER(log,"serializeElems");
 
@@ -279,7 +281,7 @@ void Contents::serializeElems(ostream &o,NSMapSerializer ns) const {
 			ContentsPtr value(elems.find(elemName,i));
 			if (value!=NULL) {
 				bool printXsiType= shallPrintXsiType(elemSt,value->st);
-				value->serialize(printXsiType,elemName,o,ns);
+				value->serialize(printXsiType,elemName,o,ns,options);
 			}
 		}
 	}

@@ -3,6 +3,7 @@
 
 
 
+
 	<xs:element name="zakupy">
 		<xs:complexType>
 			<xs:sequence>
@@ -14,6 +15,7 @@
 				
 				<xs:element name="dostawca" 	type="dostawca"	  />
 				<!--	minOccurs="0"/> -->
+				<xs:element name="info" 	type="xs:anyType"  />
 				<xs:any  />
 			</xs:sequence>
 			<xs:attribute name="kolor"	type="xs:string" />

@@ -186,13 +186,66 @@ void XPathTest::xPathTest()
 	        LOG4CXX_DEBUG(logger,"ZakupyDocument_Zakupy: " + zzstring);
 		XmlObject o = XmlObject::Factory::parse(zzstring);
 		std::string cmp = o.toString();
-		CPPUNIT_ASSERT_EQUAL(cmp, zzstring);		
-		
-		
-		
-	
-	
+		CPPUNIT_ASSERT_EQUAL(cmp, zzstring);
 	}
+
+	{	//(serialize <--> parse) annonimouse type
+		ZakupyDocument z = ZakupyDocument::Factory::parse(
+		"<zakupy xmlns='http://ala' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>"
+		"	<klient enumTest='tytus'>"
+		"		<nazwa attr='olo'>pawel</nazwa>"
+		"		<ala>13</ala>"
+		"	</klient>"
+		"</zakupy>"
+		);
+		ZakupyDocument_Zakupy zz = z.getZakupy();
+		std::string zzstring = zz.toString(XmlOptions::serializeInnerTypes());
+	        LOG4CXX_DEBUG(logger,"ZakupyDocument_Zakupy: " + zzstring);
+		XmlObject o = XmlObject::Factory::parse(zzstring);
+		CPPUNIT_ASSERT_EQUAL(o.getSchemaType(), zz.getSchemaType());
+		
+		std::string cmp = o.toString(XmlOptions::serializeInnerTypes());
+		CPPUNIT_ASSERT_EQUAL(cmp, zzstring);
+	}
+	{	//(serialize <--> parse) annonimouse type
+		ZakupyDocument z = ZakupyDocument::Factory::parse(
+		"<zakupy xmlns='http://ala' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>"
+		"	<klient enumTest='tytus'>"
+		"		<nazwa attr='olo'>pawel</nazwa>"
+		"		<ala>13</ala>"
+		"	</klient>"
+		"</zakupy>"
+		);
+		XmlObject z2=z.clone();
+		z.getZakupy().setInfo(z2);
+		std::string zstring = z.toString(XmlOptions::serializeInnerTypes());
+	        LOG4CXX_DEBUG(logger,"ZakupyDocument (XmlOptions::serializeInnerTypes()): " + zstring);
+		CPPUNIT_ASSERT_EQUAL(zstring, std::string(
+						"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+						"<a:zakupy xmlns:a=\"http://ala\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+							"<a:klient enumTest=\"tytus\"><a:nazwa attr=\"olo\">pawel</a:nazwa><a:ala>13.000000</a:ala></a:klient>"
+							"<a:info xsi:type=\"b:ala__ZakupyDocument\" xmlns:b=\"http://xmlbeansxx.touk.pl/xmlbeansxx/innerType\">"
+								"<a:zakupy><a:klient enumTest=\"tytus\"><a:nazwa attr=\"olo\">pawel</a:nazwa><a:ala>13.000000</a:ala></a:klient></a:zakupy>"
+							"</a:info>"
+						"</a:zakupy>\n"));
+
+		zstring = z.toString();
+	        LOG4CXX_DEBUG(logger,"ZakupyDocument: " + zstring);
+		CPPUNIT_ASSERT_EQUAL(zstring, std::string(
+						"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+						"<a:zakupy xmlns:a=\"http://ala\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+							"<a:klient enumTest=\"tytus\"><a:nazwa attr=\"olo\">pawel</a:nazwa><a:ala>13.000000</a:ala></a:klient>"
+							"<a:info>"
+								"<a:zakupy><a:klient enumTest=\"tytus\"><a:nazwa attr=\"olo\">pawel</a:nazwa><a:ala>13.000000</a:ala></a:klient></a:zakupy>"
+							"</a:info>"
+						"</a:zakupy>\n"));
+
+/*		XmlObject o = XmlObject::Factory::parse(zzstring);
+		CPPUNIT_ASSERT_EQUAL(o.getSchemaType(), zz.getSchemaType());
+		
+		std::string cmp = o.toString(XmlOptions::serializeInnerTypes());
+		CPPUNIT_ASSERT_EQUAL(cmp, zzstring);
+*/	}
 }
 
 
