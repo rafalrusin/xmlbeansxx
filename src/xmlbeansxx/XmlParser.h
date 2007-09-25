@@ -32,30 +32,37 @@ namespace xmlbeansxx {
 class XmlObject;
 
 /** This class is used for parsing of xml documents. It uses some xml parser and optionally can use xml schema validator.  */
+
+class XmlParser;
+typedef boost::shared_ptr<XmlParser> XmlParserPtr;
+
 class XmlParser {
 public:
-    virtual ~XmlParser() {}
+	virtual ~XmlParser() {}
 
-    /**
-     * Parses using some parser an xml document from std::istream to some XmlDocument. 
-     * If XmlOptions validation is set, then uses schema validator
-     * (apropriate grammars should be loaded using eg. loadGrammar method).
-     */
-    virtual void parse(std::istream      &in, XmlObject &documentRoot) = 0;
-    virtual void parse(const std::string &in, XmlObject &documentRoot) = 0;
+    	/**
+    	 * Parses using some parser an xml document from std::istream to some XmlDocument. 
+    	 * If XmlOptions validation is set, then uses schema validator
+    	 * (apropriate grammars should be loaded using eg. loadGrammar method).
+    	 */
+    	virtual void parse(std::istream      &in, XmlObject &documentRoot) = 0;
+    	virtual void parse(const std::string &in, XmlObject &documentRoot) = 0;
 
-    virtual XmlOptions getXmlOptions() const = 0;
-    virtual void setXmlOptions(const XmlOptions &options) = 0;
+    	virtual XmlOptions getXmlOptions() const = 0;
+    	virtual void setXmlOptions(const XmlOptions &options) = 0;
 
-    /** Loads grammars into parser from specified file names. */
-    virtual void loadGrammars(const std::vector<std::string> &fileNames) = 0;
-    /** Loads grammar into parser from specified file name. */
-    virtual void loadGrammar(const std::string &fileName) = 0;
-    /** Unloads all grammars from parser. */
-    virtual void unloadGrammars() = 0;
+    	/** Loads grammars into parser from specified file names. */
+    	virtual void loadGrammars(const std::vector<std::string> &fileNames) = 0;
+    	/** Loads grammar into parser from specified file name. */
+    	virtual void loadGrammar(const std::string &fileName) = 0;
+    	/** Unloads all grammars from parser. */
+    	virtual void unloadGrammars() = 0;
     
-//    static XmlParser * create();
-//    static XmlParser * create(const XmlOptions &opts);
+	class Factory {
+	public:
+		static XmlParserPtr newInstance();
+		static XmlParserPtr newInstance(const XmlOptions opts);
+	};
 
 };
 

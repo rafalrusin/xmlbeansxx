@@ -1,6 +1,7 @@
 #include "c.h"
 #include <iostream>
 #include <fstream>
+#include <xmlbeansxx/LibXMLParser.h>
 
 using namespace std;
 using namespace xmlbeansxx;

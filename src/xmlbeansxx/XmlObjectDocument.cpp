@@ -17,7 +17,7 @@
 
 
 #include <xmlbeansxx/XmlObjectDocument.h>
-#include <xmlbeansxx/LibXMLParser.h>
+#include <xmlbeansxx/XmlParser.h>
 #include <xmlbeansxx/XmlArray.h>
 
 using namespace xmlbeansxx;
@@ -72,10 +72,11 @@ xmlbeansxx::XmlObjectPtr XmlObjectDocument::Factory::newInstanceXmlObject() {
 xmlbeansxx::XmlObjectPtr XmlObjectDocument::Factory::newXmlArrayInstance() { return xmlbeansxx::XmlObjectPtr(new xmlbeansxx::XmlArray<XmlObjectDocument >()); }
 XmlObjectDocument XmlObjectDocument::Factory::parse(std::istream &in,xmlbeansxx::XmlOptions options) {
   XmlObjectDocument doc;
-  xmlbeansxx::LibXMLParser p(options);
-  p.parse(in,doc);
+  xmlbeansxx::XmlParserPtr p = XmlParser::Factory::newInstance(options);
+  p->parse(in,doc);
   return doc;
 }
+
 XmlObjectDocument XmlObjectDocument::Factory::parse(const std::string &str,xmlbeansxx::XmlOptions options) { 
   std::istringstream in(str);
   return parse(in,options);

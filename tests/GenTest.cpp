@@ -6,6 +6,7 @@
 #include "c.h"
 
 #include <fstream>
+#include <xmlbeansxx/LibXMLParser.h>
 
 CPPUNIT_TEST_SUITE_REGISTRATION( GenTest );
 

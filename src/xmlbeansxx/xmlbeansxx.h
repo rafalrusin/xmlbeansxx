@@ -20,12 +20,12 @@
 #include <xmlbeansxx/XmlException.h>
 #include <xmlbeansxx/XmlTypesGen.h>
 #include <xmlbeansxx/XmlArray.h>
-#include <xmlbeansxx/LibXMLParser.h>
 #include <xmlbeansxx/TypeSystem.h>
 #include <xmlbeansxx/Query.h>
 #include <xmlbeansxx/SchemaProperty.h>
 #include <xmlbeansxx/StoreString.h>
 #include <xmlbeansxx/NullPtr.h>
 #include <xmlbeansxx/shared_array.h>
+#include <xmlbeansxx/XmlParser.h>
 
 #endif

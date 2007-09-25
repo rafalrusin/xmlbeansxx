@@ -1,6 +1,7 @@
 #include "c.h"
 #include <iostream>
 #include <fstream>
+#include <xmlbeansxx/LibXMLParser.h>
 //#include <log4cxx/basicconfigurator.h>
 
 using namespace std;

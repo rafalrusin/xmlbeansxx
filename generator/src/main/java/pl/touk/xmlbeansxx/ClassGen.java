@@ -1699,13 +1699,13 @@ public class ClassGen {
 							+ "::Factory::parse(std::istream &in,xmlbeansxx::XmlOptions options) {");
 			if (st.isDocumentType()) {
 				out.cpp.println("  "+ className(st) + " doc;");
-				out.cpp.println("  xmlbeansxx::LibXMLParser p(options);\n" +
-								"  p.parse(in,doc);\n" +
+				out.cpp.println("  xmlbeansxx::XmlParserPtr p = xmlbeansxx::XmlParser::Factory::newInstance(options);\n" +
+								"  p->parse(in,doc);\n" +
 								"  return doc;");
 			} else {
 				out.cpp.println("  xmlbeansxx::definitions::XmlFragmentDocument doc;");
-				out.cpp.println("  xmlbeansxx::LibXMLParser p(options);\n" +
-								"  p.parse(in,doc);\n" +
+				out.cpp.println("  xmlbeansxx::XmlParserPtr p = xmlbeansxx::XmlParser::Factory::newInstance(options);\n" +
+								"  p->parse(in,doc);\n" +
 								"  return "
 								+ className(st) +"(doc.getXmlFragment().getElement());");
 				//out.cpp.println(" return

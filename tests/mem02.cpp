@@ -5,6 +5,7 @@
 #include "c.h"
 #include <fstream>
 #include <sstream>
+#include <xmlbeansxx/LibXMLParser.h>
 
 void namespaceTests();
 

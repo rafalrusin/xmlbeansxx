@@ -15,15 +15,36 @@
 
 
 #include "XmlParser.h"
+
+#ifdef HAVE_LIBXML2
 #include "LibXMLParser.h"
+#endif
+
+#ifdef HAVE_LIBXERCES_C
+#include "XercesParser.h"
+#endif
 
 namespace xmlbeansxx {
 
-/*    
-XmlParser XmlParser::create() {
-    return new LibXMLParser();
+    
+XmlParserPtr XmlParser::Factory::newInstance() {
+#ifdef HAVE_LIBXML2
+    return XmlParserPtr(new LibXMLParser());
+#else
+    return XmlParserPtr(new XercesParser());
+#endif
 }
 
+XmlParserPtr XmlParser::Factory::newInstance(const XmlOptions o) {
+#ifdef HAVE_LIBXML2
+    return XmlParserPtr(new LibXMLParser(o));
+#else
+    return XmlParserPtr(new XercesParser(o));
+#endif
+}
+
+
+/*
 XmlParser XmlParser::create(const XmlOptions &opts) {
     return new LibXMLParser(opts);
 }
