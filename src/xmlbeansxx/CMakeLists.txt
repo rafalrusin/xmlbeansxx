@@ -59,6 +59,8 @@ SET(XMLBEANSXX_SRC
 
 )
 
+add_dependencies (xmlbeansxx generator)
+
 add_library (xmlbeansxx SHARED ${XMLBEANSXX_SRC})
 TARGET_LINK_LIBRARIES (xmlbeansxx ${XERCES_LIBRARY} ${BOOST_THREAD_LIBRARY} ${BOOST_DATE_TIME_LIBRARY} ${LOG4CXX_LIBRARY} ${GMP_LIBRARY} ${GMPXX_LIBRARY})
 
