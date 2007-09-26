@@ -10,3 +10,4 @@ ADD_CUSTOM_TARGET( generator
 	mvn -Dbase=. -Prelease package 
 	)
 	
+add_dependencies (generator xmlbeansxx)
