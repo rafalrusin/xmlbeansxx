@@ -11,3 +11,7 @@ ADD_CUSTOM_TARGET( generator
 	)
 	
 add_dependencies (generator xmlbeansxx)
+
+
+SET(xmlbeansxx-genbuiltin ./bolek)
+SET(xmlbeansxx-gen ./bolek2)

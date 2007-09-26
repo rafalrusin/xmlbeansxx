@@ -57,6 +57,21 @@ SET(XMLBEANSXX_SRC
 	xml-fragment.h
 	xml-fragment.cpp
 
+	config_auto.h
+)
+
+ADD_CUSTOM_COMMAND(OUTPUT config_auto.h
+	cp config_auto.h.default config_auto.h
+)
+
+ADD_CUSTOM_COMMAND(OUTPUT XmlTypesGen.h XmlTypesGen.cpp
+	${XMLBEANSXX_SOURCE_DIR}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-genbuiltin .
+	DEPENDS generator
+)
+
+ADD_CUSTOM_COMMAND(OUTPUT xml-fragment.h xml-fragment.cpp
+	${XMLBEANSXX_SOURCE_DIR}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen ./xml-fragment.xsd
+	DEPENDS generator
 )
 
 
