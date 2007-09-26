@@ -13,5 +13,5 @@ find_package(Gmpxx REQUIRED)
 include_directories (${XERCES_INCLUDE_DIR} ${LOG4CXX_INCLUDE_DIR})
 
 
-SUBDIRS (src/xmlbeansxx)
+SUBDIRS (generator src/xmlbeansxx)
 
