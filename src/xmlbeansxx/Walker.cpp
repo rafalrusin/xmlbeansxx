@@ -29,7 +29,6 @@
 #include <boost/thread/recursive_mutex.hpp>
 #endif
 
-#include <XmlTypesGen.h>
 
 #define FOREACH(it,c) for(__typeof((c).begin()) it=(c).begin(); it!=(c).end(); ++it)
 

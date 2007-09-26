@@ -8,6 +8,8 @@ find_package(Log4cxx REQUIRED)
 find_package(Boost REQUIRED)
 find_package(Xerces REQUIRED)
 find_package(CppUnit REQUIRED)
+find_package(Gmp REQUIRED)
+find_package(Gmpxx REQUIRED)
 include_directories (${XERCES_INCLUDE_DIR} ${LOG4CXX_INCLUDE_DIR})
 
 
