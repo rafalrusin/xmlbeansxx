@@ -1,5 +1,5 @@
 
 
 
-java -jar `../xmlbeansxx-gen.jar %*
+java -jar ../xmlbeansxx-gen.jar %*
 
