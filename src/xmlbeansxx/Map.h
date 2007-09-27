@@ -15,18 +15,19 @@ limitations under the License. */
 #ifndef XMLBEANSXX_MAP_INCLUDED
 #define XMLBEANSXX_MAP_INCLUDED
 #include "BoostAssert.h"
+
+#ifndef WIN32
+
+
 #include <ext/hash_map>
 namespace xmlbeansxx {
-/*
-template<typename U, typename V>
-class Map {
-public:
-    typedef __gnu_cxx::hash_map<U, V> type;
-};*/
+
 template<typename KEY, typename VALUE, typename HASHFN = __gnu_cxx::hash<KEY>, typename EQFN = std::equal_to<KEY> >
 class Map {
 public:
     typedef __gnu_cxx::hash_map<KEY, VALUE, HASHFN, EQFN> type;
 };
 }
+#endif // WIN32
+
 #endif //XMLBEANSXX_MAP_INCLUDED

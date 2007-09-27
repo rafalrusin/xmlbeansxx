@@ -17,7 +17,6 @@
 %%preamble
 #include "BoostAssert.h"
 #include <map>
-#include <ext/hash_map>
 #include <string>
 #include <vector>
 #include <boost/shared_ptr.hpp>
@@ -53,16 +52,6 @@ DECLARE_PTR(QueryNode,QueryNodePtr,constQueryNodePtr)
 
 DECLARE_PTR(std::string,StringPtr,constStringPtr)
 
-/*
-struct Map_String_Int: std::map<std::string,int> {
-    Map_String_Int();
-    Map_String_Int(const Map_String_Int &b);
-};*/
-
-struct Map_String_Int: __gnu_cxx::hash_map<StoreString,int,StoreStringHashFn> {
-    Map_String_Int();
-    Map_String_Int(const Map_String_Int &b);
-};
 
 
 class XmlObject;

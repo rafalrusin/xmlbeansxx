@@ -19,7 +19,11 @@
 
 //#include <set>
 #include <string>
+#include <map>
+
+#ifndef WIN32
 #include <ext/hash_map>
+#endif
 
 
 
@@ -65,6 +69,7 @@ class CStrHashFn {
 class CStrLessFn {
     public:
     bool operator()(const char *a,const char *b) const {
+    	if(a == b) return false;
         return strcmp(a,b)<0;
     }
 };
@@ -82,7 +87,11 @@ class StringStorage {
 private:
     //std::set<CStr> contents;
     //typedef std::set<const char *,CStrLessFn> StoreSet;
+#ifdef WIN32
+    typedef std::map<const char *,int,CStrLessFn> StoreMap;
+#else 
     typedef __gnu_cxx::hash_map<const char *,int,CStrHashFn,CStrEqFn> StoreMap;
+#endif
     StoreMap contents;
 public:
     struct SSInfo {

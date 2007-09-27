@@ -19,8 +19,8 @@
 
 #include "BoostAssert.h"
 #include <string>
-#include "Map.h"
 #include <stack>
+#include <map>
 #include "StoreString.h"
 
 namespace xmlbeansxx {
@@ -30,7 +30,7 @@ namespace xmlbeansxx {
  */
 class XmlContext {
 private:
-    Map<std::string, StoreString, StoreString::Hash>::type nsLinks;
+    std::map<std::string, StoreString> nsLinks;
     std::stack<std::pair<std::string, StoreString> > restoreLinks;
     std::stack<int> rememberedPositions;
 

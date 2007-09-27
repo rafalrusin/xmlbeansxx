@@ -45,14 +45,6 @@ class NoExchangeEntitiesXmlObject: public XmlObject {
 
 DECLARE_PTR_CODE(std::string,StringPtr,constStringPtr)
 
-Map_String_Int::Map_String_Int() {}
-/*
-Map_String_Int::Map_String_Int(const Map_String_Int &b): std::map<std::string,int>(b) {}
-
-}*/
-
-Map_String_Int::Map_String_Int(const Map_String_Int &b): __gnu_cxx::hash_map<StoreString,int,StoreStringHashFn>(b) {}
-
 }
 
 
