@@ -25,7 +25,6 @@
 #include "CoreTypes.h"
 
 #include "XmlOptions.h"
-#include "geum_types.h"
 #include "macros.h"
 #include "Contents.h"
 #include "TypeSystem.h"
@@ -151,7 +150,6 @@ private:
     ContentsPtr walkXpath(const std::string xpath,std::string &lastName,bool createElems);
     bool isAttr(const std::string name);
     std::pair<std::string,int> decomposeElem(const std::string name);
-    void getXpathsLikeMapRec(XpathsMap &v,const std::string prefix);
 
 protected:
     template<class T>

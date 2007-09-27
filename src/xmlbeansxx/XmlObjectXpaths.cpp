@@ -19,7 +19,6 @@
 #include <string>
 #include "logger.h"
 #include "XmlTypesGen.h"
-#include "geum_types.h"
 #include "defs.h"
 #include "BoostAssert.h"
 #include "NSMap.h"
