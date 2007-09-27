@@ -1,3 +1,6 @@
 
 
-java -Dgenbuiltin -DinputPath=$1 -jar ../xmlbeansxx-gen.jar 
+set XMLBEANSXX_HOME=%~dp0..
+
+
+java -Dgenbuiltin -DinputPath=$1 -jar %XMLBEANSXX_HOME%/xmlbeansxx-gen.jar 
