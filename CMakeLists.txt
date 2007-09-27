@@ -4,6 +4,14 @@ PROJECT (xmlbeansxx)
 cmake_minimum_required(VERSION 2.4.7)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
+
+if (WIN32)
+	set(EXEC_SUF ".bat")
+else (WIN32) 
+	set(EXEC_SUF "")
+endif (WIN32)
+
+
 find_package(Log4cxx REQUIRED)
 find_package(Boost REQUIRED)
 find_package(Xerces REQUIRED)

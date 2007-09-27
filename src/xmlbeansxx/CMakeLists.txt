@@ -67,12 +67,12 @@ ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/config_auto.h
 )
 
 ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/XmlTypesGen.h ${CMAKE_CURRENT_BINARY_DIR}/XmlTypesGen.cpp
-	COMMAND ${PROJECT_BINARY_DIR}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-genbuiltin ${CMAKE_CURRENT_SOURCE_DIR}/
+	COMMAND ${PROJECT_BINARY_DIR}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-genbuiltin${EXEC_SUF} ${CMAKE_CURRENT_SOURCE_DIR}/
 	DEPENDS generator
 )
 
 ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/xml-fragment.h ${CMAKE_CURRENT_BINARY_DIR}/xml-fragment.cpp
-	COMMAND ${PROJECT_BINARY_DIR}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen ${CMAKE_CURRENT_SOURCE_DIR}/xml-fragment.xsd
+	COMMAND ${PROJECT_BINARY_DIR}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen${EXEC_SUF} ${CMAKE_CURRENT_SOURCE_DIR}/xml-fragment.xsd
 	DEPENDS generator
 )
 
