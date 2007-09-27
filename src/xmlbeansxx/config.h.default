@@ -5,7 +5,7 @@
 
 /* Define to 1 if you have the <boost/shared_ptr.hpp> header file. */
 #define HAVE_BOOST_SHARED_PTR_HPP 1
-   */
+
 #define HAVE_LIBBOOST_DATE_TIME 1
 
 /* Define to 1 if you have the `boost_thread' library (-lboost_thread). */

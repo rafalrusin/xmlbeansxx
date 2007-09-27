@@ -52,25 +52,27 @@ SET(XMLBEANSXX_SRC
 	XercesParser.cpp
 	XercesUtils.cpp
 	
-	XmlTypesGen.h
-	XmlTypesGen.cpp
-	xml-fragment.h
-	xml-fragment.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/XmlTypesGen.h
+	${CMAKE_CURRENT_BINARY_DIR}/XmlTypesGen.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/xml-fragment.h
+	${CMAKE_CURRENT_BINARY_DIR}/xml-fragment.cpp
 
-	config_auto.h
+	${CMAKE_CURRENT_BINARY_DIR}/config_auto.h
 )
 
-ADD_CUSTOM_COMMAND(OUTPUT config_auto.h
-	cp config_auto.h.default config_auto.h
+include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+
+ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/config_auto.h
+	COMMAND ${CMAKE_COMMAND} copy ${CMAKE_CURRENT_SOURCE_DIR}/config.h.default config_auto.h
 )
 
-ADD_CUSTOM_COMMAND(OUTPUT XmlTypesGen.h XmlTypesGen.cpp
-	${XMLBEANSXX_SOURCE_DIR}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-genbuiltin .
+ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/XmlTypesGen.h ${CMAKE_CURRENT_BINARY_DIR}/XmlTypesGen.cpp
+	COMMAND ${PROJECT_BINARY_DIR}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-genbuiltin ${CMAKE_CURRENT_SOURCE_DIR}/
 	DEPENDS generator
 )
 
-ADD_CUSTOM_COMMAND(OUTPUT xml-fragment.h xml-fragment.cpp
-	${XMLBEANSXX_SOURCE_DIR}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen ./xml-fragment.xsd
+ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/xml-fragment.h ${CMAKE_CURRENT_BINARY_DIR}/xml-fragment.cpp
+	COMMAND ${PROJECT_BINARY_DIR}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen ${CMAKE_CURRENT_SOURCE_DIR}/xml-fragment.xsd
 	DEPENDS generator
 )
 
