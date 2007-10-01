@@ -168,7 +168,7 @@ void MySAX2Handler::characters(const XMLCh* const chars, const unsigned int leng
 
 void MySAX2Handler::endElement(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname)
  {
-    LOG4CXX_DEBUG2(log, "end element " << transcode(qname) )
+    LOG4CXX_DEBUG2(log, "end element " + transcode(qname) )
     EmptyParser::StackEl e=parser->nodesStack.top();
     XmlObjectPtr n=e.obj;
     n->setSimpleContent(e.str);

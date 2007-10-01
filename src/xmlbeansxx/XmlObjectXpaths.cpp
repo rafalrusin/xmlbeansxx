@@ -107,7 +107,7 @@ public:
 		if(path.size()<=0) return *this;
 		std::pair<std::string, std::string> part = getXPathPart(path);
 		int size=obj.size();
-		LOG4CXX_DEBUG(log,"XmlObjects in buffer:" << size);
+		LOG4CXX_DEBUG(log,"XmlObjects in buffer:" + size);
 
 		if (size<=0) {
 			LOG4CXX_DEBUG(log,"no more XmlObjects in buffer");
@@ -168,7 +168,7 @@ private:
 		if(qn.find(tab.front())!=0) return false;
 		std::string sub=qn;
 		XMLBEANSXX_FOREACH(std::vector<std::string>::const_iterator,i,tab) {
-			LOG4CXX_DEBUG(log,"submatch: " << sub  << " ~= " << *i);
+			LOG4CXX_DEBUG(log,"submatch: " + sub  + " ~= " + *i);
 			int p = sub.find(*i);
 			if(p<0) return false;
 			sub = sub.substr(p+i->size());
@@ -197,14 +197,14 @@ private:
 				XMLBEANSXX_FOREACH(SchemaType::ElementsType::const_iterator,e,i->getSchemaType()->elements) {
 					QName elemName=e->first;
 					std:string elemMatch = _getQNameString(elemName);
-					LOG4CXX_DEBUG(log,"element matching: "  << elemMatch << " ~= " << partMatch);
+					LOG4CXX_DEBUG(log,"element matching: "  + elemMatch + " ~= " + partMatch);
 					
 					if(matchQNameString(elemMatch, tab)) {
-						LOG4CXX_DEBUG(log,"element matched: "   << elemMatch  << " ~= " << partMatch);
+						LOG4CXX_DEBUG(log,"element matched: "   + elemMatch  + " ~= " + partMatch);
 						try {
 							LOG4CXX_DEBUG(log,"creating flag: "   << create);
 							if(create && !Contents::Walker::isSetElem(*i,elemName)) {
-								LOG4CXX_DEBUG(log,"creating element: "   << elemName.toString());
+								LOG4CXX_DEBUG(log,"creating element: "   + elemName.toString());
 								Contents::Walker::cgetElem(*i,elemName);
 							}
 							
@@ -264,7 +264,7 @@ std::vector<XmlObject> XmlObject::selectPath(const NSMap& ns,const std::string& 
 	Path p(ns);
 	p.addXmlObject(*this);
 	Path retu = p.getPath(path);
-	LOG4CXX_DEBUG(log,"selectPath end: "  << retu.obj.size());
+	LOG4CXX_DEBUG(log,"selectPath end: "  + retu.obj.size());
 	return retu.obj;
 }
 
@@ -278,7 +278,7 @@ const std::vector<XmlObject> XmlObject::selectPath(const NSMap& ns,const std::st
 	Path p(ns);
 	p.addXmlObject(*this);
 	Path retu = p.getPath(path);
-	LOG4CXX_DEBUG(log,"selectPath end: "  << retu.obj.size());
+	LOG4CXX_DEBUG(log,"selectPath end: "  + retu.obj.size());
 	return retu.obj;
 }
 
@@ -293,7 +293,7 @@ std::vector<XmlObject> XmlObject::cselectPath(const NSMap& ns,const std::string&
 	Path p(ns,true);
 	p.addXmlObject(*this);
 	Path retu = p.getPath(path);
-	LOG4CXX_DEBUG(log,"selectPath end: "  << retu.obj.size());	
+	LOG4CXX_DEBUG(log,"selectPath end: "  + retu.obj.size());	
 	return retu.obj;
 }
 

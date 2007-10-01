@@ -20,6 +20,7 @@
 //#include <set>
 #include <string>
 #include <map>
+#include <vector>
 
 #ifndef WIN32
 #include <ext/hash_map>
