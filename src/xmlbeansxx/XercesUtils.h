@@ -35,22 +35,17 @@
 namespace xmlbeansxx {
 
 
+
+#ifdef WIN32
+// for xerces 2.8
 /** Provides a xerces input stream to read from std::istream */
 class BinStdInputStream: public xercesc::BinInputStream {
-    int p;
+    XMLFilePos p;
     std::istream &in;
 public:
     BinStdInputStream(std::istream &in);
-    unsigned int curPos() const;
-    unsigned int readBytes(XMLByte *const toFill,const unsigned int maxToRead);
-};
-
-/** Provides a xerces input source that uses std::istream reader */
-class StdInputSource: public xercesc::InputSource {
-    std::istream &in;
-public:
-    StdInputSource(std::istream &in,XERCES_CPP_NAMESPACE::MemoryManager* const manager = xercesc::XMLPlatformUtils::fgMemoryManager);
-    xercesc::BinInputStream* makeStream() const;
+    XMLFilePos curPos() const;
+    XMLSize_t readBytes(XMLByte *const toFill,const XMLSize_t  maxToRead);
 };
 
 /** Provides a xerces XMLFormatTarget that writes to String. */
@@ -60,10 +55,42 @@ private:
 public:
     StdStringFormatTarget();
 
-    virtual void writeChars(const XMLByte *const toWrite, const unsigned int count, xercesc::XMLFormatter *const formatter);
+    virtual void writeChars(const XMLByte *const toWrite, const XMLSize_t  count, xercesc::XMLFormatter *const formatter);
     std::string getString() const;
     void reset();
 };
+
+#else
+/** Provides a xerces input stream to read from std::istream */
+class BinStdInputStream: public xercesc::BinInputStream {
+    int p;
+    std::istream &in;
+public:
+    BinStdInputStream(std::istream &in);
+    unsigned int curPos() const;
+    unsigned int readBytes(XMLByte *const toFill,const unsigned int maxToRead);
+};
+/** Provides a xerces XMLFormatTarget that writes to String. */
+class StdStringFormatTarget: public xercesc::XMLFormatTarget {
+private:
+    std::string s;
+public:
+    StdStringFormatTarget();
+
+    virtual void writeChars(const XMLByte *const toWrite, const unsigned int  count, xercesc::XMLFormatter *const formatter);
+    std::string getString() const;
+    void reset();
+};
+
+#endif
+/** Provides a xerces input source that uses std::istream reader */
+class StdInputSource: public xercesc::InputSource {
+    std::istream &in;
+public:
+    StdInputSource(std::istream &in,XERCES_CPP_NAMESPACE::MemoryManager* const manager = xercesc::XMLPlatformUtils::fgMemoryManager);
+    xercesc::BinInputStream* makeStream() const;
+};
+
 
 /** Provides transcoding of xerces const XMLCh * string to String in given encoding. */
 class Transcoder {

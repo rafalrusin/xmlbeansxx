@@ -27,8 +27,6 @@ SET(XMLBEANSXX_SRC
 	QName.h
 	Query.cpp
 	Query.h
-	LibXMLParser.cpp
-	LibXMLParser.h
 	XmlParser.cpp
 	XmlParser.h
 	macros.h

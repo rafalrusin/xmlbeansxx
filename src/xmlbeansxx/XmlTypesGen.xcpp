@@ -118,7 +118,7 @@ std::string XmlObject::toString(XmlOptions options) const {
 
 const SchemaType * XmlObject::getSchemaType() const {
     if(contents) return contents->getSchemaType();
-    else getOrginSchemaType();
+    else return getOrginSchemaType();
 }
 
 

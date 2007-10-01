@@ -27,6 +27,21 @@ XERCES_CPP_NAMESPACE_USE
 
 //---
 BinStdInputStream::BinStdInputStream(std::istream &in): p(0),in(in) {}
+#ifdef WIN32
+XMLFilePos BinStdInputStream::curPos() const {
+    return p;
+}
+XMLSize_t BinStdInputStream::readBytes(XMLByte *const toFill,const XMLSize_t maxToRead) {
+    in.read((char *)toFill,maxToRead);
+    p+=in.gcount();
+    return in.gcount();
+}
+
+void StdStringFormatTarget::writeChars(const XMLByte *const toWrite, const XMLSize_t  count, XMLFormatter *const formatter) {
+    s.append((const char *)toWrite,count);
+}
+
+#else
 unsigned int BinStdInputStream::curPos() const {
     return p;
 }
@@ -35,6 +50,12 @@ unsigned int BinStdInputStream::readBytes(XMLByte *const toFill,const unsigned i
     p+=in.gcount();
     return in.gcount();
 }
+
+void StdStringFormatTarget::writeChars(const XMLByte *const toWrite, const unsigned int count, XMLFormatter *const formatter) {
+    s.append((const char *)toWrite,count);
+}
+
+#endif
 
 StdInputSource::StdInputSource(std::istream &in,MemoryManager* const manager)
         : InputSource("std",manager),in(in) {}
@@ -48,9 +69,6 @@ BinInputStream* StdInputSource::makeStream() const {
 
 StdStringFormatTarget::StdStringFormatTarget(): s() {}
 
-void StdStringFormatTarget::writeChars(const XMLByte *const toWrite, const unsigned int count, XMLFormatter *const formatter) {
-    s.append((const char *)toWrite,count);
-}
 
 std::string StdStringFormatTarget::getString() const {
     return s;

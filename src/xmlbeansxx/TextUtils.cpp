@@ -70,8 +70,8 @@ namespace xmlbeansxx {
   }
 
   std::string TextUtils::ptrToString(const void *ptr) {
-    char buf[20];
-    snprintf(buf,20,"%p",ptr);
+    char buf[100];
+    sprintf(buf,"%p",ptr);
     return string(buf);
   }
 
@@ -101,7 +101,7 @@ namespace xmlbeansxx {
   }
 
     std::string TextUtils::exchangeEntities(const std::string& str, TextUtils::EscapeFlags escapeFlag) {
-/* 
+ 
 #ifdef HAVE_LIBXML2
 
     xmlChar *retu;
@@ -115,7 +115,7 @@ namespace xmlbeansxx {
     return s;
 
 #else    
-*/
+
         XMLCh* toFormat = XMLString::transcode (str.c_str ());
         
         MemBufFormatTarget target;
@@ -137,7 +137,7 @@ namespace xmlbeansxx {
         
         LOG4CXX_DEBUG(log,"res:" + res);
         return res; 
-//#endif
+#endif
 }
 
   std::string TextUtils::exchangeEntitiesWithCDATA(const std::string& str) {
