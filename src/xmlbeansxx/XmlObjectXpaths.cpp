@@ -202,7 +202,7 @@ private:
 					if(matchQNameString(elemMatch, tab)) {
 						LOG4CXX_DEBUG(log,"element matched: "   + elemMatch  + " ~= " + partMatch);
 						try {
-							LOG4CXX_DEBUG(log,"creating flag: "   << create);
+							LOG4CXX_DEBUG(log,"creating flag: "   + create);
 							if(create && !Contents::Walker::isSetElem(*i,elemName)) {
 								LOG4CXX_DEBUG(log,"creating element: "   + elemName.toString());
 								Contents::Walker::cgetElem(*i,elemName);

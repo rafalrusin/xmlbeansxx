@@ -24,11 +24,15 @@
 #include <string>
 
 
+#ifdef HAVE_LIBXML2
 #include <libxml/entities.h>
+#endif
 
 #include <sstream>
 #include <cstdio>
 
+#include <xercesc/util/XMLString.hpp>
+#include <xercesc/framework/MemBufFormatTarget.hpp>
 
 #define TRACER2(a,b) 
 #define LOG4CXX_DEBUG2(a,b)
@@ -37,7 +41,7 @@
 using namespace std;
 using namespace boost::archive::iterators;
 
-//XERCES_CPP_NAMESPACE_USE
+XERCES_CPP_NAMESPACE_USE
 
 
 namespace xmlbeansxx {
@@ -97,7 +101,9 @@ namespace xmlbeansxx {
   }
 
     std::string TextUtils::exchangeEntities(const std::string& str, TextUtils::EscapeFlags escapeFlag) {
-    
+/* 
+#ifdef HAVE_LIBXML2
+
     xmlChar *retu;
     if(str.size()<=0) return std::string("");
     if(escapeFlag == AttrEscapes)
@@ -106,11 +112,20 @@ namespace xmlbeansxx {
     	
     std::string s((char*)retu);
     xmlFree(retu);
-    return s;    
-/*        XMLCh* toFormat = XMLString::transcode (str.c_str ());
+    return s;
+
+#else    
+*/
+        XMLCh* toFormat = XMLString::transcode (str.c_str ());
         
         MemBufFormatTarget target;
-        XMLFormatter formatter (XMLUni::fgXMLChEncodingString, &target, escapeFlag);
+	XMLFormatter::EscapeFlags flags;
+	if(escapeFlag == AttrEscapes) {
+		flags = XMLFormatter::AttrEscapes;
+	} else {
+		flags = XMLFormatter::CharEscapes;
+	}
+        XMLFormatter formatter (XMLUni::fgXMLChEncodingString, &target, flags);
         formatter << toFormat;
         
         XMLString::release(&toFormat);
@@ -120,9 +135,10 @@ namespace xmlbeansxx {
         string res(s);
         XMLString::release(&s);
         
-        LOG4CXX_DEBUG(log,"res:" << res);
+        LOG4CXX_DEBUG(log,"res:" + res);
         return res; 
-  */  }
+//#endif
+}
 
   std::string TextUtils::exchangeEntitiesWithCDATA(const std::string& str) {
     return std::string("<![CDATA[") + str + std::string("]]>");

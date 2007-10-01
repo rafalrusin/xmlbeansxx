@@ -24,9 +24,13 @@
 #include "Tracer.h"
 
 
+#include <xercesc/util/PlatformUtils.hpp>
+
+
 using namespace std;
 
 
+XERCES_CPP_NAMESPACE_USE
 
 namespace xmlbeansxx {
 
@@ -119,6 +123,7 @@ void initializeBeans() {
     if (!locale) {
         throw XmlException( "Locale not specified. Check LANG, LC_CTYPE, LC_ALL." );
     } else {
+	XMLPlatformUtils::Initialize(locale);
 //        LOG4CXX_INFO(log(),"Locale: " << locale);
     }
     
