@@ -30,8 +30,7 @@
 #endif
 
 
-#define FOREACH(it,c) for(__typeof((c).begin()) it=(c).begin(); it!=(c).end(); ++it)
-
+#include "defs.h"
 
 class xmlbeansxx::Contents;
 
@@ -124,7 +123,7 @@ namespace xmlbeansxx {
 		 void Contents::Walker::setElemArray(XmlObject& obj,const QName& elemName,const std::vector<ContentsPtr>& v) {
 			if(!obj.hasContents()) throw NullPtrException("Cannot set ElementArray on a empty XmlObject: " + obj.getSchemaType()->className);
 			removeElems(obj,elemName);
-			FOREACH(i,v) appendElem(obj,elemName,(*i));
+			XMLBEANSXX_FOREACH(std::vector<ContentsPtr>::const_iterator, i,v) appendElem(obj,elemName,(*i));
 		};
 
 /*		 void insertDefaults(ContentsPtr &p,const SchemaType *schemaType){
@@ -155,10 +154,10 @@ namespace xmlbeansxx {
 		std::string Contents::Walker::dump(const ContentsPtr& p){
 		    if(!p) return " NULL ";
 		    std::string s("{");
-		    FOREACH(i,p->elems.contents){
+		    XMLBEANSXX_FOREACH(ElemDict::ContentsType::iterator,i,p->elems.contents){
 			s+= i->name +"=" + dump(i->value); 
 		    };
-		    FOREACH(i,p->attrs.contents){
+		    XMLBEANSXX_FOREACH(ElemDict::ContentsType::iterator,i,p->attrs.contents){
 			s+= "@" +i->name +"=" + dump(i->value); 
 		    };
 		    s+= p->value;

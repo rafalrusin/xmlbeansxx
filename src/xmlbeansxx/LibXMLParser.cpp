@@ -396,14 +396,14 @@ void startElementNs(void *ctx,
         
         
         LOG4CXX_DEBUG2(LOG, "namespaces...");
-        FOR(i, nb_namespaces) {
+        for(int i=0;i<nb_namespaces;i++) {
             LOG4CXX_DEBUG2(LOG, string("namespace: ")
                           + (namespaces[2*i] == NULL ? "" : (const char *) namespaces[2*i])
                           + "="
                           + (const char *) namespaces[2*i+1]);
         }
         LOG4CXX_DEBUG2(LOG, "attributes...");
-        FOR(i, nb_attributes) {
+        for(int i=0;i<nb_attributes;i++) {
             LOG4CXX_DEBUG2(LOG, string("attribute: "));
             LOG4CXX_DEBUG2(LOG, string("localname: ") + (const char *) attributes[5*i]);
             LOG4CXX_DEBUG2(LOG, string("prefix   : ")

@@ -167,7 +167,7 @@ private:
 		BOOST_ASSERT(tab.size()>1);
 		if(qn.find(tab.front())!=0) return false;
 		std::string sub=qn;
-		FOREACH(i,tab) {
+		XMLBEANSXX_FOREACH(std::vector<std::string>::const_iterator,i,tab) {
 			LOG4CXX_DEBUG(log,"submatch: " << sub  << " ~= " << *i);
 			int p = sub.find(*i);
 			if(p<0) return false;
@@ -192,9 +192,9 @@ private:
 			return *this;
 		} else if (part.find("*")!=-1) {
 			std::string partMatch = _getQNameStringWithStar(part);
-			VAL(tab,tokenize(partMatch,"*"));
-			FOREACH(i,obj) {
-				FOREACH(e,i->getSchemaType()->elements) {
+			std::vector<std::string> tab=tokenize(partMatch,"*");
+			XMLBEANSXX_FOREACH(ObjType::iterator,i,obj) {
+				XMLBEANSXX_FOREACH(SchemaType::ElementsType::const_iterator,e,i->getSchemaType()->elements) {
 					QName elemName=e->first;
 					std:string elemMatch = _getQNameString(elemName);
 					LOG4CXX_DEBUG(log,"element matching: "  << elemMatch << " ~= " << partMatch);
@@ -224,14 +224,14 @@ private:
 
 		
 			if (isAttr(e.first)) {
-				FOREACH(i,obj) {
+				XMLBEANSXX_FOREACH(ObjType::iterator,i,obj) {
 					try {
 						p.addXmlObject(Contents::Walker::getAttr(*i,name));
 					} catch(...) {}
 //					p.addXmlObject(Contents::Walker::getAttr(*i,name));
 				}
 			} else {
-				FOREACH(i,obj) {
+				XMLBEANSXX_FOREACH(ObjType::iterator,i,obj) {
 					try {
 						if(create) 	p.addXmlObject(Contents::Walker::cgetElem(*i,name));
 						else		p.addXmlObject(Contents::Walker::getElem(*i,name));
@@ -243,7 +243,8 @@ private:
 		return p;
 	}
 	
-	std::vector<XmlObject> obj;
+	typedef std::vector<XmlObject> ObjType;
+	ObjType obj;
 
 	const NSMap &ns;
 	bool create;

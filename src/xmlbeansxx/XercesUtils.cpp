@@ -39,6 +39,7 @@ unsigned int BinStdInputStream::readBytes(XMLByte *const toFill,const unsigned i
 StdInputSource::StdInputSource(std::istream &in,MemoryManager* const manager)
         : InputSource("std",manager),in(in) {}
 
+
 BinInputStream* StdInputSource::makeStream() const {
     BinStdInputStream* retStream = new (getMemoryManager()) BinStdInputStream(in);
     return retStream;

@@ -32,7 +32,6 @@
 #include <boost/thread/recursive_mutex.hpp>
 #endif
 
-#define FOREACH(it,c) for(__typeof((c).begin()) it=(c).begin(); it!=(c).end(); ++it)
 
 
 class xmlbeansxx::Contents;
@@ -131,7 +130,11 @@ private:
 
 public:
 	struct Walker{
-
+		typedef std::vector<std::pair<QName,ContentsPtr> > AttrObjectsType;
+		typedef std::vector<std::pair<QName,std::string> > AttrsType;
+		typedef std::vector<std::pair<QName,ContentsPtr> > ElemsType;
+		typedef std::vector<ContentsPtr> ContentsPtrArrayType;
+		
 		static ContentsPtr getAttr(const XmlObject& obj,const QName& x);
 		static std::string getAttrString(const XmlObject& obj,const QName& x);
 		static void setAttr(XmlObject& obj,const QName &x,const ContentsPtr& y);
@@ -146,17 +149,18 @@ public:
 		static int countElems(const XmlObject& obj,const QName& x);
 		static bool hasElements(const XmlObject& obj);
 		
-		static std::vector<std::pair<QName,ContentsPtr> > getElems(const XmlObject& obj);
-		static std::vector<std::pair<QName,std::string> > getAttrs(const XmlObject& obj);		
-		static std::vector<std::pair<QName,ContentsPtr> > getAttrObjects(const XmlObject& obj);		
-		static std::vector<ContentsPtr> getElemArray(const XmlObject& obj,const QName& elemName);
+		static ElemsType getElems(const XmlObject& obj);
+		static AttrsType getAttrs(const XmlObject& obj);		
+		static AttrObjectsType getAttrObjects(const XmlObject& obj);		
+		static ContentsPtrArrayType getElemArray(const XmlObject& obj,const QName& elemName);
 //		static std::vector<XmlObject> getElemArray(const XmlObject& obj,const QName& elemName);
-		template <class T>
+		template <typename T>
 		static void setElemArray(XmlObject& obj,const QName& elemName,const std::vector<T>& v) {
 			removeElems(obj,elemName);
-			FOREACH(i,v) appendElem(obj,elemName,i->contents);
+			for(typename std::vector<T>::const_iterator i=v.begin();i!=v.end();++i)
+				appendElem(obj,elemName,i->contents);
 		};
-		static void setElemArray(XmlObject& obj,const QName& elemName,const std::vector<ContentsPtr>& v);
+		static void setElemArray(XmlObject& obj,const QName& elemName,const ContentsPtrArrayType& v);
 
 		static void serializeDocument(const XmlObject& obj,std::ostream &o,XmlOptions options,const xmlbeansxx::SchemaType * st);
 //		static void serialize2(XmlObject& obj,int emptyNsID,bool printXsiType,const QName& elemName,std::ostream &o,const xmlbeansxx::SchemaType * st);

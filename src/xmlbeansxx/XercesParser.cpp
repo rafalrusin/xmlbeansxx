@@ -287,7 +287,7 @@ void XercesParser::parse(istream &in,XmlObject &documentRoot) {
 
 
 void XercesParser::loadGrammars(const std::vector<std::string> &fileNames) {
-    FOREACH(it,fileNames) {
+    XMLBEANSXX_FOREACH(std::vector<std::string>::const_iterator,it,fileNames) {
         loadGrammar(*it);
     }
 }

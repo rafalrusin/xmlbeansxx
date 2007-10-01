@@ -85,14 +85,14 @@ void Contents::free() {
 ContentsPtr Contents::clone()
 {
     ContentsPtr clone(new Contents(st));
-    FOREACH(it,elems.contents) {
+    XMLBEANSXX_FOREACH(ElemDict::ContentsType::iterator,it,elems.contents) {
         ContentsPtr o=it->value;
         if (o!=NULL)
             o=o->clone();
         clone->elems.add(it->name,o);
     }
 
-    FOREACH(it,attrs.contents) {
+    XMLBEANSXX_FOREACH(ElemDict::ContentsType::iterator,it,attrs.contents) {
         ContentsPtr o=it->value;
         if (o!=NULL)
             o=o->clone();
@@ -173,7 +173,7 @@ bool Contents::hasElements() const {
 std::vector<ContentsPtr> Contents::getElemArray(const QName& elemName) const {
     SYNC(mutex)
     std::vector<ContentsPtr> r;
-    FOREACH(it,elems.contents) {
+    XMLBEANSXX_FOREACH(ElemDict::ContentsType::const_iterator,it,elems.contents) {
         if (elemName==it->name) {
             r.push_back(it->value);
         }
@@ -196,7 +196,7 @@ bool Contents::hasEmptyContent() const {
 vector<pair<QName,ContentsPtr > > Contents::getElems() const {
     SYNC(mutex)
     vector<pair<QName,ContentsPtr > > v;
-    FOREACH(it,elems.contents) {
+    XMLBEANSXX_FOREACH(ElemDict::ContentsType::const_iterator,it,elems.contents) {
         v.push_back(pair<QName,ContentsPtr >(it->name,it->value));
     }
     return v;
@@ -205,7 +205,7 @@ vector<pair<QName,ContentsPtr > > Contents::getElems() const {
 vector<pair<QName,string> > Contents::getAttrs() const {
     SYNC(mutex)
     vector<pair<QName,string> > v;
-    FOREACH(it,attrs.contents) {
+    XMLBEANSXX_FOREACH(ElemDict::ContentsType::const_iterator,it,attrs.contents) {
         v.push_back(pair<QName,string>(it->name,Walker::getSimpleContent(it->value)));
     }
     return v;
@@ -214,7 +214,7 @@ vector<pair<QName,string> > Contents::getAttrs() const {
 vector<pair<QName,ContentsPtr> > Contents::getAttrs2() const {
     SYNC(mutex)
     vector<pair<QName,ContentsPtr> > v;
-    FOREACH(it,attrs.contents) {
+    XMLBEANSXX_FOREACH(ElemDict::ContentsType::const_iterator,it,attrs.contents) {
         v.push_back(pair<QName,ContentsPtr>(it->name,it->value));
     }
     return v;
@@ -224,11 +224,11 @@ vector<pair<QName,ContentsPtr> > Contents::getAttrs2() const {
 std::string Contents::digest() const {
     std::string r;
     
-    std::vector<std::pair<QName,ContentsPtr > > as=getAttrs2();
-    std::vector<std::pair<QName,ContentsPtr > > es=getElems();
+    Contents::Walker::ElemsType as=getAttrs2();
+    Contents::Walker::ElemsType es=getElems();
 
     sort(as.begin(),as.end());
-    FOREACH(it,as) {
+    XMLBEANSXX_FOREACH(Contents::Walker::ElemsType::iterator,it,as) {
     	if(it->second){
         	r+=" ";
 	        r+=std::string(it->first);
@@ -240,18 +240,19 @@ std::string Contents::digest() const {
     r+=">";
     r+=TextUtils::exchangeEntities(getCanonicalContent());
     
-    std::map<std::pair<QName,int>, ContentsPtr> m;
+    typedef std::map<std::pair<QName,int>, ContentsPtr> MType;
+    MType m;
     std::map<std::string, int> counters;
     {
 	SYNC(mutex)
-    	FOREACH(it,es) {
+    	XMLBEANSXX_FOREACH(Contents::Walker::ElemsType::iterator,it,es) {
         	if (it->second!=NULL) {
 	            m[std::pair<QName,int>(it->first,counters[it->first])]=it->second;
         	    counters[it->first]++;
 	        }
 	}
     }
-    FOREACH(it,m) {
+    XMLBEANSXX_FOREACH(MType::iterator,it,m) {
         r+="<";
         r+=std::string(it->first.first);
         r+=it->second->digest();

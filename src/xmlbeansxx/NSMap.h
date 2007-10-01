@@ -38,7 +38,9 @@ public:
 	
 private:
 	// prefix, namespace
-	std::map<std::string,StoreString> prefixMap;
+	typedef std::map<std::string,StoreString> PrefixMapType;
+	PrefixMapType prefixMap;
+	
 
 	STATIC_LOGGER_PTR(log);
 

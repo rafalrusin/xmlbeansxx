@@ -135,7 +135,7 @@ namespace xmlbeansxx {
         num = num2.substr(1);
     else
         num = num2;
-    FOREACH(it,num) {
+    XMLBEANSXX_FOREACH(std::string::iterator,it,num) {
       if (!((*it)>='0' && (*it)<='9')) return false;
     }
     return true;
@@ -150,7 +150,7 @@ namespace xmlbeansxx {
         num = num2;
 
     int dots=0;
-    FOREACH(it,num) {
+    XMLBEANSXX_FOREACH(std::string::iterator,it,num) {
       if (!((*it)>='0' && (*it)<='9' || (*it)=='.')) return false;
       if ((*it)=='.') {
         dots++;
@@ -166,7 +166,7 @@ namespace xmlbeansxx {
 
   bool TextUtils::areDigits(const std::string &d) {
     bool r=true;
-    FOREACH(it,d) r=r && TextUtils::isDigit(*it);
+    XMLBEANSXX_FOREACH(std::string::const_iterator,it,d) r=r && TextUtils::isDigit(*it);
     return r;
   }
 
@@ -187,7 +187,7 @@ typedef transform_width< binary_from_base64<string::const_iterator>, 8, 6 > bina
     string dec(binary_t(what.begin()),binary_t(what.end()));
     unsigned int outLen=dec.length();
     xmlbeansxx::shared_array<unsigned char> a(outLen);
-    FOR(i,int(outLen)) {
+    for(unsigned int i=0;i<outLen;i++) {
       a[i]=dec[i];
     }
     return a;

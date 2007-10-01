@@ -47,8 +47,9 @@ private:
 public:
     enum WS_TYPE {WS_PRESERVE,WS_REPLACE,WS_UNSPECIFIED,WS_COLLAPSE};
     WS_TYPE whitespaceRule;
-    Map_QName_SchemaPropertyPtr attributes;
-    Map_QName_SchemaPropertyPtr elements;
+    typedef Map_QName_SchemaPropertyPtr ElementsType;
+    ElementsType attributes;
+    ElementsType elements;
 
     CreateObjFn createFn;
     CreateObjFn createArrayFn;

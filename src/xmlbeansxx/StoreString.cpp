@@ -40,7 +40,7 @@ char *duplicate(const char *str) {
         throw IllegalStateException();
     }
     //strcpy(buf,str);
-    FOR(i,l) buf[i]=str[i];
+    for(int i=0;i<l;i++) buf[i]=str[i];
     return buf;
 }
 

@@ -48,23 +48,6 @@ struct DictEl {
 //dziala tak, ze kasujac jakis element nie zwalniamy value, tylko wymazujemy;
 //name za to zwalniamy.
 //natomiast free() zwalnia name i value.
-struct AttrDict {
-    typedef std::string T;
-    std::vector<DictEl<T> > contents;
-
-public:
-    int size() const;
-    bool hasEmptyContent() const;
-    T find(const QName& u) const;
-    int count(const QName& u) const;
-    /// Duplicates u, but not v 
-    void add
-        (const QName& u,T v);
-    void set
-        (const QName& u,int pos,T v);
-    int del(const QName& u);
-    void free();
-};
 
 
 class Contents;
@@ -74,7 +57,8 @@ typedef boost::shared_ptr<Contents> ContentsPtr;
 
 struct ElemDict {
     typedef xmlbeansxx::ContentsPtr T;
-    std::vector<DictEl<T> > contents;
+    typedef std::vector<DictEl<T> > ContentsType;
+    ContentsType contents;
 
 public:
 

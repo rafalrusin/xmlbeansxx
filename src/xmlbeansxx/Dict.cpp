@@ -24,89 +24,6 @@ namespace xmlbeansxx {
 
 //Dicts Impl
 
-int AttrDict::size() const {
-    return (int) contents.size();
-}
-
-bool AttrDict::hasEmptyContent() const {
-    FOREACH(it,contents) {
-        return false;
-        //if (it->value!=NULL)
-        //    return false;
-    }
-    return true;
-}
-
-AttrDict::T AttrDict::find(const QName& u) const {
-    FOREACH(it,contents) {
-        if (it->name==u)  return AttrDict::T(it->value);
-    }
-    return AttrDict::T();
-}
-
-int AttrDict::count(const QName& u) const {
-    int ile=0;
-    FOREACH(it,contents) {
-        if (it->name==u) {
-            ile++;
-        }
-    }
-    return ile;
-}
-
-/** Duplicates u and v */
-void AttrDict::add(const QName& u,AttrDict::T v) {
-    contents.push_back(DictEl<AttrDict::T>(u,v));
-}
-
-void AttrDict::set(const QName& u,int pos,AttrDict::T v) {
-    FOREACH(it,contents) {
-        if (it->name==u) {
-            if (pos==0) {
-                it->value=v;
-                return;
-            }
-            pos--;
-        }
-    }
-    FOR(i,pos) add
-        (u,(AttrDict::T)NULL);
-    add
-        (u,v);
-    //throw new XmlException("Trying to set value at non existing position");
-}
-
-int AttrDict::del(const QName& u) {
-    int p=0,p2=0;
-    int ile=0;
-    while (p<int(contents.size())) {
-        if (p!=p2)
-            contents[p2]=contents[p];
-        if (contents[p].name==u) {
-            contents[p].name=QName(); contents[p].value=std::string();
-            ile++;
-            p++;
-        } else {
-            p++;
-            p2++;
-        }
-    }
-    FOR(i,ile) contents.pop_back();
-    return ile;
-}
-
-void AttrDict::free() {
-    /*
-    FOREACH(it,contents) {
-        if (it->value!=NULL) {
-            delete it->value;
-            it->value=NULL;
-        }
-        delete it->name;
-        it->name=NULL;
-    }*/
-    contents.clear();
-}
 
 //------------
 //ElemDict
@@ -115,7 +32,7 @@ int ElemDict::size() const {
 }
 
 bool ElemDict::hasEmptyContent() const {
-    FOREACH(it,contents) {
+    XMLBEANSXX_FOREACH(ContentsType::const_iterator,it,contents) {
         if (it->value!=NULL)
             return false;
     }
@@ -123,7 +40,7 @@ bool ElemDict::hasEmptyContent() const {
 }
 
 ElemDict::T ElemDict::find(const QName& u,int nr) const {
-    FOREACH(it,contents) {
+    XMLBEANSXX_FOREACH(ContentsType::const_iterator,it,contents) {
         if (it->name==u) {
             nr--;
             if (nr==-1)
@@ -135,7 +52,7 @@ ElemDict::T ElemDict::find(const QName& u,int nr) const {
 
 int ElemDict::count(const QName& u) const {
     int ile=0;
-    FOREACH(it,contents) {
+    XMLBEANSXX_FOREACH(ContentsType::const_iterator,it,contents) {
         if (it->name==u) {
             ile++;
         }
@@ -149,9 +66,8 @@ void ElemDict::add(const QName& u,ElemDict::T v) {
     //logger.debug("ElemDict::add - %s",v->className());
 }
 
-void ElemDict::set
-    (const QName& u,int pos,ElemDict::T v) {
-    FOREACH(it,contents) {
+void ElemDict::set(const QName& u,int pos,ElemDict::T v) {
+    XMLBEANSXX_FOREACH(ContentsType::iterator,it,contents) {
         if (it->name==u) {
             if (pos==0) {
                 it->value=v;
@@ -160,10 +76,8 @@ void ElemDict::set
             pos--;
         }
     }
-    FOR(i,pos) add
-        (u,ElemDict::T());
-    add
-        (u,v);
+    for(int i=0;i<pos;i++) add(u,ElemDict::T());
+    add(u,v);
     //throw new XmlException("Trying to set value at non existing position");
 }
 
@@ -184,7 +98,7 @@ int ElemDict::del(const QName& u) {
             p2++;
         }
     }
-    FOR(i,ile) contents.pop_back();
+    for(int i=0;i<ile;i++) contents.pop_back();
     return ile;
 }
 
@@ -193,7 +107,7 @@ void ElemDict::free() {
 }
 
 void ElemDict::removeAt(const QName& name,int index) {
-    FOREACH(it,contents) {
+    XMLBEANSXX_FOREACH(ContentsType::iterator,it,contents) {
         if (it->name==name) {
             index--;
             if (index==-1) {

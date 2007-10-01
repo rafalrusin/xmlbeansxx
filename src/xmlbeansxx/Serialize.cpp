@@ -53,7 +53,7 @@ namespace xmlbeansxx {
 LOGGER_PTR_SET(NSMap::log,"xmlbeansxx.NSMap");
 
 bool NSMap::isSetNamespaceURI(StoreString ns) const {
-	FOREACH(i,prefixMap){
+	XMLBEANSXX_FOREACH(PrefixMapType::const_iterator,i,prefixMap){
 		if (i->second == ns) return true;
 	}
 	return false;
@@ -71,7 +71,7 @@ bool NSMap::addNamespace(const std::string& prefix, StoreString ns) {
 }
 
 StoreString NSMap::getNamespaceURI(const std::string& prefix) const {
-	VAL(p,prefixMap.find(prefix));
+	PrefixMapType::const_iterator p=prefixMap.find(prefix);
 	if(p==prefixMap.end())
 		throw BeansException("Namespace prefix: " + prefix + " not set.");
 	
@@ -79,7 +79,7 @@ StoreString NSMap::getNamespaceURI(const std::string& prefix) const {
 }
 
 std::string NSMap::getPrefix(StoreString ns) const {
-	FOREACH(i,prefixMap){
+	XMLBEANSXX_FOREACH(PrefixMapType::const_iterator, i, prefixMap){
 		if (i->second == ns) return i->first;
 	}
 	throw BeansException(std::string("Namespace: ") + ns + " not set.");
@@ -213,7 +213,7 @@ void Contents::serializeDocument(ostream &o,XmlOptions options) const {
     if (options.getPrintXmlDeclaration())
         o<<"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 
-    VAL(it,elems.contents.begin());
+    ElemDict::ContentsType::const_iterator it=elems.contents.begin();
     if (it==elems.contents.end() || it->value==NULL)
         return;
 
@@ -244,7 +244,7 @@ void Contents::serializeDocument(ostream &o,XmlOptions options) const {
 
 void Contents::serializeAttrs(ostream &o,NSMapSerializer& ns, XmlOptions options) const {
 	SYNC(mutex)
-	FOREACH(it,attrs.contents) {
+	XMLBEANSXX_FOREACH(ElemDict::ContentsType::const_iterator,it,attrs.contents) {
 		o << " " << ns.cprintQName(it->name) << "=\"" << TextUtils::exchangeEntities(xmlbeansxx::Contents::Walker::getSimpleContent(it->value), TextUtils::AttrEscapes) << "\"";
 		o << ns.printNewNS();
 	}
@@ -257,23 +257,25 @@ void Contents::serializeElems(ostream &o,NSMapSerializer ns, XmlOptions options)
 
 
 	// order sort
-	map<int,std::pair<QName,const SchemaType*> > m;
-	map<QName,int> left;
+	typedef map<int,std::pair<QName,const SchemaType*> > MType;
+	MType m;
+	typedef map<QName,int> LeftType;
+	LeftType left;
 	int order=-1;
-	FOREACH_BACKWARD(it,elems.contents) 
+	XMLBEANSXX_FOREACH_BACKWARD(ElemDict::ContentsType::const_reverse_iterator,it,elems.contents) 
 		left.insert(make_pair(it->name,order--));
 	
-	FOREACH(it,st->elements){
+	XMLBEANSXX_FOREACH(SchemaType::ElementsType::const_iterator,it,st->elements){
 		m[it->second->order]=std::pair<QName,const SchemaType*>(it->first,it->second->schemaType);
 		left.erase(it->first);
 	}
-	FOREACH(it,left) {
+	XMLBEANSXX_FOREACH(LeftType::const_iterator,it,left) {
 		m[it->second]=std::pair<QName,const SchemaType*>(it->first,XmlObject::type());
 	}
 	
 		
-	FOREACH(it,m){
-		VAL(v,it->second);
+	XMLBEANSXX_FOREACH(MType::iterator,it,m){
+		std::pair<QName,const SchemaType*> v=it->second;
 		const QName &elemName = v.first;
 		const SchemaType * elemSt = v.second;
 		int count = elems.count(elemName);

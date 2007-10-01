@@ -72,8 +72,8 @@ bool QueryExpr::getBooleanValue(const XmlObject& object) {
     } else {
         std::vector<std::string> aval(a->getValue(object)),bval(b->getValue(object));
         bool res=false;
-        FOREACH(ita,aval) {
-            FOREACH(itb,bval) {
+        XMLBEANSXX_FOREACH(std::vector<std::string>::iterator,ita,aval) {
+            XMLBEANSXX_FOREACH(std::vector<std::string>::iterator,itb,bval) {
                 if (oper==Operator::EQ) {
                     res|=(*ita)==(*itb);
                 } else if (oper==Operator::LE) {
@@ -107,8 +107,8 @@ static ContentsPtr findAttr(const XmlObject& o,const std::string& attrName)
 {
 	ContentsPtr c=o.contents;
 	if(c){
-		VAL(array,Contents::Walker::getAttrObjects(o));
-		FOREACH(i,array){
+		Contents::Walker::AttrObjectsType array=Contents::Walker::getAttrObjects(o);
+		XMLBEANSXX_FOREACH(Contents::Walker::AttrObjectsType::const_iterator,i,array) {
 			QName name = i->first;
 			if(name->second==attrName)
 				return i->second;
@@ -122,13 +122,13 @@ static std::vector<ContentsPtr> findElems(const XmlObject& o,const std::string& 
 	std::vector<ContentsPtr> retu;
 	ContentsPtr c=o.contents;
 	if(elemName=="*") {
-		VAL(array,Contents::Walker::getElems(o));
-		FOREACH(i,array){
+		Contents::Walker::ElemsType array=Contents::Walker::getElems(o);
+		XMLBEANSXX_FOREACH(Contents::Walker::ElemsType::iterator,i,array) {
 			retu.push_back(i->second);
 		}
 	} else if(c){
-		VAL(array,Contents::Walker::getElems(o));
-		FOREACH(i,array){
+		Contents::Walker::ElemsType array=Contents::Walker::getElems(o);
+		XMLBEANSXX_FOREACH(Contents::Walker::ElemsType::iterator,i,array) {
 			QName name = i->first;
 			if(name->second==elemName)
 				retu.push_back(i->second);
@@ -143,7 +143,7 @@ XmlObject XmlObject::query(const std::string &elementName,QueryNodePtr queryExpr
     TRACER(log,"query");
     std::vector<ContentsPtr> elems=findElems(*this,elementName);
     
-    FOREACH(it,elems) {
+    XMLBEANSXX_FOREACH(std::vector<ContentsPtr>::iterator,it,elems) {
         if (*it) {
             if (queryExpr->getBooleanValue(XmlObject(*it))) {
                 return XmlObject(*it);
@@ -161,7 +161,7 @@ XmlObject XmlObject::cquery(const std::string & elementName,QueryNodePtr queryEx
         r=createFn();
 	QName correctName=QName("",elementName);
 	// find the correct QName
-	FOREACH(i,getSchemaType()->elements){
+	XMLBEANSXX_FOREACH(SchemaType::ElementsType::const_iterator, i,getSchemaType()->elements){
 	    QName name=i->first;
 	    if(name->second==elementName)
 		correctName=name;
@@ -186,13 +186,13 @@ std::vector<std::string> QueryAttribute::getValue(const XmlObject& object) {
 std::vector<std::string> QueryElement::getValue(const XmlObject& object) {
     std::vector<std::string> r;
     std::vector<ContentsPtr> v=findElems(object,elemName);
-    FOREACH(it,v) {
+    XMLBEANSXX_FOREACH(std::vector<ContentsPtr>::iterator,it,v) {
         if (*it) {
             if (next==NULL) {
                 r.push_back(Contents::Walker::OrginalXmlObject(*it)->getCanonicalContent());
             } else {
                 std::vector<std::string> v2=next->getValue(XmlObject(*it));
-                FOREACH(it2,v2) {
+                XMLBEANSXX_FOREACH(std::vector<std::string>::iterator, it2, v2) {
                     r.push_back(*it2);
                 }
             }
