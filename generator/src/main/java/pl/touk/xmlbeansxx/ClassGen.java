@@ -1492,7 +1492,7 @@ public class ClassGen {
 //		out.h.println("    Enum(const std::string& s):str(s){ val=forString(s).val; }");
 		
 		out.h.println("  private:");
-		out.h.println("    Enum(std::string s,int i):str(s),val(i){};");
+		out.h.println("    Enum(std::string s,int i):val(i), str(s) {};");
 		out.h.println("    int val;");
 		out.h.println("    std::string str;");
 		out.h.println("    friend class " + className(st) + ";");

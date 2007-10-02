@@ -210,7 +210,6 @@ typedef transform_width< binary_from_base64<string::const_iterator>, 8, 6 > bina
   }
 
   std::string TextUtils::base64Encode(xmlbeansxx::shared_array<unsigned char> what) {
-    unsigned int outLen;
     string str((char*)what.get(),what.size());
     str.append((3-((str.length())%3)) % 3 ,'\0');
     string enc(base64_t(str.begin()), base64_t(str.end()));

@@ -129,7 +129,8 @@ private:
 
 
 public:
-	struct Walker{
+	class Walker{
+	public:
 		typedef std::vector<std::pair<QName,ContentsPtr> > AttrObjectsType;
 		typedef std::vector<std::pair<QName,std::string> > AttrsType;
 		typedef std::vector<std::pair<QName,ContentsPtr> > ElemsType;

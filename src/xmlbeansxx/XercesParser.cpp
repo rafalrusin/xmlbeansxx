@@ -67,7 +67,7 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
         
         
         LOG4CXX_DEBUG2(log, "attributes...");
-        for(int i=0; i<attrs.getLength(); i++) {
+        for(unsigned int i=0; i<attrs.getLength(); i++) {
             LOG4CXX_DEBUG2(log, string("localname: ") + transcode(attrs.getLocalName(i)));
             LOG4CXX_DEBUG2(log, string("URI      : ") + transcode(attrs.getURI(i)));
             LOG4CXX_DEBUG2(log, string("type     : ") + transcode(attrs.getType(i)));
@@ -102,7 +102,7 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
 	        
     {
 	// test for xsi:type or create default XmlObject
-        for (int i = 0; i < attrs.getLength(); i++) {
+        for (unsigned int i = 0; i < attrs.getLength(); i++) {
 	    QName name(transcode(attrs.getURI(i)), transcode(attrs.getLocalName(i)));
 	    if(name == XmlBeans::xsi_type()) {
 		QName value=parser->nsSplit(transcode(attrs.getValue(i)));
@@ -130,7 +130,7 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
 
     {
         LOG4CXX_DEBUG2(log, "add attributes")
-        for (int i = 0;i < attrs.getLength(); i++) {
+        for (unsigned int i = 0;i < attrs.getLength(); i++) {
 	    QName name(transcode(attrs.getURI(i)), transcode(attrs.getLocalName(i)));
     	    LOG4CXX_DEBUG2(log, "attribute name: "+ name)
 	    

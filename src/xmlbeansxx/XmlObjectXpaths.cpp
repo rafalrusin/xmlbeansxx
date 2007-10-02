@@ -142,7 +142,7 @@ private:
 		return name->first + std::string(":") + name->second;
 	}
 	std::string _getQNameStringWithStar(const std::string& part){
-		if(part.find(":")==-1) return part;
+		if(part.find(":")==std::string::npos) return part;
 		try {
 			return _getQNameString(ns.getQName(part));
 		} catch(...) {
@@ -152,8 +152,8 @@ private:
 	std::vector<std::string> tokenize(const std::string& str,const std::string& t){
 		std::vector<std::string> retu;
 		std::string sub=str;
-		int p;
-		while((p = sub.find(t)) != -1) {
+		std::string::size_type p;
+		while((p = sub.find(t)) != std::string::npos) {
 			LOG4CXX_DEBUG(log,"tokenize: " + sub.substr(0,p));
 			retu.push_back(sub.substr(0,p));
 			sub = sub.substr(p+t.size());
@@ -175,7 +175,7 @@ private:
 		}
 		if(sub.size()>0) {
 		 	if(tab.back().size()>0) return false;
-			else true;
+			else return true;
 		 }
 		return true;
 		
@@ -190,13 +190,13 @@ private:
 			return *this;
 		} else if (part == ".") {
 			return *this;
-		} else if (part.find("*")!=-1) {
+		} else if (part.find("*")!=std::string::npos) {
 			std::string partMatch = _getQNameStringWithStar(part);
 			std::vector<std::string> tab=tokenize(partMatch,"*");
 			XMLBEANSXX_FOREACH(ObjType::iterator,i,obj) {
 				XMLBEANSXX_FOREACH(SchemaType::ElementsType::const_iterator,e,i->getSchemaType()->elements) {
 					QName elemName=e->first;
-					std:string elemMatch = _getQNameString(elemName);
+					std::string elemMatch = _getQNameString(elemName);
 					LOG4CXX_DEBUG(log,"element matching: "  + elemMatch + " ~= " + partMatch);
 					
 					if(matchQNameString(elemMatch, tab)) {

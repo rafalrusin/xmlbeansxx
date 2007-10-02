@@ -180,7 +180,7 @@ template<class T2,class T>
 XmlArray<T2>  xmlarray_java_cast(const XmlArray<T> &from) {
     XmlArray<T2> ret=XmlArray<T2>::Factory::newInstance();
     std::vector<T> a=from.getArray();
-    for(int it=0;it<a.size();it++) {
+    for(typename std::vector<T>::size_type it=0;it<a.size();it++) {
         ret.append(java_cast<T2>(a[it]));
     }
     return ret;
