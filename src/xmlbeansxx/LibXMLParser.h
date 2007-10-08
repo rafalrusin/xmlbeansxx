@@ -42,6 +42,7 @@ class XmlObject;
     /** 
      * Parse XML documents using libxml2 parser.
      */
+     /*
 class LibXMLParser : public EmptyParser {
     private:
 
@@ -71,24 +72,25 @@ public:
         virtual void parse(const std::string &in, XmlObject &documentRoot);
 
 
-        /** Loads grammars into libxml2 parser from specified file names. */
+        /// Loads grammars into libxml2 parser from specified file names. 
         void loadGrammars(const std::vector<std::string> &fileNames);
 
-        /** Loads grammar into libxml2 parser from specified file name. */
+        /// Loads grammar into libxml2 parser from specified file name. 
         void loadGrammar(const std::string &fileName);
 
-        /** Unloads all grammars from libxml2 parser. */
+        /// Unloads all grammars from libxml2 parser. 
         void unloadGrammars();
 
 
         xmlSAXHandlerPtr saxHandlerPtr;
 
 
-    private:
+private:
         void init();
         std::string generateErrorMessage(xmlErrorPtr);
-    };
+};
+
+*/
 
 }
-
 #endif//_XMLBEANSXX_LIBXMLPARSER_H_

@@ -22,6 +22,10 @@ IF(MSVC80)
 ENDIF(MSVC80)
 
 
+SET(XMLBEANSXX_GEN		${PROJECT_BINARY_DIR}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen${EXEC_SUF})
+SET(XMLBEANSXX_GENBUILDIN 	${PROJECT_BINARY_DIR}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-genbuiltin${EXEC_SUF}) 
+
+
 
 find_package(Log4cxx REQUIRED)
 find_package(Boost REQUIRED)
@@ -29,8 +33,11 @@ find_package(Xerces REQUIRED)
 find_package(CppUnit REQUIRED)
 find_package(Gmp REQUIRED)
 find_package(Gmpxx REQUIRED)
+
 include_directories (${XERCES_INCLUDE_DIR} ${LOG4CXX_INCLUDE_DIR})
 
 
-SUBDIRS (generator src/xmlbeansxx)
+ADD_SUBDIRECTORY (generator )
+ADD_SUBDIRECTORY (src/xmlbeansxx)
+ADD_SUBDIRECTORY (tests)
 

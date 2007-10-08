@@ -16,6 +16,9 @@
 
 #include "XmlParser.h"
 
+#undef HAVE_LIBXML2
+#include "config_auto.h"
+
 #ifdef HAVE_LIBXML2
 #include "LibXMLParser.h"
 #endif
