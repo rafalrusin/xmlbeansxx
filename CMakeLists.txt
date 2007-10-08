@@ -2,14 +2,8 @@
 PROJECT (xmlbeansxx)
 
 cmake_minimum_required(VERSION 2.4.7)
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-
-if (WIN32)
-	set(EXEC_SUF ".bat")
-else (WIN32) 
-	set(EXEC_SUF "")
-endif (WIN32)
 
 IF(MSVC80)
 	SET(CMAKE_CXX_WARNING_LEVEL 1)
@@ -22,22 +16,31 @@ IF(MSVC80)
 ENDIF(MSVC80)
 
 
-SET(XMLBEANSXX_GEN		${PROJECT_BINARY_DIR}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen${EXEC_SUF})
-SET(XMLBEANSXX_GENBUILDIN 	${PROJECT_BINARY_DIR}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-genbuiltin${EXEC_SUF}) 
+IF (WIN32)
+	SET(EXEC_SUF ".bat")
+ELSE (WIN32) 
+	SET(EXEC_SUF "")
+ENDIF (WIN32)
 
 
 
-find_package(Log4cxx REQUIRED)
-find_package(Boost REQUIRED)
-find_package(Xerces REQUIRED)
-find_package(CppUnit REQUIRED)
-find_package(Gmp REQUIRED)
-find_package(Gmpxx REQUIRED)
-
-include_directories (${XERCES_INCLUDE_DIR} ${LOG4CXX_INCLUDE_DIR})
+SET(XMLBEANSXX_GEN_PROG		${PROJECT_BINARY_DIR}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen${EXEC_SUF})
+SET(XMLBEANSXX_GENBUILDIN_PROG 	${PROJECT_BINARY_DIR}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-genbuiltin${EXEC_SUF}) 
 
 
-ADD_SUBDIRECTORY (generator )
+
+FIND_PACKAGE(Log4cxx REQUIRED)
+FIND_PACKAGE(Boost REQUIRED)
+FIND_PACKAGE(Xerces REQUIRED)
+FIND_PACKAGE(CppUnit REQUIRED)
+FIND_PACKAGE(Gmp REQUIRED)
+FIND_PACKAGE(Gmpxx REQUIRED)
+FIND_PACKAGE(XmlbeansxxInternal REQUIRED)
+
+INCLUDE_DIRECTORIES (${XERCES_INCLUDE_DIR} ${LOG4CXX_INCLUDE_DIR})
+
+
+ADD_SUBDIRECTORY (generator)
 ADD_SUBDIRECTORY (src/xmlbeansxx)
 ADD_SUBDIRECTORY (tests)
 
