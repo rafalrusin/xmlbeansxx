@@ -42,7 +42,7 @@ class XmlObject;
     /** 
      * Parse XML documents using libxml2 parser.
      */
-     /*
+     
 class LibXMLParser : public EmptyParser {
     private:
 
@@ -90,7 +90,7 @@ private:
         std::string generateErrorMessage(xmlErrorPtr);
 };
 
-*/
+
 
 }
 #endif//_XMLBEANSXX_LIBXMLPARSER_H_

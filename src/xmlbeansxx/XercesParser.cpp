@@ -79,7 +79,7 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
     parser->xmlContext.remember();
     
     QName name(transcode(uri), transcode(localname));
-    LOG4CXX_DEBUG2(log, "begin element: " + name)
+    LOG4CXX_DEBUG2(log, std::string("begin element: ") + name)
     
     if(parser->nodesStack.empty())
 	throw XmlException(string("no XmlObject on XercesParser stack"));
@@ -106,12 +106,12 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
 	    QName name(transcode(attrs.getURI(i)), transcode(attrs.getLocalName(i)));
 	    if(name == XmlBeans::xsi_type()) {
 		QName value=parser->nsSplit(transcode(attrs.getValue(i)));
-        	LOG4CXX_DEBUG2(log, "xsi:type = " + value)
+        	LOG4CXX_DEBUG2(log, std::string("xsi:type = ") + value)
 		n = globalTypeSystem()->createByName(value);
 		if (!n) throw XmlException(string("Xsd Type '")+value+string("' not defined in builtin type system"));					   
 	    } else if(name == XmlBeans::xsi_array()) {
 		QName value=parser->nsSplit(transcode(attrs.getValue(i)));
-        	LOG4CXX_DEBUG2(log, "xsi:array = " + value)
+        	LOG4CXX_DEBUG2(log, std::string("xsi:array = ") + value)
 		n = globalTypeSystem()->createArrayByName(value);
 		if (!n) throw XmlException(string("Xsd Type '")+value+string("' not defined in builtin type system"));					   
 	    
@@ -132,7 +132,7 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
         LOG4CXX_DEBUG2(log, "add attributes")
         for (unsigned int i = 0;i < attrs.getLength(); i++) {
 	    QName name(transcode(attrs.getURI(i)), transcode(attrs.getLocalName(i)));
-    	    LOG4CXX_DEBUG2(log, "attribute name: "+ name)
+    	    LOG4CXX_DEBUG2(log, std::string("attribute name: ")+ name)
 	    
 	    if (name == XmlBeans::xsi_type()) continue;
 	    if (name == XmlBeans::xsi_array()) continue;
@@ -142,7 +142,7 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
     }
     
     {
-        LOG4CXX_DEBUG2(log, "append element name:" + name  )
+        LOG4CXX_DEBUG2(log, std::string("append element name:") + name  )
 
 	Contents::Walker::appendElem(*(parser->nodesStack.top().obj),name,n->contents);
         parser->nodesStack.push(EmptyParser::StackEl(n,n->getSchemaType()->processContents,name));
@@ -155,7 +155,7 @@ void MySAX2Handler::startPrefixMapping(const XMLCh* const _prefix, const XMLCh* 
     	//NAMESPACES
 	std::string prefix = transcode(_prefix);
 	std::string uri = transcode(_uri);
-	LOG4CXX_DEBUG2(log, "store namespace in xmlContext:" + prefix + " = " + uri)
+	LOG4CXX_DEBUG2(log, std::string("store namespace in xmlContext:") + prefix + " = " + uri)
         parser->xmlContext.setLink(prefix, uri); 
 }
 
@@ -168,7 +168,7 @@ void MySAX2Handler::characters(const XMLCh* const chars, const unsigned int leng
 
 void MySAX2Handler::endElement(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname)
  {
-    LOG4CXX_DEBUG2(log, "end element " + transcode(qname) )
+    LOG4CXX_DEBUG2(log, std::string("end element ") + transcode(qname) )
     EmptyParser::StackEl e=parser->nodesStack.top();
     XmlObjectPtr n=e.obj;
     n->setSimpleContent(e.str);
@@ -201,20 +201,22 @@ void MySAX2Handler::fatalError(const SAXParseException& exc) {
 
 std::string MySAX2Handler::transcode(const XMLCh* const chars,const int length)
 {
-	char* message = XMLString::transcode(chars);
+	return parser->transcoder.transcode(chars);
+/*	char* message = XMLString::transcode(chars);
 	std::string retu(message);
 	XMLString::release(&message);
 	return retu;
+*/
 }
 
 
 //----------------------
 
-XercesParser::XercesParser(){
+XercesParser::XercesParser():transcoder(XmlBeans::encoding().c_str()){
     init();
 }
 
-XercesParser::XercesParser(const XmlOptions &opts):EmptyParser(opts) {
+XercesParser::XercesParser(const XmlOptions &opts):EmptyParser(opts),transcoder(XmlBeans::encoding().c_str()) {
     init();
 }
 
@@ -222,14 +224,14 @@ XercesParser::XercesParser(const XmlOptions &opts):EmptyParser(opts) {
 
 void XercesParser::init(bool reinit) {
     LOG4CXX_DEBUG(log,"start");
-    static bool initialized = false;
+/*    static bool initialized = false;
     
     if(!initialized) {
     	LOG4CXX_DEBUG(log,"initializing xerces-c");
 	XMLPlatformUtils::Initialize(); 
 	initialized=true;
     }
-
+*/
     sax2=auto_ptr<SAX2XMLReader>(XMLReaderFactory::createXMLReader());
     handler=auto_ptr<MySAX2Handler>(new MySAX2Handler(this));
     sax2->setContentHandler(handler.get());
@@ -293,7 +295,7 @@ void XercesParser::loadGrammars(const std::vector<std::string> &fileNames) {
 }
 
 void XercesParser::loadGrammar(const std::string &fileName) {
-    LOG4CXX_DEBUG(log,std::string("loadGrammar: "+ fileName));
+    LOG4CXX_DEBUG(log,std::string("loadGrammar: ") + fileName);
     sax2->loadGrammar(fileName.c_str(),Grammar::SchemaGrammarType,true);
 }
 void XercesParser::unloadGrammars() {

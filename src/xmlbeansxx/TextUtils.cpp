@@ -24,6 +24,7 @@
 #include <string>
 
 
+#include "config_auto.h"
 #ifdef HAVE_LIBXML2
 #include <libxml/entities.h>
 #endif
@@ -86,7 +87,7 @@ namespace xmlbeansxx {
 
   std::string TextUtils::collapse(const std::string &str) {
     TRACER2(log,"collapse");
-    LOG4CXX_DEBUG2(log,"str:"+str);
+    LOG4CXX_DEBUG2(log,std::string("str:")+str);
     int l=str.size();
     int a=0,b=l-1;
     while (a<l && isWhite(str[a])) a++;
@@ -95,7 +96,7 @@ namespace xmlbeansxx {
       LOG4CXX_DEBUG2(log,"ret:");
       return std::string("");
     } else {
-      LOG4CXX_DEBUG2(log,"ret:"+str.substr(a,b-a+1));
+      LOG4CXX_DEBUG2(log,std::string("ret:")+str.substr(a,b-a+1));
       return str.substr(a,b-a+1);
     }
   }
@@ -135,7 +136,7 @@ namespace xmlbeansxx {
         string res(s);
         XMLString::release(&s);
         
-        LOG4CXX_DEBUG(log,"res:" + res);
+        LOG4CXX_DEBUG(log,std::string("res:") + res);
         return res; 
 #endif
 }

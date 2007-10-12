@@ -15,6 +15,7 @@
 
 
 #include <string>
+#include <iostream>
 
 #include "BoostAssert.h"
 
@@ -22,6 +23,7 @@
 #include "defs.h"
 #include "logger.h"
 #include "Tracer.h"
+#include "XmlBeans.h"
 
 
 #include <xercesc/util/PlatformUtils.hpp>
@@ -123,6 +125,8 @@ void initializeBeans() {
     if (!locale) {
         throw XmlException( "Locale not specified. Check LANG, LC_CTYPE, LC_ALL." );
     } else {
+    	std::cerr << "Locale: " << locale << "\n";
+//    	XmlBeans::encoding(locale);
 	XMLPlatformUtils::Initialize(locale);
 //        LOG4CXX_INFO(log(),"Locale: " << locale);
     }

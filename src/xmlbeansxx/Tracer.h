@@ -21,9 +21,9 @@
 #include "logger.h"
 
 
-#ifdef HAVE_LIBLOG4CXX
+//#ifdef HAVE_LIBLOG4CXX
 #define XMLBEANSXX_LOGGING
-#endif //HAVE_LIBLOG4CXX
+//#endif //HAVE_LIBLOG4CXX
 
 
 #ifndef XMLBEANSXX_LOGGING
@@ -45,7 +45,7 @@ namespace xmlbeansxx {
 class Tracer {
 public:
     Tracer(log4cxx::LoggerPtr logger, const std::string &text) : logger(logger), text(text) {
-        LOG4CXX_DEBUG(logger,"entering " + text);
+        LOG4CXX_DEBUG(logger,std::string("entering ") + text);
         previous = log4cxx::MDC::get("method");
         log4cxx::MDC::put("method", text);
     };
@@ -59,7 +59,7 @@ public:
     ~Tracer() {
         log4cxx::MDC::put("method", previous);
         if (logger)
-            LOG4CXX_DEBUG(logger,"leaving " + text);
+            LOG4CXX_DEBUG(logger,std::string("leaving ") + text);
     };
 
 protected:

@@ -444,7 +444,7 @@ void startElementNs(void *ctx,
 
     
     QName name(parser->getQName((const char *) prefix, (const char *) localname));
-    LOG4CXX_DEBUG2(LOG, "begin element: " + name)
+    LOG4CXX_DEBUG2(LOG, std::string("begin element: ") + name)
     
     if(parser->nodesStack.empty())
 	throw XmlException(string("no XmlObject on LibXMLParser stack"));
@@ -504,7 +504,7 @@ void startElementNs(void *ctx,
                 current += ATTRTABSIZE) {
             StoreString uri;
             QName name(parser->getQName((const char *) attributes[current + ATTR_PREFIX], (const char *) attributes[current + ATTR_LOCALNAME], true));
-    	    LOG4CXX_DEBUG2(LOG, "attribute name: "+ name)
+    	    LOG4CXX_DEBUG2(LOG, std::string("attribute name: ") + name)
 	    
 	    if (name == XmlBeans::xsi_type()) continue;
 	    if (name == XmlBeans::xsi_array()) continue;
@@ -514,7 +514,7 @@ void startElementNs(void *ctx,
     }
     
     {
-        LOG4CXX_DEBUG2(LOG, "append element name:" + name  )
+        LOG4CXX_DEBUG2(LOG, std::string("append element name:") + name  )
 
 	Contents::Walker::appendElem(*(parser->nodesStack.top().obj),name,n->contents);
         parser->nodesStack.push(LibXMLParser::StackEl(n,n->getSchemaType()->processContents,name));

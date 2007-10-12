@@ -35,6 +35,7 @@ public:
 	virtual std::string getPrefix(StoreString ns) const;
 	virtual QName getQName(const std::string& name) const;
 	
+	std::string toString() const;
 	
 private:
 	// prefix, namespace

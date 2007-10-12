@@ -35,6 +35,10 @@ public:
 
     /** xsi:array QName */    
     static QName xsi_array();
+    
+   
+    static std::string encoding(std::string encoding = std::string());
+    
 };
 }
 #endif //XMLBEANSXX_XMLBEANS_INCLUDED

@@ -45,6 +45,12 @@ QName XmlBeans::xsi_array() {
     static QName n = QName::store("http://www.w3.org/2001/XMLSchema-instance","array");
     return n;
 }
+std::string XmlBeans::encoding(std::string encoding) {
+	static std::string encode="utf8";
+	if(encoding.size()>0) encode = encoding;
+	return encode;
+}
+
 
 
 }

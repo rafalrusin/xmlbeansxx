@@ -32,6 +32,7 @@
 #include "XmlOptions.h"
 #include "XmlContext.h"
 #include "XmlParser.h"
+#include "XercesUtils.h"
 
 
 #include <log4cxx/logger.h>
@@ -54,6 +55,7 @@ private:
     friend class MySAX2Handler;
     std::auto_ptr<MySAX2Handler> handler;
     std::auto_ptr<xercesc::XMLGrammarPool> grammarPool;
+    Transcoder transcoder;
 
 
 public:
@@ -99,7 +101,7 @@ public:
     virtual void error(const XERCES_CPP_NAMESPACE::SAXParseException& exc);
     virtual void fatalError(const XERCES_CPP_NAMESPACE::SAXParseException& exc);
     
-    static std::string transcode(const XMLCh* const chars,const int length = -1);
+    virtual std::string transcode(const XMLCh* const chars,const int length = -1);
 
 private:
     void updateValidation();

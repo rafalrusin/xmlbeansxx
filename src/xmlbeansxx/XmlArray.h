@@ -36,9 +36,7 @@
 namespace xmlbeansxx {
 
 
-#ifdef HAVE_LIBLOG4CXX
 extern LOGGER_PTR(XmlArray_log);
-#endif
 
 extern QName XmlArray_elemName;
 

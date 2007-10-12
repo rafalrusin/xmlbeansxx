@@ -18,11 +18,20 @@
 #define _XMLBEANSXX_LOGGER_H_
 
 
-#include "config_auto.h"
+//#include "config_auto.h"
 
-#ifdef HAVE_LIBLOG4CXX
+//#ifdef HAVE_LIBLOG4CXX
 
 #include <log4cxx/logger.h>
+
+// undefining log4cxx definitions
+#undef VERSION
+#undef PACKAGE_VERSION
+#undef PACKAGE_TARNAME
+#undef PACKAGE_STRING
+#undef PACKAGE_NAME
+#undef PACKAGE_BUGREPORT
+#undef PACKAGE
 
 #define LOGGER_PTR(name) log4cxx::LoggerPtr name
 #define STATIC_LOGGER_PTR(name) static LOGGER_PTR(name)
@@ -30,7 +39,7 @@
 #define STATIC_LOGGER_PTR_SET(name,string) STATIC_LOGGER_PTR(name) = GET_LOGGER(string)
 #define LOGGER_PTR_SET(name,string) LOGGER_PTR(name) = GET_LOGGER(string)
     
-#else // HAVE_LIBLOG4CXX
+/*#else // HAVE_LIBLOG4CXX
 
 #define LOGGER_PTR(name) 
 #define STATIC_LOGGER_PTR(name) 
@@ -46,7 +55,8 @@
 #define LOG4CXX_ERROR(logger,string)
 
 
-#endif
 
+#endif // HAVE_LIBLOG4CXX
+*/
 
 #endif

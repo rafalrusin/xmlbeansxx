@@ -122,6 +122,45 @@ void XPathTest::xPathTest()
 		CPPUNIT_ASSERT_EQUAL(retu4.size(), size_t(1));		
 	}
 	{
+		XmlObject z = XmlObjectDocument::Factory::parse(
+			"<ala xmlns='http://ala'>"
+			"	<klient enumTest='tytus'>"
+			"		<nazwa attr='olo'>pawel</nazwa>"
+			"		<ala>13</ala>"
+			"		<ola>3</ola>"
+			"		<ola>4</ola>"
+			"		<ola>5</ola>"
+			"		<ola>6</ola>"			
+			"	</klient>"
+			"</ala>"
+		);
+
+		NSMap ns;
+	        LOG4CXX_DEBUG(logger,"XmlObject: " + z.toString())
+		ns.addNamespace("a","http://ala");		
+		std::vector<XmlObject> retu=z.selectPath(ns,"./a:*/a:klient/a:ala");
+		
+		XmlArray<XmlObject> a(retu);
+	        LOG4CXX_DEBUG(logger,"path: " + a.toString())
+		XmlDecimal d = XmlDecimal(a.xgetArray(0).getSimpleContent());
+	        LOG4CXX_DEBUG(logger,"element: " + d.toString());
+		CPPUNIT_ASSERT_EQUAL(d.getMpfValue(), mpf_class(13));
+
+		std::vector<XmlObject> retu2=z.selectPath(ns,"./a:*/a:klient/a:ola");
+		
+		XmlArray<XmlObject> a2(retu2);
+	        LOG4CXX_DEBUG(logger,"path: " + a2.toString())
+		XmlDecimal d2 = XmlDecimal(a2.xgetArray(2).getSimpleContent());
+	        LOG4CXX_DEBUG(logger,"element: " + d2.toString());
+		CPPUNIT_ASSERT_EQUAL(d2.getMpfValue(), mpf_class(5));
+		CPPUNIT_ASSERT_EQUAL(a2.size(), 4);
+	
+	}
+	
+	
+	
+	
+/*	{
 		//cselectPath with *
 	
 		XmlObject o = XmlObjectDocument::Factory::parse(
@@ -136,8 +175,9 @@ void XPathTest::xPathTest()
 
 		NSMap ns;
 		ns.addNamespace("a","http://ala");		
-		std::vector<XmlObject> retu=z.cselectPath(ns,"./a:*/*:klient/*:adres");
-		
+*/
+//		std::vector<XmlObject> retu=z.cselectPath(ns,"./a:*/*:klient/*:adres");
+/*		
 		CPPUNIT_ASSERT_EQUAL(size_t(1), retu.size());		
 		retu[0].setSimpleContent("Egejska 3");
 		
@@ -145,8 +185,9 @@ void XPathTest::xPathTest()
 	        LOG4CXX_DEBUG(logger,"path: " + a.toString());
 	        LOG4CXX_DEBUG(logger,"XmlObjectDokument: " + o.toString());
 	        LOG4CXX_DEBUG(logger,"ZakupyDokument: " + z.toString());
-		CPPUNIT_ASSERT_EQUAL(std::string("Egejska 3"), XmlString(z.selectPath(ns,"./a:*/*:klient/*:adres").front()).getStringValue());		
-
+*/
+//		CPPUNIT_ASSERT_EQUAL(std::string("Egejska 3"), XmlString(z.selectPath(ns,"./a:*/*:klient/*:adres").front()).getStringValue());		
+/*
 	
 	}
 
@@ -161,9 +202,9 @@ void XPathTest::xPathTest()
 		"</zakupy>"
 		);
 		ZakupyDocument z=ZakupyDocument::Factory::parse(o.toString());
-
-		std::vector<XmlObject> retu=z.cselectPath("./*/*:klient/*:nazwa");
-		
+*/
+//		std::vector<XmlObject> retu=z.cselectPath("./*/*:klient/*:nazwa");
+/*		
 		CPPUNIT_ASSERT_EQUAL(size_t(1), retu.size());		
 		
 		XmlArray<XmlObject> a(retu);
@@ -171,7 +212,7 @@ void XPathTest::xPathTest()
 		CPPUNIT_ASSERT_EQUAL(retu[0].getSimpleContent(), std::string("pawel"));		
 	
 	}
-	
+*/	
 	{	//(serialize <--> parse) annonimouse type
 		ZakupyDocument z = ZakupyDocument::Factory::parse(
 		"<zakupy xmlns='http://ala' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>"

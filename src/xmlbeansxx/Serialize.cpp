@@ -63,7 +63,7 @@ bool NSMap::isSetPrefix(const std::string& prefix) const {
 }
 
 bool NSMap::addNamespace(const std::string& prefix, StoreString ns) {
-        LOG4CXX_DEBUG(log,"addNamespace: " + prefix + ": " + ns);
+        LOG4CXX_DEBUG(log,std::string("addNamespace: ") + prefix + ": " + ns);
 	if(isSetPrefix(prefix)) return false;
 	std::pair<std::string, StoreString> a(prefix, ns);
 	prefixMap.insert(a);
@@ -83,6 +83,14 @@ std::string NSMap::getPrefix(StoreString ns) const {
 		if (i->second == ns) return i->first;
 	}
 	throw BeansException(std::string("Namespace: ") + ns + " not set.");
+}
+
+std::string NSMap::toString() const {
+	std::string retu;
+	XMLBEANSXX_FOREACH(PrefixMapType::const_iterator, i, prefixMap){
+		retu += i->first + " => " + i->second;
+	}
+	return retu;
 }
 
 
