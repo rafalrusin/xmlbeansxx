@@ -129,7 +129,7 @@ public:
 	pair<string,string> getXPathPredicat(const string& part) {
 		int p=part.find('[');
 		if(p<0)	return pair<string,string>(part,"");
-		else 	return pair<string,string>( part.substr(0,p), part.substr(p+1, part.find(']')) );
+		else 	return pair<string,string>( part.substr(0,p), part.substr(p+1) );
 	}
 	
 	pair<string,int> decomposeElem(const std::string& name) {
@@ -198,11 +198,13 @@ private:
 
 	Path doPredicat(const std::string& pred) {
 		if(pred.size() <= 0) return *this;
+		LOG4CXX_DEBUG(log,std::string("doPredicat: ") + pred);
 		Path p(ns,create);
 		stringstream s(pred);
 		int pos=0; 
 		s >> pos;
-		p.addXmlObject(p.obj[pos]);
+		LOG4CXX_DEBUG(log,std::string("selecting: ") + TextUtils::intToString(pos));		
+		p.addXmlObject(obj[pos]);
 		return p;
 	}
 
