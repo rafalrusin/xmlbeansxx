@@ -39,7 +39,16 @@ XmlObjectPtr SchemaType::createSubObject(const QName &name) const {
     if (it!=elements.end()) {
         return it->second->schemaType->createFn();
     } else {
-        return XmlObject::Factory::newInstanceXmlObject(); 
+    	//searching for a Document type
+	XmlObjectPtr root = globalTypeSystem()->createDocumentByName(name);
+	//Document type not found (returning an XmlObject)
+	if(!root)  return XmlObject::Factory::newInstanceXmlObject(); 
+
+	//Get the inner type of the document
+	QName documentElementName = root->getSchemaType()->documentElementName;
+	return root->getSchemaType()->createSubObject(documentElementName);
+	
+	
     }
 }
     

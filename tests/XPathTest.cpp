@@ -130,30 +130,58 @@ void XPathTest::xPathTest()
 			"		<ola>3</ola>"
 			"		<ola>4</ola>"
 			"		<ola>5</ola>"
-			"		<ola>6</ola>"			
+			"		<ola>6"
+			"			<zla lang='en'>3</zla>"
+			"			<zla lang='pl'>4</zla>"
+			"			<zla>5</zla>"
+			"		</ola>"			
 			"	</klient>"
 			"</ala>"
 		);
 
-		NSMap ns;
-	        LOG4CXX_DEBUG(logger,"XmlObject: " + z.toString())
-		ns.addNamespace("a","http://ala");		
-		std::vector<XmlObject> retu=z.selectPath(ns,"./a:*/a:klient/a:ala");
+		{
+			NSMap ns;
+		        LOG4CXX_DEBUG(logger,"XmlObject: " + z.toString())
+			ns.addNamespace("a","http://ala");		
+			std::vector<XmlObject> retu=z.selectPath(ns,"./a:*/a:klient/a:ala");
 		
-		XmlArray<XmlObject> a(retu);
-	        LOG4CXX_DEBUG(logger,"path: " + a.toString())
-		XmlDecimal d = XmlDecimal(a.xgetArray(0).getSimpleContent());
-	        LOG4CXX_DEBUG(logger,"element: " + d.toString());
-		CPPUNIT_ASSERT_EQUAL(d.getMpfValue(), mpf_class(13));
+			XmlArray<XmlObject> a(retu);
+		        LOG4CXX_DEBUG(logger,"path: " + a.toString())
+			XmlDecimal d = XmlDecimal(a.xgetArray(0).getSimpleContent());
+		        LOG4CXX_DEBUG(logger,"element: " + d.toString());
+			CPPUNIT_ASSERT_EQUAL(d.getMpfValue(), mpf_class(13));
 
-		std::vector<XmlObject> retu2=z.selectPath(ns,"./a:*/a:klient/a:ola");
+			std::vector<XmlObject> retu2=z.selectPath(ns,"./a:*/a:klient/a:ola");
+			
+			XmlArray<XmlObject> a2(retu2);
+		        LOG4CXX_DEBUG(logger,"path: " + a2.toString())
+			XmlDecimal d2 = XmlDecimal(a2.xgetArray(2).getSimpleContent());
+	        	LOG4CXX_DEBUG(logger,"element: " + d2.toString());
+			CPPUNIT_ASSERT_EQUAL(d2.getMpfValue(), mpf_class(5));
+			CPPUNIT_ASSERT_EQUAL(a2.size(), 4);
+		}
+		{
+			std::vector<XmlObject> retu=z.selectPath(
+					"declare namespace ala='http://ala' "
+					"./ala:ala/ala:klient/*:ola[3]");
 		
-		XmlArray<XmlObject> a2(retu2);
-	        LOG4CXX_DEBUG(logger,"path: " + a2.toString())
-		XmlDecimal d2 = XmlDecimal(a2.xgetArray(2).getSimpleContent());
-	        LOG4CXX_DEBUG(logger,"element: " + d2.toString());
-		CPPUNIT_ASSERT_EQUAL(d2.getMpfValue(), mpf_class(5));
-		CPPUNIT_ASSERT_EQUAL(a2.size(), 4);
+			XmlArray<XmlObject> a(retu);
+		        LOG4CXX_DEBUG(logger,"path2: " + a.toString())
+			CPPUNIT_ASSERT_EQUAL(a.size(), 1);
+		}
+		{
+			std::vector<XmlObject> retu=z.selectPath(
+					"declare namespace ala='http://ala' "
+					"./ala:*/ala:klient/*:ola[3]/ala:zla[1]/@lang");
+		
+			XmlArray<XmlObject> a(retu);
+		        LOG4CXX_DEBUG(logger,"path3: " + a.toString())
+			CPPUNIT_ASSERT_EQUAL(a.size(), 1);
+
+			std::string d = a.xgetArray(0).getSimpleContent();
+		        LOG4CXX_DEBUG(logger,"element: " + d);
+			CPPUNIT_ASSERT_EQUAL(d, std::string("pl"));
+		}
 	
 	}
 	

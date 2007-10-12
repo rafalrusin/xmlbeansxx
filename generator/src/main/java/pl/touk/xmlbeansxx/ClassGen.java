@@ -1599,6 +1599,19 @@ public class ClassGen {
 				"      return;\n" +
 				"    } else " );
 		} 
+		if(st.isDocumentType()) {
+					out.cpp.println(
+				"    xmlbeansxx::Contents::Walker::ElemsType elements = xmlbeansxx::Contents::Walker::getElems(p);\n" +
+				"    if(elements.size()==1) { \n" +
+				"      XmlObject e = elements[0].second;\n" +
+				"      if(xmlbeansxx::_cast_test<" + className(st.getElementProperty(st.getDocumentElementName()).getType()) + " >(e)) {\n" +
+				"        createContents();\n" +
+				"        set"+javaPropertyName( st.getElementProperty(st.getDocumentElementName())) + "(e);\n" +
+				"        return;\n" +
+				"      }\n" +
+				"    }\n"
+					);
+		}
 		out.cpp.println("    throw xmlbeansxx::ClassCastException( ((p) ? p.contents->st->className : \"unknow\") + \" to " + className(st) + "\");" );
 		out.cpp.println(
 				"  }" +

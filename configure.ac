@@ -2,10 +2,10 @@
 # V_1_1
 AC_PREREQ(2.57)
 
-AC_INIT(XMLBEANSXX, 0.8.7, support@TouK.pl)
+AC_INIT(XMLBEANSXX, 0.8.8, support@TouK.pl)
 #Before release, change library versions 
 #Read http://www.gnu.org/software/libtool/manual.html#SEC32 before doing this
-AC_SUBST(library_version_info, 1:5:0)
+AC_SUBST(library_version_info, 1:7:0)
 
 
 AC_CONFIG_AUX_DIR([config])

@@ -36,7 +36,7 @@ GenTest_SOURCES=TestApp.cpp GenTest.cpp GenTest.h
 nodist_GenTest_SOURCES = c.h c.cpp pawel.h pawel.cpp
 
 ParseTest_SOURCES=TestApp.cpp ParseTest.cpp ParseTest.h 
-nodist_ParseTest_SOURCES = c.h c.cpp
+nodist_ParseTest_SOURCES = c.h c.cpp pawel.h pawel.cpp
 
 UnqualTest_SOURCES=TestApp.cpp UnqualTest.cpp UnqualTest.h 
 nodist_UnqualTest_SOURCES = unqual.h unqual.cpp

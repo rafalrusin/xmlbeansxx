@@ -4,7 +4,10 @@
 #include <xmlbeansxx/logger.h>
 //#include <log4cxx/stream.h>
 #include "c.h"
+#include "pawel.h"
 #include "XercesParser.h"
+#include "LibXMLParser.h"
+#include "XmlObjectDocument.h"
 #include <fstream>
 
 CPPUNIT_TEST_SUITE_REGISTRATION( ParseTest );
@@ -19,6 +22,7 @@ LOGGER_PTR_SET(logger,"test.ParserTest");
 using namespace xmlbeansxx;
 using namespace com::p4::mind::mytest;
 using namespace std;
+using namespace ala;
 
 void ParseTest::parseTest() {
 
@@ -67,6 +71,48 @@ void ParseTest::parseTest() {
 		"</a:content>\n";
 		CPPUNIT_ASSERT_EQUAL(cmp,str);
 		
+	}
+	{
+		XmlObject o = XmlObjectDocument::Factory::parse(
+		"<zakupy xmlns='http://ala' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>"
+		"	<klient enumTest='tytus'>"
+		"		<nazwa attr='olo'>pawel</nazwa>"
+		"		<ala>13</ala>"
+		"	</klient>"
+		"	<info>"
+		"		<zakupy>"
+		"			<klient enumTest='tytus'>"
+		"				<nazwa attr='olo'>pawel</nazwa>"
+		"				<ala>13</ala>"
+		"			</klient>"
+		"		</zakupy>"
+		"	</info>"
+		"</zakupy>"
+		);
+		
+		
+		ZakupyDocument z = o;
+		std::string infoSchema=z.getZakupy().getInfo().getSchemaType()->name;
+	        LOG4CXX_DEBUG(logger, "z.getZakupy().getInfo().getSchemaType()->name: " + infoSchema);
+		std::string cmp = "anyType@http://www.w3.org/2001/XMLSchema";
+		CPPUNIT_ASSERT_EQUAL(cmp,infoSchema);
+		XmlObject info= z.getZakupy().getInfo();
+		Contents::Walker::ElemsType infoE = Contents::Walker::getElems(info);
+		int size = infoE.size();
+		CPPUNIT_ASSERT_EQUAL(size,1);
+		std::string infoESchema=infoE[0].second->st->name;
+	        LOG4CXX_DEBUG(logger, "info element SchemaType name: " + infoESchema);
+		std::string cmp2 = "ala__ZakupyDocument_Zakupy@http://xmlbeansxx.touk.pl/xmlbeansxx/innerType";
+		CPPUNIT_ASSERT_EQUAL(cmp2,infoESchema);
+		
+		ZakupyDocument z2(info);
+	        LOG4CXX_DEBUG(logger, "zakupy: " + z2.toString());
+		
+		
+		
+		 
+
+	
 	}
 	
 	

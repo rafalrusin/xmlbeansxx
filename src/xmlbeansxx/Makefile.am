@@ -55,6 +55,7 @@ libxmlbeansxx_la_SOURCES = \
 	XmlObjectDocument.cpp\
 	XmlObjectXpaths.cpp\
 	NSMap.h\
+	config_auto.h\
 	XercesParser.cpp\
 	XercesUtils.cpp
 
@@ -97,7 +98,6 @@ libxmlbeansxxinclude_HEADERS = \
 	Tracer.h\
 	XmlContext.h\
 	logger.h\
-	config_auto.h\
 	Query.h\
 	SchemaProperty.h\
 	StoreString.h\
