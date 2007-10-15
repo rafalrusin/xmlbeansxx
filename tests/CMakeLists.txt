@@ -15,7 +15,7 @@ SET(TEST_PROGS
 	XmlArrayTest
 	ArrayTest
 #	GenTest
-	ParseTest
+#	ParseTest
 #	UnqualTest
 	EnumTest
 	XPathTest
@@ -43,7 +43,7 @@ ADD_EXECUTABLE(BeansTest	TestApp.cpp BeansTest.cpp	BeansTest.h)
 ADD_EXECUTABLE(XmlArrayTest	TestApp.cpp XmlArrayTest.cpp	XmlArrayTest.h)
 ADD_EXECUTABLE(ArrayTest	TestApp.cpp ArrayTest.cpp	ArrayTest.h		${c.xsd_SRC})
 #ADD_EXECUTABLE(GenTest		TestApp.cpp GenTest.cpp		GenTest.h		${c.xsd_SRC} ${pawel.xsd_SRC})
-ADD_EXECUTABLE(ParseTest	TestApp.cpp ParseTest.cpp 	ParseTest.h 		${c.xsd_SRC})
+#ADD_EXECUTABLE(ParseTest	TestApp.cpp ParseTest.cpp 	ParseTest.h 		${c.xsd_SRC})
 #ADD_EXECUTABLE(UnqualTest	TestApp.cpp UnqualTest.cpp 	UnqualTest.h 		${unqual.xsd_SRC})
 ADD_EXECUTABLE(EnumTest		TestApp.cpp EnumTest.cpp 	EnumTest.h		${pawel.xsd_SRC})
 ADD_EXECUTABLE(XPathTest	TestApp.cpp XPathTest.cpp 	XPathTest.h		${pawel.xsd_SRC})
