@@ -1597,24 +1597,28 @@ public class ClassGen {
 				"    if(xmlbeansxx::_cast_test<xmlbeansxx::XmlAnySimpleType>(p)) {\n" +
 				"      setSimpleContent(p.getSimpleContent()); \n" +
 				"      return;\n" +
-				"    } else " );
+				"    }" );
 		} 
 		if(st.isDocumentType()) {
-					out.cpp.println(
+			SchemaProperty elemProp=st.getElementProperty(st.getDocumentElementName());
+			PropGen pg=new PropGen(elemProp);
+			String x="";
+			if(pg.hasHolder()) {
+				x = "x";  
+			}
+			out.cpp.println(
 				"    xmlbeansxx::Contents::Walker::ElemsType elements = xmlbeansxx::Contents::Walker::getElems(p);\n" +
 				"    if(elements.size()==1) { \n" +
 				"      XmlObject e = elements[0].second;\n" +
-				"      if(xmlbeansxx::_cast_test<" + className(st.getElementProperty(st.getDocumentElementName()).getType()) + " >(e)) {\n" +
-				"        createContents();\n" +
-				"        set"+javaPropertyName( st.getElementProperty(st.getDocumentElementName())) + "(e);\n" +
-				"        return;\n" +
-				"      }\n" +
+				"      createContents();\n" +
+				"      " + x + "set"+javaPropertyName(elemProp) + "(e);\n" +
+				"      return;\n" +
 				"    }\n"
 					);
 		}
 		out.cpp.println("    throw xmlbeansxx::ClassCastException( ((p) ? p.contents->st->className : \"unknow\") + \" to " + className(st) + "\");" );
 		out.cpp.println(
-				"  }" +
+				"  }\n" +
 				"  swapContents(p.contents);\n" +
 				"}");
 
