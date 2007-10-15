@@ -299,7 +299,8 @@ public class ClassGen {
             case SchemaProperty.JAVA_QNAME:
                 return "xmlbeansxx::QNamePtr";
             case SchemaProperty.JAVA_LIST:
-                return "xmlbeansxx::ListPtr";
+                //return "xmlbeansxx::ListPtr";
+                return "std::string";
             case SchemaProperty.JAVA_CALENDAR:
                 return "xmlbeansxx::CalendarPtr";
 
@@ -388,7 +389,7 @@ public class ClassGen {
 	            return "QName";
 
 	        case SchemaProperty.JAVA_LIST:
-	            return "List";
+	            return "String";
 
 	        case SchemaProperty.JAVA_ENUM:
 	            return "Enum";
