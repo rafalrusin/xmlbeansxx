@@ -16,7 +16,7 @@
 all-local: stamp-build 
 
 stamp-build: $(shell find . -regex '\./\(src\|pom\.xml\).*' -not -regex '.*/\..*' | grep -v stamp)
-	cp ${srcdir}/pom.xml .; mvn -Dbase=${srcdir} -Prelease package 
+	cp ${srcdir}/pom.xml .; mvn -U -Dbase=${srcdir} -Prelease package 
 	touch stamp-build
 
 clean-local:
