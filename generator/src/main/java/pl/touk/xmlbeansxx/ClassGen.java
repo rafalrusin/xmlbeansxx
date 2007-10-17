@@ -295,14 +295,14 @@ public class ClassGen {
                 //return "org.apache.xmlbeans.GDuration";
             	return "xmlbeansxx::GDurationPtr";
             case SchemaProperty.JAVA_DATE:
-                return "xmlbeansxx::DatePtr";
+                return "boost::gregorian::date";
             case SchemaProperty.JAVA_QNAME:
                 return "xmlbeansxx::QNamePtr";
             case SchemaProperty.JAVA_LIST:
                 //return "xmlbeansxx::ListPtr";
                 return "std::string";
             case SchemaProperty.JAVA_CALENDAR:
-                return "xmlbeansxx::CalendarPtr";
+                return "boost::posix_time::ptime";
 
             case SchemaProperty.JAVA_ENUM:
             	return "int";

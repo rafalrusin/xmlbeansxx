@@ -25,7 +25,7 @@
 #include "BeansException.h"
 #include "Tracer.h"
 
-
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 namespace xmlbeansxx {
 std::string istreamToString(std::istream &in) {
@@ -430,6 +430,11 @@ XmlDecimal::operator mpf_class() const {
 %%class xmlbeansxx::XmlDateTime
 LOGGER_PTR_SET(XmlDateTime::log,"xmlbeansxx.XmlDateTime");
 
+XmlDateTime::XmlDateTime(const boost::posix_time::ptime &pt) {
+    setCalendarValue(pt);
+}
+
+
 bool XmlDateTime::operator==(const XmlDateTime &b) const {
     return !((*this)<b) && !(b<(*this));
 }
@@ -458,29 +463,39 @@ bool XmlDateTime::operator<(const XmlDateTime &b) const {
 
 XmlTime XmlDateTime::timePart() const {
     std::string dt=getSimpleContent();
-    int p=dt.find('T');
-    if (p==-1) throw XmlSimpleTypeException("T separator not found in dateTime",dt);
+    std::string::size_type p=dt.find('T');
+    if (p==std::string::npos) throw XmlSimpleTypeException("T separator not found in dateTime",dt);
     return XmlTime(dt.substr(p+1));
 }
 
 XmlDate XmlDateTime::datePart() const {
     std::string dt=getSimpleContent();
-    int p=dt.find('T');
-    if (p==-1) throw XmlSimpleTypeException("T separator not found in dateTime",dt);
+    std::string::size_type p=dt.find('T');
+    if (p==std::string::npos) throw XmlSimpleTypeException("T separator not found in dateTime",dt);
     return XmlDate(dt.substr(0,p));
 }
 
-CalendarPtr XmlDateTime::getCalendarValue() const {
-    throw NotImplementedException("XmlDateTime::getCalendarValue");
-    return CalendarPtr();
+boost::posix_time::ptime XmlDateTime::getCalendarValue() const {
+    return boost::posix_time::ptime(datePart().getDateValue(),timePart().getTimeValue());
 }
 
-void XmlDateTime::setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v) {
-    throw NotImplementedException("XmlDateTime::getCalendarValue");
+void XmlDateTime::setCalendarValue(const boost::posix_time::ptime &v) {
+    XmlDate d(v);	
+    XmlTime t(v);
+    setSimpleContent(d.getSimpleContent() + "T" + t.getSimpleContent());
 }
 
 %%class xmlbeansxx::XmlTime
 LOGGER_PTR_SET(XmlTime::log,"xmlbeansxx.XmlTime");
+
+
+XmlTime::XmlTime(const boost::posix_time::ptime &pt) {
+    setCalendarValue(pt);
+}
+XmlTime::XmlTime(const boost::posix_time::time_duration &td) {
+    setTimeValue(td);
+}
+
 
 bool XmlTime::operator==(const XmlTime &b) const {
     return !((*this)<b) && !(b<(*this));
@@ -498,20 +513,35 @@ bool XmlTime::operator>(const XmlTime &b) const {
     return b<(*this);
 }
 bool XmlTime::operator<(const XmlTime &b) const {
-    return getSimpleContent()<b.getSimpleContent();
+    return getTimeValue()<b.getTimeValue();
 }
 
-CalendarPtr XmlTime::getCalendarValue() const {
-    throw NotImplementedException("XmlTime::getCalendarValue");
-    return CalendarPtr();
+boost::posix_time::time_duration XmlTime::getTimeValue() const {
+    return boost::posix_time::duration_from_string(getSimpleContent());
+}
+void XmlTime::setTimeValue(const boost::posix_time::time_duration &d) {
+    setSimpleContent(boost::posix_time::to_simple_string(d));
 }
 
-void XmlTime::setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v) {
-    throw NotImplementedException("XmlTime::setCalendarValue");
+
+boost::posix_time::ptime XmlTime::getCalendarValue() const {
+    return boost::posix_time::ptime(boost::gregorian::date(),getTimeValue());
+}
+
+void XmlTime::setCalendarValue(const boost::posix_time::ptime & v) {
+    setTimeValue(v.time_of_day());
 }
 
 %%class xmlbeansxx::XmlDate
 LOGGER_PTR_SET(XmlDate::log,"xmlbeansxx.XmlDate");
+
+XmlDate::XmlDate(const boost::posix_time::ptime &pt) {
+    setCalendarValue(pt);
+}
+XmlDate::XmlDate(const boost::gregorian::date &gd) {
+    setDateValue(gd);
+}
+
 
 
 XmlDate::operator boost::gregorian::date() const {
@@ -545,13 +575,12 @@ boost::gregorian::date XmlDate::getDateValue() const {
     return boost::gregorian::from_string(v);
 }
     
-CalendarPtr XmlDate::getCalendarValue() const {
-    throw NotImplementedException("XmlDate::getCalendarValue");
-    return CalendarPtr();
+boost::posix_time::ptime XmlDate::getCalendarValue() const {
+    return boost::posix_time::ptime(getDateValue());
 }
 
-void XmlDate::setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v) {
-    throw NotImplementedException("XmlDate::setCalendarValue");
+void XmlDate::setCalendarValue(const boost::posix_time::ptime &v) {
+	setDateValue(v.date());
 }
 
 void XmlDate::setDateValue(const boost::gregorian::date &d) {
@@ -563,52 +592,47 @@ XmlInteger XmlDate::daysFrom(const XmlDate &from) const {
 }
 
 %%class xmlbeansxx::XmlGDay
-boost::shared_ptr<xmlbeansxx::Calendar> XmlGDay::getCalendarValue() const {
+boost::posix_time::ptime XmlGDay::getCalendarValue() const {
     throw NotImplementedException("XmlGDay::getCalendarValue");
-    return boost::shared_ptr<xmlbeansxx::Calendar>();
 }
 
-void XmlGDay::setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v) {
+void XmlGDay::setCalendarValue(const boost::posix_time::ptime & v) {
     throw NotImplementedException("XmlGDay::setCalendarValue");
 }
     
 %%class xmlbeansxx::XmlGMonth
-boost::shared_ptr<xmlbeansxx::Calendar> XmlGMonth::getCalendarValue() const {
+boost::posix_time::ptime XmlGMonth::getCalendarValue() const {
     throw NotImplementedException("XmlGMonth::getCalendarValue");
-    return boost::shared_ptr<xmlbeansxx::Calendar>();
 }
 
-void XmlGMonth::setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v) {
+void XmlGMonth::setCalendarValue(const boost::posix_time::ptime & v) {
     throw NotImplementedException("XmlGMonth::setCalendarValue");
 }
     
 %%class xmlbeansxx::XmlGMonthDay
-boost::shared_ptr<xmlbeansxx::Calendar> XmlGMonthDay::getCalendarValue() const {
+boost::posix_time::ptime XmlGMonthDay::getCalendarValue() const {
     throw NotImplementedException("XmlGMonthDay::getCalendarValue");
-    return boost::shared_ptr<xmlbeansxx::Calendar>();
 }
 
-void XmlGMonthDay::setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v) {
+void XmlGMonthDay::setCalendarValue(const boost::posix_time::ptime & v) {
     throw NotImplementedException("XmlGMonthDay::getCalendarValue");
 }
     
 %%class xmlbeansxx::XmlGYear
-boost::shared_ptr<xmlbeansxx::Calendar> XmlGYear::getCalendarValue() const {
+boost::posix_time::ptime  XmlGYear::getCalendarValue() const {
     throw NotImplementedException("XmlGYear::getCalendarValue");
-    return boost::shared_ptr<xmlbeansxx::Calendar>();
 }
 
-void XmlGYear::setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v) {
+void XmlGYear::setCalendarValue(const boost::posix_time::ptime & v) {
     throw NotImplementedException("XmlGYear::getCalendarValue");
 }
     
 %%class xmlbeansxx::XmlGYearMonth
-boost::shared_ptr<xmlbeansxx::Calendar> XmlGYearMonth::getCalendarValue() const {
+boost::posix_time::ptime XmlGYearMonth::getCalendarValue() const {
     throw NotImplementedException("XmlGYearMonth::getCalendarValue");
-    return boost::shared_ptr<xmlbeansxx::Calendar>();
 }
 
-void XmlGYearMonth::setCalendarValue(boost::shared_ptr<xmlbeansxx::Calendar> v) {
+void XmlGYearMonth::setCalendarValue(const boost::posix_time::ptime & v) {
     throw NotImplementedException("XmlGYearMonth::getCalendarValue");
 }
     

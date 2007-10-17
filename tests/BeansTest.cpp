@@ -22,6 +22,8 @@ void BeansTest::beansTest() {
 
 
 using namespace xmlbeansxx;
+using namespace boost::posix_time;
+using namespace boost::gregorian;
 
 void namespaceTests() {
     {
@@ -132,29 +134,72 @@ void namespaceTests() {
     }
 
     {
+    	//XmlTime
+	{
+		ptime pt(date(2002,Jan,10),time_duration(1,2,3));
+		XmlTime t(pt);
+		LOG4CXX_DEBUG(logger,std::string("time: ") + t.getSimpleContent()); 
+		CPPUNIT_ASSERT(t.getSimpleContent()=="01:02:03");
+		CPPUNIT_ASSERT(t.getTimeValue()==time_duration(1,2,3));
+		CPPUNIT_ASSERT(t.getCalendarValue()==ptime(date(),time_duration(1,2,3)));
+	}
+	{
+		XmlTime t("	01:02:03  ");
+		LOG4CXX_DEBUG(logger,std::string("time: ") + t.getSimpleContent()); 
+		CPPUNIT_ASSERT(t.getSimpleContent()=="01:02:03");
+		CPPUNIT_ASSERT(t.getTimeValue()==time_duration(1,2,3));
+		CPPUNIT_ASSERT(t.getCalendarValue()==ptime(date(),time_duration(1,2,3)));
+	}
+	
+	
+    }
+
+    {
         //XmlDateTime
-        XmlDateTime a(" 2004-01-12T23:50:22 \n\n\n");
-        XmlDateTime b("   2004-01-12T23:50:22 \n");
-        XmlDateTime c("   2004-01-12T23:50:24 \n");
-        XmlDateTime d("   2004-01-11T23:50:24 \n");
-	XmlDateTime e(XmlAnySimpleType(" 2004-01-11T23:50:24 "));
-        CPPUNIT_ASSERT(a.getSimpleContent()=="2004-01-12T23:50:22");
-        CPPUNIT_ASSERT(a.datePart().getSimpleContent()=="2004-01-12");
-        CPPUNIT_ASSERT(a.timePart().getSimpleContent()=="23:50:22");
-        CPPUNIT_ASSERT(a==b);
-        CPPUNIT_ASSERT(!(a<b));
-        CPPUNIT_ASSERT(a<c);
-        CPPUNIT_ASSERT(d<a);
-        CPPUNIT_ASSERT(e==d);
+	{
+	        XmlDateTime a(" 2004-01-12T23:50:22 \n\n\n");
+	        XmlDateTime b("   2004-01-12T23:50:22 \n");
+	        XmlDateTime c("   2004-01-12T23:50:24 \n");
+	        XmlDateTime d("   2004-01-11T23:50:24 \n");
+		XmlDateTime e(XmlAnySimpleType(" 2004-01-11T23:50:24 "));
+	        CPPUNIT_ASSERT(a.getSimpleContent()=="2004-01-12T23:50:22");
+	        CPPUNIT_ASSERT(a.datePart().getSimpleContent()=="2004-01-12");
+	        CPPUNIT_ASSERT(a.timePart().getSimpleContent()=="23:50:22");
+	        CPPUNIT_ASSERT(a.datePart().getDateValue()==date(2004,01,12));
+	        CPPUNIT_ASSERT(a.timePart().getTimeValue()==time_duration(23,50,22));
+	        CPPUNIT_ASSERT(a==b);
+	        CPPUNIT_ASSERT(!(a<b));
+	        CPPUNIT_ASSERT(a<c);
+	        CPPUNIT_ASSERT(d<a);
+	        CPPUNIT_ASSERT(e==d);
+	}
+	{
+	        XmlDateTime a(ptime(date(2004,01,12),time_duration(23,50,22)));
+	        CPPUNIT_ASSERT(a.getSimpleContent()=="2004-01-12T23:50:22");
+	        CPPUNIT_ASSERT(a.datePart().getSimpleContent()=="2004-01-12");
+	        CPPUNIT_ASSERT(a.timePart().getSimpleContent()=="23:50:22");
+	        CPPUNIT_ASSERT(a.datePart().getDateValue()==date(2004,01,12));
+	        CPPUNIT_ASSERT(a.timePart().getTimeValue()==time_duration(23,50,22));
+	}
     }
     {
         //XmlDate
-        XmlDate a("   2001-03-24");
-        boost::gregorian::date d=a.getDateValue();
-        CPPUNIT_ASSERT(d==boost::gregorian::from_string("2001-3-24"));
-        LOG4CXX_DEBUG(logger,a.daysFrom(XmlDate(" 2001-01-24\n")).getSimpleContent());
-        CPPUNIT_ASSERT(a.daysFrom(XmlDate(" 2001-01-24\n"))==XmlInteger("59"));
-        CPPUNIT_ASSERT(XmlDate("2003-01-01").daysFrom(XmlDate(" 2002-12-30\n"))==XmlInteger("2"));
+	{
+	        XmlDate a("   2001-03-24");
+	        boost::gregorian::date d=a.getDateValue();
+	        CPPUNIT_ASSERT(d==boost::gregorian::from_string("2001-3-24"));
+	        LOG4CXX_DEBUG(logger,a.daysFrom(XmlDate(" 2001-01-24\n")).getSimpleContent());
+	        CPPUNIT_ASSERT(a.daysFrom(XmlDate(" 2001-01-24\n"))==XmlInteger("59"));
+	        CPPUNIT_ASSERT(XmlDate("2003-01-01").daysFrom(XmlDate(" 2002-12-30\n"))==XmlInteger("2"));
+	}
+	{
+	        XmlDate a(date(2001,03,24));
+	        boost::gregorian::date d=a.getDateValue();
+	        CPPUNIT_ASSERT(d==boost::gregorian::from_string("2001-3-24"));
+	        LOG4CXX_DEBUG(logger,a.daysFrom(XmlDate(" 2001-01-24\n")).getSimpleContent());
+	        CPPUNIT_ASSERT(a.daysFrom(XmlDate(" 2001-01-24\n"))==XmlInteger("59"));
+	        CPPUNIT_ASSERT(XmlDate("2003-01-01").daysFrom(XmlDate(" 2002-12-30\n"))==XmlInteger("2"));
+	}
 
     }
 
