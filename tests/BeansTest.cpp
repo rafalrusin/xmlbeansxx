@@ -214,9 +214,9 @@ void namespaceTests() {
         ar.setArray(0,XmlPositiveInteger("102"));
         ar.setArray(1,XmlPositiveInteger("103"));
         ar.setArray(2,XmlPositiveInteger("104"));
-        LOG4CXX_DEBUG(logger,"XmlArray ar: " + ar.toString());
+        LOG4CXX_DEBUG(logger,"XmlArray ar: " + ar.toString(XmlOptions::serializeTypes()));
         LOG4CXX_DEBUG(logger,"!a");
-        ar2=XmlObject::Factory::parse(ar.toString());
+        ar2=XmlObject::Factory::parse(ar.toString(XmlOptions::serializeTypes()));
         LOG4CXX_DEBUG(logger,"XmlArray ar2: " + ar2.toString());
 	
 	LOG4CXX_DEBUG(logger,"XmlArray ar2 dump: " + Contents::Walker::dump(ar2.contents));

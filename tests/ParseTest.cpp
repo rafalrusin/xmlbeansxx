@@ -34,7 +34,7 @@ void ParseTest::parseTest() {
 		opt.setValidation(true);
 		XercesParser p(opt);
 		p.loadGrammar("c.xsd");
-	    
+			    
 	       	ContentDocument doc=ContentDocument::Factory::newInstance();
 	
 	
@@ -106,15 +106,50 @@ void ParseTest::parseTest() {
 		CPPUNIT_ASSERT_EQUAL(cmp2,infoESchema);
 		
 		ZakupyDocument z2(info);
-	        LOG4CXX_DEBUG(logger, "zakupy: " + z2.toString());
-		
-		
-		
-		 
-
-	
+	        LOG4CXX_DEBUG(logger, "zakupy: " + z2.toString());		
 	}
+
+	// cast => serialize <-> parse of anyType
 	
+	{
+		XmlObject o = XmlObjectDocument::Factory::parse(
+		"<cos xmlns='http://ala' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>"
+		"	<klient enumTest='tytus'>"
+		"		<nazwa attr='olo'>pawel</nazwa>"
+		"		<ala>13</ala>"
+		"	</klient>"
+		"	<info>"
+		"		<zakupy>"
+		"			<klient enumTest='tytus'>"
+		"				<nazwa attr='olo'>pawel</nazwa>"
+		"				<ala>13</ala>"
+		"			</klient>"
+		"		</zakupy>"
+		"	</info>"
+		"</cos>");
+		
+	        LOG4CXX_DEBUG(logger, "Document: " + o.toString(XmlOptions::serializeInnerTypes()));
+		XmlObject k = o.selectPath("/*/*:klient").front();
+		std::string k_str=k.toString();
+	        LOG4CXX_DEBUG(logger, "klient: " + k_str);
+		Klient k3 = Klient::Factory::newInstance();
+	        LOG4CXX_DEBUG(logger, "klient3: " + k3.toString());
+		
+		
+		Klient k2=Klient::Factory::parse(k_str);
+	        LOG4CXX_DEBUG(logger, "klient2: " + k2.toString());
+	}
+	{
+		XmlObject s=XmlString::Factory::parse("<test> something </test>");
+		std::string s_str=s.toString(XmlOptions::serializeTypes());
+		std::string s_equ=
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+			"<a:xml-fragment xmlns:a=\"http://xmlbeans.apache.org/definitions\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"xs:string\">"
+				" something "
+			"</a:xml-fragment>\n";
+	        LOG4CXX_DEBUG(logger, "something: " + s_str);
+		CPPUNIT_ASSERT_EQUAL(s_str,s_equ);
+	}
 	
 	
 }

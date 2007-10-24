@@ -1359,89 +1359,83 @@ public class ClassGen {
 		out.cpp.println("xmlbeansxx::SchemaType "
 				+ className(st) + "::initSchemaType() {");
 	
-/*		{
-			SchemaProperty[] properties = st.getProperties();
-			for (int i = 0; i < properties.length; i++) {
-				SchemaProperty p = properties[i];
-				out.cpp.println("  " + genPropName(p) +  " = " + genQNameStore(p) + ";");
-			}
-		}
-*/
-		out.cpp.println();
-	
+		
 		out.cpp.println("  xmlbeansxx::SchemaType st(typeid("+fullClassName(st)+"));");
 		
-		{	
-			out.cpp.println("  st.createFn="+genCreateFn(st)+";");
-			out.cpp.println("  st.createArrayFn="+genCreateArrayFn(st)+";");
-			
-			out.cpp.println("  st.whitespaceRule="+genWsRule(st.getWhiteSpaceRule())+";");
-			out.cpp.println("  st.className="+genString(fullClassName(st))+";");
-			
-			out.cpp.println("  st.contentType=" + genContentType(st.getContentType()) + ";");
-
-			QName qname = st.getName();
-			
-			if (st.isDocumentType()) {
-				 QName DEname = st.getDocumentElementName();
-				 out.cpp.println("  st.documentElementName = xmlbeansxx::QName::store(" 
-						+ nsLinks.getVarName(DEname.getNamespaceURI()) + ", "
-						+ genString(DEname.getLocalPart())+");");
-			}
-			
-			
-			if (qname == null) 
-				qname = innerTypeName(st);
-			
-			out.cpp.println("  st.name = xmlbeansxx::QName::store(" 
-						+ nsLinks.getVarName(qname.getNamespaceURI()) + ", "
-						+ genString(qname.getLocalPart())+");");
-			
-						
-			{
-				String r="true";
-				if (fullClassName(st).equals("xmlbeansxx::XmlObject")) r="false";
-				out.cpp.println("  st.processContents="+r+";");
-			}
-		}
-
-		if (!st.isSimpleType()) {
-			{
-				//String Storage
-/*				SchemaProperty[] properties = st.getProperties();
-				for (int i = 0; i < properties.length; i++) {
-					SchemaProperty p = properties[i];
-					out.cpp.println("  xmlbeansxx::StoreString::store("+genString(p.getName().getLocalPart())+");");
+		if(true)
+		{
+			{	
+				out.cpp.println("  st.createFn="+genCreateFn(st)+";");
+				out.cpp.println("  st.createArrayFn="+genCreateArrayFn(st)+";");
+				
+				out.cpp.println("  st.whitespaceRule="+genWsRule(st.getWhiteSpaceRule())+";");
+				out.cpp.println("  st.className="+genString(fullClassName(st))+";");
+				
+				out.cpp.println("  st.contentType=" + genContentType(st.getContentType()) + ";");
+	
+				QName qname = st.getName();
+				
+				if (st.isDocumentType()) {
+					 QName DEname = st.getDocumentElementName();
+					 out.cpp.println("  st.documentElementName = xmlbeansxx::QName::store(" 
+							+ nsLinks.getVarName(DEname.getNamespaceURI()) + ", "
+							+ genString(DEname.getLocalPart())+");");
 				}
-*/			}
-			{
-				//SubProperties: Elements with order
-				SchemaProperty[] properties = st.getElementProperties();
-				for (int i = 0; i < properties.length; i++) {
-					SchemaProperty p = properties[i];
-					out.cpp.println("  st.elements[" + 
-//							genPropName(p) //p.getName().getLocalPart()
-							genQNameStore(p)
-							+ "]=xmlbeansxx::SchemaPropertyPtr(new xmlbeansxx::SchemaProperty(" + (i + 1) + ","+genTypeFn(p.getType())+", " + genDefaultSingletonStringPtr(p) + "));");
+				
+				
+				if (qname == null) 
+					qname = innerTypeName(st);
+				
+				out.cpp.println("  st.name = xmlbeansxx::QName::store(" 
+							+ nsLinks.getVarName(qname.getNamespaceURI()) + ", "
+							+ genString(qname.getLocalPart())+");");
+				
+							
+				{
+					String r="true";
+					if (fullClassName(st).equals("xmlbeansxx::XmlObject")) r="false";
+					out.cpp.println("  st.processContents="+r+";");
 				}
 			}
-			{
-				//SubProperties: Attributes with order
-				SchemaProperty[] properties = st.getAttributeProperties();
-				for (int i = 0; i < properties.length; i++) {
-					SchemaProperty p = properties[i];
-					out.cpp.println("  st.attributes[" + 
-//							genPropName(p) //p.getName().getLocalPart()
-							genQNameStore(p)							
-							+ "]=xmlbeansxx::SchemaPropertyPtr(new xmlbeansxx::SchemaProperty(" + (i + 1) + ","+genTypeFn(p.getType())+", " + genDefaultSingletonStringPtr(p) + "));");
+	
+			if (!st.isSimpleType()) {
+				{
+					//String Storage
+	/*				SchemaProperty[] properties = st.getProperties();
+					for (int i = 0; i < properties.length; i++) {
+						SchemaProperty p = properties[i];
+						out.cpp.println("  xmlbeansxx::StoreString::store("+genString(p.getName().getLocalPart())+");");
+					}
+	*/			}
+				{
+					//SubProperties: Elements with order
+					SchemaProperty[] properties = st.getElementProperties();
+					for (int i = 0; i < properties.length; i++) {
+						SchemaProperty p = properties[i];
+						out.cpp.println("  st.elements[" + 
+	//							genPropName(p) //p.getName().getLocalPart()
+								genQNameStore(p)
+								+ "]=xmlbeansxx::SchemaPropertyPtr(new xmlbeansxx::SchemaProperty(" + (i + 1) + ","+genTypeFn(p.getType())+", " + genDefaultSingletonStringPtr(p) + "));");
+					}
 				}
-			}
-		} else {
-			//simple type
-			{
-				XmlInteger fd=(XmlInteger)st.getFacet(SchemaType.FACET_FRACTION_DIGITS);
-				if (fd!=null) {
-					out.cpp.println("  st.fractionDigits="+fd.getBigIntegerValue().toString()+";");
+				{
+					//SubProperties: Attributes with order
+					SchemaProperty[] properties = st.getAttributeProperties();
+					for (int i = 0; i < properties.length; i++) {
+						SchemaProperty p = properties[i];
+						out.cpp.println("  st.attributes[" + 
+	//							genPropName(p) //p.getName().getLocalPart()
+								genQNameStore(p)							
+								+ "]=xmlbeansxx::SchemaPropertyPtr(new xmlbeansxx::SchemaProperty(" + (i + 1) + ","+genTypeFn(p.getType())+", " + genDefaultSingletonStringPtr(p) + "));");
+					}
+				}
+			} else {
+				//simple type
+				{
+					XmlInteger fd=(XmlInteger)st.getFacet(SchemaType.FACET_FRACTION_DIGITS);
+					if (fd!=null) {
+						out.cpp.println("  st.fractionDigits="+fd.getBigIntegerValue().toString()+";");
+					}
 				}
 			}
 		}
@@ -1721,11 +1715,12 @@ public class ClassGen {
 								"  p->parse(in,doc);\n" +
 								"  return doc;");
 			} else {
-				out.cpp.println("  xmlbeansxx::definitions::XmlFragmentDocument doc;");
+				out.cpp.println("  xmlbeansxx::definitions::XmlFragmentDocument doc=xmlbeansxx::definitions::XmlFragmentDocument::Factory::newInstance();");
+				out.cpp.println("  doc.setXmlFragment(Factory::newInstance());");
 				out.cpp.println("  xmlbeansxx::XmlParserPtr p = xmlbeansxx::XmlParser::Factory::newInstance(options);\n" +
 								"  p->parse(in,doc);\n" +
 								"  return "
-								+ className(st) +"(doc.getXmlFragment().getElement());");
+								+ className(st) +"(doc.getXmlFragment());");
 				//out.cpp.println(" return
 				// "+genThrowingCast(className(st),"xmlbeansxx::XmlObject::parse(in,options)")+";");
 				//out.cpp.println(" return java_cast<xmlbeansxx::X

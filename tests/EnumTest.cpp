@@ -28,20 +28,20 @@ void EnumTest::enumTest()
 //		a= k.xgetEnumTest()
 //		a.setSimpleString(" ble ble ");
 
-	        LOG4CXX_DEBUG(logger,"Klient: " + k.toString());
+	        LOG4CXX_DEBUG(logger,"Klient1: " + k.toString());
 		CPPUNIT_ASSERT(k.getEnumTest() == Klient_EnumTest::ATOMEK);
 	        LOG4CXX_DEBUG(logger,"Klient int: " <<  k.getEnumTest() );
 		CPPUNIT_ASSERT_EQUAL(k.getEnumTest(), 4);
 		k.setEnumTest("lolek");
-	        LOG4CXX_DEBUG(logger,"Klient: " + k.toString());
+	        LOG4CXX_DEBUG(logger,"Klient2: " + k.toString());
 		CPPUNIT_ASSERT_EQUAL(k.xgetEnumTest().getEnumValue(), 1);
 		k.setEnumTest(2);
-	        LOG4CXX_DEBUG(logger,"Klient: " + k.toString());
+	        LOG4CXX_DEBUG(logger,"Klient3: " + k.toString());
 		CPPUNIT_ASSERT(k.xgetEnumTest()== "tytus");
 		ZakupyDocument z=ZakupyDocument::Factory::newInstance();
 		z.cgetZakupy().setKlient(k);
 
-	        LOG4CXX_DEBUG(logger,"zakupy: " + z.toString());		
+	        LOG4CXX_DEBUG(logger,"zakupy4: " + z.toString());		
 
 
 	}
@@ -49,8 +49,8 @@ void EnumTest::enumTest()
 		Klient k;
 		try {
 			k.getNazwa();
-			CPPUNIT_ASSERT(true);
 		       	LOG4CXX_DEBUG(logger,"throw !! ");
+			CPPUNIT_ASSERT(false);
 		} catch (NullPtrException &e) {
 		       	LOG4CXX_DEBUG(logger,"catch: " + std::string(e.what()));
 		}
@@ -58,8 +58,8 @@ void EnumTest::enumTest()
 	}
 	{	
 		XmlString s = XmlString::Factory::parse(
-		"<d:xml-fragment xmlns:d='http://xmlbeans.apache.org/definitions' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xs='http://www.w3.org/2001/XMLSchema'>"
-			"<d:element xsi:type='xs:string'> Ola ma kota  </d:element>"
+		"<d:xml-fragment xsi:type='xs:string' xmlns:d='http://xmlbeans.apache.org/definitions' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xs='http://www.w3.org/2001/XMLSchema'>"
+			" Ola ma kota  "
 		"</d:xml-fragment>");
 		CPPUNIT_ASSERT_EQUAL(s.getStringValue(), std::string(" Ola ma kota  "));
 		XmlString t("Ula");
@@ -77,11 +77,11 @@ void EnumTest::enumTest()
 		"</zakupy>"
 		);
 	        LOG4CXX_DEBUG(logger,"zakupy class: " + o.getSchemaType()->className);
-	        LOG4CXX_DEBUG(logger,"zakupy: " + o.toString());
+	        LOG4CXX_DEBUG(logger,"zakupy5: " + o.toString());
 		
 		ZakupyDocument z=ZakupyDocument::Factory::parse(o.toString());
 
-	        LOG4CXX_DEBUG(logger,"zakupy2: " + z.toString());
+	        LOG4CXX_DEBUG(logger,"zakupy6: " + z.toString());
 		
 		NSMap ns;
 		ns.addNamespace("a","http://ala");
