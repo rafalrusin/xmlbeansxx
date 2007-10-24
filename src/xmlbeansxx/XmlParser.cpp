@@ -31,18 +31,18 @@ namespace xmlbeansxx {
 
     
 XmlParserPtr XmlParser::Factory::newInstance() {
-#ifdef HAVE_LIBXML2
-    return XmlParserPtr(new LibXMLParser());
-#else
+#ifdef HAVE_LIBXERCES_C
     return XmlParserPtr(new XercesParser());
+#else
+    return XmlParserPtr(new LibXMLParser());
 #endif
 }
 
 XmlParserPtr XmlParser::Factory::newInstance(const XmlOptions o) {
-#ifdef HAVE_LIBXML2
-    return XmlParserPtr(new LibXMLParser(o));
-#else
+#ifdef HAVE_LIBXERCES_C
     return XmlParserPtr(new XercesParser(o));
+#else
+    return XmlParserPtr(new LibXMLParser(o));
 #endif
 }
 

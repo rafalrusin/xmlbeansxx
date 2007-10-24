@@ -90,17 +90,28 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
     if(!top) throw XmlException(string("no XmlObjectPtr on XercesParser stack"));					   
 
     if(parser->nodesStack.size()==1){
+	//hack for type casting. Runtime defined type
+	Contents::Walker::ElemsType e = Contents::Walker::getElems(*top);
+       	LOG4CXX_DEBUG2(log, std::string("elements in parsed XmlObject:") + TextUtils::intToString(e.size()));
+	if(e.size()==1) {
+		n=XmlObjectPtr(new XmlObject(ContentsPtr(new Contents(e.front().second->getSchemaType()))));
+        	LOG4CXX_DEBUG2(log, std::string("predefined type found:") + n->getSchemaType()->name);
+		name = e.front().first;
+	}
 	//this is the ROOT element
 	XmlObjectPtr root = globalTypeSystem()->createDocumentByName(name);
 	if (root) {
 	    root->createContents();
 	    top->setXmlObject(*root);
 	}
-	
+
     }
-	
+
+    top->createContents();	
 	        
     {
+	if(!n) n=top->getSchemaType()->createSubObject(name);
+
 	// test for xsi:type or create default XmlObject
         for (unsigned int i = 0; i < attrs.getLength(); i++) {
 	    QName name(transcode(attrs.getURI(i)), transcode(attrs.getLocalName(i)));
@@ -108,17 +119,16 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
 		QName value=parser->nsSplit(transcode(attrs.getValue(i)));
         	LOG4CXX_DEBUG2(log, std::string("xsi:type = ") + value)
 		n = globalTypeSystem()->createByName(value);
-		if (!n) throw XmlException(string("Xsd Type '")+value+string("' not defined in builtin type system"));					   
+		if (!n) throw XmlException(string("Xsd Type '")+value+string("' not defined in builtin type system"));
 	    } else if(name == XmlBeans::xsi_array()) {
 		QName value=parser->nsSplit(transcode(attrs.getValue(i)));
         	LOG4CXX_DEBUG2(log, std::string("xsi:array = ") + value)
 		n = globalTypeSystem()->createArrayByName(value);
-		if (!n) throw XmlException(string("Xsd Type '")+value+string("' not defined in builtin type system"));					   
+		if (!n) throw XmlException(string("Xsd Type '")+value+string("' not defined in builtin type system"));
 	    
 	    }
-	}
+	}	
 	
-	if(!n) n=top->getSchemaType()->createSubObject(name);
 	if(!n) throw XmlException(string("Cannot create subelement '")+name+string("' on object of class "+top->getSchemaType()->className));
 
 

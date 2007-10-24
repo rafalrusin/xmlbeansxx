@@ -105,7 +105,7 @@ void XmlObject::serialize(std::ostream &o,XmlOptions options)  const{
 
 
     xmlbeansxx::definitions::XmlFragmentDocument doc=xmlbeansxx::definitions::XmlFragmentDocument::Factory::newInstance();
-    doc.cgetXmlFragment().setElement(*this);
+    doc.setXmlFragment(*this);
     doc.serialize(o,options);
 }
 

@@ -187,7 +187,7 @@ void Contents::serialize(bool printXsiType,const QName& elemName,std::ostream &o
 
 
         //it's an object
-    	if (printXsiType) {
+    	if (printXsiType && options.getSerializeTypes()) {
 		if( options.getSerializeInnerTypes() || !(st->name.first == XmlBeans::innerType_ns()) ) {
 			if(st->isArray) {
 				o << " xsi:array=\"" << ns.cprintQName(st->name) << "\"";
