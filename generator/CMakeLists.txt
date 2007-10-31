@@ -12,28 +12,30 @@ ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pom.xml
 )
 
 SET(GENDIR ${PROJECT_BINARY_DIR}/generator/target/xmlbeansxx-gen/)
+
+SET(GEN_UNIX_BIN_LINKS scompxx xmlbeansxx-geninclude xmlbeansxx-gen xmlbeansxx-split)
 SET(GEN_BINFILES 
+	${GENDIR}/bin/acx_pthread.m4
 	${GENDIR}/bin/scompxx
 	${GENDIR}/bin/xmlbeansxx-geninclude
 	${GENDIR}/bin/xmlvalidator
 	${GENDIR}/bin/xmlbeansxx-gen
-	${GENDIR}/bin/acx_pthread.m4
 	${GENDIR}/bin/xmlbeansxx-genbuiltin
 	${GENDIR}/bin/xmlbeansxx-split
 	${GENDIR}/bin/xmlbeansxx-gen.bat
 	${GENDIR}/bin/xmlbeansxx-genbuiltin.bat
-}
+)
 SET(GEN_LIBFILES
 	${GENDIR}/lib/commons-logging-1.1.jar
 	${GENDIR}/lib/xbean-1.0.4.jar
 	${GENDIR}/lib/log4j-1.2.12.jar
-}
+)
 SET(GEN_JAR
 	${GENDIR}/xmlbeansxx-gen.jar
 )
 
 
-ADD_CUSTOM_COMMAND(OUTPUT ${XMLBEANSXX_GENBUILDIN_PROG} ${XMLBEANSXX_GEN_PROG} ${GEN_BINFILES} ${GEN_LIBFILES}
+ADD_CUSTOM_COMMAND(OUTPUT ${XMLBEANSXX_GENBUILDIN_PROG} ${XMLBEANSXX_GEN_PROG} ${GEN_BINFILES} ${GEN_LIBFILES} ${GEN_JAR}
 	COMMAND mvn -Dbase=${CMAKE_CURRENT_SOURCE_DIR} -Prelease package
 	DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/pom.xml
 )
@@ -43,14 +45,23 @@ ADD_CUSTOM_TARGET(generator
 )
 
 
+INSTALL(FILES ${GEN_BINFILES} 
+	DESTINATION share/xmlbeansxx/bin
+	PERMISSIONS 	OWNER_EXECUTE	OWNER_WRITE	OWNER_READ
+              		GROUP_EXECUTE			GROUP_READ
+			WORLD_EXECUTE			WORLD_READ
+)
+INSTALL(FILES ${GEN_LIBFILES}
+	DESTINATION share/xmlbeansxx/lib
+)
 
-#INSTALL(CODE EXECUTE_PROCESS(COMMAND ${CMAKE} -E cp 
+INSTALL(FILES ${GEN_JAR}
+	DESTINATION share/xmlbeansxx
+)
 
-#
-#INSTALL(DIRECTORY ${PROJECT_BINARY_DIR}/generator/target/xmlbeansxx-gen/ 
-#	DESTINATION share/xmlbeansxx
-#	PATTERN "bin/*" PERMISSIONS 	OWNER_EXECUTE	OWNER_WRITE	OWNER_READ
-#	                      		GROUP_EXECUTE			GROUP_READ
-#					WORLD_EXECUTE			WORLD_READ
-#)
-#
+IF(NOT WIN32)
+	FOREACH(LINK ${GEN_UNIX_BIN_LINKS})
+		INSTALL(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \"${CMAKE_INSTALL_PREFIX}/share/xmlbeansxx/bin/${LINK}\"  \"${CMAKE_INSTALL_PREFIX}/bin/${LINK}\" )")
+	ENDFOREACH(LINK)
+ENDIF(NOT WIN32)
+

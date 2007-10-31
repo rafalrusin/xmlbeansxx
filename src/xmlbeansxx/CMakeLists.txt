@@ -101,6 +101,7 @@ SET(XMLBEANSXX_SRC
 	XmlObjectDocument.cpp
 	XmlObjectXpaths.cpp
 	NSMap.h
+	NSMap.cpp
 	XercesUtils.cpp
 	
 	${PARSERS_CPP}
