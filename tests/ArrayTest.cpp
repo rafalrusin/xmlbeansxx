@@ -26,7 +26,7 @@ void ArrayTest::arrayTest()
 	        a.append(XmlInteger("101")).append(XmlPositiveInteger("102")).append(XmlInteger("103"));
         	LOG4CXX_DEBUG(logger,"!1");
 	        LOG4CXX_DEBUG(logger,a.toString());
-	/*        c=xmlarray_java_cast<XmlObject>(a);
+	        c=xmlarray_java_cast<XmlObject>(a);
 	        LOG4CXX_DEBUG(logger,"!2");
 	        b=xmlarray_java_cast<XmlPositiveInteger>(c);
 	        LOG4CXX_DEBUG(logger,"!3");
@@ -39,7 +39,7 @@ void ArrayTest::arrayTest()
 	        CPPUNIT_ASSERT(std::string(a.getArray(0).getSchemaType()->className)=="xmlbeansxx::XmlInteger");
         	CPPUNIT_ASSERT(std::string(a.getArray(1).getSchemaType()->className)=="xmlbeansxx::XmlPositiveInteger");
 	        CPPUNIT_ASSERT(std::string(a.getArray(2).getSchemaType()->className)=="xmlbeansxx::XmlInteger");
-	*/
+	
 	}
 	
 	{

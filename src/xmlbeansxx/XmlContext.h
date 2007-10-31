@@ -22,26 +22,31 @@
 #include <stack>
 #include <map>
 #include "StoreString.h"
+#include "NSMap.h"
 
 namespace xmlbeansxx {
 
 /**
  * Provides context of xml namespace links. 
  */
-class XmlContext {
+ 
+class XmlContext : public NSMap {
+public:
+    typedef std::vector<std::pair<std::string, StoreString> > StoredLinks;
 private:
-    std::map<std::string, StoreString> nsLinks;
-    std::stack<std::pair<std::string, StoreString> > restoreLinks;
+    StoredLinks restoreLinks;
     std::stack<int> rememberedPositions;
 
 public:
-    /** @return remembered shortcut mapping to namespace. */
-    StoreString getLink(const std::string & shortcut);
-    /** Adds new shortcut to a namespace ns. */
-    void setLink(const std::string& shortcut, StoreString ns);
+    XmlContext();
+    virtual ~XmlContext();
+    virtual bool addNamespace(const std::string& prefix, StoreString ns,bool force = true);
 
     /** Restores state of links to last remembered posittion. */
     void restore();
+
+    //get a list of last stored links
+    StoredLinks getLastStoredLinks();
     
     /** Remembers state of links. */
     void remember();

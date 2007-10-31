@@ -56,21 +56,22 @@ class Contents;
 typedef boost::shared_ptr<Contents> ContentsPtr;
 
 struct ElemDict {
-    typedef xmlbeansxx::ContentsPtr T;
-    typedef std::vector<DictEl<T> > ContentsType;
+    typedef xmlbeansxx::ContentsPtr data_type;
+    typedef DictEl<data_type> value_type;
+    typedef std::vector<value_type > ContentsType;
     ContentsType contents;
 
 public:
 
     int size() const;
     bool hasEmptyContent() const;
-    T find(const QName& u,int nr=0) const;
+    value_type find(const QName& u,int nr=0) const;
     int count(const QName& u) const;
     /** Duplicates u, but not v */
     void add
-        (const QName& u,T v);
+        (const QName& u,data_type v);
     void set
-        (const QName& u,int pos,T v);
+        (const QName& u,int pos,data_type v);
     int del(const QName& u);
     void removeAt(const QName& name,int index);
     void free();

@@ -20,26 +20,46 @@
 	
 namespace xmlbeansxx {
 
-StoreString XmlContext::getLink(const std::string& shortcut) {
-    return nsLinks[shortcut];
-}
 
-void XmlContext::setLink(const std::string& shortcut, StoreString ns) {
-    restoreLinks.push(std::pair<std::string, StoreString>(shortcut, nsLinks[shortcut]));
-    nsLinks[shortcut] = ns;
+bool XmlContext::addNamespace(const std::string& shortcut, StoreString ns,bool force) {
+	if(isSetPrefix(shortcut)) {	
+		if(!force) return false;
+    		restoreLinks.push_back(make_pair(shortcut, getNamespaceURI(shortcut)));
+	} else	restoreLinks.push_back(make_pair(shortcut, ""));
+	return NSMap::addNamespace(shortcut,ns,true);
 }
 
 void XmlContext::remember() {
-    rememberedPositions.push(restoreLinks.size());
+    	rememberedPositions.push(restoreLinks.size());
 }
 
+XmlContext::StoredLinks XmlContext::getLastStoredLinks() {
+	StoredLinks retu;
+	int start=0;
+	if(rememberedPositions.size()>0)  start=rememberedPositions.top();
+	for(int i=start;i<restoreLinks.size();i++) {
+		std::string prefix = restoreLinks[i].first;
+		retu.push_back(make_pair(prefix,getNamespaceURI(prefix)));
+	}
+	return retu;
+}
+
+
 void XmlContext::restore() {
-    int restorePosition = rememberedPositions.top();
     rememberedPositions.pop();
+    int restorePosition = rememberedPositions.top();
     while (int(restoreLinks.size()) > restorePosition) {
-        nsLinks[restoreLinks.top().first] = restoreLinks.top().second;
-        restoreLinks.pop();
+        NSMap::addNamespace(restoreLinks.back().first,restoreLinks.back().second,true);
+        restoreLinks.pop_back();
     }
 }
+XmlContext::XmlContext() { 
+	remember(); 
+	addNamespace("","");
+	remember();
+}
+
+XmlContext::~XmlContext() {};
+
 
 }

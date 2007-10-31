@@ -422,7 +422,6 @@ void startElementNs(void *ctx,
     /* *************************************************************************** */
     LibXMLParser *parser = (LibXMLParser *) ctx;
 
-    parser->xmlContext.remember();
 
     {
     	//NAMESPACES
@@ -438,7 +437,7 @@ void startElementNs(void *ctx,
             StoreString ns(ns0);
             const char *prefix = (const char *) namespaces[current + NS_PREFIX];
             LOG4CXX_DEBUG2(LOG, "prefix: " << (prefix == NULL ? "" : prefix) << " namespace: " << ns)
-            parser->xmlContext.setLink(prefix == NULL ? "" : prefix, ns);
+            parser->xmlContext.addNamespace(prefix == NULL ? "" : prefix, ns);
         }
     }
 
@@ -505,12 +504,9 @@ void startElementNs(void *ctx,
 
     {
         LOG4CXX_DEBUG2(LOG, "add attributes")
-        for (int current = 0;
-                current < ATTRTABSIZE * nb_attributes;
-                current += ATTRTABSIZE) {
-            StoreString uri;
+        for (int current = 0; current < ATTRTABSIZE * nb_attributes; current += ATTRTABSIZE) {
             QName name(parser->getQName((const char *) attributes[current + ATTR_PREFIX], (const char *) attributes[current + ATTR_LOCALNAME], true));
-    	    LOG4CXX_DEBUG2(LOG, std::string("attribute name: ") + name)
+    	    LOG4CXX_DEBUG2(LOG, std::string("attribute name (prefix): (") +  name.prefix + ")" + name)
 	    
 	    if (name == XmlBeans::xsi_type()) continue;
 	    if (name == XmlBeans::xsi_array()) continue;
@@ -518,14 +514,23 @@ void startElementNs(void *ctx,
             xmlbeansxx::Contents::Walker::setAttr(*n,name, value);
         }
     }
+
+    {	//add namespaces as attributes
+	    XmlContext::StoredLinks ns=parser->xmlContext.getLastStoredLinks();
+	    XMLBEANSXX_FOREACH(XmlContext::StoredLinks::iterator,i,ns) {
+	    	QName name(XmlBeans::xmlns(),i->first);
+    	    	LOG4CXX_DEBUG2(LOG, std::string("namespace attribute name: ")+ name + " = " + std::string(i->second) )
+	    	xmlbeansxx::Contents::Walker::setAttr(*n,name, i->second);
+	    }
+    }
+
+    parser->xmlContext.remember();
     
     {
-        LOG4CXX_DEBUG2(LOG, std::string("append element name:") + name  )
+	LOG4CXX_DEBUG2(LOG, std::string("append element name (prefix): (") +name.prefix+ ")"+ name  )
 
 	Contents::Walker::appendElem(*(parser->nodesStack.top().obj),name,n->contents);
         parser->nodesStack.push(LibXMLParser::StackEl(n,n->getSchemaType()->processContents,name));
-	
-
     }
 }
 

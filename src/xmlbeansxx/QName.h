@@ -25,11 +25,14 @@ class QName: public std::pair<StoreString, StoreString> {
 public:
     QName *operator -> () { return this; }
     const QName *operator -> () const { return this; }
-    QName(const StoreString &namespacePrefix, const StoreString& localPart) : std::pair<StoreString, StoreString>(namespacePrefix, localPart) {}
+    QName(const StoreString &namespaceURI, const StoreString& localPart) : std::pair<StoreString, StoreString>(namespaceURI, localPart) {}
+
+    QName(const StoreString &namespaceURI, const StoreString& localPart,const std::string& prefix) : std::pair<StoreString, StoreString>(namespaceURI, localPart), prefix(prefix) {}
     QName() {
         first = "";
         second = "";
     }
+    QName(const QName & qname) : std::pair<StoreString, StoreString>(qname) , prefix(qname.prefix) {}
 
     class Hash {
     public:
@@ -45,12 +48,16 @@ public:
     	if(std::string(first).size()>0)	return second + std::string("@") + first;
 	else				return second;
     }
-    static QName store(const std::string &namespacePrefix, const std::string& localPart) {
-    	return QName(StoreString::store(namespacePrefix), StoreString::store(localPart));
+    static QName store(const std::string &namespaceURI, const std::string& localPart) {
+    	return QName(StoreString::store(namespaceURI), StoreString::store(localPart));
     }
-    static QName store(const char * namespacePrefix, const char * localPart) {
-    	return QName(StoreString::store(namespacePrefix), StoreString::store(localPart));
+    static QName store(const std::string &namespaceURI, const std::string& localPart,const std::string& prefix) {
+    	return QName(StoreString::store(namespaceURI), StoreString::store(localPart), prefix);
     }
+    static QName store(const char * namespaceURI, const char * localPart) {
+    	return QName(StoreString::store(namespaceURI), StoreString::store(localPart));
+    }
+    std::string prefix;
 };
 
 inline bool operator<(const QName& a,const QName &b)
@@ -58,6 +65,10 @@ inline bool operator<(const QName& a,const QName &b)
 	if(a.first==b.first)
 		return a.second<b.second;
 	return a.first<b.first;
+}
+inline bool operator==(const QName& a,const QName &b)
+{
+	return a.first==b.first && a.second==b.second;
 }
 
 }

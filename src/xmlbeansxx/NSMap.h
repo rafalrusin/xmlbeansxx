@@ -28,9 +28,10 @@ public:
 	
 	NSMap(){};
 	virtual ~NSMap(){};	
-	virtual bool addNamespace(const std::string& prefix, StoreString ns);
+	//try tu add new namespace 
+	virtual bool addNamespace(const std::string& prefix, StoreString ns,bool force = false);
 	virtual bool isSetNamespaceURI(StoreString ns) const;
-	virtual bool isSetPrefix(const std::string& prefix) const;
+	virtual bool isSetPrefix(const std::string& prefix) const;	
 	virtual StoreString getNamespaceURI(const std::string& prefix) const;
 	virtual std::string getPrefix(StoreString ns) const;
 	virtual QName getQName(const std::string& name) const;

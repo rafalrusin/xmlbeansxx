@@ -57,7 +57,8 @@ libxmlbeansxx_la_SOURCES = \
 	NSMap.h\
 	config_auto.h\
 	XercesParser.cpp\
-	XercesUtils.cpp
+	XercesUtils.cpp\
+	NSMap.cpp
 
 nodist_libxmlbeansxx_la_SOURCES = \
 	XmlTypesGen.h\

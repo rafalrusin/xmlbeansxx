@@ -39,15 +39,15 @@ bool ElemDict::hasEmptyContent() const {
     return true;
 }
 
-ElemDict::T ElemDict::find(const QName& u,int nr) const {
+ElemDict::value_type ElemDict::find(const QName& u,int nr) const {
     XMLBEANSXX_FOREACH(ContentsType::const_iterator,it,contents) {
         if (it->name==u) {
             nr--;
             if (nr==-1)
-                return it->value;
+                return *it;
         }
     }
-    return ElemDict::T();
+    return value_type();
 }
 
 int ElemDict::count(const QName& u) const {
@@ -61,22 +61,23 @@ int ElemDict::count(const QName& u) const {
 }
 
 /** Duplicates u, but not v */
-void ElemDict::add(const QName& u,ElemDict::T v) {
-    contents.push_back(DictEl<ElemDict::T>(u,v));
+void ElemDict::add(const QName& u,ElemDict::data_type v) {
+    contents.push_back(value_type(u,v));
     //logger.debug("ElemDict::add - %s",v->className());
 }
 
-void ElemDict::set(const QName& u,int pos,ElemDict::T v) {
+void ElemDict::set(const QName& u,int pos,ElemDict::data_type v) {
     XMLBEANSXX_FOREACH(ContentsType::iterator,it,contents) {
         if (it->name==u) {
             if (pos==0) {
+	    	it->name=u;
                 it->value=v;
                 return;
             }
             pos--;
         }
     }
-    for(int i=0;i<pos;i++) add(u,ElemDict::T());
+    for(int i=0;i<pos;i++) add(u,ElemDict::data_type());
     add(u,v);
     //throw new XmlException("Trying to set value at non existing position");
 }

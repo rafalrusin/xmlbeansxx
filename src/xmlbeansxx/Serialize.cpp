@@ -30,6 +30,7 @@
 #include "SchemaProperty.h"
 #include "XmlBeans.h"
 #include "NSMap.h"
+#include "XmlContext.h"
 
 using namespace std;
 
@@ -50,67 +51,8 @@ using namespace std;
 
 namespace xmlbeansxx {
 
-LOGGER_PTR_SET(NSMap::log,"xmlbeansxx.NSMap");
 
-bool NSMap::isSetNamespaceURI(StoreString ns) const {
-	XMLBEANSXX_FOREACH(PrefixMapType::const_iterator,i,prefixMap){
-		if (i->second == ns) return true;
-	}
-	return false;
-}
-bool NSMap::isSetPrefix(const std::string& prefix) const {
-	return prefixMap.find(prefix)!=prefixMap.end();
-}
-
-bool NSMap::addNamespace(const std::string& prefix, StoreString ns) {
-        LOG4CXX_DEBUG(log,std::string("addNamespace: ") + prefix + ": " + ns);
-	if(isSetPrefix(prefix)) return false;
-	std::pair<std::string, StoreString> a(prefix, ns);
-	prefixMap.insert(a);
-	return true;
-}
-
-StoreString NSMap::getNamespaceURI(const std::string& prefix) const {
-	PrefixMapType::const_iterator p=prefixMap.find(prefix);
-	if(p==prefixMap.end())
-		throw BeansException("Namespace prefix: " + prefix + " not set.");
-	
-	return p->second;
-}
-
-std::string NSMap::getPrefix(StoreString ns) const {
-	XMLBEANSXX_FOREACH(PrefixMapType::const_iterator, i, prefixMap){
-		if (i->second == ns) return i->first;
-	}
-	throw BeansException(std::string("Namespace: ") + ns + " not set.");
-}
-
-std::string NSMap::toString() const {
-	std::string retu;
-	XMLBEANSXX_FOREACH(PrefixMapType::const_iterator, i, prefixMap){
-		retu += i->first + " => " + i->second;
-	}
-	return retu;
-}
-
-
-QName NSMap::getQName(const std::string& name) const {
-	int p=name.find(':');
-	if(p<0) {
-		try {
-			StoreString ns = getNamespaceURI("");
-			return QName(ns,name);
-		} catch(BeansException &e) {
-			return QName("",name);
-		}
-	}
-	return QName(getNamespaceURI(name.substr(0,p)),name.substr(p+1));
-}
-
-
-
-
-struct NSMapSerializer : public NSMap {
+struct NSMapSerializer : public XmlContext {
 	
 	std::vector<std::pair<std::string, StoreString> > notPrinted;
 	int current;
@@ -118,8 +60,8 @@ struct NSMapSerializer : public NSMap {
 	NSMapSerializer():current(0){};
 
 
-	virtual bool addNamespace(const std::string& prefix,StoreString ns) {
-	    if(!isSetNamespaceURI(ns)) {
+/*	virtual bool addNamespace(const std::string& prefix,StoreString ns) {
+	    if(true){ //!isSetNamespaceURI(ns)
 	    	NSMap::addNamespace(prefix, ns);
 		std::pair<std::string, StoreString> a(prefix, ns);
 		notPrinted.push_back(a);
@@ -128,44 +70,57 @@ struct NSMapSerializer : public NSMap {
 	    return false;
 	}
 
-	
+*/	
 	std::string cprintQName(const QName& n) {
 		if(n.first==StoreString("")) return n.second;
 		
-		//VAL(i,prefixMap.find(n.first));
-		if(!isSetNamespaceURI(n.first)) {
-			std::string prefix=getNextPrefix();
-			addNamespace(prefix,n.first);
-			return printPrefixName(prefix, n.second);
+		std::string prefix=n.prefix;
+        	LOG4CXX_DEBUG(log,std::string("printQName: ") + prefix + "{" + n.first + "}" + n.second);
+		try {
+			if(getNamespaceURI(prefix) == n.first) 
+				return printPrefixName(prefix, n.second);
+		} catch(BeansException &e) {
+			//Prefix not set (getPrefix)
 		}
-		return printPrefixName(getPrefix(n.first), n.second);
+		if(prefix.size()==0) {
+			try {
+				prefix = getPrefix(n.first);
+				return printPrefixName(prefix, n.second);
+				
+			} catch (BeansException &e) {
+				prefix=getNextPrefix();
+			}
+		}
+		addNamespace(prefix,n.first);
+		return printPrefixName(prefix, n.second);
 	};
 	
 	
 	std::string printNewNS() {
 		std::string retu;
-		while(!notPrinted.empty()) {
-			std::pair<std::string, StoreString> a=notPrinted.back();
-			if(a.first.empty())	retu+=std::string(" xmlns=\"") + a.second + "\"";
-			else			retu+=std::string(" xmlns:") + a.first  + "=\"" + a.second + "\"";
-			
-			notPrinted.pop_back();
-		}
-		
+	    	XmlContext::StoredLinks ns=getLastStoredLinks();
+		XMLBEANSXX_FOREACH(XmlContext::StoredLinks::iterator,i,ns) {
+			if(i->first.empty())	retu+=std::string(" xmlns=\"") + i->second + "\"";
+			else			retu+=std::string(" xmlns:") + i->first  + "=\"" + i->second + "\"";
+	    	}
 		return retu;
 	}
 	
 private:
 	std::string getNextPrefix() {
-		return std::string(1,'a'+current++);
+		std::string prefix(1,'a'+current++);
+		if(isSetPrefix(prefix)) return getNextPrefix();
+		else 
+			return prefix;
 	}
 	std::string printPrefixName(const std::string& prefix,const std::string& name) {
 		if(prefix.empty()) return name;
 		return prefix + ":" + name;
 	}
-	
+	STATIC_LOGGER_PTR(log);	
 };
 
+LOGGER_PTR_SET(NSMapSerializer::log,"xmlbeansxx.NSMapSerializer");
 
 
 namespace {
@@ -182,20 +137,24 @@ void Contents::serialize(bool printXsiType,const QName& elemName,std::ostream &o
 	TRACER(log,"serialize");
     	SYNC(mutex)
 
-    	o << "<" << ns.cprintQName(elemName);
-    	o << ns.printNewNS();
+	ns.remember();
+
+	// add all namespace attribute to namespace map
+	XMLBEANSXX_FOREACH(ElemDict::ContentsType::const_iterator,it,attrs.contents) {
+		QName name = it->name;
+		if(name->first == XmlBeans::xmlns()) 
+		    ns.addNamespace(name->second,xmlbeansxx::Contents::Walker::getSimpleContent(it->value));
+	}
+
+	std::string name = ns.cprintQName(elemName);
+    	o << "<" << name;
 
 
         //it's an object
     	if (printXsiType && options.getSerializeTypes()) {
 		if( options.getSerializeInnerTypes() || !(st->name.first == XmlBeans::innerType_ns()) ) {
-			if(st->isArray) {
-				o << " xsi:array=\"" << ns.cprintQName(st->name) << "\"";
-				o << ns.printNewNS();			
-			} else {
-				o << " xsi:type=\"" << ns.cprintQName(st->name) << "\"";
-				o << ns.printNewNS();
-			}
+    			if(st->isArray) o << " " << ns.cprintQName(XmlBeans::xsi_array()) << "=\"" << ns.cprintQName(st->name) << "\"";
+			else 		o << " " << ns.cprintQName(XmlBeans::xsi_type())  << "=\"" << ns.cprintQName(st->name) << "\"";
 		}
         }
     
@@ -204,14 +163,17 @@ void Contents::serialize(bool printXsiType,const QName& elemName,std::ostream &o
     	{
         	std::string cnt=TextUtils::exchangeEntities(getSimpleContent());
         	if (cnt==std::string() && !hasElements()) {
-            		o<<"/>";
+            		o << "/>";
         	} else {
-        		o<<">";
-            		o<<cnt;
+        		o << ">";
+            		o << cnt;
             		serializeElems(o,ns,options);
-            		o<<"</"<<ns.cprintQName(elemName)<<">";
+            		o << "</" << name << ">";
         	}
     	}
+	
+	ns.restore();
+
 }
 
 void Contents::serializeDocument(ostream &o,XmlOptions options) const {
@@ -226,9 +188,6 @@ void Contents::serializeDocument(ostream &o,XmlOptions options) const {
         return;
 
     NSMapSerializer ns;
-    ns.addNamespace("xsi","http://www.w3.org/2001/XMLSchema-instance");
-    ns.addNamespace("xs","http://www.w3.org/2001/XMLSchema");
-//    ns.addNamespace("",it->name->first);
     
     const std::map<QName,SchemaPropertyPtr> *order=&(st->elements);
     std::map<QName,SchemaPropertyPtr>::const_iterator propIt=order->find(it->name);
@@ -253,7 +212,11 @@ void Contents::serializeDocument(ostream &o,XmlOptions options) const {
 void Contents::serializeAttrs(ostream &o,NSMapSerializer& ns, XmlOptions options) const {
 	SYNC(mutex)
 	XMLBEANSXX_FOREACH(ElemDict::ContentsType::const_iterator,it,attrs.contents) {
-		o << " " << ns.cprintQName(it->name) << "=\"" << TextUtils::exchangeEntities(xmlbeansxx::Contents::Walker::getSimpleContent(it->value), TextUtils::AttrEscapes) << "\"";
+		if(!(it->name.first == XmlBeans::xmlns())) {		
+			o << " " << ns.cprintQName(it->name) << "=\"" << TextUtils::exchangeEntities(xmlbeansxx::Contents::Walker::getSimpleContent(it->value), TextUtils::AttrEscapes) << "\"";
+		}
+	}
+	{
 		o << ns.printNewNS();
 	}
 }
@@ -288,10 +251,10 @@ void Contents::serializeElems(ostream &o,NSMapSerializer ns, XmlOptions options)
 		const SchemaType * elemSt = v.second;
 		int count = elems.count(elemName);
 		for(int i=0;i<count;i++) {
-			ContentsPtr value(elems.find(elemName,i));
-			if (value!=NULL) {
-				bool printXsiType= shallPrintXsiType(elemSt,value->st);
-				value->serialize(printXsiType,elemName,o,ns,options);
+			ElemDict::value_type value(elems.find(elemName,i));
+			if (value.value!=NULL) {
+				bool printXsiType= shallPrintXsiType(elemSt,value.value->st);
+				value.value->serialize(printXsiType,value.name,o,ns,options);
 			}
 		}
 	}

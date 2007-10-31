@@ -154,11 +154,11 @@ namespace xmlbeansxx {
 		std::string Contents::Walker::dump(const ContentsPtr& p){
 		    if(!p) return " NULL ";
 		    std::string s("{");
-		    XMLBEANSXX_FOREACH(ElemDict::ContentsType::iterator,i,p->elems.contents){
-			s+= i->name +"=" + dump(i->value); 
-		    };
 		    XMLBEANSXX_FOREACH(ElemDict::ContentsType::iterator,i,p->attrs.contents){
-			s+= "@" +i->name +"=" + dump(i->value); 
+			s+= "@("+i->name.prefix +")"+i->name +"=" + dump(i->value); 
+		    };
+		    XMLBEANSXX_FOREACH(ElemDict::ContentsType::iterator,i,p->elems.contents){
+			s+= "("+i->name.prefix +")"+ i->name +"=" + dump(i->value); 
 		    };
 		    s+= p->value;
 		    s+= "}";

@@ -89,20 +89,6 @@ void parsing() {
     LibXMLParser p(opt);
     p.loadGrammar("c.xsd");
     
-    /*    
-    {
-        ifstream in("b.xml");
-        LOG4CXX_DEBUG(logger, "parsing b.xml");
-        ContentDocumentPtr doc=ContentDocument::Factory::newInstance();
-        try {
-            p.parse(in,doc.get());
-		    LOG4CXX_INFO(logger,"b.xml parse passed - error");
-            CPPUNIT_ASSERT(false);
-        } catch (BeansException &ex) {
-		    LOG4CXX_INFO(logger,std::string("Exception: ") + ex.getMessage());
-        }
-    }
-    */
     
     ContentDocument doc;
     {
@@ -119,23 +105,6 @@ void parsing() {
         doc = docC;
     }
 
-    //ifstream in("a.xml");
-    //LOG4CXX_DEBUG(logger, "parsing a.xml");
-    {
-    
-      /*
-        for (int i = 0; i<1000; i++) {
-            XmlParser *p2 = new XmlParser();
-            p2->loadGrammar("c.xsd");
-            //delete p2;
-        }
-        std::string l;
-        std::cin>>l;
-      */
-    }
-
-    //    ContentDocumentPtr doc=ContentDocument::Factory::newInstance();
-    //p.parse(in,doc.get());
     
     CPPUNIT_ASSERT(doc.getContent().getEmployee().getAge()==10);
     LOG4CXX_DEBUG(logger,doc.toString());

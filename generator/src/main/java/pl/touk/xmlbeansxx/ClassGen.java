@@ -30,6 +30,9 @@ import javax.xml.namespace.QName;
 
 import org.apache.xmlbeans.*;
 import org.apache.commons.logging.*;
+import org.apache.internal.xmlbeans.wsdlsubst.DefinitionsDocument.Definitions.Factory;
+
+import com.sun.org.apache.xml.internal.utils.XMLString;
 
 public class ClassGen {
 	private static final String CUSTOM_CODE_STR="//-------------Custom Code---------------";
@@ -2221,6 +2224,11 @@ public class ClassGen {
 
 	public static void main(String[] args) throws Exception {
 				
+/*		//test
+  		XmlString s=XmlString.Factory.parse("<s:bolek zosia=\"as\" xmlns=\"kura\" xmlns:s=\"zosia\" zuza=\"es\">"
+  		 + "<s:zzz xmlns:s=\"zosia\"> dd </s:zzz> </s:bolek>");
+		log.info(s.toString());
+	*/
 		if (System.getProperty("genbuiltin") != null) {
 			log.info("Generating builtin types");
 			//currentName="XmlTypesGen";

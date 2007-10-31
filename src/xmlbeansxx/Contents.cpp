@@ -127,7 +127,7 @@ std::string Contents::getSimpleContent() const {
 
 ContentsPtr Contents::getAttr(const QName &elemName) const {
     SYNC(mutex)
-    return attrs.find(elemName);
+    return attrs.find(elemName).value;
 }
 
 void Contents::setAttr(const QName &elemName,ContentsPtr value) {
@@ -140,7 +140,7 @@ void Contents::setAttr(const QName &elemName,ContentsPtr value) {
 
 ContentsPtr Contents::getElem(const QName& elemName,int index) const {
     SYNC(mutex)
-    return elems.find(elemName,index);
+    return elems.find(elemName,index).value;
 }
 
 void Contents::setElem(const QName& elemName,ContentsPtr value,int index) {
@@ -150,7 +150,7 @@ void Contents::setElem(const QName& elemName,ContentsPtr value,int index) {
 
 bool Contents::isSetElem(const QName& elemName,int index){
     SYNC(mutex)
-    return elems.find(elemName,index)!=NULL;
+    return elems.find(elemName,index).value!=NULL;
 };
 
 void Contents::removeElems(const QName& name) {

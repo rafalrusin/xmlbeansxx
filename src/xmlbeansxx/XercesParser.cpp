@@ -53,6 +53,12 @@ XERCES_CPP_NAMESPACE_USE
 
 MySAX2Handler::MySAX2Handler(XercesParser *p): parser(p) {}
 
+static std::string getPrefix(std::string qname){
+    std::string::size_type p=qname.find(":");
+    if(p!=std::string::npos) return qname.substr(0,p);	
+    return std::string();
+}
+
 void MySAX2Handler::startElement(	const XMLCh* const uri, 
 					const XMLCh* const localname, 
 					const XMLCh* const qname, 
@@ -76,10 +82,11 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
         LOG4CXX_DEBUG2(log, "SAX2 - end info")
     }
 
-    parser->xmlContext.remember();
+    std::string prefix = getPrefix(transcode(qname));
+    QName name(transcode(uri), transcode(localname), prefix);
     
-    QName name(transcode(uri), transcode(localname));
     LOG4CXX_DEBUG2(log, std::string("begin element: ") + name)
+    LOG4CXX_DEBUG2(log, std::string("prefix: ") + prefix)
     
     if(parser->nodesStack.empty())
 	throw XmlException(string("no XmlObject on XercesParser stack"));
@@ -141,8 +148,8 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
     {
         LOG4CXX_DEBUG2(log, "add attributes")
         for (unsigned int i = 0;i < attrs.getLength(); i++) {
-	    QName name(transcode(attrs.getURI(i)), transcode(attrs.getLocalName(i)));
-    	    LOG4CXX_DEBUG2(log, std::string("attribute name: ")+ name)
+	    QName name(transcode(attrs.getURI(i)), transcode(attrs.getLocalName(i)), getPrefix(transcode(attrs.getQName(i))));
+    	    LOG4CXX_DEBUG2(log, std::string("attribute name (prefix): (") +  name.prefix + ")" + name)
 	    
 	    if (name == XmlBeans::xsi_type()) continue;
 	    if (name == XmlBeans::xsi_array()) continue;
@@ -151,13 +158,23 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
         }
     }
     
+    
+    {	//add namespaces as attributes
+	    XmlContext::StoredLinks ns=parser->xmlContext.getLastStoredLinks();
+	    XMLBEANSXX_FOREACH(XmlContext::StoredLinks::iterator,i,ns) {
+	    	QName name(XmlBeans::xmlns(),i->first);
+    	    	LOG4CXX_DEBUG2(log, std::string("namespace attribute name: ")+ name + " = " + std::string(i->second) )
+	    	xmlbeansxx::Contents::Walker::setAttr(*n,name, i->second);
+	    }
+    }
+    
+    parser->xmlContext.remember();
+
     {
-        LOG4CXX_DEBUG2(log, std::string("append element name:") + name  )
+        LOG4CXX_DEBUG2(log, std::string("append element name (prefix): (") +name.prefix+ ")"+ name  )
 
 	Contents::Walker::appendElem(*(parser->nodesStack.top().obj),name,n->contents);
         parser->nodesStack.push(EmptyParser::StackEl(n,n->getSchemaType()->processContents,name));
-	
-
     }
 
 }
@@ -165,8 +182,7 @@ void MySAX2Handler::startPrefixMapping(const XMLCh* const _prefix, const XMLCh* 
     	//NAMESPACES
 	std::string prefix = transcode(_prefix);
 	std::string uri = transcode(_uri);
-	LOG4CXX_DEBUG2(log, std::string("store namespace in xmlContext:") + prefix + " = " + uri)
-        parser->xmlContext.setLink(prefix, uri); 
+        parser->xmlContext.addNamespace(prefix, uri); 
 }
 
 
@@ -258,6 +274,7 @@ XercesParser::~XercesParser() {}
 void XercesParser::updateOptions() {
 	sax2->setFeature(XMLUni::fgSAX2CoreValidation, options.getValidation());
 	sax2->setFeature(XMLUni::fgXercesCacheGrammarFromParse, true);
+	sax2->setFeature(XMLUni::fgSAX2CoreNameSpaces, true);
 //	sax2->setFeature(XMLUni::fgXercesDynamic, true);
 }
 

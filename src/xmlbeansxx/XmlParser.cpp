@@ -31,19 +31,32 @@ namespace xmlbeansxx {
 
     
 XmlParserPtr XmlParser::Factory::newInstance() {
-#ifdef HAVE_LIBXERCES_C
+#ifdef HAVE_LIBXML2
+    return XmlParserPtr(new LibXMLParser());
+#else
+    return XmlParserPtr(new XercesParser());
+#endif
+/*#ifdef HAVE_LIBXERCES_C
     return XmlParserPtr(new XercesParser());
 #else
     return XmlParserPtr(new LibXMLParser());
 #endif
+*/
 }
 
 XmlParserPtr XmlParser::Factory::newInstance(const XmlOptions o) {
-#ifdef HAVE_LIBXERCES_C
+#ifdef HAVE_LIBXML2
+    return XmlParserPtr(new LibXMLParser(o));
+#else
+    return XmlParserPtr(new XercesParser(o));
+#endif
+
+/*#ifdef HAVE_LIBXERCES_C
     return XmlParserPtr(new XercesParser(o));
 #else
     return XmlParserPtr(new LibXMLParser(o));
 #endif
+*/
 }
 
 
@@ -64,17 +77,19 @@ QName EmptyParser::nsSplit(const std::string &str, bool isAttr) {
         if (isAttr) {
             return QName(std::string(""), str);
         } else {
-            return QName(xmlContext.getLink(""), str);
+            return QName(xmlContext.getNamespaceURI(""), str);
         }
     } else {
-        return QName(xmlContext.getLink(str.substr(0,pos)) ,str.substr(pos+1));
+        return QName(xmlContext.getNamespaceURI(str.substr(0,pos)) ,str.substr(pos+1));
     }
 
 }
 
 QName EmptyParser::getQName(const char *prefix, const char *localname, bool isAttr) {
-    if (isAttr && prefix == NULL) return QName("", localname);
-    else return QName(xmlContext.getLink(prefix == NULL ? "" : prefix), localname);
+    if (prefix == NULL) {
+    	if (isAttr) return QName("", localname);
+	else return QName(xmlContext.getNamespaceURI(""), localname);
+    } else return QName(xmlContext.getNamespaceURI(prefix), localname,prefix);
 }
 
 std::pair<std::string, std::string> EmptyParser::tagSplit(const std::string &str) {

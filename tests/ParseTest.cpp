@@ -33,11 +33,12 @@ void ParseTest::parseTest() {
 		XmlOptions opt;
 		opt.setValidation(true);
 		XercesParser p(opt);
+//		LibXMLParser p(opt);
 		p.loadGrammar("c.xsd");
 			    
 	       	ContentDocument doc=ContentDocument::Factory::newInstance();
 	
-	
+
 		for(int i=0;i<2;i++) {
 			//Test 2 times
 		       	try {
@@ -59,16 +60,24 @@ void ParseTest::parseTest() {
 	        	ifstream in("c.xml");
 		        LOG4CXX_DEBUG(logger, "parsing c.xml");
 	       		p.parse(in,doc);
+			LOG4CXX_DEBUG(logger, "dump:" + Contents::Walker::dump(doc.contents));
 	    	}
 		std::string str=doc.toString();
 	        LOG4CXX_DEBUG(logger, "parsed c.xml:" + str);
 		std::string cmp = 
 		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-		"<a:content xmlns:a=\"http://mind.p4.com/mytest\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
-			"<a:employee age=\"10\"><a:firstname>Name1</a:firstname><a:lastname>Name2</a:lastname><a:dane>bleble</a:dane><a:def>myval</a:def><a:choice><a:b>20</a:b></a:choice>"
-				"<a:pattern>.</a:pattern><a:floatElement>10.55</a:floatElement><a:doubleElement>3.14</a:doubleElement>"
-			"</a:employee>"
-		"</a:content>\n";
+		"<test2:content xmlns:test2=\"http://mind.p4.com/mytest\" xmlns:test3=\"http://mind.p4.com/mytest\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+		  "<test2:employee age=\"10\" xmlns=\"http://mind.p4.com/mytest\">"
+		    "<test2:firstname xmlns:test2=\"http://mind.p4.com/mytest\">Name1</test2:firstname>"
+		    "<lastname>Name2</lastname>"
+		    "<dane>bleble</dane>"
+		    "<def>myval</def>"
+		    "<choice>"
+		      "<b>20</b>"
+		    "</choice>"
+		    "<pattern>.</pattern><floatElement>10.55</floatElement><doubleElement>3.14</doubleElement>"
+		  "</test2:employee>"
+		"</test2:content>\n";
 		CPPUNIT_ASSERT_EQUAL(cmp,str);
 		
 	}
@@ -144,10 +153,30 @@ void ParseTest::parseTest() {
 		std::string s_str=s.toString(XmlOptions::serializeTypes());
 		std::string s_equ=
 			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-			"<a:xml-fragment xmlns:a=\"http://xmlbeans.apache.org/definitions\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"xs:string\">"
+			"<a:xml-fragment xsi:type=\"b:string\" xmlns:a=\"http://xmlbeans.apache.org/definitions\" xmlns:b=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"\
 				" something "
 			"</a:xml-fragment>\n";
-	        LOG4CXX_DEBUG(logger, "something: " + s_str);
+		LOG4CXX_DEBUG(logger, "something: " + s_str);
+		CPPUNIT_ASSERT_EQUAL(s_str,s_equ);
+	}
+	{
+		XmlObject s=XmlObjectDocument::Factory::parse("<test> something </test>");
+		std::string s_str=s.toString(XmlOptions::XmlOptions::serializeInnerTypes());
+		std::string s_equ=
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+			"<test> something </test>\n";
+	        		
+		LOG4CXX_DEBUG(logger, "something: " + s_str);
+		CPPUNIT_ASSERT_EQUAL(s_str,s_equ);
+	}
+	{
+		XmlObject s=XmlObjectDocument::Factory::parse("<test2/>");
+		std::string s_str=s.toString(XmlOptions::XmlOptions::serializeInnerTypes());
+		std::string s_equ=
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+			"<test2/>\n";
+	        		
+		LOG4CXX_DEBUG(logger, "something: " + s_str);
 		CPPUNIT_ASSERT_EQUAL(s_str,s_equ);
 	}
 	

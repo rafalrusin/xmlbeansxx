@@ -24,18 +24,20 @@ class XmlBeans {
 private:
 public:
     
-    /** Schema namespace name. */
+    /** Schema namespaceURI name. */
     static StoreString xs_ns();
-    /** Schema instance namespace name. */
+    /** Schema instance namespaceURI name. */
     static StoreString xsi_ns();
-    /** inner Type namespace name */
+    /** inner Type namespaceURI name */
     static StoreString innerType_ns();
     /** xsi:type QName */
-    static QName xsi_type();
+    static const QName& xsi_type();
 
     /** xsi:array QName */    
-    static QName xsi_array();
+    static const QName& xsi_array();
     
+    /** xmlns namespaceURI name*/
+    static StoreString xmlns();
    
     static std::string encoding(std::string encoding = std::string());
     
