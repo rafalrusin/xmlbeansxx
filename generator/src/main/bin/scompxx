@@ -46,13 +46,11 @@ fi
 basefile=`readlink -f $0`
 BIN=`dirname $basefile`
 
-ARG_XSD=""
 SRC_DIR="src"
 XSD_PATH_PREFIX="../"
 MAKEFILE_XSD_PATH_PREFIX="\${top_srcdir}/"
 LIB_NAME="xmltypes"
 LIB_VERSION="1:0:0"
-DIRS=""
 XMLBEANSXX_OPTS=""
 SRCONLY_FLAG=""
 MAX_FILESIZE=3000000
@@ -76,32 +74,40 @@ while test $# -gt 0; do
 		;;
 	-*)	echo "$usage" ; exit 1
 		;;
-	*.xsd)	ARG_XSD="$ARG_XSD $1"
+	*.xsd)	ARG_XSD[${#ARG_XSD[@]}]=$1
 		;;
-	*)	DIRS="$DIRS $1"
+	*)	DIRS[${#DIRS[@]}]=$1
 		;;
 	esac
 	shift
 done
 
 
-for i in $DIRS; do
-	 ARG_XSD="$ARG_XSD `find $i -name \*.xsd`"
+for i in "${DIRS[@]}"; do
+	TMP_FILE=`mktemp`
+	find $i -name \*.xsd  > $TMP_FILE
+	while read -r xx ; do 
+		ARG_XSD[${#ARG_XSD[@]}]=$xx
+	done < $TMP_FILE
+	rm $TMP_FILE
 done
 
 
-for i in $ARG_XSD; do
+for i in "${ARG_XSD[@]}"; do
+	iesc=`echo "$i" | sed -e 's/ /\\\ /g'`
 	case "$i" in
-	/*)	XSD_FILES="$XSD_FILES $i"
-		MAKEFILE_XSD_FILES="$MAKEFILE_XSD_FILES $i"
+	/*)	XSD_FILES[${#XSD_FILES[@]}]=$i
+		MAKEFILE_XSD_FILES[${#MAKEFILE_XSD_FILES[@]}]="$iesc"
 		;;
-	*)	XSD_FILES="$XSD_FILES $XSD_PATH_PREFIX$i"
-		MAKEFILE_XSD_FILES="$MAKEFILE_XSD_FILES $MAKEFILE_XSD_PATH_PREFIX$i"
+	*)	XSD_FILES[${#XSD_FILES[@]}]="$XSD_PATH_PREFIX$i"
+		MAKEFILE_XSD_FILES[${#MAKEFILE_XSD_FILES[@]}]="$MAKEFILE_XSD_PATH_PREFIX$iesc"
 		;;
 	esac
-	ORGIN_XSD="$ORGIN_XSD $i"
-	ORGIN_BASENAME_XSD="$ORGIN_BASENAME_XSD `basename $i`"
+	ORGIN_XSD[${#ORGIN_XSD[@]}]="$iesc"
+	ORGIN_BASENAME_XSD[${#ORGIN_BASENAME_XSD[@]}]=`basename "$iesc"`
 done 
+
+
 
 LIB_FULLNAME="lib${LIB_NAME}"
 PKG_VERSION=`echo $LIB_VERSION | sed -e 's/\([^:]*\):\([^:]*\):\([^:]*\)/\1.\3/'`
@@ -121,46 +127,51 @@ cd $SRC_DIR
 ln -s . $LIB_NAME
 
 rm -f xsd.txt
-if ! $BIN/xmlbeansxx-gen $XMLBEANSXX_OPTS -Dincludes=xsd.txt $XSD_FILES; then exit 1; fi
+if ! $BIN/xmlbeansxx-gen $XMLBEANSXX_OPTS -Dincludes=xsd.txt "${XSD_FILES[@]}"; then exit 1; fi
 
 #COMP_XSD=`cat xsd.txt`
 #COMP_XSD=`echo $COMP_XSD`
 
 
-ALL_XSD="$ORGIN_XSD `cat xsd.txt`"
 TMP1_FILE=`mktemp`
 TMP2_FILE=`mktemp`
 cat xsd.txt > $TMP1_FILE 
-for i in $ORGIN_BASENAME_XSD; do
+for i in "${ORGIN_BASENAME_XSD[@]}"; do
 	echo $i >> $TMP1_FILE
 done
 sort $TMP1_FILE | uniq > $TMP2_FILE
 
-ALL_XSD=`cat $TMP2_FILE`
+#ALL_XSD=`cat $TMP2_FILE`
+while read -r xx ; do 
+	ALL_XSD[${#ALL_XSD[@]}]=$xx
+done < $TMP2_FILE
 
 rm $TMP1_FILE
 rm $TMP2_FILE
 
 
-for i in $ALL_XSD; do
-	COMP_XSD="$COMP_XSD `basename $i`"
-	COMP_H="$COMP_H `basename $i .xsd`.h"
-	CPPFILE="`basename $i .xsd`.cpp"
-	CPPFILES=$CPPFILE
+for i in "${ALL_XSD[@]}"; do
+	base_esc=`basename "$i" .xsd | sed -e 's/ /\\ /g'`
+	COMP_XSD[${#COMP_XSD[@]}]="$base_esc.xsd"
+	COMP_H[${#COMP_H[@]}]="$base_esc.h"
+	CPPFILE="$base_esc.cpp"
 	if [ `du -s -b $CPPFILE | sed -e 's/^\([0-9]*\)[^0-9].*/\1/'` -ge $MAX_FILESIZE ] ; then 
 		# split
-		CPPFILES=`$BIN/xmlbeansxx-split  $CPPFILE`
+		TMP=`$BIN/xmlbeansxx-split  $CPPFILE `
+		unset CPPFILES
+		for i in $TMP; do
+			CPPFILES="$CPPFILES $i"
+		done
 		echo "spliting: $CPPFILE into: $CPPFILES"
-		SPLITS="\
-$SPLITS 
+		SPLITS[${SPLITS[@]}]="
 $CPPFILES: $CPPFILE
 	$BIN/xmlbeansxx-split $CPPFILE
 
 "
-		COMP_TO_SPLIT_CPP="$COMP_TO_SPLIT_CPP $CPPFILE"
-		COMP_SPLITED_CPP="$COMP_SPLITED_CPP $CPPFILES"
+		COMP_TO_SPLIT_CPP[${#COMP_TO_SPLIT_CPP[@]}]=$CPPFILE
+		COMP_SPLITED_CPP[${#COMP_SPLITED_CPP[@]}]=$CPPFILES
 	else
-    		COMP_CPP="$COMP_CPP $CPPFILE"
+    		COMP_CPP[${#COMP_CPP[@]}]=$CPPFILE
 	fi
 done
 
@@ -172,11 +183,11 @@ done
 cat <<EOF >Makefile.am
 ACLOCAL = aclocal -I m4
 
-COMP_XSD=$COMP_XSD
-COMP_H=$COMP_H
-COMP_CPP=$COMP_CPP
-COMP_TO_SPLIT_CPP=$COMP_TO_SPLIT_CPP
-COMP_SPLITED_CPP=$COMP_SPLITED_CPP
+COMP_XSD=${COMP_XSD[*]}
+COMP_H=${COMP_H[*]}
+COMP_CPP=${COMP_CPP[*]}
+COMP_TO_SPLIT_CPP=${COMP_TO_SPLIT_CPP[*]}
+COMP_SPLITED_CPP=${COMP_SPLITED_CPP[*]}
 
 schemaincludedir = \$(includedir)/${LIB_NAME}
 schemainclude_HEADERS = \$(COMP_H)
@@ -185,10 +196,10 @@ lib_LTLIBRARIES = ${LIB_FULLNAME}.la
 ${LIB_FULLNAME}_la_LDFLAGS = -version-info $LIB_VERSION -lxmlbeansxx
 dist_${LIB_FULLNAME}_la_SOURCES = \$(COMP_H) \$(COMP_SPLITED_CPP) \$(COMP_CPP)
 
-\$(COMP_H) \$(COMP_CPP) \$(COMP_TO_SPLIT_CPP): $MAKEFILE_XSD_FILES
-	$BIN/xmlbeansxx-gen $XMLBEANSXX_OPTS $MAKEFILE_XSD_FILES
+\$(COMP_H) \$(COMP_CPP) \$(COMP_TO_SPLIT_CPP): ${MAKEFILE_XSD_FILES[*]}
+	$BIN/xmlbeansxx-gen $XMLBEANSXX_OPTS ${MAKEFILE_XSD_FILES[*]}
 
-$SPLITS
+${SPLITS[*]}
 
 ${LIB_NAME}headerincludedir = \$(includedir)
 ${LIB_NAME}headerinclude_HEADERS = ${LIB_NAME}_headers.h
@@ -233,7 +244,7 @@ EXTRA_DIST = bootstrap m4/acx_pthread.m4
 SUBDIRS = src
 
 schemasdir = \$(datadir)/${LIB_NAME}
-nobase_dist_schemas_DATA = ${ORGIN_XSD} ${COMPOSITE_SCHEMA}
+nobase_dist_schemas_DATA = ${ORGIN_XSD[*]} ${COMPOSITE_SCHEMA}
 
 EOF
 

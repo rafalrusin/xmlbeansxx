@@ -31,12 +31,12 @@ if test $# -eq 0; then
 fi
 
 basefile=$1
-filename=`basename $basefile .cpp`
+filename=`basename "$basefile" .cpp`
 
 CPPFILE="$filename.cpp"
 PREFIX=`/bin/mktemp`
 
-csplit -f $PREFIX $CPPFILE /^\/\/\-\-split\-\-/+1 {\*} > /dev/null
+csplit -f $PREFIX "$CPPFILE" /^\/\/\-\-split\-\-/+1 {\*} > /dev/null
 
 NFILE="${PREFIX}??"
 N0FILE="${PREFIX}00"
@@ -51,11 +51,13 @@ for i in $NFILE ;  do
 	
 	nr=`echo $i | sed -e 's/.*\(.\)\(.\)$/\1\2/'`
 	cppfile="$filename$nr.cpp"
-	CPPFILES="$CPPFILES $cppfile"
-	cat $header > $cppfile
-	cat $i >> $cppfile
-	rm $i 
+	CPPFILES[${#CPPFILES[@]}]=$cppfile
+	cat "$header" > "$cppfile"
+	cat "$i" >> "$cppfile"
+	rm "$i" 
 done
 
-rm $header
-echo $CPPFILES
+rm "$header"
+for i in "${CPPFILES[@]}"; do
+	echo $i
+done
