@@ -7,7 +7,7 @@
 
 
 SET(TEST_LIBS
-	xmlbeansxx
+	${XMLBEANSXX_LIB}
 	${CPPUNIT_LIBRARY}
 )
 

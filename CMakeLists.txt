@@ -23,18 +23,7 @@ IF(MSVC80)
 ENDIF(MSVC80)
 
 
-IF (WIN32)
-	SET(EXEC_SUF ".bat")
-ELSE (WIN32) 
-	SET(EXEC_SUF "")
-ENDIF (WIN32)
   
-
-
-SET(XMLBEANSXX_GEN_PROG		${PROJECT_BINARY_DIR}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen${EXEC_SUF})
-SET(XMLBEANSXX_GENBUILDIN_PROG 	${PROJECT_BINARY_DIR}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-genbuiltin${EXEC_SUF}) 
-
-
 
 FIND_PACKAGE(Log4cxx REQUIRED)
 FIND_PACKAGE(Boost REQUIRED)
