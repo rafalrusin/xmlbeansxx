@@ -48,7 +48,7 @@ void ParseTest::parseTest() {
 		        	LOG4CXX_ERROR(logger, "bad_c.xml parsed !!!");
 				CPPUNIT_ASSERT(false);
 	    		}catch (xmlbeansxx::XmlParseException & e) {
-				LOG4CXX_DEBUG(logger, "EXCEPTION: " << e.what());
+				LOG4CXX_DEBUG(logger, std::string("EXCEPTION: ") + e.what());
 				std::string cmp = "Xml:While parsing: Xerces-c error: At line 4, char 64, Unknown element 'test2:firstname', std";
 				CPPUNIT_ASSERT_EQUAL(std::string(e.what()),cmp);
 			}
@@ -180,6 +180,17 @@ void ParseTest::parseTest() {
 		CPPUNIT_ASSERT_EQUAL(s_str,s_equ);
 	}
 	
-	
+/*	{
+		XmlObject s=XmlToken::Factory::parse("<test> something \t a \n b   </test>");
+		std::string s_str=s.toString(XmlOptions::serializeTypes());
+		std::string s_equ=
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+			"<a:xml-fragment xsi:type=\"b:string\" xmlns:a=\"http://xmlbeans.apache.org/definitions\" xmlns:b=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"\
+				" something "
+			"</a:xml-fragment>\n";
+		LOG4CXX_DEBUG(logger, "something: " + s_str);
+		CPPUNIT_ASSERT_EQUAL(s_str,s_equ);
+	}
+*/	
 }
 

@@ -55,7 +55,7 @@ void XPathTest::xPathTest()
 		CPPUNIT_ASSERT_EQUAL(std::string(ns.getQName("nazwa")), std::string("nazwa@http://ala"));
 
 		std::vector<XmlObject> retu2=z.selectPath(ns,"/zakupy/a:klient/bolek/lolek/");
-	        LOG4CXX_DEBUG(logger,std::string("retu2 size: ") << retu2.size());
+	        LOG4CXX_DEBUG(logger,std::string("retu2 size: ") + TextUtils::intToString(retu2.size()));
 		CPPUNIT_ASSERT_EQUAL(retu2.size(), size_t(0));
 
 		std::string path = 	"declare namespace ale='http://ala' "
@@ -107,7 +107,7 @@ void XPathTest::xPathTest()
 		CPPUNIT_ASSERT_EQUAL(std::string(ns.getQName("nazwa")), std::string("nazwa@http://ala"));
 
 		std::vector<XmlObject> retu3=z.selectPath(ns,"/zakupy/a:klient/bolek/lolek/");
-	        LOG4CXX_DEBUG(logger,std::string("retu2 size: ") << retu3.size());
+	        LOG4CXX_DEBUG(logger,std::string("retu2 size: ") + TextUtils::intToString(retu3.size()) );
 		CPPUNIT_ASSERT_EQUAL(retu3.size(), size_t(0));
 
 		std::string path = 	"declare namespace ale='http://ala' "

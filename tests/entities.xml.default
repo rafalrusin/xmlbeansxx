@@ -1,0 +1,19 @@
+<?xml version="1.0"  encoding="UTF-8"?>
+<nodes xmlns="http://mind.p4.com/mytest">
+  <node id="1324" value='opi"sik'>
+      <data>>>>>ito jest jakiś długi tekst&#xA;podzielony enterami&#xA;i z krzaczkami &quot;&amp;&lt;&gt;</data>
+  </node>
+  <node id="13" value=">&quot;opi&#x0A;isik&quot;">
+    <data><![CDATA[I am > the rules! 
+    !@#$%^&*()_+~
+    {}|:"<>?<>?,./[]\;']]></data>
+  </node>
+  <node id="24" value="opi&amp;sik">
+    <data><![CDATA[ !@#$%^&*(
+    {:>}"?<|\]]></data>
+  </node>
+  <node id="14" value="opi&#120;sik"/>
+  <node id="324" value="opi&#172;isik"/>
+  <node id="674" value="opi&lt;isik"/>
+  <node id="32" value="&amp;opii&gt;sik"/>
+</nodes>

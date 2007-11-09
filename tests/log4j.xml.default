@@ -4,8 +4,8 @@
 
     <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
         <layout class="org.apache.log4j.PatternLayout">
-<!--            <param name="ConversionPattern" value="%d{ISO8601} %d{%H %Z} %-5p [%6t] %16.16c - %m%n"/> -->
-            <param name="ConversionPattern" value=" %16.16c - %m%n"/> 
+            <param name="ConversionPattern" value="%d{ISO8601} %d{%H %Z} %-5p [%6t] %16.16c - %m%n"/> 
+<!--            <param name="ConversionPattern" value=" %16.16c - %m%n"/> -->
         </layout>
     </appender>
         

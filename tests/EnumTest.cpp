@@ -30,7 +30,7 @@ void EnumTest::enumTest()
 
 	        LOG4CXX_DEBUG(logger,"Klient1: " + k.toString());
 		CPPUNIT_ASSERT(k.getEnumTest() == Klient_EnumTest::ATOMEK);
-	        LOG4CXX_DEBUG(logger,"Klient int: " <<  k.getEnumTest() );
+	        LOG4CXX_DEBUG(logger,"Klient int: " +  k.getEnumTest() );
 		CPPUNIT_ASSERT_EQUAL(k.getEnumTest(), 4);
 		k.setEnumTest("lolek");
 	        LOG4CXX_DEBUG(logger,"Klient2: " + k.toString());
@@ -102,7 +102,7 @@ void EnumTest::enumTest()
 		CPPUNIT_ASSERT_EQUAL(std::string(ns.getQName("nazwa")), std::string("nazwa@http://ala"));
 
 		std::vector<XmlObject> retu2=z.selectPath(ns,"/zakupy/a:klient/bolek/lolek/");
-	        LOG4CXX_DEBUG(logger,std::string("retu2 size: ") << retu2.size());
+	        LOG4CXX_DEBUG(logger,std::string("retu2 size: ") + TextUtils::intToString(retu2.size()));
 		CPPUNIT_ASSERT_EQUAL(retu2.size(), size_t(0));
 
 		std::string path = 	"declare namespace ale='http://ala' "
