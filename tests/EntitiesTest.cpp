@@ -23,7 +23,7 @@ void EntitiesTest::entitiesTest () {
         
         stringstream ss1;
         ss1 << ifs.rdbuf();
-        LOG4CXX_INFO(LOG,"original: " << ss1.str());
+        LOG4CXX_INFO(LOG,string("original: ") + ss1.str());
         
         NodesDocument doc = NodesDocument::Factory::parse (ss1);
         LOG4CXX_INFO(LOG,"data: " << doc.getNodes().getNodeArray(0).getData());
