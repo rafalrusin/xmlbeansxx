@@ -23,5 +23,3 @@
 /* Define to 1 if you have the `xerces-c' library (-lxerces-c). */
 #define HAVE_LIBXERCES_C 1
 
-/* Define to 1 if you have the `xml2' library (-lxml2). */
-#define HAVE_LIBXML2 1
