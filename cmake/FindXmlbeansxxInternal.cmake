@@ -11,10 +11,6 @@ ELSE (WIN32)
 	SET(LIB_SUF "")
 ENDIF (WIN32)
 
-if (WIN32)
-else (WIN32) 
-  set(LIB_SUF "")
-endif (WIN32)
 
 SET(XMLBEANSXX_GEN_PROG		${PROJECT_BINARY_DIR}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen${EXEC_SUF})
 SET(XMLBEANSXX_GENBUILDIN_PROG 	${PROJECT_BINARY_DIR}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-genbuiltin${EXEC_SUF}) 

@@ -34,6 +34,9 @@
 #include "StoreString.h"
 
 #include <boost/date_time/posix_time/posix_time_types.hpp>
+//bug fix - win32 visual studio 8
+#undef IN
+
 #include <boost/config.hpp>
 #ifdef BOOST_HAS_THREADS
 #include <boost/thread/recursive_mutex.hpp>
