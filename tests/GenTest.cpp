@@ -139,12 +139,12 @@ void parsing() {
 //    CPPUNIT_ASSERT(doc.getContent().getEmployee().xgetDefault().getSimpleContent()=="101");
 
     /* test float and double */
-    LOG4CXX_DEBUG(logger, doc.getContent().getEmployee().getFloatElement());
-    LOG4CXX_DEBUG(logger, doc.getContent().getEmployee().getDoubleElement());
+    LOG4CXX_DEBUG(logger, doc.getContent().getEmployee().xgetFloatElement().toString());
+    LOG4CXX_DEBUG(logger, doc.getContent().getEmployee().xgetDoubleElement().toString());
     doc.getContent().getEmployee().setFloatElement("2.71");
     doc.getContent().getEmployee().setDoubleElement("2e71");
-    LOG4CXX_DEBUG(logger, doc.getContent().getEmployee().getFloatElement());
-    LOG4CXX_DEBUG(logger, doc.getContent().getEmployee().getDoubleElement());
+    LOG4CXX_DEBUG(logger, doc.getContent().getEmployee().xgetFloatElement().toString());
+    LOG4CXX_DEBUG(logger, doc.getContent().getEmployee().xgetDoubleElement().toString());
     
 
     std::string d1, d2;

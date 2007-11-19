@@ -436,7 +436,7 @@ void startElementNs(void *ctx,
             BOOST_ASSERT(ns0 != NULL);
             StoreString ns(ns0);
             const char *prefix = (const char *) namespaces[current + NS_PREFIX];
-            LOG4CXX_DEBUG2(LOG, "prefix: " << (prefix == NULL ? "" : prefix) << " namespace: " << ns)
+            LOG4CXX_DEBUG2(LOG, std::string("prefix: ") + (prefix == NULL ? "" : prefix) + " namespace: " + ns)
             parser->xmlContext.addNamespace(prefix == NULL ? "" : prefix, ns);
         }
     }
@@ -541,7 +541,7 @@ void endElementNs(void *ctx,
 
     if (IMMEDIATE_RETURN)
         return;
-    LOG4CXX_DEBUG2(LOG, "end element " << (const char *) localname )
+    LOG4CXX_DEBUG2(LOG, std::string("end element ") + (const char *) localname )
     LibXMLParser *parser = (LibXMLParser *) ctx;
 ///    if (INSERT_INTO_CURSOR)
 ///        parser->cursor->pop();
@@ -552,7 +552,7 @@ void endElementNs(void *ctx,
     parser->xmlContext.restore();
     parser->nodesStack.pop();
 
-    LOG4CXX_DEBUG2(LOG, "leaving end element " << (const char *) localname)
+    LOG4CXX_DEBUG2(LOG, std::string("leaving end element ") + (const char *) localname)
 }
 
 void characters(void *ctx, const xmlChar *ch, int length) {
