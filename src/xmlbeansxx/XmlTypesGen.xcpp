@@ -464,8 +464,11 @@ bool XmlDateTime::operator<(const XmlDateTime &b) const {
 XmlTime XmlDateTime::timePart() const {
     std::string dt=getSimpleContent();
     std::string::size_type p=dt.find('T');
+
     if (p==std::string::npos) throw XmlSimpleTypeException("T separator not found in dateTime",dt);
-    return XmlTime(dt.substr(p+1));
+    std::string retu=dt.substr(p+1);
+    std::string::size_type z=retu.find('Z');
+    return XmlTime(retu.substr(0,z));
 }
 
 XmlDate XmlDateTime::datePart() const {

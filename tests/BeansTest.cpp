@@ -158,7 +158,7 @@ void namespaceTests() {
         //XmlDateTime
 	{
 	        XmlDateTime a(" 2004-01-12T23:50:22 \n\n\n");
-	        XmlDateTime b("   2004-01-12T23:50:22 \n");
+	        XmlDateTime b("   2004-01-12T23:50:22Z \n");
 	        XmlDateTime c("   2004-01-12T23:50:24 \n");
 	        XmlDateTime d("   2004-01-11T23:50:24 \n");
 		XmlDateTime e(XmlAnySimpleType(" 2004-01-11T23:50:24 "));
