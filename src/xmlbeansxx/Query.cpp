@@ -158,14 +158,21 @@ XmlObject XmlObject::cquery(const std::string & elementName,QueryNodePtr queryEx
     
     XmlObject r=query(elementName,queryExpr);
     if (!r.hasContents()) {
-        r=createFn();
 	QName correctName=QName("",elementName);
 	// find the correct QName
-	XMLBEANSXX_FOREACH(SchemaType::ElementsType::const_iterator, i,getSchemaType()->elements){
+	XMLBEANSXX_FOREACH(SchemaType::ElementsType::const_iterator, i,getSchemaType()->elements) {
 	    QName name=i->first;
-	    if(name->second==elementName)
+	    if(name->second==elementName) 
 		correctName=name;
 	}
+    	if(createFn != NULL) {
+        	r = createFn();
+	} else {
+		XmlObjectPtr objP=getSchemaType()->createSubObject(correctName);
+		objP->createContents();
+		r=*objP;
+	}
+	
         xmlbeansxx::Contents::Walker::appendElem(*this,correctName,r.contents);
     }
     return r;
