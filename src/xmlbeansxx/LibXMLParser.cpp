@@ -198,7 +198,7 @@ void LibXMLParser::parse(const std::string &doc, xmlbeansxx::XmlObject &document
 
 
             xmlErrorPtr error = xmlGetLastError();
-            throw new XmlParseException(generateErrorMessage(error));
+            throw XmlParseException(generateErrorMessage(error));
         }
     } else {
         xmlParserInputBufferPtr buf = NULL;
@@ -212,7 +212,7 @@ void LibXMLParser::parse(const std::string &doc, xmlbeansxx::XmlObject &document
 
 
             xmlErrorPtr error = xmlGetLastError();
-            throw new XmlParseException(generateErrorMessage(error));
+            throw XmlParseException(generateErrorMessage(error));
         }
     }
     
@@ -541,14 +541,16 @@ void endElementNs(void *ctx,
 
     if (IMMEDIATE_RETURN)
         return;
-    LOG4CXX_DEBUG2(LOG, std::string("end element ") + (const char *) localname )
     LibXMLParser *parser = (LibXMLParser *) ctx;
 ///    if (INSERT_INTO_CURSOR)
 ///        parser->cursor->pop();
 ///    parser->xmlContext.restore();
     LibXMLParser::StackEl e=parser->nodesStack.top();
     XmlObjectPtr n=e.obj;
+
+
     n->setSimpleContent(e.str);
+    LOG4CXX_DEBUG2(LOG, "added content :" + n->getSimpleContent())
     parser->xmlContext.restore();
     parser->nodesStack.pop();
 
@@ -565,6 +567,8 @@ void characters(void *ctx, const xmlChar *ch, int length) {
 ///       parser->cursor->insertChars(s);
 
     parser->nodesStack.top().str+=s;
+    LOG4CXX_DEBUG2(LOG, "element content:" + s)
+    
 }
 
 void serror(void *ctx, xmlErrorPtr error) {
