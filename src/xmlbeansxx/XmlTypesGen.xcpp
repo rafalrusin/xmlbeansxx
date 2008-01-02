@@ -324,7 +324,7 @@ LOGGER_PTR_SET(XmlInteger::log,"xmlbeansxx.XmlIteger");
 
 void XmlInteger::setSimpleContent(const std::string &value) {
     XmlObject::setSimpleContent(value);
-    setMpzValue(getMpzValue());
+    getMpzValue(); // throw if not valid
 }
 
 XmlInteger::operator int() const {
@@ -346,11 +346,15 @@ mpf_class XmlDecimal::getMpfValue() const {
 }
 
 void XmlDecimal::setMpfValue(const mpf_class &v) {
-    std::ostringstream ss;
-    ss << std::fixed;
     int fd=getSchemaType()->fractionDigits;
-    if (fd!=-1) { ss.precision(fd); }
-    ss << v;
+    std::ostringstream ss;
+    if (fd!=-1) {
+        ss << std::fixed;
+        ss.precision(fd);
+	ss << v;
+    } else {
+        ss << v;
+    }
     XmlObject::setSimpleContent(ss.str());
 }
 
@@ -420,7 +424,7 @@ void XmlDecimal::setByteValue(unsigned char v) {
 
 void XmlDecimal::setSimpleContent(const std::string &value) {
     XmlObject::setSimpleContent(value);
-    setMpfValue(getMpfValue());
+    getMpfValue();
 }
 
 XmlDecimal::operator mpf_class() const {
