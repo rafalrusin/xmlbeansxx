@@ -70,9 +70,9 @@ void namespaceTests() {
         p.setCar2(CarType("3").getSimpleContent());
 
         p.xsetAge(XmlInt());
-        p.xsetMoney(AmountType("10.256789"));
+        p.setMoney(10.256789);
         CPPUNIT_ASSERT(p.xgetMoney().getSimpleContent()==std::string("10.26"));
-        p.xsetMoney(AmountType("10.254789"));
+        p.setMoney(10.254789);
         CPPUNIT_ASSERT(p.xgetMoney().getSimpleContent()==std::string("10.25"));
         //root->serialize(cout);
 	LOG4CXX_DEBUG(logger,std::string("created:\n") + root.toString() + "\n~created\n");
