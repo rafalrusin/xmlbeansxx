@@ -35,7 +35,7 @@
 #include "XercesUtils.h"
 
 
-#include <log4cxx/logger.h>
+#include "logger.h"
 
 
 
@@ -49,7 +49,7 @@ class MySAX2Handler;
 
 class XercesParser : public EmptyParser{
 private:
-    static log4cxx::LoggerPtr log;
+    XMLBEANSXX_STATIC_LOGGER_PTR(log);
     
     std::auto_ptr<XERCES_CPP_NAMESPACE::SAX2XMLReader> sax2;
     friend class MySAX2Handler;
@@ -83,7 +83,7 @@ private:
 
 class MySAX2Handler: public XERCES_CPP_NAMESPACE::DefaultHandler {
 private:
-    static log4cxx::LoggerPtr log;
+    XMLBEANSXX_STATIC_LOGGER_PTR(log);
     XercesParser *parser;
 public:
     MySAX2Handler(XercesParser *p);

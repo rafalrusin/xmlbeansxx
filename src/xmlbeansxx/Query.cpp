@@ -25,18 +25,18 @@
 
 namespace xmlbeansxx {
 
-LOGGER_PTR_SET(QueryExpr::log,"xmlbeansxx.QueryExpr");
+XMLBEANSXX_LOGGER_PTR_SET(QueryExpr::log,"xmlbeansxx.QueryExpr");
 QueryExpr::QueryExpr(QueryNodePtr a,int oper,QueryNodePtr b):a(a),b(b),oper(oper) {}
 
-LOGGER_PTR_SET(QueryNode::log,"xmlbeansxx.QueryNode");
+XMLBEANSXX_LOGGER_PTR_SET(QueryNode::log,"xmlbeansxx.QueryNode");
 
-LOGGER_PTR_SET(QueryString::log,"xmlbeansxx.QueryString");
+XMLBEANSXX_LOGGER_PTR_SET(QueryString::log,"xmlbeansxx.QueryString");
 QueryString::QueryString(const std::string& str):str(str) {}
 
-LOGGER_PTR_SET(QueryAttribute::log,"xmlbeansxx.QueryAttribute");
+XMLBEANSXX_LOGGER_PTR_SET(QueryAttribute::log,"xmlbeansxx.QueryAttribute");
 QueryAttribute::QueryAttribute(const std::string& attrName): attrName(attrName) {}
 
-LOGGER_PTR_SET(QueryElement::log,"xmlbeansxx.QueryElement");
+XMLBEANSXX_LOGGER_PTR_SET(QueryElement::log,"xmlbeansxx.QueryElement");
 QueryElement::QueryElement(const std::string & elemName,QueryNodePtr next): elemName(elemName),next(next) {}
 
 QueryNode::~QueryNode() {}

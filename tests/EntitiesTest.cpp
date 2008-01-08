@@ -14,7 +14,7 @@ using namespace xmlbeansxx;
 using namespace com::p4::mind::mytest;
 
 //log4cxx::LoggerPtr LOG = log4cxx::Logger::getLogger (string("test.EntitiesTest"));
-LOGGER_PTR_SET(LOG,"test.EntitiesTest");
+XMLBEANSXX_LOGGER_PTR_SET(LOG,"test.EntitiesTest");
 
 void EntitiesTest::entitiesTest () {
 
@@ -23,22 +23,22 @@ void EntitiesTest::entitiesTest () {
         
         stringstream ss1;
         ss1 << ifs.rdbuf();
-        LOG4CXX_INFO(LOG,"original: " + ss1.str());
+        XMLBEANSXX_INFO(LOG,"original: " + ss1.str());
         
         NodesDocument doc = NodesDocument::Factory::parse (ss1);
-        LOG4CXX_INFO(LOG,"data: " + doc.getNodes().getNodeArray(0).getData());
+        XMLBEANSXX_INFO(LOG,"data: " + doc.getNodes().getNodeArray(0).getData());
         doc.getNodes().getNodeArray(0).setValue("opi\"sik");
             
         stringstream ss2;
         ss2 << doc.toString();
-        LOG4CXX_INFO(LOG,"after first parsing: \n" + ss2.str());
+        XMLBEANSXX_INFO(LOG,"after first parsing: \n" + ss2.str());
         
         NodesDocument doc2 = NodesDocument::Factory::parse (ss2);
-        LOG4CXX_INFO(LOG,"data: " + doc2.getNodes().getNodeArray(0).getData());
+        XMLBEANSXX_INFO(LOG,"data: " + doc2.getNodes().getNodeArray(0).getData());
 
         stringstream ss3;
         ss3 << doc.toString();
-        LOG4CXX_INFO(LOG,"after second parsing: " + ss3.str());
+        XMLBEANSXX_INFO(LOG,"after second parsing: " + ss3.str());
         
         CPPUNIT_ASSERT_EQUAL (ss2.str(), ss3.str());
         CPPUNIT_ASSERT ( !doc2.getNodes().getNodeArray(0).getData().empty());

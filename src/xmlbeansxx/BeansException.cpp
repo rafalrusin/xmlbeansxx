@@ -27,10 +27,10 @@ namespace xmlbeansxx {
 
 
 
-LOGGER_PTR_SET(BeansException::log,"xmlbeansxx.BeansException");
+XMLBEANSXX_LOGGER_PTR_SET(BeansException::log,"xmlbeansxx.BeansException");
 
 BeansException::BeansException(const std::string msg) throw() :msg(msg) { 
-    LOG4CXX_DEBUG(log,msg);
+    XMLBEANSXX_DEBUG(log,msg);
 }
 
 const char *BeansException::what() const throw() {

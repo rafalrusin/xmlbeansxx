@@ -26,7 +26,7 @@ namespace xmlbeansxx {
 
 class BeansException: public std::exception {
 private:
-    STATIC_LOGGER_PTR(log);
+    XMLBEANSXX_STATIC_LOGGER_PTR(log);
     const std::string msg;
 public:
 

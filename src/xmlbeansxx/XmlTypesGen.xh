@@ -101,7 +101,7 @@ private:
     friend class QueryElement;
     
 protected:
-    STATIC_LOGGER_PTR(log);
+    XMLBEANSXX_STATIC_LOGGER_PTR(log);
     
 public:
     ContentsPtr contents;
@@ -207,7 +207,7 @@ public:
 
 %%class xmlbeansxx::XmlBoolean
 private:
-    STATIC_LOGGER_PTR(log);
+    XMLBEANSXX_STATIC_LOGGER_PTR(log);
 public:
     XmlBoolean(bool value) { setBooleanValue(value); }
     XmlBoolean(const char *value) {
@@ -228,7 +228,7 @@ public:
 
 %%class xmlbeansxx::XmlString
 private:
-    STATIC_LOGGER_PTR(log);
+    XMLBEANSXX_STATIC_LOGGER_PTR(log);
 public:
     operator std::string() const;
     bool operator==(const XmlString &b) const;
@@ -242,7 +242,7 @@ public:
 %%class xmlbeansxx::XmlInteger
 private:
     friend class XmlDecimal;
-    STATIC_LOGGER_PTR(log);
+    XMLBEANSXX_STATIC_LOGGER_PTR(log);
 public:
     XmlInteger(const char *value) {
         setSimpleContent(value);
@@ -306,7 +306,7 @@ public:
 
 %%class xmlbeansxx::XmlDecimal
 private:
-    STATIC_LOGGER_PTR(log);
+    XMLBEANSXX_STATIC_LOGGER_PTR(log);
 public:
     XmlDecimal(const char *value) {
         setSimpleContent(value);
@@ -407,7 +407,7 @@ public:
     //---------------------------------
     //specific methods
 private:
-    STATIC_LOGGER_PTR(log);
+    XMLBEANSXX_STATIC_LOGGER_PTR(log);
 public:
     XmlTime timePart() const;
     XmlDate datePart() const;
@@ -433,7 +433,7 @@ public:
     void setTimeValue(const boost::posix_time::time_duration &d);
 
 private:
-    STATIC_LOGGER_PTR(log);
+    XMLBEANSXX_STATIC_LOGGER_PTR(log);
 
 %%class xmlbeansxx::XmlDate
 public:
@@ -458,7 +458,7 @@ public:
     XmlInteger daysFrom(const XmlDate &from) const;
 
 private:
-    STATIC_LOGGER_PTR(log);
+    XMLBEANSXX_STATIC_LOGGER_PTR(log);
 
 
 %%class xmlbeansxx::XmlGDay

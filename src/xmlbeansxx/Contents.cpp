@@ -44,7 +44,7 @@ using namespace std;
 
 namespace xmlbeansxx {
 
-LOGGER_PTR_SET(Contents::log,"xmlbeansxx.Contents");
+XMLBEANSXX_LOGGER_PTR_SET(Contents::log,"xmlbeansxx.Contents");
 
 //Contents Impl
 

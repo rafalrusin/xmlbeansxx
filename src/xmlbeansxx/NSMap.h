@@ -44,7 +44,7 @@ private:
 	PrefixMapType prefixMap;
 	
 
-	STATIC_LOGGER_PTR(log);
+	XMLBEANSXX_STATIC_LOGGER_PTR(log);
 
 	
 };

@@ -9,13 +9,13 @@ CPPUNIT_TEST_SUITE_REGISTRATION( BeansTest );
 
 void namespaceTests();
 
-LOGGER_PTR_SET(logger,"test.BeansTest");
+XMLBEANSXX_LOGGER_PTR_SET(logger,"test.BeansTest");
 
 void BeansTest::beansTest() {
     try {
         namespaceTests();
     } catch (xmlbeansxx::BeansException e) {
-        LOG4CXX_ERROR(logger,"Exception: "+std::string(e.getMessage()));
+        XMLBEANSXX_ERROR(logger,"Exception: "+std::string(e.getMessage()));
         throw e;
     }
 }
@@ -54,7 +54,7 @@ void namespaceTests() {
         }
         {
             StoreString s("abcdef");
-            LOG4CXX_DEBUG(logger,std::string("HashCode for ") + s + "=" + TextUtils::intToString(s.hashCode()));
+            XMLBEANSXX_DEBUG(logger,std::string("HashCode for ") + s + "=" + TextUtils::intToString(s.hashCode()));
         }
         
     }
@@ -97,7 +97,7 @@ void namespaceTests() {
 
         XmlObject obj=XmlPositiveInteger("10");
         XmlInteger obj2=obj;
-        LOG4CXX_DEBUG(logger,"obj2: "+obj2.getSimpleContent());
+        XMLBEANSXX_DEBUG(logger,"obj2: "+obj2.getSimpleContent());
         CPPUNIT_ASSERT(obj2.getSimpleContent()=="10");
         //XmlDecimalPtr obj3=java_cast<XmlDecimal>(obj);
 
@@ -138,14 +138,14 @@ void namespaceTests() {
 	{
 		ptime pt(date(2002,Jan,10),time_duration(1,2,3));
 		XmlTime t(pt);
-		LOG4CXX_DEBUG(logger,std::string("time: ") + t.getSimpleContent()); 
+		XMLBEANSXX_DEBUG(logger,std::string("time: ") + t.getSimpleContent()); 
 		CPPUNIT_ASSERT(t.getSimpleContent()=="01:02:03");
 		CPPUNIT_ASSERT(t.getTimeValue()==time_duration(1,2,3));
 		CPPUNIT_ASSERT(t.getCalendarValue()==ptime(date(),time_duration(1,2,3)));
 	}
 	{
 		XmlTime t("	01:02:03  ");
-		LOG4CXX_DEBUG(logger,std::string("time: ") + t.getSimpleContent()); 
+		XMLBEANSXX_DEBUG(logger,std::string("time: ") + t.getSimpleContent()); 
 		CPPUNIT_ASSERT(t.getSimpleContent()=="01:02:03");
 		CPPUNIT_ASSERT(t.getTimeValue()==time_duration(1,2,3));
 		CPPUNIT_ASSERT(t.getCalendarValue()==ptime(date(),time_duration(1,2,3)));
@@ -188,7 +188,7 @@ void namespaceTests() {
 	        XmlDate a("   2001-03-24");
 	        boost::gregorian::date d=a.getDateValue();
 	        CPPUNIT_ASSERT(d==boost::gregorian::from_string("2001-3-24"));
-	        LOG4CXX_DEBUG(logger,a.daysFrom(XmlDate(" 2001-01-24\n")).getSimpleContent());
+	        XMLBEANSXX_DEBUG(logger,a.daysFrom(XmlDate(" 2001-01-24\n")).getSimpleContent());
 	        CPPUNIT_ASSERT(a.daysFrom(XmlDate(" 2001-01-24\n"))==XmlInteger("59"));
 	        CPPUNIT_ASSERT(XmlDate("2003-01-01").daysFrom(XmlDate(" 2002-12-30\n"))==XmlInteger("2"));
 	}
@@ -196,7 +196,7 @@ void namespaceTests() {
 	        XmlDate a(date(2001,03,24));
 	        boost::gregorian::date d=a.getDateValue();
 	        CPPUNIT_ASSERT(d==boost::gregorian::from_string("2001-3-24"));
-	        LOG4CXX_DEBUG(logger,a.daysFrom(XmlDate(" 2001-01-24\n")).getSimpleContent());
+	        XMLBEANSXX_DEBUG(logger,a.daysFrom(XmlDate(" 2001-01-24\n")).getSimpleContent());
 	        CPPUNIT_ASSERT(a.daysFrom(XmlDate(" 2001-01-24\n"))==XmlInteger("59"));
 	        CPPUNIT_ASSERT(XmlDate("2003-01-01").daysFrom(XmlDate(" 2002-12-30\n"))==XmlInteger("2"));
 	}
@@ -206,7 +206,7 @@ void namespaceTests() {
     {
         //serialization/parsing
         XmlPositiveInteger x("101"),y;
-        LOG4CXX_DEBUG(logger,x.toString());
+        XMLBEANSXX_DEBUG(logger,x.toString());
         y=XmlPositiveInteger::Factory::parse(x.toString());
         CPPUNIT_ASSERT(x.getSimpleContent()==y.getSimpleContent());
 
@@ -214,13 +214,13 @@ void namespaceTests() {
         ar.setArray(0,XmlPositiveInteger("102"));
         ar.setArray(1,XmlPositiveInteger("103"));
         ar.setArray(2,XmlPositiveInteger("104"));
-        LOG4CXX_DEBUG(logger,"XmlArray ar: " + ar.toString(XmlOptions::serializeTypes()));
-        LOG4CXX_DEBUG(logger,"!a");
+        XMLBEANSXX_DEBUG(logger,"XmlArray ar: " + ar.toString(XmlOptions::serializeTypes()));
+        XMLBEANSXX_DEBUG(logger,"!a");
         ar2=XmlObject::Factory::parse(ar.toString(XmlOptions::serializeTypes()));
-        LOG4CXX_DEBUG(logger,"XmlArray ar2: " + ar2.toString());
+        XMLBEANSXX_DEBUG(logger,"XmlArray ar2: " + ar2.toString());
 	
-	LOG4CXX_DEBUG(logger,"XmlArray ar2 dump: " + Contents::Walker::dump(ar2.contents));
-        LOG4CXX_DEBUG(logger,"!b");
+	XMLBEANSXX_DEBUG(logger,"XmlArray ar2 dump: " + Contents::Walker::dump(ar2.contents));
+        XMLBEANSXX_DEBUG(logger,"!b");
         CPPUNIT_ASSERT(ar2.getArray(0).getSimpleContent()=="102");
         CPPUNIT_ASSERT(ar2.getArray(1).getSimpleContent()=="103");
         CPPUNIT_ASSERT(ar2.getArray(2).getSimpleContent()=="104");
@@ -233,17 +233,17 @@ void namespaceTests() {
         a.append(XmlInteger("101"));
         a.append(XmlPositiveInteger("102"));
         a.append(XmlInteger("103"));
-        LOG4CXX_DEBUG(logger,"!1");
+        XMLBEANSXX_DEBUG(logger,"!1");
         c=xmlarray_java_cast<XmlObject>(a);
-        LOG4CXX_DEBUG(logger,"!2");
+        XMLBEANSXX_DEBUG(logger,"!2");
         b=xmlarray_java_cast<XmlPositiveInteger>(a);
-        LOG4CXX_DEBUG(logger,"!3");
-        LOG4CXX_DEBUG(logger,a.toString());
-        LOG4CXX_DEBUG(logger,"!4");
-        LOG4CXX_DEBUG(logger,b.toString());
-        LOG4CXX_DEBUG(logger,std::string(a.getArray(0).getSchemaType()->className));
-        LOG4CXX_DEBUG(logger,std::string(a.getArray(1).getSchemaType()->className));
-        LOG4CXX_DEBUG(logger,std::string(a.getArray(2).getSchemaType()->className));
+        XMLBEANSXX_DEBUG(logger,"!3");
+        XMLBEANSXX_DEBUG(logger,a.toString());
+        XMLBEANSXX_DEBUG(logger,"!4");
+        XMLBEANSXX_DEBUG(logger,b.toString());
+        XMLBEANSXX_DEBUG(logger,std::string(a.getArray(0).getSchemaType()->className));
+        XMLBEANSXX_DEBUG(logger,std::string(a.getArray(1).getSchemaType()->className));
+        XMLBEANSXX_DEBUG(logger,std::string(a.getArray(2).getSchemaType()->className));
         CPPUNIT_ASSERT(std::string(a.getArray(0).getSchemaType()->className)=="xmlbeansxx::XmlInteger");
         CPPUNIT_ASSERT(std::string(a.getArray(1).getSchemaType()->className)=="xmlbeansxx::XmlPositiveInteger");
         CPPUNIT_ASSERT(std::string(a.getArray(2).getSchemaType()->className)=="xmlbeansxx::XmlInteger");
@@ -260,8 +260,8 @@ void namespaceTests() {
         b->append(XmlPositiveIntegerPtr(new XmlPositiveInteger("102")));
         b->append(XmlIntegerPtr(new XmlInteger("103")));
 
-        LOG4CXX_DEBUG(logger,a->digest().getSimpleContent());
-        LOG4CXX_DEBUG(logger,b->digest().getSimpleContent());
+        XMLBEANSXX_DEBUG(logger,a->digest().getSimpleContent());
+        XMLBEANSXX_DEBUG(logger,b->digest().getSimpleContent());
         CPPUNIT_ASSERT(a->digest()==b->digest());
         b->append(XmlIntegerPtr(new XmlInteger("103")));
         CPPUNIT_ASSERT(a->digest()!=b->digest());
@@ -275,14 +275,14 @@ void namespaceTests() {
         a[2]='c';
 
         std::string s=TextUtils::base64Encode(a);
-        LOG4CXX_DEBUG(logger,"str size:" + TextUtils::intToString(a.size()));
-        LOG4CXX_DEBUG(logger,"Base64 size:" + TextUtils::intToString(s.size()));
-        LOG4CXX_DEBUG(logger,"Base64:" + s);
+        XMLBEANSXX_DEBUG(logger,"str size:" + TextUtils::intToString(a.size()));
+        XMLBEANSXX_DEBUG(logger,"Base64 size:" + TextUtils::intToString(s.size()));
+        XMLBEANSXX_DEBUG(logger,"Base64:" + s);
         CPPUNIT_ASSERT(TextUtils::collapse(s)==std::string("YWJj"));
 
         XmlBase64Binary b=XmlBase64Binary::Factory::newInstance();
         b.setByteArrayValue(a);
-        LOG4CXX_DEBUG(logger,"Base64 xml:" + b.toString());
+        XMLBEANSXX_DEBUG(logger,"Base64 xml:" + b.toString());
         CPPUNIT_ASSERT(b.getByteArrayValue()[0]=='a');
         CPPUNIT_ASSERT(b.getByteArrayValue()[1]=='b');
         CPPUNIT_ASSERT(b.getByteArrayValue()[2]=='c');
@@ -306,9 +306,9 @@ void namespaceTests() {
     
     	XmlString test;
     	XmlString test2("test");
-        LOG4CXX_DEBUG(logger,"NULL ptr:" + std::string(bool(test)? "true" : "false"));
+        XMLBEANSXX_DEBUG(logger,"NULL ptr:" + std::string(bool(test)? "true" : "false"));
         CPPUNIT_ASSERT(!test);
-        LOG4CXX_DEBUG(logger,"NULL ptr:" + std::string(bool(test2)? "true" : "false"));
+        XMLBEANSXX_DEBUG(logger,"NULL ptr:" + std::string(bool(test2)? "true" : "false"));
         CPPUNIT_ASSERT(test2);
 	
     }

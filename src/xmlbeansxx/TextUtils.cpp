@@ -36,7 +36,7 @@
 #include <xercesc/framework/MemBufFormatTarget.hpp>
 
 #define TRACER2(a,b) 
-#define LOG4CXX_DEBUG2(a,b)
+#define XMLBEANSXX_DEBUG2(a,b)
 
 
 using namespace std;
@@ -47,7 +47,7 @@ XERCES_CPP_NAMESPACE_USE
 
 namespace xmlbeansxx {
 
-  LOGGER_PTR_SET(TextUtils::log,"xmlbeansxx.TextUtils");
+  XMLBEANSXX_LOGGER_PTR_SET(TextUtils::log,"xmlbeansxx.TextUtils");
 
   TextUtils::TextUtils() {}
 
@@ -87,16 +87,16 @@ namespace xmlbeansxx {
 
   std::string TextUtils::collapse(const std::string &str) {
     TRACER2(log,"collapse");
-    LOG4CXX_DEBUG2(log,std::string("str:")+str);
+    XMLBEANSXX_DEBUG2(log,std::string("str:")+str);
     int l=str.size();
     int a=0,b=l-1;
     while (a<l && isWhite(str[a])) a++;
     while (b>=0 && isWhite(str[b])) b--;
     if (a>=l || b<a) {
-      LOG4CXX_DEBUG2(log,"ret:");
+      XMLBEANSXX_DEBUG2(log,"ret:");
       return std::string("");
     } else {
-      LOG4CXX_DEBUG2(log,std::string("ret:")+str.substr(a,b-a+1));
+      XMLBEANSXX_DEBUG2(log,std::string("ret:")+str.substr(a,b-a+1));
       return str.substr(a,b-a+1);
     }
   }
@@ -136,7 +136,7 @@ namespace xmlbeansxx {
         string res(s);
         XMLString::release(&s);
         
-        LOG4CXX_DEBUG(log,std::string("res:") + res);
+        XMLBEANSXX_DEBUG(log,std::string("res:") + res);
         return res; 
 #endif
 }

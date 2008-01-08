@@ -25,7 +25,7 @@
 namespace xmlbeansxx {
 class TextUtils {
 private:
-    STATIC_LOGGER_PTR(log);
+    XMLBEANSXX_STATIC_LOGGER_PTR(log);
 
     TextUtils();
 

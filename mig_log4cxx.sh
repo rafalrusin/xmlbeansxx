@@ -1,0 +1,27 @@
+#xmlbeansxx migration script
+if [ $# -eq 0 ]; then cat <<EOF
+	Usage:
+	$0 file_name
+EOF
+exit 1
+fi
+cp $1 $1.bk
+cat $1.bk \
+| sed "s/\LOG4CXX_DEBUG/XMLBEANSXX_DEBUG/g" \
+| sed "s/\LOG4CXX_DEBUG2/XMLBEANSXX_DEBUG2/g" \
+| sed "s/\LOG4CXX_INFO/XMLBEANSXX_INFO/g" \
+| sed "s/\LOG4CXX_ERROR/XMLBEANSXX_ERROR/g" \
+ \
+| sed "s/\([^_]\)LOGGER_PTR/\1XMLBEANSXX_LOGGER_PTR/g" \
+| sed "s/\([^_]\)STATIC_LOGGER_PTR/\1XMLBEANSXX_STATIC_LOGGER_PTR/g" \
+| sed "s/\([^_]\)GET_LOGGER/\1XMLBEANSXX_GET_LOGGER/g" \
+| sed "s/\([^_]\)STATIC_LOGGER_PTR_SET/\1XMLBEANSXX_STATIC_LOGGER_PTR_SET/g" \
+| sed "s/\([^_]\)LOGGER_PTR_SET/\1XMLBEANSXX_LOGGER_PTR_SET/g" \
+ \
+| sed "s/^LOGGER_PTR/XMLBEANSXX_LOGGER_PTR/g" \
+| sed "s/^STATIC_LOGGER_PTR/XMLBEANSXX_STATIC_LOGGER_PTR/g" \
+| sed "s/^GET_LOGGER/XMLBEANSXX_GET_LOGGER/g" \
+| sed "s/^STATIC_LOGGER_PTR_SET/XMLBEANSXX_STATIC_LOGGER_PTR_SET/g" \
+| sed "s/^LOGGER_PTR_SET/XMLBEANSXX_LOGGER_PTR_SET/g" \
+| cat - >$1
+

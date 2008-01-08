@@ -10,13 +10,13 @@
 void namespaceTests();
 
 //log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger(std::string("mem01"));
-LOGGER_PTR_SET(logger,"mem01");
+XMLBEANSXX_LOGGER_PTR_SET(logger,"mem01");
 
 int main() {
     try {
         namespaceTests();
     } catch (xmlbeansxx::BeansException e) {
-        LOG4CXX_ERROR(logger,"Exception: "+std::string(e.getMessage()));
+        XMLBEANSXX_ERROR(logger,"Exception: "+std::string(e.getMessage()));
         throw e;
     }
 	return 0;
@@ -73,7 +73,7 @@ void namespaceTests() {
             double t2 = currentTime();
             cerr << "Duration: " << t2-t1 << " sec." << " " << 1./(t2-t1) << " per second" << endl;
         } catch (BeansException &ex) {
-		    //LOG4CXX_DEBUG(logger,"Exception: " << ex.getMessage());
+		    //XMLBEANSXX_DEBUG(logger,"Exception: " << ex.getMessage());
             //log4cxx::logstream s(logger, log4cxx::Level::DEBUG);
             //s << "xx";
             //log4cxx::logstream(logger, log4cxx::Level::DEBUG) << (ex.getMessage());

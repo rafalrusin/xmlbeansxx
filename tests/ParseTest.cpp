@@ -15,7 +15,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( ParseTest );
 void namespaceTests();
 void parsing();
 
-LOGGER_PTR_SET(logger,"test.ParserTest");
+XMLBEANSXX_LOGGER_PTR_SET(logger,"test.ParserTest");
 //log4cxx::logstream LOG_DEBUG(log4cxx::Logger::getLogger(std::string("test.GenTest")), log4cxx::Level::DEBUG);
 
 
@@ -43,12 +43,12 @@ void ParseTest::parseTest() {
 			//Test 2 times
 		       	try {
 	        		ifstream in("bad_c.xml");
-			        LOG4CXX_DEBUG(logger, "parsing bad_c.xml");
+			        XMLBEANSXX_DEBUG(logger, "parsing bad_c.xml");
 	       			p.parse(in,doc);
-		        	LOG4CXX_ERROR(logger, "bad_c.xml parsed !!!");
+		        	XMLBEANSXX_ERROR(logger, "bad_c.xml parsed !!!");
 				CPPUNIT_ASSERT(false);
 	    		}catch (xmlbeansxx::XmlParseException & e) {
-				LOG4CXX_DEBUG(logger, std::string("EXCEPTION: ") + e.what());
+				XMLBEANSXX_DEBUG(logger, std::string("EXCEPTION: ") + e.what());
 				std::string cmp = "Xml:While parsing: Xerces-c error: At line 4, char 64, Unknown element 'test2:firstname', std";
 				CPPUNIT_ASSERT_EQUAL(std::string(e.what()),cmp);
 			}
@@ -58,12 +58,12 @@ void ParseTest::parseTest() {
 	
 	       	{
 	        	ifstream in("c.xml");
-		        LOG4CXX_DEBUG(logger, "parsing c.xml");
+		        XMLBEANSXX_DEBUG(logger, "parsing c.xml");
 	       		p.parse(in,doc);
-			LOG4CXX_DEBUG(logger, "dump:" + Contents::Walker::dump(doc.contents));
+			XMLBEANSXX_DEBUG(logger, "dump:" + Contents::Walker::dump(doc.contents));
 	    	}
 		std::string str=doc.toString();
-	        LOG4CXX_DEBUG(logger, "parsed c.xml:" + str);
+	        XMLBEANSXX_DEBUG(logger, "parsed c.xml:" + str);
 		std::string cmp = 
 		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 		"<test2:content xmlns:test2=\"http://mind.p4.com/mytest\" xmlns:test3=\"http://mind.p4.com/mytest\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
@@ -102,7 +102,7 @@ void ParseTest::parseTest() {
 		
 		ZakupyDocument z = o;
 		std::string infoSchema=z.getZakupy().getInfo().getSchemaType()->name;
-	        LOG4CXX_DEBUG(logger, "z.getZakupy().getInfo().getSchemaType()->name: " + infoSchema);
+	        XMLBEANSXX_DEBUG(logger, "z.getZakupy().getInfo().getSchemaType()->name: " + infoSchema);
 		std::string cmp = "anyType@http://www.w3.org/2001/XMLSchema";
 		CPPUNIT_ASSERT_EQUAL(cmp,infoSchema);
 		XmlObject info= z.getZakupy().getInfo();
@@ -110,12 +110,12 @@ void ParseTest::parseTest() {
 		int size = infoE.size();
 		CPPUNIT_ASSERT_EQUAL(size,1);
 		std::string infoESchema=infoE[0].second->st->name;
-	        LOG4CXX_DEBUG(logger, "info element SchemaType name: " + infoESchema);
+	        XMLBEANSXX_DEBUG(logger, "info element SchemaType name: " + infoESchema);
 		std::string cmp2 = "ala__ZakupyDocument_Zakupy@http://xmlbeansxx.touk.pl/xmlbeansxx/innerType";
 		CPPUNIT_ASSERT_EQUAL(cmp2,infoESchema);
 		
 		ZakupyDocument z2(info);
-	        LOG4CXX_DEBUG(logger, "zakupy: " + z2.toString());		
+	        XMLBEANSXX_DEBUG(logger, "zakupy: " + z2.toString());		
 	}
 
 	// cast => serialize <-> parse of anyType
@@ -137,16 +137,16 @@ void ParseTest::parseTest() {
 		"	</info>"
 		"</cos>");
 		
-	        LOG4CXX_DEBUG(logger, "Document: " + o.toString(XmlOptions::serializeInnerTypes()));
+	        XMLBEANSXX_DEBUG(logger, "Document: " + o.toString(XmlOptions::serializeInnerTypes()));
 		XmlObject k = o.selectPath("/*/*:klient").front();
 		std::string k_str=k.toString();
-	        LOG4CXX_DEBUG(logger, "klient: " + k_str);
+	        XMLBEANSXX_DEBUG(logger, "klient: " + k_str);
 		Klient k3 = Klient::Factory::newInstance();
-	        LOG4CXX_DEBUG(logger, "klient3: " + k3.toString());
+	        XMLBEANSXX_DEBUG(logger, "klient3: " + k3.toString());
 		
 		
 		Klient k2=Klient::Factory::parse(k_str);
-	        LOG4CXX_DEBUG(logger, "klient2: " + k2.toString());
+	        XMLBEANSXX_DEBUG(logger, "klient2: " + k2.toString());
 	}
 	{
 		XmlObject s=XmlString::Factory::parse("<test> something </test>");
@@ -156,7 +156,7 @@ void ParseTest::parseTest() {
 			"<a:xml-fragment xsi:type=\"b:string\" xmlns:a=\"http://xmlbeans.apache.org/definitions\" xmlns:b=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"\
 				" something "
 			"</a:xml-fragment>\n";
-		LOG4CXX_DEBUG(logger, "something: " + s_str);
+		XMLBEANSXX_DEBUG(logger, "something: " + s_str);
 		CPPUNIT_ASSERT_EQUAL(s_str,s_equ);
 	}
 	{
@@ -166,7 +166,7 @@ void ParseTest::parseTest() {
 			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 			"<test> something </test>\n";
 	        		
-		LOG4CXX_DEBUG(logger, "something: " + s_str);
+		XMLBEANSXX_DEBUG(logger, "something: " + s_str);
 		CPPUNIT_ASSERT_EQUAL(s_str,s_equ);
 	}
 	{
@@ -176,7 +176,7 @@ void ParseTest::parseTest() {
 			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 			"<test2/>\n";
 	        		
-		LOG4CXX_DEBUG(logger, "something: " + s_str);
+		XMLBEANSXX_DEBUG(logger, "something: " + s_str);
 		CPPUNIT_ASSERT_EQUAL(s_str,s_equ);
 	}
 	
@@ -188,7 +188,7 @@ void ParseTest::parseTest() {
 			"<a:xml-fragment xsi:type=\"b:string\" xmlns:a=\"http://xmlbeans.apache.org/definitions\" xmlns:b=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"\
 				" something "
 			"</a:xml-fragment>\n";
-		LOG4CXX_DEBUG(logger, "something: " + s_str);
+		XMLBEANSXX_DEBUG(logger, "something: " + s_str);
 		CPPUNIT_ASSERT_EQUAL(s_str,s_equ);
 	}
 */	

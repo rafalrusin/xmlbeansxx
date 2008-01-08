@@ -50,7 +50,7 @@ DECLARE_PTR_CODE(std::string,StringPtr,constStringPtr)
 
 
 %%class xmlbeansxx::XmlObject
-LOGGER_PTR_SET(XmlObject::log,"xmlbeansxx.XmlObject");
+XMLBEANSXX_LOGGER_PTR_SET(XmlObject::log,"xmlbeansxx.XmlObject");
 
 
 void XmlObject::createContents()
@@ -215,11 +215,11 @@ void XmlAnySimpleType::setStringValue(const std::string &v) {
 
 
 %%class xmlbeansxx::XmlBoolean
-LOGGER_PTR_SET(XmlBoolean::log,"xmlbeansxx.XmlBoolean");
+XMLBEANSXX_LOGGER_PTR_SET(XmlBoolean::log,"xmlbeansxx.XmlBoolean");
 
 bool XmlBoolean::getBooleanValue() const {
     TRACER(log,"getBooleanValue");
-    LOG4CXX_DEBUG(log,"value:"+getSimpleContent());
+    XMLBEANSXX_DEBUG(log,"value:"+getSimpleContent());
     std::string s = getSimpleContent();
 //    std::transform(s.begin(), s.end(), s.begin(), tolower);
     boost::to_lower(s);
@@ -229,7 +229,7 @@ bool XmlBoolean::getBooleanValue() const {
     } else if (s=="1") {
         boolVal=true;
     } else if (s=="false") {
-        LOG4CXX_DEBUG(log,"is false"); boolVal=false;
+        XMLBEANSXX_DEBUG(log,"is false"); boolVal=false;
     } else if (s=="true") {
         boolVal=true;
     } else throw XmlIllegalValueException("xs:boolean",getSimpleContent());
@@ -268,7 +268,7 @@ XmlBoolean::operator bool() const {
 }
 
 %%class xmlbeansxx::XmlString
-LOGGER_PTR_SET(XmlString::log,"xmlbeansxx.XmlString");
+XMLBEANSXX_LOGGER_PTR_SET(XmlString::log,"xmlbeansxx.XmlString");
 
 
 XmlString::operator std::string() const {
@@ -320,7 +320,7 @@ int XmlString::length() const {
 }
 
 %%class xmlbeansxx::XmlInteger
-LOGGER_PTR_SET(XmlInteger::log,"xmlbeansxx.XmlIteger");
+XMLBEANSXX_LOGGER_PTR_SET(XmlInteger::log,"xmlbeansxx.XmlIteger");
 
 void XmlInteger::setSimpleContent(const std::string &value) {
     XmlObject::setSimpleContent(value);
@@ -335,7 +335,7 @@ XmlInteger::operator mpz_class() const {
 }
 
 %%class xmlbeansxx::XmlDecimal
-LOGGER_PTR_SET(XmlDecimal::log,"xmlbeansxx.XmlDecimal");
+XMLBEANSXX_LOGGER_PTR_SET(XmlDecimal::log,"xmlbeansxx.XmlDecimal");
 
 mpf_class XmlDecimal::getMpfValue() const {
     TRACER(log,"getMpfValue");
@@ -432,7 +432,7 @@ XmlDecimal::operator mpf_class() const {
 }
 
 %%class xmlbeansxx::XmlDateTime
-LOGGER_PTR_SET(XmlDateTime::log,"xmlbeansxx.XmlDateTime");
+XMLBEANSXX_LOGGER_PTR_SET(XmlDateTime::log,"xmlbeansxx.XmlDateTime");
 
 XmlDateTime::XmlDateTime(const boost::posix_time::ptime &pt) {
     setCalendarValue(pt);
@@ -493,7 +493,7 @@ void XmlDateTime::setCalendarValue(const boost::posix_time::ptime &v) {
 }
 
 %%class xmlbeansxx::XmlTime
-LOGGER_PTR_SET(XmlTime::log,"xmlbeansxx.XmlTime");
+XMLBEANSXX_LOGGER_PTR_SET(XmlTime::log,"xmlbeansxx.XmlTime");
 
 
 XmlTime::XmlTime(const boost::posix_time::ptime &pt) {
@@ -540,7 +540,7 @@ void XmlTime::setCalendarValue(const boost::posix_time::ptime & v) {
 }
 
 %%class xmlbeansxx::XmlDate
-LOGGER_PTR_SET(XmlDate::log,"xmlbeansxx.XmlDate");
+XMLBEANSXX_LOGGER_PTR_SET(XmlDate::log,"xmlbeansxx.XmlDate");
 
 XmlDate::XmlDate(const boost::posix_time::ptime &pt) {
     setCalendarValue(pt);
@@ -677,7 +677,7 @@ void XmlQName::setQNameValue(boost::shared_ptr<xmlbeansxx::QName> v) {
 %%class xmlbeansxx::XmlFloat
 float XmlFloat::getFloatValue() const {
   TRACER(log,"getFloatValue");
-  LOG4CXX_DEBUG(log,"value:"+getSimpleContent());
+  XMLBEANSXX_DEBUG(log,"value:"+getSimpleContent());
   std::istringstream iss(getSimpleContent());
   float floatVal;
   iss >> floatVal;
@@ -697,7 +697,7 @@ void XmlFloat::setFloatValue(float v) {
 %%class xmlbeansxx::XmlDouble
 double XmlDouble::getDoubleValue() const {
   TRACER(log,"getDoubleValue");
-  LOG4CXX_DEBUG(log,"value:"+getSimpleContent());
+  XMLBEANSXX_DEBUG(log,"value:"+getSimpleContent());
   std::istringstream iss(getSimpleContent());
   double doubleVal;
   iss >> doubleVal;

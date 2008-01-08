@@ -20,7 +20,8 @@
 
 //#include "config_auto.h"
 
-//#ifdef HAVE_LIBLOG4CXX
+#define HAVE_LIBLOG4CXX
+#ifdef  HAVE_LIBLOG4CXX
 
 #include <log4cxx/logger.h>
 
@@ -33,30 +34,43 @@
 #undef PACKAGE_BUGREPORT
 #undef PACKAGE
 
-#define LOGGER_PTR(name) log4cxx::LoggerPtr name
-#define STATIC_LOGGER_PTR(name) static LOGGER_PTR(name)
-#define GET_LOGGER(string) log4cxx::Logger::getLogger(string)
-#define STATIC_LOGGER_PTR_SET(name,string) STATIC_LOGGER_PTR(name) = GET_LOGGER(string)
-#define LOGGER_PTR_SET(name,string) LOGGER_PTR(name) = GET_LOGGER(string)
+
+#define XMLBEANSXX_LOGGING 1
+
+
+#define XMLBEANSXX_LOGGER_PTR(name) log4cxx::LoggerPtr name
+#define XMLBEANSXX_STATIC_LOGGER_PTR(name) static XMLBEANSXX_LOGGER_PTR(name)
+#define XMLBEANSXX_GET_LOGGER(string) log4cxx::Logger::getLogger(string)
+#define XMLBEANSXX_STATIC_LOGGER_PTR_SET(name,string) XMLBEANSXX_STATIC_LOGGER_PTR(name) = XMLBEANSXX_GET_LOGGER(string)
+#define XMLBEANSXX_LOGGER_PTR_SET(name,string) XMLBEANSXX_LOGGER_PTR(name) = XMLBEANSXX_GET_LOGGER(string)
+
+#define XMLBEANSXX_FATAL(logger,string)  LOG4CXX_FATAL(logger,string)
+#define XMLBEANSXX_DEBUG(logger,string)  LOG4CXX_DEBUG(logger,string)
+#define XMLBEANSXX_INFO(logger,string)   LOG4CXX_INFO(logger,string)
+#define XMLBEANSXX_ERROR(logger,string)  LOG4CXX_ERROR(logger,string)
+#define XMLBEANSXX_WARN(logger,string)  LOG4CXX_WARN(logger,string)
+
     
-/*#else // HAVE_LIBLOG4CXX
+#else // HAVE_LIBLOG4CXX
 
-#define LOGGER_PTR(name) 
-#define STATIC_LOGGER_PTR(name) 
-#define GET_LOGGER(string)
-#define STATIC_LOGGER_PTR_SET(name,string) 
-#define LOGGER_PTR_SET(name,string)
+#undef XMLBEANSXX_LOGGING
 
+#define XMLBEANSXX_LOGGER_PTR(name)
+#define XMLBEANSXX_STATIC_LOGGER_PTR(name)
+#define XMLBEANSXX_GET_LOGGER(string)
+#define XMLBEANSXX_STATIC_LOGGER_PTR_SET(name,string)
+#define XMLBEANSXX_LOGGER_PTR_SET(name,string)
 
-#define TRACER(logger,string)
-#define LOG4CXX_FATAL(logger,string)
-#define LOG4CXX_DEBUG(logger,string)
-#define LOG4CXX_INFO(logger,string)
-#define LOG4CXX_ERROR(logger,string)
+#define XMLBEANSXX_FATAL(logger,string)
+#define XMLBEANSXX_DEBUG(logger,string)
+#define XMLBEANSXX_INFO(logger,string) 
+#define XMLBEANSXX_ERROR(logger,string)
+#define XMLBEANSXX_WARN(logger,string) 
+
 
 
 
 #endif // HAVE_LIBLOG4CXX
-*/
+
 
 #endif

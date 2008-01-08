@@ -87,7 +87,7 @@ private:
 	}
 };
 
-LOGGER_PTR_SET(log,"xmlbeansxx.XPath");
+XMLBEANSXX_LOGGER_PTR_SET(log,"xmlbeansxx.XPath");
 
 class Path {
 public:
@@ -107,10 +107,10 @@ public:
 		if(path.size()<=0) return *this;
 		std::pair<std::string, std::string> part = getXPathPart(path);
 		int size=obj.size();
-		LOG4CXX_DEBUG(log,std::string("XmlObjects in buffer:") + TextUtils::intToString(size));
+		XMLBEANSXX_DEBUG(log,std::string("XmlObjects in buffer:") + TextUtils::intToString(size));
 
 		if (size<=0) {
-			LOG4CXX_DEBUG(log,"no more XmlObjects in buffer");
+			XMLBEANSXX_DEBUG(log,"no more XmlObjects in buffer");
 			return *this;
 		}
 		std::pair<std::string, std::string> pred = getXPathPredicat(part.first);
@@ -165,11 +165,11 @@ private:
 		std::string sub=str;
 		std::string::size_type p;
 		while((p = sub.find(t)) != std::string::npos) {
-			LOG4CXX_DEBUG(log,"tokenize: " + sub.substr(0,p));
+			XMLBEANSXX_DEBUG(log,"tokenize: " + sub.substr(0,p));
 			retu.push_back(sub.substr(0,p));
 			sub = sub.substr(p+t.size());
 		}
-		LOG4CXX_DEBUG(log,"tokenize: " + sub);
+		XMLBEANSXX_DEBUG(log,"tokenize: " + sub);
 		retu.push_back(sub);		
 		return retu;
 	}
@@ -183,7 +183,7 @@ private:
 		if(qn.find(tab.front())!=0) return false;
 		std::string sub=qn;
 		XMLBEANSXX_FOREACH(std::vector<std::string>::const_iterator,i,tab) {
-//			LOG4CXX_DEBUG(log,"submatch: " + sub  + " ~= " + *i);
+//			XMLBEANSXX_DEBUG(log,"submatch: " + sub  + " ~= " + *i);
 			int p = sub.find(*i);
 			if(p<0) return false;
 			sub = sub.substr(p+i->size());
@@ -198,12 +198,12 @@ private:
 
 	Path doPredicat(const std::string& pred) {
 		if(pred.size() <= 0) return *this;
-		LOG4CXX_DEBUG(log,std::string("doPredicat: ") + pred);
+		XMLBEANSXX_DEBUG(log,std::string("doPredicat: ") + pred);
 		Path p(ns,create);
 		stringstream s(pred);
 		int pos=0; 
 		s >> pos;
-		LOG4CXX_DEBUG(log,std::string("selecting: ") + TextUtils::intToString(pos));		
+		XMLBEANSXX_DEBUG(log,std::string("selecting: ") + TextUtils::intToString(pos));		
 		p.addXmlObject(obj[pos]);
 		return p;
 	}
@@ -211,7 +211,7 @@ private:
 	Path doPart(const std::string& part) {
 		Path p(ns,create);
 
-		LOG4CXX_DEBUG(log,"doPart: " + part);
+		XMLBEANSXX_DEBUG(log,"doPart: " + part);
 		if (part.size()<=0) { 
 			return *this;
 		} else if (part == ".") {
@@ -233,10 +233,10 @@ private:
 				XMLBEANSXX_FOREACH(Contents::Walker::ElemsType::const_iterator,e,elems) {
 					QName elemName=e->first;
 					std::string elemMatch = _getQNameString(elemName);
-					LOG4CXX_DEBUG(log,"element matching: "  + elemMatch + " ~= " + partMatch);
+					XMLBEANSXX_DEBUG(log,"element matching: "  + elemMatch + " ~= " + partMatch);
 					
 					if(matchQNameString(elemMatch, tab)) {
-						LOG4CXX_DEBUG(log,"element matched: "   + elemMatch  + " ~= " + partMatch);
+						XMLBEANSXX_DEBUG(log,"element matched: "   + elemMatch  + " ~= " + partMatch);
 						try {
 							p.addXmlObject(XmlObject(e->second));
 						} catch(...) {}
@@ -265,13 +265,13 @@ std::vector<XmlObject> XmlObject::selectPath(const std::string& path) {
 }
 
 std::vector<XmlObject> XmlObject::selectPath(const NSMap& ns,const std::string& path) {
-	LOG4CXX_DEBUG(log,"selectPath start:");
-	LOG4CXX_DEBUG(log,"selectPath ns:"  + ns.toString());
-	LOG4CXX_DEBUG(log,"selectPath xpath:"  + path);
+	XMLBEANSXX_DEBUG(log,"selectPath start:");
+	XMLBEANSXX_DEBUG(log,"selectPath ns:"  + ns.toString());
+	XMLBEANSXX_DEBUG(log,"selectPath xpath:"  + path);
 	Path p(ns);
 	p.addXmlObject(*this);
 	Path retu = p.getPath(path);
-	LOG4CXX_DEBUG(log,std::string("selectPath end: ")  + TextUtils::intToString(retu.obj.size()));
+	XMLBEANSXX_DEBUG(log,std::string("selectPath end: ")  + TextUtils::intToString(retu.obj.size()));
 	return retu.obj;
 }
 
@@ -282,13 +282,13 @@ const std::vector<XmlObject> XmlObject::selectPath(const std::string& path) cons
 }
 
 const std::vector<XmlObject> XmlObject::selectPath(const NSMap& ns,const std::string& path) const {
-	LOG4CXX_DEBUG(log,"selectPath start:");
-	LOG4CXX_DEBUG(log,"selectPath ns:"  + ns.toString());
-	LOG4CXX_DEBUG(log,"selectPath xpath:"  + path);
+	XMLBEANSXX_DEBUG(log,"selectPath start:");
+	XMLBEANSXX_DEBUG(log,"selectPath ns:"  + ns.toString());
+	XMLBEANSXX_DEBUG(log,"selectPath xpath:"  + path);
 	Path p(ns);
 	p.addXmlObject(*this);
 	Path retu = p.getPath(path);
-	LOG4CXX_DEBUG(log,std::string("selectPath end: ")  + TextUtils::intToString(retu.obj.size()));
+	XMLBEANSXX_DEBUG(log,std::string("selectPath end: ")  + TextUtils::intToString(retu.obj.size()));
 	return retu.obj;
 }
 
@@ -302,15 +302,15 @@ std::vector<XmlObject> XmlObject::cselectPath(const std::string& path) {
 
 // Not implemented 
 std::vector<XmlObject> XmlObject::cselectPath(const NSMap& ns,const std::string& path) {
-	LOG4CXX_DEBUG(log,"cselectPath start:");
-	LOG4CXX_DEBUG(log,"cselectPath ns:"  + ns.toString());
-	LOG4CXX_DEBUG(log,"cselectPath xpath:"  + path);
+	XMLBEANSXX_DEBUG(log,"cselectPath start:");
+	XMLBEANSXX_DEBUG(log,"cselectPath ns:"  + ns.toString());
+	XMLBEANSXX_DEBUG(log,"cselectPath xpath:"  + path);
 /* 	Path p(ns,true);
 	p.addXmlObject(*this);
 	Path retu = p.getPath(path);
 */
 	throw NotImplementedException("cselectPath not implemented.");
-//	LOG4CXX_DEBUG(log,"cselectPath end: "  + retu.obj.size());	
+//	XMLBEANSXX_DEBUG(log,"cselectPath end: "  + retu.obj.size());	
 //	return retu.obj;
 }
 

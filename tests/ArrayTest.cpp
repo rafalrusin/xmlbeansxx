@@ -9,7 +9,7 @@
 CPPUNIT_TEST_SUITE_REGISTRATION( ArrayTest );
 
 
-LOGGER_PTR_SET(logger,"test.ArrayTest");
+XMLBEANSXX_LOGGER_PTR_SET(logger,"test.ArrayTest");
 
 
 using namespace xmlbeansxx;
@@ -24,18 +24,18 @@ void ArrayTest::arrayTest()
 		XmlArray<XmlPositiveInteger> b;
         	XmlArray<XmlObject>  c;
 	        a.append(XmlInteger("101")).append(XmlPositiveInteger("102")).append(XmlInteger("103"));
-        	LOG4CXX_DEBUG(logger,"!1");
-	        LOG4CXX_DEBUG(logger,a.toString());
+        	XMLBEANSXX_DEBUG(logger,"!1");
+	        XMLBEANSXX_DEBUG(logger,a.toString());
 	        c=xmlarray_java_cast<XmlObject>(a);
-	        LOG4CXX_DEBUG(logger,"!2");
+	        XMLBEANSXX_DEBUG(logger,"!2");
 	        b=xmlarray_java_cast<XmlPositiveInteger>(c);
-	        LOG4CXX_DEBUG(logger,"!3");
-	        LOG4CXX_DEBUG(logger,a.toString());
-        	LOG4CXX_DEBUG(logger,"!4");
-	        LOG4CXX_DEBUG(logger,b.toString());
-        	LOG4CXX_DEBUG(logger,std::string(a.getArray(0).getSchemaType()->className));
-	        LOG4CXX_DEBUG(logger,std::string(a.getArray(1).getSchemaType()->className));
-        	LOG4CXX_DEBUG(logger,std::string(a.getArray(2).getSchemaType()->className));
+	        XMLBEANSXX_DEBUG(logger,"!3");
+	        XMLBEANSXX_DEBUG(logger,a.toString());
+        	XMLBEANSXX_DEBUG(logger,"!4");
+	        XMLBEANSXX_DEBUG(logger,b.toString());
+        	XMLBEANSXX_DEBUG(logger,std::string(a.getArray(0).getSchemaType()->className));
+	        XMLBEANSXX_DEBUG(logger,std::string(a.getArray(1).getSchemaType()->className));
+        	XMLBEANSXX_DEBUG(logger,std::string(a.getArray(2).getSchemaType()->className));
 	        CPPUNIT_ASSERT(std::string(a.getArray(0).getSchemaType()->className)=="xmlbeansxx::XmlInteger");
         	CPPUNIT_ASSERT(std::string(a.getArray(1).getSchemaType()->className)=="xmlbeansxx::XmlPositiveInteger");
 	        CPPUNIT_ASSERT(std::string(a.getArray(2).getSchemaType()->className)=="xmlbeansxx::XmlInteger");
@@ -49,25 +49,25 @@ void ArrayTest::arrayTest()
 		XmlInteger bb=p2;
 		XmlInteger cc("12");
 		XmlPositiveInteger dd(cc);
-        	LOG4CXX_DEBUG(logger,"!2");
-	        LOG4CXX_DEBUG(logger,aa.toString());
-	        LOG4CXX_DEBUG(logger,bb.toString());
-	        LOG4CXX_DEBUG(logger,dd.toString());
+        	XMLBEANSXX_DEBUG(logger,"!2");
+	        XMLBEANSXX_DEBUG(logger,aa.toString());
+	        XMLBEANSXX_DEBUG(logger,bb.toString());
+	        XMLBEANSXX_DEBUG(logger,dd.toString());
 	}
 
 	{
 	//cast
-	        LOG4CXX_DEBUG(logger,"cast!!");
+	        XMLBEANSXX_DEBUG(logger,"cast!!");
 		Personinfo p=Personinfo::Factory::newInstance();
 		p.setFirstname("ala");
 		
 		try {
 			Fullpersoninfo p2(p);
-	        	LOG4CXX_DEBUG(logger,"invalid cast");
+	        	XMLBEANSXX_DEBUG(logger,"invalid cast");
 			CPPUNIT_ASSERT(false);
 		} 
 		catch (xmlbeansxx::ClassCastException& e) {
-	        	LOG4CXX_DEBUG(logger,"catch exception");		
+	        	XMLBEANSXX_DEBUG(logger,"catch exception");		
 		}
 		
 		Fullpersoninfo p2=Fullpersoninfo::Factory::newInstance();
@@ -77,8 +77,8 @@ void ArrayTest::arrayTest()
 		Personinfo p3(o);
 		Fullpersoninfo p4(o);
 		
-		LOG4CXX_DEBUG(logger,p4.toString());
-		LOG4CXX_DEBUG(logger,p3.toString());
+		XMLBEANSXX_DEBUG(logger,p4.toString());
+		XMLBEANSXX_DEBUG(logger,p3.toString());
 		CPPUNIT_ASSERT(p4.digest()==p3.digest());
 		
 		

@@ -6,7 +6,7 @@
 
 void namespaceTests();
 
-LOGGER_PTR_SET(logger,"mem03");
+XMLBEANSXX_LOGGER_PTR_SET(logger,"mem03");
 
 //using namespace xmlbeansxx;
 using namespace std;
@@ -31,6 +31,6 @@ int main()
 	a=XmlString::Factory::parse(s);
 */
 	do{
-	LOG4CXX_DEBUG(logger,"mem leak Test:");		
+	XMLBEANSXX_DEBUG(logger,"mem leak Test:");		
 	} while(true);
 }

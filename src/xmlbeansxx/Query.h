@@ -55,7 +55,7 @@ class Operator {
 
 
 class QueryNode {
-    STATIC_LOGGER_PTR(log);
+    XMLBEANSXX_STATIC_LOGGER_PTR(log);
 
     public:
     virtual bool getBooleanValue(const XmlObject& object);
@@ -65,7 +65,7 @@ class QueryNode {
 
 class QueryExpr: public QueryNode {
     private:
-    STATIC_LOGGER_PTR(log);
+    XMLBEANSXX_STATIC_LOGGER_PTR(log);
     QueryNodePtr a,b; 
     int oper;
     public:
@@ -76,7 +76,7 @@ class QueryExpr: public QueryNode {
 
 class QueryString: public QueryNode {
     private:
-    STATIC_LOGGER_PTR(log);
+    XMLBEANSXX_STATIC_LOGGER_PTR(log);
     std::string str;
     
     public:
@@ -86,7 +86,7 @@ class QueryString: public QueryNode {
 
 class QueryAttribute: public QueryNode {
     private:
-    STATIC_LOGGER_PTR(log);
+    XMLBEANSXX_STATIC_LOGGER_PTR(log);
     std::string attrName;
     public:
     QueryAttribute(const std::string & attrName);
@@ -95,7 +95,7 @@ class QueryAttribute: public QueryNode {
 
 class QueryElement: public QueryNode {
     private:
-    STATIC_LOGGER_PTR(log);
+    XMLBEANSXX_STATIC_LOGGER_PTR(log);
     std::string elemName;
     QueryNodePtr next;
     public:

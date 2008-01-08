@@ -75,7 +75,7 @@ struct NSMapSerializer : public XmlContext {
 		if(n.first==StoreString("")) return n.second;
 		
 		std::string prefix=n.prefix;
-        	LOG4CXX_DEBUG(log,std::string("printQName: ") + prefix + "{" + n.first + "}" + n.second);
+        	XMLBEANSXX_DEBUG(log,std::string("printQName: ") + prefix + "{" + n.first + "}" + n.second);
 		try {
 			if(getNamespaceURI(prefix) == n.first) 
 				return printPrefixName(prefix, n.second);
@@ -117,10 +117,10 @@ private:
 		if(prefix.empty()) return name;
 		return prefix + ":" + name;
 	}
-	STATIC_LOGGER_PTR(log);	
+	XMLBEANSXX_STATIC_LOGGER_PTR(log);	
 };
 
-LOGGER_PTR_SET(NSMapSerializer::log,"xmlbeansxx.NSMapSerializer");
+XMLBEANSXX_LOGGER_PTR_SET(NSMapSerializer::log,"xmlbeansxx.NSMapSerializer");
 
 
 namespace {
@@ -198,7 +198,7 @@ void Contents::serializeDocument(ostream &o,XmlOptions options) const {
     bool printXsiType;
     if (prop==NULL) {
         std::string msg=std::string("Serializing document of class: ")+std::string(st->className)+std::string(". It's root element name should not be '")+it->name+std::string("'");
-        LOG4CXX_DEBUG(log,msg);
+        XMLBEANSXX_DEBUG(log,msg);
 	printXsiType=false;
 //        throw XmlException(msg);
     } else printXsiType=shallPrintXsiType(prop->schemaType,it->value->st);

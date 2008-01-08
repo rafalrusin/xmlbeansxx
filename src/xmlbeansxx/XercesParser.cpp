@@ -42,11 +42,11 @@ using namespace std;
 
 #define ENCODING "utf8"
 #define TRACER2(a,b) 
-#define LOG4CXX_DEBUG2(a,b) LOG4CXX_DEBUG(a,b)
+#define XMLBEANSXX_DEBUG2(a,b) XMLBEANSXX_DEBUG(a,b)
 
 
-log4cxx::LoggerPtr XercesParser::log = log4cxx::Logger::getLogger(std::string("xmlbeansxx.XercesParser"));
-log4cxx::LoggerPtr MySAX2Handler::log = log4cxx::Logger::getLogger(std::string("xmlbeansxx.MySAX2Handler"));
+XMLBEANSXX_LOGGER_PTR_SET(XercesParser::log, "xmlbeansxx.XercesParser");
+XMLBEANSXX_LOGGER_PTR_SET(MySAX2Handler::log,"xmlbeansxx.MySAX2Handler");
 
 XERCES_CPP_NAMESPACE_USE
 
@@ -66,27 +66,27 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
 {
     {
         // LOGS
-        LOG4CXX_DEBUG2(log, "SAX2 - StartElement info")
-        LOG4CXX_DEBUG2(log, string("localname: ") + transcode(localname))
-        LOG4CXX_DEBUG2(log, string("URI      : ") + transcode(uri))
-        LOG4CXX_DEBUG2(log, string("qname    : ") + transcode(qname))
+        XMLBEANSXX_DEBUG2(log, "SAX2 - StartElement info")
+        XMLBEANSXX_DEBUG2(log, string("localname: ") + transcode(localname))
+        XMLBEANSXX_DEBUG2(log, string("URI      : ") + transcode(uri))
+        XMLBEANSXX_DEBUG2(log, string("qname    : ") + transcode(qname))
         
         
-        LOG4CXX_DEBUG2(log, "attributes...");
+        XMLBEANSXX_DEBUG2(log, "attributes...");
         for(unsigned int i=0; i<attrs.getLength(); i++) {
-            LOG4CXX_DEBUG2(log, string("localname: ") + transcode(attrs.getLocalName(i)));
-            LOG4CXX_DEBUG2(log, string("URI      : ") + transcode(attrs.getURI(i)));
-            LOG4CXX_DEBUG2(log, string("type     : ") + transcode(attrs.getType(i)));
-            LOG4CXX_DEBUG2(log, string("value    : ") + transcode(attrs.getValue(i)));
+            XMLBEANSXX_DEBUG2(log, string("localname: ") + transcode(attrs.getLocalName(i)));
+            XMLBEANSXX_DEBUG2(log, string("URI      : ") + transcode(attrs.getURI(i)));
+            XMLBEANSXX_DEBUG2(log, string("type     : ") + transcode(attrs.getType(i)));
+            XMLBEANSXX_DEBUG2(log, string("value    : ") + transcode(attrs.getValue(i)));
         }
-        LOG4CXX_DEBUG2(log, "SAX2 - end info")
+        XMLBEANSXX_DEBUG2(log, "SAX2 - end info")
     }
 
     std::string prefix = getPrefix(transcode(qname));
     QName name(transcode(uri), transcode(localname), prefix);
     
-    LOG4CXX_DEBUG2(log, std::string("begin element: ") + name)
-    LOG4CXX_DEBUG2(log, std::string("prefix: ") + prefix)
+    XMLBEANSXX_DEBUG2(log, std::string("begin element: ") + name)
+    XMLBEANSXX_DEBUG2(log, std::string("prefix: ") + prefix)
     
     if(parser->nodesStack.empty())
 	throw XmlException(string("no XmlObject on XercesParser stack"));
@@ -99,10 +99,10 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
     if(parser->nodesStack.size()==1){
 	//hack for type casting. Runtime defined type
 	Contents::Walker::ElemsType e = Contents::Walker::getElems(*top);
-       	LOG4CXX_DEBUG2(log, std::string("elements in parsed XmlObject:") + TextUtils::intToString(e.size()));
+       	XMLBEANSXX_DEBUG2(log, std::string("elements in parsed XmlObject:") + TextUtils::intToString(e.size()));
 	if(e.size()==1) {
 		n=XmlObjectPtr(new XmlObject(ContentsPtr(new Contents(e.front().second->getSchemaType()))));
-        	LOG4CXX_DEBUG2(log, std::string("predefined type found:") + n->getSchemaType()->name);
+        	XMLBEANSXX_DEBUG2(log, std::string("predefined type found:") + n->getSchemaType()->name);
 		name = e.front().first;
 	}
 	//this is the ROOT element
@@ -124,12 +124,12 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
 	    QName name(transcode(attrs.getURI(i)), transcode(attrs.getLocalName(i)));
 	    if(name == XmlBeans::xsi_type()) {
 		QName value=parser->nsSplit(transcode(attrs.getValue(i)));
-        	LOG4CXX_DEBUG2(log, std::string("xsi:type = ") + value)
+        	XMLBEANSXX_DEBUG2(log, std::string("xsi:type = ") + value)
 		n = globalTypeSystem()->createByName(value);
 		if (!n) throw XmlException(string("Xsd Type '")+value+string("' not defined in builtin type system"));
 	    } else if(name == XmlBeans::xsi_array()) {
 		QName value=parser->nsSplit(transcode(attrs.getValue(i)));
-        	LOG4CXX_DEBUG2(log, std::string("xsi:array = ") + value)
+        	XMLBEANSXX_DEBUG2(log, std::string("xsi:array = ") + value)
 		n = globalTypeSystem()->createArrayByName(value);
 		if (!n) throw XmlException(string("Xsd Type '")+value+string("' not defined in builtin type system"));
 	    
@@ -146,10 +146,10 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
     
 
     {
-        LOG4CXX_DEBUG2(log, "add attributes")
+        XMLBEANSXX_DEBUG2(log, "add attributes")
         for (unsigned int i = 0;i < attrs.getLength(); i++) {
 	    QName name(transcode(attrs.getURI(i)), transcode(attrs.getLocalName(i)), getPrefix(transcode(attrs.getQName(i))));
-    	    LOG4CXX_DEBUG2(log, std::string("attribute name (prefix): (") +  name.prefix + ")" + name)
+    	    XMLBEANSXX_DEBUG2(log, std::string("attribute name (prefix): (") +  name.prefix + ")" + name)
 	    
 	    if (name == XmlBeans::xsi_type()) continue;
 	    if (name == XmlBeans::xsi_array()) continue;
@@ -163,7 +163,7 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
 	    XmlContext::StoredLinks ns=parser->xmlContext.getLastStoredLinks();
 	    XMLBEANSXX_FOREACH(XmlContext::StoredLinks::iterator,i,ns) {
 	    	QName name(XmlBeans::xmlns(),i->first);
-    	    	LOG4CXX_DEBUG2(log, std::string("namespace attribute name: ")+ name + " = " + std::string(i->second) )
+    	    	XMLBEANSXX_DEBUG2(log, std::string("namespace attribute name: ")+ name + " = " + std::string(i->second) )
 	    	xmlbeansxx::Contents::Walker::setAttr(*n,name, i->second);
 	    }
     }
@@ -171,7 +171,7 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
     parser->xmlContext.remember();
 
     {
-        LOG4CXX_DEBUG2(log, std::string("append element name (prefix): (") +name.prefix+ ")"+ name  )
+        XMLBEANSXX_DEBUG2(log, std::string("append element name (prefix): (") +name.prefix+ ")"+ name  )
 
 	Contents::Walker::appendElem(*(parser->nodesStack.top().obj),name,n->contents);
         parser->nodesStack.push(EmptyParser::StackEl(n,n->getSchemaType()->processContents,name));
@@ -194,7 +194,7 @@ void MySAX2Handler::characters(const XMLCh* const chars, const unsigned int leng
 
 void MySAX2Handler::endElement(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname)
  {
-    LOG4CXX_DEBUG2(log, std::string("end element ") + transcode(qname) )
+    XMLBEANSXX_DEBUG2(log, std::string("end element ") + transcode(qname) )
     EmptyParser::StackEl e=parser->nodesStack.top();
     XmlObjectPtr n=e.obj;
     n->setSimpleContent(e.str);
@@ -215,7 +215,7 @@ string MySAX2Handler::getErrorStr(const SAXParseException& e) {
 }
 
 void MySAX2Handler::warning(const SAXParseException& exc) {
-    LOG4CXX_WARN(log,std::string("MySAX2Handler::warning() - Xerces-c warning: ")+getErrorStr(exc));
+    XMLBEANSXX_WARN(log,std::string("MySAX2Handler::warning() - Xerces-c warning: ")+getErrorStr(exc));
 //    throw XmlParseException(string("Xerces-c warning: ")+getErrorStr(exc));
 }
 void MySAX2Handler::error(const SAXParseException& exc) {
@@ -249,11 +249,11 @@ XercesParser::XercesParser(const XmlOptions &opts):EmptyParser(opts),transcoder(
 
 
 void XercesParser::init(bool reinit) {
-    LOG4CXX_DEBUG(log,"start");
+    XMLBEANSXX_DEBUG(log,"start");
 /*    static bool initialized = false;
     
     if(!initialized) {
-    	LOG4CXX_DEBUG(log,"initializing xerces-c");
+    	XMLBEANSXX_DEBUG(log,"initializing xerces-c");
 	XMLPlatformUtils::Initialize(); 
 	initialized=true;
     }
@@ -266,7 +266,7 @@ void XercesParser::init(bool reinit) {
     sax2->setFeature(XMLUni::fgSAX2CoreNameSpaces, true); 
     sax2->setFeature(XMLUni::fgXercesCacheGrammarFromParse, true);
 
-    LOG4CXX_DEBUG(log,"finish");
+    XMLBEANSXX_DEBUG(log,"finish");
 }
 
 XercesParser::~XercesParser() {}
@@ -291,7 +291,7 @@ void XercesParser::parse(const std::string &str, XmlObject &documentRoot){
 
 void XercesParser::parse(istream &in,XmlObject &documentRoot) {
     TRACER(log,"parse");
-    LOG4CXX_INFO(log,std::string("XmlParser::parse() - start"));
+    XMLBEANSXX_INFO(log,std::string("XmlParser::parse() - start"));
 
     updateOptions();
 
@@ -305,11 +305,11 @@ void XercesParser::parse(istream &in,XmlObject &documentRoot) {
 
 
     StdInputSource s(in);
-    LOG4CXX_INFO(log,"parsing:");
+    XMLBEANSXX_INFO(log,"parsing:");
     sax2->parse(s);
     nodesStack.pop();
     BOOST_ASSERT(nodesStack.empty());
-    LOG4CXX_DEBUG(log,std::string("XmlParser::parse() - finish"));
+    XMLBEANSXX_DEBUG(log,std::string("XmlParser::parse() - finish"));
 }
 
 
@@ -322,7 +322,7 @@ void XercesParser::loadGrammars(const std::vector<std::string> &fileNames) {
 }
 
 void XercesParser::loadGrammar(const std::string &fileName) {
-    LOG4CXX_DEBUG(log,std::string("loadGrammar: ") + fileName);
+    XMLBEANSXX_DEBUG(log,std::string("loadGrammar: ") + fileName);
     sax2->loadGrammar(fileName.c_str(),Grammar::SchemaGrammarType,true);
 }
 void XercesParser::unloadGrammars() {

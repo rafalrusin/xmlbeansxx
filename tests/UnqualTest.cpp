@@ -11,7 +11,7 @@
 CPPUNIT_TEST_SUITE_REGISTRATION( UnqualTest );
 
 
-LOGGER_PTR_SET(logger,"test.UnqualTest");
+XMLBEANSXX_LOGGER_PTR_SET(logger,"test.UnqualTest");
 //log4cxx::logstream LOG_DEBUG(log4cxx::Logger::getLogger(std::string("test.GenTest")), log4cxx::Level::DEBUG);
 
 
@@ -21,7 +21,7 @@ using namespace std;
 
 
 void libXml() {
-        LOG4CXX_DEBUG(logger, "Xerces OK");
+        XMLBEANSXX_DEBUG(logger, "Xerces OK");
 	XmlOptions opt;
 	opt.setValidation(true);
 	LibXMLParser p(opt);
@@ -32,14 +32,14 @@ void libXml() {
 
        	{
         	ifstream in("unqual.xml");
-	        LOG4CXX_DEBUG(logger, "parsing unqual.xml");
+	        XMLBEANSXX_DEBUG(logger, "parsing unqual.xml");
        		p.parse(in,doc);
     	}
 	std::string str=doc.toString();
-        LOG4CXX_DEBUG(logger, "parsed unqual.xml:" + str);
+        XMLBEANSXX_DEBUG(logger, "parsed unqual.xml:" + str);
 
        	{
-	        LOG4CXX_DEBUG(logger, "parsing str:");
+	        XMLBEANSXX_DEBUG(logger, "parsing str:");
        		p.parse(str,doc);
     	}
 
@@ -51,7 +51,7 @@ void libXml() {
 		"</employee>"
 	"</test2:content>\n";
 	CPPUNIT_ASSERT_EQUAL(cmp,str);
-        LOG4CXX_DEBUG(logger, "LibXML OK");
+        XMLBEANSXX_DEBUG(logger, "LibXML OK");
 }
 void UnqualTest::unqualTest() {
 
@@ -69,15 +69,15 @@ void UnqualTest::unqualTest() {
 
        	{
         	ifstream in("unqual.xml");
-	        LOG4CXX_DEBUG(logger, "parsing unqual.xml");
+	        XMLBEANSXX_DEBUG(logger, "parsing unqual.xml");
        		p.parse(in,doc);
     	}
 	std::string str=doc.toString();
-        LOG4CXX_DEBUG(logger, "parsed unqual.xml:" + str);
+        XMLBEANSXX_DEBUG(logger, "parsed unqual.xml:" + str);
 
        	{
        		ContentDocument doc=ContentDocument::Factory::newInstance();
-	        LOG4CXX_DEBUG(logger, "parsing str:");
+	        XMLBEANSXX_DEBUG(logger, "parsing str:");
        		p.parse(str,doc);
     	}
 
@@ -89,7 +89,7 @@ void UnqualTest::unqualTest() {
 		"</employee>"
 	"</test2:content>\n";
 	CPPUNIT_ASSERT_EQUAL(cmp,str);
-        LOG4CXX_DEBUG(logger, "XercesParser OK");
+        XMLBEANSXX_DEBUG(logger, "XercesParser OK");
 	libXml();
 		
 

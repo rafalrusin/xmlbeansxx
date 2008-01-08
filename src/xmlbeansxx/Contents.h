@@ -61,7 +61,7 @@ typedef boost::shared_ptr<std::string> StringPtr;
 
 class Contents : public boost::enable_shared_from_this<Contents> {
 private:
-	STATIC_LOGGER_PTR(log);
+	XMLBEANSXX_STATIC_LOGGER_PTR(log);
 public:
 
     	ElemDict attrs;

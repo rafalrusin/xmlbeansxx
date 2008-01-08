@@ -40,7 +40,7 @@ using namespace std;
 
 namespace xmlbeansxx {
 
-LOGGER_PTR_SET(NSMap::log,"xmlbeansxx.NSMap");
+XMLBEANSXX_LOGGER_PTR_SET(NSMap::log,"xmlbeansxx.NSMap");
 
 bool NSMap::isSetNamespaceURI(StoreString ns) const {
 	XMLBEANSXX_FOREACH(PrefixMapType::const_iterator,i,prefixMap){
@@ -53,7 +53,7 @@ bool NSMap::isSetPrefix(const std::string& prefix) const {
 }
 
 bool NSMap::addNamespace(const std::string& prefix, StoreString ns, bool force) {
-        LOG4CXX_DEBUG(log,std::string("addNamespace: ") + prefix + ": " + ns);
+        XMLBEANSXX_DEBUG(log,std::string("addNamespace: ") + prefix + ": " + ns);
 	bool retu=true;
 	if(isSetPrefix(prefix)) retu=false;
 	if(force||retu) prefixMap[prefix]=ns;

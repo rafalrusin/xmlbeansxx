@@ -21,50 +21,32 @@
 #include "logger.h"
 
 
-//#ifdef HAVE_LIBLOG4CXX
-#define XMLBEANSXX_LOGGING
-//#endif //HAVE_LIBLOG4CXX
-
-
 #ifndef XMLBEANSXX_LOGGING
 #define TRACER(log,method)
-#undef LOG4CXX_DEBUG
-#define LOG4CXX_DEBUG(log,text)
 
 #else  // XMLBEANSXX_LOGGING
 
-#define TRACER(log,method) Tracer tracer(log,method)
+#define TRACER(log,method) Tracer<log4cxx::LoggerPtr> tracer(log,method)
 
 
 #include <string>
-#include <log4cxx/mdc.h>
 
 
 namespace xmlbeansxx {
 
+template <class LoggerPtr_type>
 class Tracer {
 public:
-    Tracer(log4cxx::LoggerPtr logger, const std::string &text) : logger(logger), text(text) {
-        LOG4CXX_DEBUG(logger,std::string("entering ") + text);
-        previous = log4cxx::MDC::get("method");
-        log4cxx::MDC::put("method", text);
-    };
-
-    Tracer(const std::string &text) {
-        previous = log4cxx::MDC::get
-                       ("method");
-        log4cxx::MDC::put("method", text);
+    Tracer(LoggerPtr_type logger, const std::string &text) : logger(logger), text(text) {
+        XMLBEANSXX_DEBUG(logger,std::string("entering ") + text);
     };
 
     ~Tracer() {
-        log4cxx::MDC::put("method", previous);
-        if (logger)
-            LOG4CXX_DEBUG(logger,std::string("leaving ") + text);
+	XMLBEANSXX_DEBUG(logger,std::string("leaving ") + text);
     };
 
 protected:
-    std::string previous;
-    log4cxx::LoggerPtr logger;
+    LoggerPtr_type logger;
     std::string text;
 };
 

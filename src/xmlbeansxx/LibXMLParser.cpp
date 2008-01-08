@@ -29,8 +29,8 @@
 #include <string>
 #include "XmlBeans.h"
 
-#define LOG4CXX_DEBUG2(a,b) LOG4CXX_DEBUG(a, b)
-//#define LOG4CXX_DEBUG2(a,b) 
+#define XMLBEANSXX_DEBUG2(a,b) XMLBEANSXX_DEBUG(a, b)
+//#define XMLBEANSXX_DEBUG2(a,b) 
 
 namespace {
     const bool INSERT_INTO_CURSOR = true;
@@ -106,7 +106,7 @@ extern "C" {
 
 }
 
-LOGGER_PTR_SET(LOG,"xmlbeansxx.LibXMLParser");
+XMLBEANSXX_LOGGER_PTR_SET(LOG,"xmlbeansxx.LibXMLParser");
 
 LibXMLParser::LibXMLParser() {
     init();
@@ -121,13 +121,13 @@ LibXMLParser::~LibXMLParser() {
 }
 
 void LibXMLParser::init() {
-    //LOG4CXX_DEBUG(LOG, "init - start");
+    //XMLBEANSXX_DEBUG(LOG, "init - start");
     /*
     #ifdef BOOST_HAS_THREADS
             {
                 boost::detail::thread::scoped_lock<boost::mutex> lock(mutex);
                 if (initialized == false) {
-                    //LOG4CXX_DEBUG(LOG, "initializing libxml2 parser...");
+                    //XMLBEANSXX_DEBUG(LOG, "initializing libxml2 parser...");
                     xmlInitParser();
                     initialized = true;
                 }
@@ -141,7 +141,7 @@ void LibXMLParser::init() {
     schemaPlug       = NULL;
 
 ///    xsi_ns = XmlBeans::xsi_ns();
-    //LOG4CXX_DEBUG(LOG, "init - finish");
+    //XMLBEANSXX_DEBUG(LOG, "init - finish");
 }
 
 string LibXMLParser::generateErrorMessage(xmlErrorPtr error) {
@@ -305,7 +305,7 @@ void LibXMLParser::loadGrammar(const string &filename) {
                                   &(this->user_data));
     if (schemaPlug == NULL) {
         // TODO: errors
-        LOG4CXX_ERROR(LOG, "Can't plug in schema validation layer");
+        XMLBEANSXX_ERROR(LOG, "Can't plug in schema validation layer");
         unloadGrammars();
         return;
     }
@@ -389,34 +389,34 @@ void startElementNs(void *ctx,
         return;
     {
         // LOGS
-        LOG4CXX_DEBUG2(LOG, "SAX2 - StartElementNS info")
-        LOG4CXX_DEBUG2(LOG, string("localname: ") + (const char *) localname)
-        LOG4CXX_DEBUG2(LOG, string("prefix   : ") + (prefix == NULL ? "" : (const char *) prefix))
-        LOG4CXX_DEBUG2(LOG, string("URI      : ") + (URI == NULL ? "" : (const char *) URI))
+        XMLBEANSXX_DEBUG2(LOG, "SAX2 - StartElementNS info")
+        XMLBEANSXX_DEBUG2(LOG, string("localname: ") + (const char *) localname)
+        XMLBEANSXX_DEBUG2(LOG, string("prefix   : ") + (prefix == NULL ? "" : (const char *) prefix))
+        XMLBEANSXX_DEBUG2(LOG, string("URI      : ") + (URI == NULL ? "" : (const char *) URI))
         
         
-        LOG4CXX_DEBUG2(LOG, "namespaces...");
+        XMLBEANSXX_DEBUG2(LOG, "namespaces...");
         for(int i=0;i<nb_namespaces;i++) {
-            LOG4CXX_DEBUG2(LOG, string("namespace: ")
+            XMLBEANSXX_DEBUG2(LOG, string("namespace: ")
                           + (namespaces[2*i] == NULL ? "" : (const char *) namespaces[2*i])
                           + "="
                           + (const char *) namespaces[2*i+1]);
         }
-        LOG4CXX_DEBUG2(LOG, "attributes...");
+        XMLBEANSXX_DEBUG2(LOG, "attributes...");
         for(int i=0;i<nb_attributes;i++) {
-            LOG4CXX_DEBUG2(LOG, string("attribute: "));
-            LOG4CXX_DEBUG2(LOG, string("localname: ") + (const char *) attributes[5*i]);
-            LOG4CXX_DEBUG2(LOG, string("prefix   : ")
+            XMLBEANSXX_DEBUG2(LOG, string("attribute: "));
+            XMLBEANSXX_DEBUG2(LOG, string("localname: ") + (const char *) attributes[5*i]);
+            XMLBEANSXX_DEBUG2(LOG, string("prefix   : ")
                           + (attributes[5*i+1] == NULL
                              ? ""
                              : (const char *) attributes[5*i+1]));
-            LOG4CXX_DEBUG2(LOG, string("URI      : ")
+            XMLBEANSXX_DEBUG2(LOG, string("URI      : ")
                           + (attributes[5*i+2] == NULL
                              ? ""
                              : (const char *) attributes[5*i+2]));
-            LOG4CXX_DEBUG2(LOG, string("value    : ") + getAttrValue(attributes + 5*i));
+            XMLBEANSXX_DEBUG2(LOG, string("value    : ") + getAttrValue(attributes + 5*i));
         }
-        LOG4CXX_DEBUG2(LOG, "SAX2 - end info")
+        XMLBEANSXX_DEBUG2(LOG, "SAX2 - end info")
     }
 
     /* *************************************************************************** */
@@ -425,25 +425,25 @@ void startElementNs(void *ctx,
 
     {
     	//NAMESPACES
-        LOG4CXX_DEBUG2(LOG, "store namespaces in xmlContext")
+        XMLBEANSXX_DEBUG2(LOG, "store namespaces in xmlContext")
         for (int current = 0;
                 current < 2 * nb_namespaces;
                 current += 2) {
 
-            LOG4CXX_DEBUG2(LOG, "iteration")
+            XMLBEANSXX_DEBUG2(LOG, "iteration")
 
             const char * ns0 = (const char *) namespaces[current + NS_URI];
             BOOST_ASSERT(ns0 != NULL);
             StoreString ns(ns0);
             const char *prefix = (const char *) namespaces[current + NS_PREFIX];
-            LOG4CXX_DEBUG2(LOG, std::string("prefix: ") + (prefix == NULL ? "" : prefix) + " namespace: " + ns)
+            XMLBEANSXX_DEBUG2(LOG, std::string("prefix: ") + (prefix == NULL ? "" : prefix) + " namespace: " + ns)
             parser->xmlContext.addNamespace(prefix == NULL ? "" : prefix, ns);
         }
     }
 
     
     QName name(parser->getQName((const char *) prefix, (const char *) localname));
-    LOG4CXX_DEBUG2(LOG, std::string("begin element: ") + name)
+    XMLBEANSXX_DEBUG2(LOG, std::string("begin element: ") + name)
     
     if(parser->nodesStack.empty())
 	throw XmlException(string("no XmlObject on LibXMLParser stack"));
@@ -456,10 +456,10 @@ void startElementNs(void *ctx,
     if(parser->nodesStack.size()==1){
 	//hack for type casting. Runtime defined type
 	Contents::Walker::ElemsType e = Contents::Walker::getElems(*top);
-       	LOG4CXX_DEBUG2(LOG, std::string("elements in parsed XmlObject:") + TextUtils::intToString(e.size()));
+       	XMLBEANSXX_DEBUG2(LOG, std::string("elements in parsed XmlObject:") + TextUtils::intToString(e.size()));
 	if(e.size()==1) {
 		n=XmlObjectPtr(new XmlObject(ContentsPtr(new Contents(e.front().second->getSchemaType()))));
-        	LOG4CXX_DEBUG2(LOG, std::string("predefined type found:") + n->getSchemaType()->name);
+        	XMLBEANSXX_DEBUG2(LOG, std::string("predefined type found:") + n->getSchemaType()->name);
 		name = e.front().first;
 	}
 	//this is the ROOT element
@@ -481,12 +481,12 @@ void startElementNs(void *ctx,
 	    QName name(parser->getQName((const char *) attributes[current + ATTR_PREFIX], (const char *) attributes[current + ATTR_LOCALNAME], true));
 	    if(name == XmlBeans::xsi_type()) {
 		QName value=parser->nsSplit(getAttrValue(attributes + current));
-        	LOG4CXX_DEBUG2(LOG, std::string("xsi:type = ") + value)
+        	XMLBEANSXX_DEBUG2(LOG, std::string("xsi:type = ") + value)
 		n = globalTypeSystem()->createByName(value);
 		if (!n) throw XmlException(string("Xsd Type '")+value+string("' not defined in builtin type system"));					   
 	    } else if(name == XmlBeans::xsi_array()) {
 		QName value=parser->nsSplit(getAttrValue(attributes + current));
-        	LOG4CXX_DEBUG2(LOG, std::string("xsi:array = ") + value)
+        	XMLBEANSXX_DEBUG2(LOG, std::string("xsi:array = ") + value)
 		n = globalTypeSystem()->createArrayByName(value);
 		if (!n) throw XmlException(string("Xsd Type '")+value+string("' not defined in builtin type system"));					   
 	    
@@ -503,10 +503,10 @@ void startElementNs(void *ctx,
     
 
     {
-        LOG4CXX_DEBUG2(LOG, "add attributes")
+        XMLBEANSXX_DEBUG2(LOG, "add attributes")
         for (int current = 0; current < ATTRTABSIZE * nb_attributes; current += ATTRTABSIZE) {
             QName name(parser->getQName((const char *) attributes[current + ATTR_PREFIX], (const char *) attributes[current + ATTR_LOCALNAME], true));
-    	    LOG4CXX_DEBUG2(LOG, std::string("attribute name (prefix): (") +  name.prefix + ")" + name)
+    	    XMLBEANSXX_DEBUG2(LOG, std::string("attribute name (prefix): (") +  name.prefix + ")" + name)
 	    
 	    if (name == XmlBeans::xsi_type()) continue;
 	    if (name == XmlBeans::xsi_array()) continue;
@@ -519,7 +519,7 @@ void startElementNs(void *ctx,
 	    XmlContext::StoredLinks ns=parser->xmlContext.getLastStoredLinks();
 	    XMLBEANSXX_FOREACH(XmlContext::StoredLinks::iterator,i,ns) {
 	    	QName name(XmlBeans::xmlns(),i->first);
-    	    	LOG4CXX_DEBUG2(LOG, std::string("namespace attribute name: ")+ name + " = " + std::string(i->second) )
+    	    	XMLBEANSXX_DEBUG2(LOG, std::string("namespace attribute name: ")+ name + " = " + std::string(i->second) )
 	    	xmlbeansxx::Contents::Walker::setAttr(*n,name, i->second);
 	    }
     }
@@ -527,7 +527,7 @@ void startElementNs(void *ctx,
     parser->xmlContext.remember();
     
     {
-	LOG4CXX_DEBUG2(LOG, std::string("append element name (prefix): (") +name.prefix+ ")"+ name  )
+	XMLBEANSXX_DEBUG2(LOG, std::string("append element name (prefix): (") +name.prefix+ ")"+ name  )
 
 	Contents::Walker::appendElem(*(parser->nodesStack.top().obj),name,n->contents);
         parser->nodesStack.push(LibXMLParser::StackEl(n,n->getSchemaType()->processContents,name));
@@ -550,11 +550,11 @@ void endElementNs(void *ctx,
 
 
     n->setSimpleContent(e.str);
-    LOG4CXX_DEBUG2(LOG, "added content :" + n->getSimpleContent())
+    XMLBEANSXX_DEBUG2(LOG, "added content :" + n->getSimpleContent())
     parser->xmlContext.restore();
     parser->nodesStack.pop();
 
-    LOG4CXX_DEBUG2(LOG, std::string("leaving end element ") + (const char *) localname)
+    XMLBEANSXX_DEBUG2(LOG, std::string("leaving end element ") + (const char *) localname)
 }
 
 void characters(void *ctx, const xmlChar *ch, int length) {
@@ -567,7 +567,7 @@ void characters(void *ctx, const xmlChar *ch, int length) {
 ///       parser->cursor->insertChars(s);
 
     parser->nodesStack.top().str+=s;
-    LOG4CXX_DEBUG2(LOG, "element content:" + s)
+    XMLBEANSXX_DEBUG2(LOG, "element content:" + s)
     
 }
 
@@ -583,6 +583,6 @@ void serror(void *ctx, xmlErrorPtr error) {
 	err << " ,str2:" 	<< error->str2;
 	if(error->str3)
 	err << " ,str3:" 	<< error->str3;
-    LOG4CXX_ERROR(LOG,err.str());
+    XMLBEANSXX_ERROR(LOG,err.str());
 }
 }

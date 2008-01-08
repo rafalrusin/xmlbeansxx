@@ -36,7 +36,9 @@
 namespace xmlbeansxx {
 
 
-extern LOGGER_PTR(XmlArray_log);
+#ifdef XMLBEANSXX_LOGGING
+extern XMLBEANSXX_LOGGER_PTR(XmlArray_log);
+#endif
 
 extern QName XmlArray_elemName;
 
