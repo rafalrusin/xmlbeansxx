@@ -17,6 +17,8 @@
 #include "XmlParser.h"
 
 #undef HAVE_LIBXML2
+#undef HAVE_LIBXERCES_c
+#undef HAVE_LIBLOG4CXX
 #include "config_auto.h"
 
 #ifdef HAVE_LIBXML2
@@ -31,32 +33,32 @@ namespace xmlbeansxx {
 
     
 XmlParserPtr XmlParser::Factory::newInstance() {
-#ifdef HAVE_LIBXML2
+/*#ifdef HAVE_LIBXML2
     return XmlParserPtr(new LibXMLParser());
 #else
     return XmlParserPtr(new XercesParser());
-#endif
-/*#ifdef HAVE_LIBXERCES_C
+#endif*/
+#ifdef HAVE_LIBXERCES_C
     return XmlParserPtr(new XercesParser());
 #else
     return XmlParserPtr(new LibXMLParser());
 #endif
-*/
+
 }
 
 XmlParserPtr XmlParser::Factory::newInstance(const XmlOptions o) {
-#ifdef HAVE_LIBXML2
+/*#ifdef HAVE_LIBXML2
     return XmlParserPtr(new LibXMLParser(o));
 #else
     return XmlParserPtr(new XercesParser(o));
-#endif
-
-/*#ifdef HAVE_LIBXERCES_C
-    return XmlParserPtr(new XercesParser(o));
-#else
-    return XmlParserPtr(new LibXMLParser(o));
 #endif
 */
+#ifdef HAVE_LIBXERCES_C
+    return XmlParserPtr(new XercesParser(o));
+#else
+    return XmlParserPtr(new LibXMLParser(o));
+#endif
+
 }
 
 
