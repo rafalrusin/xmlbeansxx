@@ -120,7 +120,7 @@ xml-fragment.h xml-fragment.cpp: ${top_builddir}/generator/stamp-build ${top_bui
 	${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen ${srcdir}/xml-fragment.xsd
 
 CoreTypes.h: ${srcdir}/CoreTypes.h.gmpxx
-	$(CP) ${srcdir}/CoreTypes.h.gmpxx CoreTypes.h
+	cp ${srcdir}/CoreTypes.h.gmpxx CoreTypes.h
 
 MOSTLYCLEANFILES=XmlTypesGen.h XmlTypesGen.cpp xml-fragment.h xml-fragment.cpp CoreTypes.h
 

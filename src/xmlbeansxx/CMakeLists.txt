@@ -22,11 +22,17 @@ ELSE (LIBXML2_FOUND)
 ENDIF (LIBXML2_FOUND) 
 
 
+IF (GMPXX_FOUND)
+	XMLBEANSXX_COPY(CoreTypes.h.gmpxx  CoreTypes.h)
+ELSE (GMPXX_FOUND)
+	XMLBEANSXX_COPY(CoreTypes.h.no_gmpxx  CoreTypes.h)
+ENDIF (GMPXX_FOUND)
+
+
 SET(XMLBEANSXX_INSTALL_HEADERS 
         XmlObjectDocument.h
         BoostAssert.h
         TypeSystem.h
-        CoreTypes.h
         shared_array.h
         SchemaType.h
         geum_types.h
@@ -58,6 +64,7 @@ SET(XMLBEANSXX_INSTALL_HEADERS
 
 	${CMAKE_CURRENT_BINARY_DIR}/XmlTypesGen.h	
 	${xml-fragment.xsd_HEADER}
+	${CoreTypes.h._FILE}
 )
 
 
