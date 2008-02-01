@@ -199,6 +199,7 @@ void MySAX2Handler::endElement(const XMLCh* const uri, const XMLCh* const localn
     EmptyParser::StackEl e=parser->nodesStack.top();
     XmlObjectPtr n=e.obj;
     n->setSimpleContent(e.str);
+    XMLBEANSXX_DEBUG2(log, std::string("element end value: ") + e.str )
     parser->xmlContext.restore();
     parser->nodesStack.pop();
 }
