@@ -1,11 +1,13 @@
 SUBDIRS =
-EXTRA_DIST = xml-fragment.xsd CoreTypes.h.gmpxx CoreTypes.h.no_gmpxx
+EXTRA_DIST = xml-fragment.xsd
 
 AM_CPPFLAGS = -I${top_srcdir}/src -I${top_builddir}/src
 
 lib_LTLIBRARIES = libxmlbeansxx.la
 libxmlbeansxx_la_LDFLAGS = -version-info $(library_version_info)
 libxmlbeansxx_la_SOURCES = \
+	CoreTypes.h.gmpxx\
+	CoreTypes.h.no_gmpxx\
 	XmlTypesGen.xh\
 	XmlTypesGen.xcpp\
 	BoostAssert.h\
@@ -78,7 +80,6 @@ libxmlbeansxxinclude_HEADERS = \
 	XmlObjectDocument.h\
 	BoostAssert.h\
 	TypeSystem.h\
-	CoreTypes.h\
 	shared_array.h\
 	SchemaType.h\
 	geum_types.h\
