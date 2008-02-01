@@ -6,6 +6,8 @@ AM_CPPFLAGS = -I${top_srcdir}/src -I${top_builddir}/src
 lib_LTLIBRARIES = libxmlbeansxx.la
 libxmlbeansxx_la_LDFLAGS = -version-info $(library_version_info)
 libxmlbeansxx_la_SOURCES = \
+	CoreTypes.h\
+	CoreTypes.cpp\
 	CoreTypes.h.gmpxx\
 	CoreTypes.h.no_gmpxx\
 	XmlTypesGen.xh\
@@ -14,8 +16,6 @@ libxmlbeansxx_la_SOURCES = \
 	BoostAssert.cpp\
 	StoreString.h\
 	StoreString.cpp\
-	CoreTypes.h\
-	CoreTypes.cpp\
 	TypeSystem.h\
 	shared_array.h\
 	SchemaType.h\
@@ -122,6 +122,8 @@ xml-fragment.h xml-fragment.cpp: ${top_builddir}/generator/stamp-build ${top_bui
 
 CoreTypes.h: ${srcdir}/CoreTypes.h.gmpxx
 	cp ${srcdir}/CoreTypes.h.gmpxx CoreTypes.h
+
+CoreTypes.cpp: CoreTypes.h
 
 MOSTLYCLEANFILES=XmlTypesGen.h XmlTypesGen.cpp xml-fragment.h xml-fragment.cpp CoreTypes.h
 
