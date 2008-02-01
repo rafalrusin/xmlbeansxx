@@ -17,19 +17,45 @@
 #ifndef _XMLBEANSXX_CORE_TYPES_H_
 #define _XMLBEANSXX_CORE_TYPES_H_
 
+
 #include "BoostAssert.h"
 #include <boost/shared_array.hpp>
 #include <string>
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <gmp.h>
 #include <gmpxx.h>
+#include <sstream>
 
 #include "QName.h"
 
+
 namespace xmlbeansxx {
     
-    typedef boost::shared_ptr<QName> QNamePtr;
+    typedef long int mpz_class;
+    typedef long double mpf_class;
 
+    inline bool mpzFitsToInt(const mpz_class &v) {
+    	return true;
+    }
+    inline int mpzToInt(const mpz_class &v){
+    	return v;
+    } 
+    inline mpz_class stringToMpz(const std::string &v) {
+    	mpz_class r;
+    	std::stringstream ss(v);
+	ss >> r;
+	return r;
+    }
+    inline mpf_class stringToMpf(const std::string &v) {
+    	mpf_class r;
+    	std::stringstream ss(v);
+	ss >> r;
+	return r;
+    }
+
+
+
+    typedef boost::shared_ptr<QName> QNamePtr;
     class Calendar {
     };
     typedef boost::shared_ptr<Calendar> CalendarPtr;
@@ -48,6 +74,8 @@ namespace xmlbeansxx {
         virtual std::string toString() const { return ""; }
     };
     typedef boost::shared_ptr<Object> ObjectPtr;
+    
+    
 }
 
 #endif //_XMLBEANSXX_CORE_TYPES_H_
