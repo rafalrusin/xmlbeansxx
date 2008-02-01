@@ -27,8 +27,8 @@ int main() {
         cout<<"s1:"<<s1.toString()<<"\n";
 
 	cout << "\n************************* TEST2 (XmlDecimal) *************************\n";
-        XmlDecimal a(XmlDecimal(12));
-        XmlDecimal b(15);
+        XmlDecimal a(double(12));
+        XmlDecimal b(double(15));
         XmlDecimal c(a+b);
         cout<<c.getSchemaType()->className<<":"<<c.getSimpleContent()<<"\n";
 

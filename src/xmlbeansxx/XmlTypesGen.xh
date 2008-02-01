@@ -321,7 +321,7 @@ public:
     virtual int getIntValue() const;
     virtual void setIntValue(int v);
     virtual mpz_class getLongValue() const;
-    virtual void setLongValue(mpz_class v);
+    virtual void setLongValue(const mpz_class &v);
     virtual short getShortValue() const;
     virtual void setShortValue(short v);
     virtual unsigned char getByteValue() const;

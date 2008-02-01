@@ -225,7 +225,7 @@ if [ $COMPOSITE_SCHEMA ]; then
 		<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 		' > $COMPOSITE_SCHEMA
 
-		for i in $ORGIN_XSD; do 
+		for i in "${ORGIN_XSD[@]}"; do
 			echo -n "<xs:import schemaLocation=\"$i\"" >> $COMPOSITE_SCHEMA
 			cat $i | grep targetNamespace | sed "s/.*targetNamespace\(=\"[^\"]*\"\).*/  namespace\\1\/>/" >> $COMPOSITE_SCHEMA
 		done

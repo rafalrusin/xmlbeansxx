@@ -94,7 +94,7 @@ void EnumTest::enumTest()
 	        XMLBEANSXX_DEBUG(logger,"path: " + a.toString())
 		XmlDecimal d = a.xgetArray(0);
 	        XMLBEANSXX_DEBUG(logger,"element: " + d.toString());
-		CPPUNIT_ASSERT_EQUAL(d.getMpfValue(), mpf_class(13));
+		CPPUNIT_ASSERT_EQUAL(d.getMpfValue(), xmlbeansxx::mpf_class(13));
 
 		
 		ns.addNamespace("","http://ala");

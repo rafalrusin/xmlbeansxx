@@ -71,6 +71,7 @@ void namespaceTests() {
 
         p.xsetAge(XmlInt());
         p.setMoney(10.256789);
+	XMLBEANSXX_DEBUG(logger,"money:" + p.xgetMoney().getSimpleContent());
         CPPUNIT_ASSERT(p.xgetMoney().getSimpleContent()==std::string("10.26"));
         p.setMoney(10.254789);
         CPPUNIT_ASSERT(p.xgetMoney().getSimpleContent()==std::string("10.25"));

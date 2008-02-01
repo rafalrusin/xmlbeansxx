@@ -342,7 +342,7 @@ mpf_class XmlDecimal::getMpfValue() const {
     std::string v=TextUtils::collapse(getSimpleContent());
     if (!TextUtils::checkDecimal(v)) 
         throw XmlIllegalValueException("xs:decimal",v);
-    return mpf_class(v);
+    return stringToMpf(v);
 }
 
 void XmlDecimal::setMpfValue(const mpf_class &v) {
@@ -363,7 +363,7 @@ mpz_class XmlDecimal::getMpzValue() const {
     std::string v=TextUtils::collapse(getSimpleContent());
     if (!TextUtils::checkInteger(v)) 
         throw XmlIllegalValueException("xs:integer",v);
-    return mpz_class(v);
+    return stringToMpz(v);
 }
 
 void XmlDecimal::setMpzValue(const mpz_class &v) {
@@ -374,8 +374,9 @@ void XmlDecimal::setMpzValue(const mpz_class &v) {
 
 int XmlDecimal::getIntValue() const {
     mpz_class v=getMpzValue();
-    if (v.fits_sint_p()) {
-        return v.get_si();
+//    if (v.fits_sint_p()) {
+    if (mpzFitsToInt(v)) {
+        return mpzToInt(v);//v.get_si();
     } else {
         throw IllegalArgumentsException(std::string("Cannot convert decimal='")+getSimpleContent()+std::string("' to int."));
         return 0;
@@ -390,7 +391,7 @@ mpz_class XmlDecimal::getLongValue() const {
     return getMpzValue();
 }
 
-void XmlDecimal::setLongValue(mpz_class v) {
+void XmlDecimal::setLongValue(const mpz_class &v) {
     setMpzValue(v);
 }
     

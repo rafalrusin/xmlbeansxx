@@ -76,8 +76,8 @@ void namespaceTests() {
         CPPUNIT_ASSERT(s3!=s4);
         //cout<<"s5:"<<s5.toString()<<"\n";
 
-        XmlDecimal a(-12);
-        XmlDecimal b(+15);
+        XmlDecimal a(double(-12));
+        XmlDecimal b(double(+15));
         XmlDecimal c(a+b);
         std::cout << a.getSimpleContent() << " + "
                   << b.getSimpleContent() << " = "
@@ -286,6 +286,14 @@ void namespaceTests() {
         CPPUNIT_ASSERT(b.getByteArrayValue()[0]=='a');
         CPPUNIT_ASSERT(b.getByteArrayValue()[1]=='b');
         CPPUNIT_ASSERT(b.getByteArrayValue()[2]=='c');
+
+	//TODO: 	
+/*	XmlBase64Binary b2=xmlbeansxx::XmlBase64Binary::Factory::parse("<a>OOOOOOOOOO&#xA;    \n \n \n \n  PPPP       PPPPPPPPPPP      </a>");
+	XMLBEANSXX_DEBUG(logger,b2.toString(XmlOptions::serializeTypes()));
+	XmlString s2=xmlbeansxx::XmlString::Factory::parse("<a>OOOOOOOOOO&#xA;    \n \n \n \n  PPPP       PPPPPPPPPPP      </a>");
+	XMLBEANSXX_DEBUG(logger,s2.toString(XmlOptions::serializeTypes()));
+	CPPUNIT_ASSERT(false);
+  */
     }
     {
         //xmlbeansxx::shared_array

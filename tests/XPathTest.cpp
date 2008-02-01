@@ -47,7 +47,7 @@ void XPathTest::xPathTest()
 	        XMLBEANSXX_DEBUG(logger,"path: " + a.toString())
 		XmlDecimal d = a.xgetArray(0);
 	        XMLBEANSXX_DEBUG(logger,"element: " + d.toString());
-		CPPUNIT_ASSERT_EQUAL(d.getMpfValue(), mpf_class(13));
+		CPPUNIT_ASSERT_EQUAL(d.getMpfValue(), xmlbeansxx::mpf_class(13));
 
 		
 		ns.addNamespace("","http://ala");
@@ -89,7 +89,7 @@ void XPathTest::xPathTest()
 	        XMLBEANSXX_DEBUG(logger,"path: " + a.toString())
 		XmlDecimal d = a.xgetArray(0);
 	        XMLBEANSXX_DEBUG(logger,"element: " + d.toString());
-		CPPUNIT_ASSERT_EQUAL(d.getMpfValue(), mpf_class(13));
+		CPPUNIT_ASSERT_EQUAL(d.getMpfValue(), xmlbeansxx::mpf_class(13));
 
 
 		std::vector<XmlObject> retu2=z.selectPath(ns,"./*/a:klient/*:ala");
@@ -98,7 +98,7 @@ void XPathTest::xPathTest()
 	        XMLBEANSXX_DEBUG(logger,"path: " + a2.toString())
 		XmlDecimal d2 = a2.xgetArray(0);
 	        XMLBEANSXX_DEBUG(logger,"element: " + d2.toString());
-		CPPUNIT_ASSERT_EQUAL(d2.getMpfValue(), mpf_class(13));
+		CPPUNIT_ASSERT_EQUAL(d2.getMpfValue(), xmlbeansxx::mpf_class(13));
 
 
 		
@@ -149,7 +149,7 @@ void XPathTest::xPathTest()
 		        XMLBEANSXX_DEBUG(logger,"path: " + a.toString())
 			XmlDecimal d = XmlDecimal(a.xgetArray(0).getSimpleContent());
 		        XMLBEANSXX_DEBUG(logger,"element: " + d.toString());
-			CPPUNIT_ASSERT_EQUAL(d.getMpfValue(), mpf_class(13));
+			CPPUNIT_ASSERT_EQUAL(d.getMpfValue(), xmlbeansxx::mpf_class(13));
 
 			std::vector<XmlObject> retu2=z.selectPath(ns,"./a:*/a:klient/a:ola");
 			
@@ -157,7 +157,7 @@ void XPathTest::xPathTest()
 		        XMLBEANSXX_DEBUG(logger,"path: " + a2.toString())
 			XmlDecimal d2 = XmlDecimal(a2.xgetArray(2).getSimpleContent());
 	        	XMLBEANSXX_DEBUG(logger,"element: " + d2.toString());
-			CPPUNIT_ASSERT_EQUAL(d2.getMpfValue(), mpf_class(5));
+			CPPUNIT_ASSERT_EQUAL(d2.getMpfValue(), xmlbeansxx::mpf_class(5));
 			CPPUNIT_ASSERT_EQUAL(a2.size(), 4);
 		}
 		{

@@ -1,5 +1,5 @@
 SUBDIRS =
-EXTRA_DIST = xml-fragment.xsd
+EXTRA_DIST = xml-fragment.xsd CoreTypes.h.gmpxx CoreTypes.h.no_gmpxx
 
 AM_CPPFLAGS = -I${top_srcdir}/src -I${top_builddir}/src
 
@@ -110,7 +110,8 @@ libxmlbeansxxinclude_HEADERS = \
 
 nodist_libxmlbeansxxinclude_HEADERS = \
 	XmlTypesGen.h\
-	xml-fragment.h
+	xml-fragment.h\
+	CoreTypes.h
 
 XmlTypesGen.h XmlTypesGen.cpp:  ${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-genbuiltin XmlTypesGen.xh XmlTypesGen.xcpp 
 	${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-genbuiltin ${srcdir}/
@@ -118,5 +119,8 @@ XmlTypesGen.h XmlTypesGen.cpp:  ${top_builddir}/generator/target/xmlbeansxx-gen/
 xml-fragment.h xml-fragment.cpp: ${top_builddir}/generator/stamp-build ${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen xml-fragment.xsd
 	${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen ${srcdir}/xml-fragment.xsd
 
-MOSTLYCLEANFILES=XmlTypesGen.h XmlTypesGen.cpp xml-fragment.h xml-fragment.cpp
+CoreTypes.h: ${srcdir}/CoreTypes.h.gmpxx
+	$(CP) ${srcdir}/CoreTypes.h.gmpxx CoreTypes.h
+
+MOSTLYCLEANFILES=XmlTypesGen.h XmlTypesGen.cpp xml-fragment.h xml-fragment.cpp CoreTypes.h
 

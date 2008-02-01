@@ -282,12 +282,12 @@ public class ClassGen {
             case SchemaProperty.JAVA_INT:
                 return "int";
             case SchemaProperty.JAVA_LONG:
-                return "mpz_class";
+                return "xmlbeansxx::mpz_class";
 
             case SchemaProperty.JAVA_BIG_DECIMAL:
-            	return "mpf_class";
+            	return "xmlbeansxx::mpf_class";
             case SchemaProperty.JAVA_BIG_INTEGER:
-                return "mpz_class";
+                return "xmlbeansxx::mpz_class";
             case SchemaProperty.JAVA_STRING:
                 return "std::string";
             case SchemaProperty.JAVA_BYTE_ARRAY:
