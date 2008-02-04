@@ -187,7 +187,9 @@ void MySAX2Handler::startPrefixMapping(const XMLCh* const _prefix, const XMLCh* 
 
 
 
-void MySAX2Handler::characters(const XMLCh* const chars, const unsigned int length) {
+//void MySAX2Handler::characters(const XMLCh* const chars, const unsigned int length) {
+void MySAX2Handler::characters(const XMLCh* const chars, const XMLSize_t length) {
+
         string s = transcode(chars, length);
     	parser->nodesStack.top().str+=s;
     	XMLBEANSXX_DEBUG2(log, std::string("element value: ") + s )

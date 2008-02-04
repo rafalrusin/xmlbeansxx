@@ -94,7 +94,8 @@ public:
 			
     virtual void startPrefixMapping(const XMLCh* const prefix, const XMLCh* const uri);
              
-    virtual void characters(const XMLCh* const chars, const unsigned int length);
+//    virtual void characters(const XMLCh* const chars, const unsigned int length);
+    virtual void characters(const XMLCh* const chars, const XMLSize_t length);
     virtual void endElement(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname);
 
     virtual void warning(const XERCES_CPP_NAMESPACE::SAXParseException& exc);
