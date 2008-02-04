@@ -66,7 +66,7 @@ SET(XMLBEANSXX_INSTALL_HEADERS
 
 	${CMAKE_CURRENT_BINARY_DIR}/XmlTypesGen.h	
 	${xml-fragment.xsd_HEADER}
-	${CoreTypes.h._FILE}
+	${CoreTypes.h_FILE}
 )
 
 
