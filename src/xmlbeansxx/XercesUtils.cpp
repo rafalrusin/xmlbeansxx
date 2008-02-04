@@ -27,7 +27,7 @@ XERCES_CPP_NAMESPACE_USE
 
 //---
 BinStdInputStream::BinStdInputStream(std::istream &in): p(0),in(in) {}
-#if defined(WIN32) || (XERCES_VERSION_MAJOR == 3)
+#if (XERCES_VERSION_MAJOR == 3)
 XMLFilePos BinStdInputStream::curPos() const {
     return p;
 }

@@ -186,9 +186,11 @@ void MySAX2Handler::startPrefixMapping(const XMLCh* const _prefix, const XMLCh* 
 }
 
 
-
-//void MySAX2Handler::characters(const XMLCh* const chars, const unsigned int length) {
+#if (XERCES_VERSION_MAJOR == 3)
 void MySAX2Handler::characters(const XMLCh* const chars, const XMLSize_t length) {
+#else
+void MySAX2Handler::characters(const XMLCh* const chars, const unsigned int length) {
+#endif
 
         string s = transcode(chars, length);
     	parser->nodesStack.top().str+=s;

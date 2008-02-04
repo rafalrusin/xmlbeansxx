@@ -36,8 +36,8 @@ namespace xmlbeansxx {
 
 
 
-#if defined(WIN32) || (XERCES_VERSION_MAJOR == 3)
-// for xerces 2.8
+#if (XERCES_VERSION_MAJOR == 3)
+// for xerces 3.0
 /** Provides a xerces input stream to read from std::istream */
 class BinStdInputStream: public xercesc::BinInputStream {
     XMLFilePos p;
