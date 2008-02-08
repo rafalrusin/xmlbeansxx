@@ -52,6 +52,16 @@ DECLARE_PTR_CODE(std::string,StringPtr,constStringPtr)
 %%class xmlbeansxx::XmlObject
 XMLBEANSXX_LOGGER_PTR_SET(XmlObject::log,"xmlbeansxx.XmlObject");
 
+void XmlObject::setElement(const QName & name,const XmlObject &element,int index) 
+{
+	Contents::Walker::setElem(*this,name,element.contents,index);
+
+}
+void XmlObject::setAttribute(const QName & name,const XmlAnySimpleType &attribute ) 
+{
+	Contents::Walker::setAttr(*this,name,attribute.contents);
+}
+
 
 void XmlObject::createContents()
 {

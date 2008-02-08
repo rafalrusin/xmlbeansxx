@@ -82,7 +82,7 @@ struct NSMapSerializer : public XmlContext {
 		} catch(BeansException &e) {
 			//Prefix not set (getPrefix)
 		}
-		if(prefix.size()==0) {
+		if(prefix.empty()) {
 			try {
 				prefix = getPrefix(n.first);
 				return printPrefixName(prefix, n.second);
@@ -138,12 +138,21 @@ void Contents::serialize(bool printXsiType,const QName& elemName,std::ostream &o
     	SYNC(mutex)
 
 	ns.remember();
-
+	bool ClearDefaultNamespace = false;
+	if(elemName.first==StoreString("")) {
+		// if the element has a empty namespace then  it must have a "default namespace" (empty prefix)
+		ClearDefaultNamespace = true;
+		if(!(ns.getNamespaceURI("") == StoreString(""))) 
+			ns.addNamespace("","");
+	}
 	// add all namespace attribute to namespace map
 	XMLBEANSXX_FOREACH(ElemDict::ContentsType::const_iterator,it,attrs.contents) {
 		QName name = it->name;
-		if(name->first == XmlBeans::xmlns()) 
-		    ns.addNamespace(name->second,xmlbeansxx::Contents::Walker::getSimpleContent(it->value));
+		// add ownly namespaceses
+		// check if the namespace is the "default namespace" and it must be empty
+		if(name->first == XmlBeans::xmlns()  && (!ClearDefaultNamespace || !(name->second == StoreString("")))) {
+		    	ns.addNamespace(name->second,xmlbeansxx::Contents::Walker::getSimpleContent(it->value));
+		}
 	}
 
 	std::string name = ns.cprintQName(elemName);

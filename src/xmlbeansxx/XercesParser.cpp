@@ -105,7 +105,9 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
         	XMLBEANSXX_DEBUG2(log, std::string("predefined type found:") + n->getSchemaType()->name);
 		name = e.front().first;
 	}
+	
 	//this is the ROOT element
+	top->free();
 	XmlObjectPtr root = globalTypeSystem()->createDocumentByName(name);
 	if (root) {
 	    root->createContents();

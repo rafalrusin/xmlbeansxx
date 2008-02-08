@@ -198,7 +198,11 @@ public:
 //    virtual void swapContents(const constContentsPtr& p);
 
     operator bool() const; // == hasContents()
-    
+
+public:
+    void setElement(const QName & name,const XmlObject &element,int index = 0);
+    void setAttribute(const QName & name,const XmlAnySimpleType &attribute );
+        
 
 
 %%class xmlbeansxx::XmlAnySimpleType

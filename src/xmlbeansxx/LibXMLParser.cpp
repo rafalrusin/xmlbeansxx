@@ -463,6 +463,7 @@ void startElementNs(void *ctx,
 		name = e.front().first;
 	}
 	//this is the ROOT element
+	top->free();
 	XmlObjectPtr root = globalTypeSystem()->createDocumentByName(name);
 	if (root) {
 	    root->createContents();
