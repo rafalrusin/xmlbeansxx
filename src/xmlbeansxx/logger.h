@@ -18,10 +18,9 @@
 #define _XMLBEANSXX_LOGGER_H_
 
 
-//#include "config_auto.h"
+#include "config.h"
 
-#define HAVE_LIBLOG4CXX
-#ifdef  HAVE_LIBLOG4CXX
+#ifdef  XMLBEANSXX_WITH_LOG4CXX
 
 #include <log4cxx/logger.h>
 
@@ -51,7 +50,7 @@
 #define XMLBEANSXX_WARN(logger,string)  LOG4CXX_WARN(logger,string)
 
     
-#else // HAVE_LIBLOG4CXX
+#else // XMLBEANSXX_WITH_LOG4CXX
 
 #undef XMLBEANSXX_LOGGING
 
