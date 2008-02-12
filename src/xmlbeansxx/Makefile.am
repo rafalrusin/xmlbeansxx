@@ -6,16 +6,14 @@ AM_CPPFLAGS = -I${top_srcdir}/src -I${top_builddir}/src
 lib_LTLIBRARIES = libxmlbeansxx.la
 libxmlbeansxx_la_LDFLAGS = -version-info $(library_version_info)
 libxmlbeansxx_la_SOURCES = \
-	configGmpxx.h.disable\
-	configGmpxx.h.enable\
-	configLibxml2.h.disable\
-	configLibxml2.h.enable\
-	configLog4cxx.h.disable\
-	configLog4cxx.h.enable\
+	configGmpxx.h.yes\
+	configGmpxx.h.no\
+	configLibxml2.h.yes\
+	configLibxml2.h.no\
+	configLog4cxx.h.yes\
+	configLog4cxx.h.no\
 	CoreTypes.h\
 	CoreTypes.cpp\
-	CoreTypes.h.gmpxx\
-	CoreTypes.h.no_gmpxx\
 	XmlTypesGen.xh\
 	XmlTypesGen.xcpp\
 	BoostAssert.h\
@@ -118,7 +116,6 @@ libxmlbeansxxinclude_HEADERS = \
 nodist_libxmlbeansxxinclude_HEADERS = \
 	XmlTypesGen.h\
 	xml-fragment.h\
-	CoreTypes.h\
 	configGmpxx.h\
 	configLibxml2.h\
 	configLog4cxx.h
@@ -129,10 +126,20 @@ XmlTypesGen.h XmlTypesGen.cpp:  ${top_builddir}/generator/target/xmlbeansxx-gen/
 xml-fragment.h xml-fragment.cpp: ${top_builddir}/generator/stamp-build ${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen xml-fragment.xsd
 	${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen ${srcdir}/xml-fragment.xsd
 
-CoreTypes.h: ${srcdir}/CoreTypes.h.gmpxx
-	cp ${srcdir}/CoreTypes.h.gmpxx CoreTypes.h
+#CoreTypes.h: ${srcdir}/CoreTypes.h.gmpxx
+#	cp ${srcdir}/CoreTypes.h.gmpxx CoreTypes.h
 
-CoreTypes.cpp: CoreTypes.h
+CoreTypes.cpp: CoreTypes.h configLog4cxx.h configLibxml2.h configGmpxx.h
 
-MOSTLYCLEANFILES=XmlTypesGen.h XmlTypesGen.cpp xml-fragment.h xml-fragment.cpp CoreTypes.h
+configLog4cxx.h: ${srcdir}/configLog4cxx.h.${enable_log4cxx}
+	cp ${srcdir}/configLog4cxx.h.${enable_log4cxx} configLog4cxx.h
+
+configLibxml2.h: ${srcdir}/configLibxml2.h.${enable_libxml2}
+	cp ${srcdir}/configLibxml2.h.${enable_libxml2} configLibxml2.h
+
+configGmpxx.h: ${srcdir}/configGmpxx.h.${enable_gmpxx}
+	cp ${srcdir}/configGmpxx.h.${enable_gmpxx} configGmpxx.h
+
+
+MOSTLYCLEANFILES=XmlTypesGen.h XmlTypesGen.cpp xml-fragment.h xml-fragment.cpp configLog4cxx.h configLibxml2.h configGmpxx.h
 

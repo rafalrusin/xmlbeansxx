@@ -17,8 +17,6 @@
 #ifndef _XMLBEANSXX_CORE_TYPES_H_
 #define _XMLBEANSXX_CORE_TYPES_H_
 
-#define XMLBEANSXX_WITH_GMPXX
-
 
 #include "BoostAssert.h"
 #include <boost/shared_array.hpp>
@@ -29,10 +27,12 @@
 #include <sstream>
 
 #include "QName.h"
+#include "config.h"
 
 
 namespace xmlbeansxx {
     
+#ifdef XMLBEANSXX_WITH_GMPXX
     typedef ::mpz_class mpz_class;
     typedef ::mpf_class mpf_class;
 
@@ -54,8 +54,31 @@ namespace xmlbeansxx {
 	ss >> r;
 	return r;
     }
+#else
 
+    typedef long int mpz_class;
+    typedef long double mpf_class;
 
+    inline bool mpzFitsToInt(const mpz_class &v) {
+    	return true;
+    }
+    inline int mpzToInt(const mpz_class &v){
+    	return v;
+    } 
+    inline mpz_class stringToMpz(const std::string &v) {
+    	mpz_class r;
+    	std::stringstream ss(v);
+	ss >> r;
+	return r;
+    }
+    inline mpf_class stringToMpf(const std::string &v) {
+    	mpf_class r;
+    	std::stringstream ss(v);
+	ss >> r;
+	return r;
+    }
+
+#endif
 
     typedef boost::shared_ptr<QName> QNamePtr;
     class Calendar {
