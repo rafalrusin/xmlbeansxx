@@ -6,6 +6,12 @@ AM_CPPFLAGS = -I${top_srcdir}/src -I${top_builddir}/src
 lib_LTLIBRARIES = libxmlbeansxx.la
 libxmlbeansxx_la_LDFLAGS = -version-info $(library_version_info)
 libxmlbeansxx_la_SOURCES = \
+	configGmpxx.h.disable\
+	configGmpxx.h.enable\
+	configLibxml2.h.disable\
+	configLibxml2.h.enable\
+	configLog4cxx.h.disable\
+	configLog4cxx.h.enable\
 	CoreTypes.h\
 	CoreTypes.cpp\
 	CoreTypes.h.gmpxx\
@@ -112,7 +118,10 @@ libxmlbeansxxinclude_HEADERS = \
 nodist_libxmlbeansxxinclude_HEADERS = \
 	XmlTypesGen.h\
 	xml-fragment.h\
-	CoreTypes.h
+	CoreTypes.h\
+	configGmpxx.h\
+	configLibxml2.h\
+	configLog4cxx.h
 
 XmlTypesGen.h XmlTypesGen.cpp:  ${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-genbuiltin XmlTypesGen.xh XmlTypesGen.xcpp 
 	${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-genbuiltin ${srcdir}/

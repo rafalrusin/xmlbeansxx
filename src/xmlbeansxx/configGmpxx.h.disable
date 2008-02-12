@@ -1,0 +1,10 @@
+#ifndef _XMLBEANSXX_CONFIG_GMPXX_H_
+#define _XMLBEANSXX_CONFIG_GMPXX_H_
+
+
+#define XMLBEANSXX_WITHOUT_GMPXX
+ 
+
+#endif
+
+
