@@ -77,10 +77,13 @@ BUILT_SOURCES = \
 	XmlTypesGen.cpp\
 	xml-fragment.h\
 	xml-fragment.cpp\
-	XercesUtils.cpp
+	configGmpxx.h\
+	configLibxml2.h\
+	configLog4cxx.h
 
 libxmlbeansxxincludedir = $(includedir)/xmlbeansxx
 libxmlbeansxxinclude_HEADERS = \
+	config.h\
 	XmlObjectDocument.h\
 	BoostAssert.h\
 	TypeSystem.h\
@@ -126,10 +129,6 @@ XmlTypesGen.h XmlTypesGen.cpp:  ${top_builddir}/generator/target/xmlbeansxx-gen/
 xml-fragment.h xml-fragment.cpp: ${top_builddir}/generator/stamp-build ${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen xml-fragment.xsd
 	${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen ${srcdir}/xml-fragment.xsd
 
-#CoreTypes.h: ${srcdir}/CoreTypes.h.gmpxx
-#	cp ${srcdir}/CoreTypes.h.gmpxx CoreTypes.h
-
-CoreTypes.cpp: CoreTypes.h configLog4cxx.h configLibxml2.h configGmpxx.h
 
 configLog4cxx.h: ${srcdir}/configLog4cxx.h.${enable_log4cxx}
 	cp ${srcdir}/configLog4cxx.h.${enable_log4cxx} configLog4cxx.h

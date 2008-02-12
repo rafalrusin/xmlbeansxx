@@ -3,9 +3,9 @@
 
 
 
-#include "configLibxml2.h"
-#include "configLog4cxx.h"
-#include "configGmpxx.h"
+#include <xmlbeansxx/configLibxml2.h>
+#include <xmlbeansxx/configLog4cxx.h>
+#include <xmlbeansxx/configGmpxx.h>
 
 
 

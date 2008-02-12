@@ -22,13 +22,6 @@ AC_LIBTOOL_DLOPEN
 AC_PROG_LIBTOOL
 
 AC_PATH_PROG(XML2_CONFIG, xml2-config, no)
-if test "$XML2_CONFIG" = "no" ; then
-    AC_CHECK_LIB([xml2], [main])
-    AC_CHECK_HEADER([libxml/xmlversion.h])
-else
-    CPPFLAGS="$CPPFLAGS `$XML2_CONFIG --cflags`"
-    LIBS="$LIBS `$XML2_CONFIG --libs`"
-fi
 
 ACX_PTHREAD([
 		LIBS="$PTHREAD_LIBS $LIBS"
@@ -38,15 +31,6 @@ ACX_PTHREAD([
 		AC_MSG_WARN([Compiling without threads support])
 	])
 
-AC_ARG_WITH(xmlbeansxx-gen, 
-			[  --with-xmlbeansxx-gen=DIR Specify xmlbeansxx-gen distribution directory (dist) ],
-			[
-				xmlbeansxx_gen_dir="$withval"
-			],
-			[ 
-             xmlbeansxx_gen_dir="$PWD/generator"
-             #AC_MSG_ERROR([xmlbeansxx-gen distribution directory (dist) not specified. Please use --with-xmlbeansxx-gen.])
-			])
 
 m4_ifdef([AM_PATH_CPPUNIT],[
     AM_PATH_CPPUNIT(1.8.0)
@@ -55,17 +39,48 @@ m4_ifdef([AM_PATH_CPPUNIT],[
 
 BB_ENABLE_DOXYGEN
 
+AC_ARG_WITH(xmlbeansxx-gen, 	[AS_HELP_STRING([--with-xmlbeansxx-gen=DIR],[Specify xmlbeansxx-gen distribution directory (dist)])],
+				[ xmlbeansxx_gen_dir="$withval"],
+				[ xmlbeansxx_gen_dir="$PWD/generator" ])
+AC_ARG_ENABLE(gmpxx,		[AS_HELP_STRING([--disable-gmpxx],[disable support for gmpxx (default is enabled) ])],
+				[],
+				[enable_gmpxx=yes])
+AC_ARG_ENABLE(log4cxx,		[AS_HELP_STRING([--disable-log4cxx],[disable support for log4cxx (default is enabled) ])],
+				[],
+				[enable_log4cxx=yes])
+AC_ARG_ENABLE(libxml2,		[AS_HELP_STRING([--disable-libxml2],[disable support for libxml2 (default is enabled) ])],
+				[],
+				[enable_libxml2=yes])
+
+
+
+AS_IF([test "x$enable_log4cxx" != xno],	[AC_CHECK_LIB(log4cxx,main,,AC_MSG_ERROR([log4cxx library not found. Please install it.]))],[])
+AS_IF([test "x$enable_gmpxx"   != xno],	[AC_CHECK_LIB(gmp,main,,AC_MSG_ERROR([gmp library not found. Please install it.]),[])
+					 AC_CHECK_LIB(gmpxx,main,,AC_MSG_ERROR([gmpxx library not found. Please install gmp with gmpxx option enabled.]))],[])
+
+AS_IF([test "x$enable_libxml2" != xno],[
+		AS_IF([test "x$XML2_CONFIG" = "xno"], 
+					[
+					 AC_CHECK_LIB([xml2], [main])
+    					 AC_CHECK_HEADER([libxml/xmlversion.h])],
+					[
+					 CPPFLAGS="$CPPFLAGS `$XML2_CONFIG --cflags`"
+					 LIBS="$LIBS `$XML2_CONFIG --libs`"
+					])],[])
+
+
+
+
 AC_CHECK_LIB(xerces-c,main,,AC_MSG_ERROR([xerces-c library not found. Please install it.]))
-AC_CHECK_LIB(log4cxx,main,,AC_MSG_ERROR([log4cxx library not found.]))
-AC_CHECK_LIB(gmp,main,,AC_MSG_ERROR([gmp library not found. Please install it.]))
-AC_CHECK_LIB(gmpxx,main,,AC_MSG_ERROR([gmpxx library not found. Please install gmp with gmpxx option enabled.]))
 AC_CHECK_LIB(boost_date_time,main,,AC_MSG_ERROR([boost_date_time library not found. Please install it.]))
 AC_CHECK_LIB(boost_thread,main,,AC_MSG_ERROR([boost_thread library not found. Please install it.]))
-AC_CHECK_LIB(xml2,main,,AC_MSG_ERROR([xml2 library not found. Please install it.]))
 AC_CHECK_HEADERS([boost/shared_ptr.hpp boost/shared_array.hpp boost/date_time/gregorian/gregorian.hpp],,AC_MSG_ERROR([boost library headers not found. Please install boost library.]))
 
 AC_SUBST(ac_aux_dir)
 AC_SUBST(xmlbeansxx_gen_dir)
+AC_SUBST(enable_gmpxx)
+AC_SUBST(enable_libxml2)
+AC_SUBST(enable_log4cxx)
 
 AC_CONFIG_FILES([Makefile generator/Makefile src/Makefile src/xmlbeansxx/Makefile tests/Makefile examples/Makefile examples/small/Makefile docs/Doxyfile docs/Makefile])
 
