@@ -27,6 +27,11 @@
 #endif
 
 
+#include <boost/config.hpp>
+#ifdef BOOST_HAS_THREADS
+#include <boost/thread/recursive_mutex.hpp>
+#endif
+
 
 namespace xmlbeansxx {
 
@@ -93,6 +98,11 @@ private:
 #else 
     typedef __gnu_cxx::hash_map<const char *,int,CStrHashFn,CStrEqFn> StoreMap;
 #endif
+
+#ifdef BOOST_HAS_THREADS
+    mutable boost::recursive_mutex mutex;
+#endif
+
     StoreMap contents;
 public:
     struct SSInfo {
@@ -104,8 +114,8 @@ public:
     StringStorage();
     void add(const std::string &str);
     void add(const char * cs);
-    bool isStored(const char *str);
-    unsigned long get(const char *str);
+    bool isStored(const char *str) const;
+    unsigned long get(const char *str) const;
     ~StringStorage();
 };
 
@@ -126,6 +136,7 @@ public:
     StoreString(const std::string &str);
     StoreString(const char * str);
     ~StoreString();
+    void free();
     inline const char *c_str() const;
     inline unsigned int hashCode() const;
 
@@ -159,11 +170,13 @@ inline bool operator==(const StoreString &a,const std::string &b);
 
 //Inline functions
 inline StoreString &StoreString::operator=(const StoreString &b) {
+    free();
     copyFrom(b);
     return *this;
 }
 
 inline void StoreString::copyFrom(const StoreString &from) {
+    free();
     if (from.isStored()) {
         buf=from.buf;
     } else {

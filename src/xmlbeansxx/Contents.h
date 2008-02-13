@@ -115,14 +115,14 @@ public:
 
 //	void serialize2(int emptyNsID,bool printXsiType,const QName& elemName,std::ostream &o,const xmlbeansxx::SchemaType * st) const;
 	void serializeDocument(std::ostream &o,XmlOptions options) const;
-	void serialize(bool printXsiType,const QName &elemName,std::ostream &o,NSMapSerializer ns,XmlOptions options) const;
+	void serialize(bool printXsiType,const QName &elemName,std::ostream &o,NSMapSerializer &ns,XmlOptions options) const;
 
 	std::string digest() const;
 	const SchemaType * getSchemaType() const;
 
 private:
 	void serializeAttrs(std::ostream &o,NSMapSerializer& ns,XmlOptions options) const;
-	void serializeElems(std::ostream &o,NSMapSerializer  ns,XmlOptions options) const;
+	void serializeElems(std::ostream &o,NSMapSerializer& ns,XmlOptions options) const;
 
 
 

@@ -28,6 +28,14 @@
 
 #include <xercesc/util/PlatformUtils.hpp>
 
+#include <boost/config.hpp>
+#ifdef BOOST_HAS_THREADS
+#include <boost/thread/detail/lock.hpp>
+#define SYNC(mutex) boost::detail::thread::scoped_lock<boost::recursive_mutex> lock(mutex);
+#else
+#define SYNC(mutex)
+#endif
+
 
 using namespace std;
 
@@ -49,11 +57,16 @@ static log4cxx::LoggerPtr log()
 #endif
 
 
-XmlObjectPtr TypeSystem::createDocumentByName(const QName &typeName) {
+XmlObjectPtr TypeSystem::createDocumentByName(const QName &typeName) const {
     TRACER(log(),"createByName");
-    
-    
-    const SchemaType * st = documentTypeCreators[typeName];
+   
+    const SchemaType * st=0;
+    {
+    	SYNC(mutex);
+    	TypeCreators_type::const_iterator i = documentTypeCreators.find(typeName);
+	if(i != documentTypeCreators.end()) 
+		st=i->second;
+    }
     if(!st) {
         XMLBEANSXX_DEBUG(log(),std::string("typeName:")+typeName+std::string(" Document Object not registered ,  returning NULL pointer"));
         return XmlObjectPtr();
@@ -69,11 +82,16 @@ XmlObjectPtr TypeSystem::createDocumentByName(const QName &typeName) {
 }
 
 
-XmlObjectPtr TypeSystem::createByName(const QName &typeName) {
+XmlObjectPtr TypeSystem::createByName(const QName &typeName) const{
     TRACER(log(),"createByName");
     
-    
-    const SchemaType * st = typeCreators[typeName];
+    const SchemaType * st=0;
+    {
+    	SYNC(mutex);
+    	TypeCreators_type::const_iterator i = typeCreators.find(typeName);
+	if(i != typeCreators.end()) 
+		st=i->second;
+    }
     if(!st) {
         XMLBEANSXX_DEBUG(log(),std::string("typeName:")+typeName+std::string(" Object not registered ,  returning NULL pointer"));
         return XmlObjectPtr();
@@ -88,10 +106,16 @@ XmlObjectPtr TypeSystem::createByName(const QName &typeName) {
     }
 }
 
-XmlObjectPtr TypeSystem::createArrayByName(const QName &typeName) {
+XmlObjectPtr TypeSystem::createArrayByName(const QName &typeName) const {
     TRACER(log(),"createArrayByName");
 
-    const SchemaType * st = typeCreators[typeName];
+    const SchemaType * st=0;
+    {
+    	SYNC(mutex);
+    	TypeCreators_type::const_iterator i = typeCreators.find(typeName);
+	if(i != typeCreators.end()) 
+		st=i->second;
+    }
     if(!st) {
         XMLBEANSXX_DEBUG(log(),std::string("typeName:")+typeName+std::string(" Object not registered ,  returning NULL pointer"));
         return XmlObjectPtr();
@@ -107,12 +131,16 @@ XmlObjectPtr TypeSystem::createArrayByName(const QName &typeName) {
 }
 
 void TypeSystem::addType(const SchemaType *st) {
+    SYNC(mutex);
     typeCreators[st->name]=st;
 }
 
 void TypeSystem::addDocumentType(const SchemaType *st) {
     addType(st);
-    documentTypeCreators[st->documentElementName]=st;
+    {
+    	SYNC(mutex);
+    	documentTypeCreators[st->documentElementName]=st;
+    }
 }
 
 //------------------------------------------------------------------------------------
@@ -165,8 +193,8 @@ public:
 //-------------------------------------------------------------------------
 TypeSystem *globalTypeSystem() {
     static BeansExistence exist;
-    static TypeSystem *gts=new TypeSystem();
-    return gts;
+    static std::auto_ptr<TypeSystem> gts(new TypeSystem());
+    return gts.get();
 }
 
 

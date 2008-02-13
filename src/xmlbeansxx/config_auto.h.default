@@ -1,0 +1,2 @@
+#define HAVE_LIBXERCES_C 1
+

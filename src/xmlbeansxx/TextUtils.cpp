@@ -103,7 +103,7 @@ namespace xmlbeansxx {
 
     std::string TextUtils::exchangeEntities(const std::string& str, TextUtils::EscapeFlags escapeFlag) {
  
-#ifdef HAVE_LIBXML2
+#ifndef HAVE_LIBXERCES_C
 
     xmlChar *retu;
     if(str.size()<=0) return std::string("");

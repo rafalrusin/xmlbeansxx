@@ -133,7 +133,7 @@ bool shallPrintXsiType(const SchemaType *xsdDefined,const SchemaType * st) {
 
 
 
-void Contents::serialize(bool printXsiType,const QName& elemName,std::ostream &o,NSMapSerializer ns,XmlOptions options) const {
+void Contents::serialize(bool printXsiType,const QName& elemName,std::ostream &o,NSMapSerializer &ns,XmlOptions options) const {
 	TRACER(log,"serialize");
     	SYNC(mutex)
 
@@ -231,10 +231,11 @@ void Contents::serializeAttrs(ostream &o,NSMapSerializer& ns, XmlOptions options
 }
 
 
-void Contents::serializeElems(ostream &o,NSMapSerializer ns, XmlOptions options) const {
+void Contents::serializeElems(ostream &o,NSMapSerializer &ns, XmlOptions options) const {
 	SYNC(mutex)
 	TRACER(log,"serializeElems");
 
+	ns.remember();
 
 	// order sort
 	typedef map<int,std::pair<QName,const SchemaType*> > MType;
@@ -267,6 +268,8 @@ void Contents::serializeElems(ostream &o,NSMapSerializer ns, XmlOptions options)
 			}
 		}
 	}
+	
+	ns.restore();
 }
 
 }

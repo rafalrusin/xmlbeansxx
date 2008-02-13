@@ -53,11 +53,12 @@ XERCES_CPP_NAMESPACE_USE
 
 MySAX2Handler::MySAX2Handler(XercesParser *p): parser(p) {}
 
-static std::string getPrefix(std::string qname){
+std::string getPrefix(const std::string &qname){
     std::string::size_type p=qname.find(":");
     if(p!=std::string::npos) return qname.substr(0,p);	
     return std::string();
 }
+
 
 void MySAX2Handler::startElement(	const XMLCh* const uri, 
 					const XMLCh* const localname, 

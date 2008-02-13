@@ -22,6 +22,14 @@
 
 #include <cstring>
 
+#include <boost/config.hpp>
+#ifdef BOOST_HAS_THREADS
+#include <boost/thread/detail/lock.hpp>
+#define SYNC(mutex) boost::detail::thread::scoped_lock<boost::recursive_mutex> lock(mutex);
+#else
+#define SYNC(mutex)
+#endif
+
 
 
 namespace xmlbeansxx {
@@ -37,6 +45,7 @@ char *duplicate(const char *str) {
 
 
     if (!((((unsigned long)buf)&1)==0)) {
+    	delete[] buf;
         throw IllegalStateException();
     }
     //strcpy(buf,str);
@@ -98,6 +107,7 @@ void StringStorage::add(const std::string &str) {
 void StringStorage::add(const char * cs) {
     if (cs==NULL) cs="";
     if (!isStored(cs)) {
+	SYNC(mutex);
         const char *s(duplicate(cs));
         contents.insert(std::pair<const char *,int>(s,stored.size()));
         SSInfo ssi;
@@ -106,12 +116,14 @@ void StringStorage::add(const char * cs) {
         stored.push_back(ssi);
     }
 }
-bool StringStorage::isStored(const char *str) {
-    return contents.find(str)!=contents.end();
+bool StringStorage::isStored(const char *str) const {
+    SYNC(mutex);
+    return  contents.find(str)!=contents.end();
 }
 
-unsigned long StringStorage::get(const char *str) {
-    StoreMap::iterator it=contents.find(str);
+unsigned long StringStorage::get(const char *str) const {
+    SYNC(mutex);    
+    StoreMap::const_iterator it=contents.find(str);
     if (it!=contents.end()) {
         return (it->second*2+1);
     } else return 0;
@@ -130,6 +142,7 @@ StringStorage::~StringStorage() {
 //------------------------------------------------
 
 void StoreString::construct(const std::string &str) {
+    free();
     buf=getStorage()->get(str.c_str());
     if (buf==0) {
         buf=(unsigned long)duplicate(str.c_str());
@@ -137,30 +150,39 @@ void StoreString::construct(const std::string &str) {
 }
 
 StringStorage *StoreString::getStorage() {
-    static StringStorage *storage=new StringStorage();
-    return storage;
+    static std::auto_ptr<StringStorage> storage(new StringStorage());
+    return storage.get();
 }
 
 StoreString::StoreString() {
+    buf=0;
     construct(std::string());
 }
 
 StoreString::StoreString(const std::string &str) {
+    buf=0;
     construct(str);
 }
 StoreString::StoreString(const char *str) {
+    buf=0;
     construct(std::string(str));
 }
 
 StoreString::StoreString(const StoreString &from) {
+    buf=0;
     copyFrom(from);
 }
 
-StoreString::~StoreString() {
-    if (!isStored()) {
+void StoreString::free()
+{
+    if (!isStored() && buf!=0) {
         delete[] ((char *)buf);
     }
     buf=0;
+}
+
+StoreString::~StoreString() {
+    free();
 }
 
 std::string StoreString::toString() const {

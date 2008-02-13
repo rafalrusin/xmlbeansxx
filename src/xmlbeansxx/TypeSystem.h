@@ -25,22 +25,31 @@
 #include "SchemaType.h"
 
 
+#include <boost/config.hpp>
+#ifdef BOOST_HAS_THREADS
+#include <boost/thread/recursive_mutex.hpp>
+#endif
+
 
 namespace xmlbeansxx {
 
 class TypeSystem {
-    
-    std::map<QName,const SchemaType *> typeCreators;
-    std::map<QName,const SchemaType *> documentTypeCreators;
+
+    typedef std::map<QName,const SchemaType *> TypeCreators_type;
+#ifdef BOOST_HAS_THREADS
+    mutable boost::recursive_mutex mutex;
+#endif    
+    TypeCreators_type typeCreators;
+    TypeCreators_type documentTypeCreators;
 
 
 public:
 
     TypeSystem(){};
 
-    XmlObjectPtr createDocumentByName(const QName &typeName);    
-    XmlObjectPtr createByName(const QName &typeName);
-    XmlObjectPtr createArrayByName(const QName &typeName);
+    XmlObjectPtr createDocumentByName(const QName &typeName) const;
+    XmlObjectPtr createByName(const QName &typeName) const;
+    XmlObjectPtr createArrayByName(const QName &typeName) const;
     
     void addDocumentType(const SchemaType *st);
     void addType(const SchemaType *st);
