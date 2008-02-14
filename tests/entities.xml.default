@@ -1,7 +1,7 @@
 <?xml version="1.0"  encoding="UTF-8"?>
 <nodes xmlns="http://mind.p4.com/mytest">
   <node id="1324" value='opi"sik'>
-      <data>>>>>ito jest jakiś długi tekst&#xA;podzielony enterami&#xA;i z krzaczkami &quot;&amp;&lt;&gt;</data>
+      <data>>>>>ito jest jakis dlugi tekst&#xA;podzielony enterami&#xA;i z krzaczkami &quot;&amp;&lt;&gt;</data>
   </node>
   <node id="13" value=">&quot;opi&#x0A;isik&quot;">
     <data><![CDATA[I am > the rules! 
