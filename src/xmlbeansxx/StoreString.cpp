@@ -150,8 +150,8 @@ void StoreString::construct(const std::string &str) {
 }
 
 StringStorage *StoreString::getStorage() {
-    static std::auto_ptr<StringStorage> storage(new StringStorage());
-    return storage.get();
+    static StringStorage * storage =new StringStorage();
+    return storage;
 }
 
 StoreString::StoreString() {
