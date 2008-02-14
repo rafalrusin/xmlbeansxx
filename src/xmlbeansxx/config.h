@@ -7,6 +7,7 @@
 #include <xmlbeansxx/configLog4cxx.h>
 #include <xmlbeansxx/configGmpxx.h>
 
+#define XMLBEANSXX_WITH_LIBXERCES_C
 
 
 #endif

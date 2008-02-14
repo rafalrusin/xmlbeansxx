@@ -16,16 +16,13 @@
 
 #include "XmlParser.h"
 
-#undef HAVE_LIBXML2
-#undef HAVE_LIBXERCES_c
-#undef HAVE_LIBLOG4CXX
-#include "config_auto.h"
+#include "config.h"
 
-#ifdef HAVE_LIBXML2
+#ifdef XMLBEANSXX_WITH_LIBXML2
 #include "LibXMLParser.h"
 #endif
 
-#ifdef HAVE_LIBXERCES_C
+#ifdef XMLBEANSXX_WITH_LIBXERCES_C
 #include "XercesParser.h"
 #endif
 
@@ -38,7 +35,7 @@ XmlParserPtr XmlParser::Factory::newInstance() {
 #else
     return XmlParserPtr(new XercesParser());
 #endif*/
-#ifdef HAVE_LIBXERCES_C
+#ifdef XMLBEANSXX_WITH_LIBXERCES_C
     return XmlParserPtr(new XercesParser());
 #else
     return XmlParserPtr(new LibXMLParser());
@@ -53,7 +50,7 @@ XmlParserPtr XmlParser::Factory::newInstance(const XmlOptions o) {
     return XmlParserPtr(new XercesParser(o));
 #endif
 */
-#ifdef HAVE_LIBXERCES_C
+#ifdef XMLBEANSXX_WITH_LIBXERCES_C
     return XmlParserPtr(new XercesParser(o));
 #else
     return XmlParserPtr(new LibXMLParser(o));

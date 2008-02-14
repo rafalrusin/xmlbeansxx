@@ -18,7 +18,6 @@ XMLBEANSXX_LOGGER_PTR_SET(LOG,"test.EntitiesTest");
 
 void EntitiesTest::entitiesTest () {
 
-    try {
         ifstream ifs ("entities.xml");
         
         stringstream ss1;
@@ -43,14 +42,4 @@ void EntitiesTest::entitiesTest () {
         CPPUNIT_ASSERT_EQUAL (ss2.str(), ss3.str());
         CPPUNIT_ASSERT ( !doc2.getNodes().getNodeArray(0).getData().empty());
         
-    } catch (XmlException& e) {
-        cerr << "XmlException: " << e.what () << endl;
-        throw;
-    } catch (BeansException& e) {
-        cerr << "BeansException: " << e.what () << endl;
-        throw;
-    } catch (exception& e) {
-        cerr << "exception: " << e.what () << endl;
-        throw;
-    }
 }

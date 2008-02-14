@@ -18,7 +18,7 @@
 #define _XMLBEANSXX_LOGGER_H_
 
 
-#include "config.h"
+#include <xmlbeansxx/config.h>
 
 #ifdef  XMLBEANSXX_WITH_LOG4CXX
 
@@ -69,7 +69,7 @@
 
 
 
-#endif // HAVE_LIBLOG4CXX
+#endif // XMLBEANSXX_WITH_LOG4CXX
 
 
 #endif

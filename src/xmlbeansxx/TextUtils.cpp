@@ -24,8 +24,9 @@
 #include <string>
 
 
-#include "config_auto.h"
-#ifdef HAVE_LIBXML2
+#include "config.h"
+
+#ifdef XMLBEANSXX_WITH_LIBXML2
 #include <libxml/entities.h>
 #endif
 
@@ -103,7 +104,7 @@ namespace xmlbeansxx {
 
     std::string TextUtils::exchangeEntities(const std::string& str, TextUtils::EscapeFlags escapeFlag) {
  
-#ifndef HAVE_LIBXERCES_C
+#ifndef XMLBEANSXX_WITH_LIBXERCES_C
 
     xmlChar *retu;
     if(str.size()<=0) return std::string("");
@@ -116,6 +117,7 @@ namespace xmlbeansxx {
     return s;
 
 #else    
+//        XMLBEANSXX_DEBUG(log,std::string("exchange entities in:") + str);
 
         XMLCh* toFormat = XMLString::transcode (str.c_str ());
         
@@ -136,7 +138,7 @@ namespace xmlbeansxx {
         string res(s);
         XMLString::release(&s);
         
-        XMLBEANSXX_DEBUG(log,std::string("res:") + res);
+//        XMLBEANSXX_DEBUG(log,std::string("res:") + res);
         return res; 
 #endif
 }

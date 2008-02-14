@@ -6,7 +6,7 @@ XMLBEANSXX_GEN(xml-fragment.xsd xml-fragment.cpp xml-fragment.h)
 
 
 #make a config file
-XMLBEANSXX_COPY(config_auto.h.default config_auto.h)
+#XMLBEANSXX_COPY(config_auto.h.default config_auto.h)
 SET(XMLBEANSXX_EXTRA_INCLUDE_DIRS "")
 SET(XMLBEANSXX_OPTIONAL_LIBS "")
 
