@@ -193,8 +193,8 @@ public:
 //-------------------------------------------------------------------------
 TypeSystem *globalTypeSystem() {
     static BeansExistence exist;
-    static std::auto_ptr<TypeSystem> gts(new TypeSystem());
-    return gts.get();
+    static TypeSystem * gts=new TypeSystem();
+    return gts;
 }
 
 
