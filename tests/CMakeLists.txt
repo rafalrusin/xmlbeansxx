@@ -43,16 +43,18 @@ XMLBEANSXX_GEN(entities.xsd 	entities.cpp 	entities.h)
 XMLBEANSXX_COPY(log4j.xml.default	log4j.xml)
 XMLBEANSXX_COPY(entities.xml.default	entities.xml)
 
+SET(EXTRA_FILES ${log4j.xml_FILE} ${entities.xml_FILE})
 
-ADD_EXECUTABLE(BeansTest	TestApp.cpp BeansTest.cpp	BeansTest.h 						)
-ADD_EXECUTABLE(XmlArrayTest	TestApp.cpp XmlArrayTest.cpp	XmlArrayTest.h						)
-ADD_EXECUTABLE(ArrayTest	TestApp.cpp ArrayTest.cpp	ArrayTest.h		${c.xsd_SRC}			)
-#ADD_EXECUTABLE(GenTest		TestApp.cpp GenTest.cpp		GenTest.h		${c.xsd_SRC} ${pawel.xsd_SRC}	)
-#ADD_EXECUTABLE(ParseTest	TestApp.cpp ParseTest.cpp 	ParseTest.h 		${c.xsd_SRC}			)
-#ADD_EXECUTABLE(UnqualTest	TestApp.cpp UnqualTest.cpp 	UnqualTest.h 		${unqual.xsd_SRC}		)
-ADD_EXECUTABLE(EnumTest		TestApp.cpp EnumTest.cpp 	EnumTest.h		${pawel.xsd_SRC}		)
-ADD_EXECUTABLE(XPathTest	TestApp.cpp XPathTest.cpp 	XPathTest.h		${pawel.xsd_SRC}		)
-ADD_EXECUTABLE(EntitiesTest	TestApp.cpp EntitiesTest.cpp 	EntitiesTest.h		${entities.xsd_SRC}		)
+
+ADD_EXECUTABLE(BeansTest	TestApp.cpp BeansTest.cpp	BeansTest.h 		${EXTRA_FILES}					)
+ADD_EXECUTABLE(XmlArrayTest	TestApp.cpp XmlArrayTest.cpp	XmlArrayTest.h		${EXTRA_FILES}					)
+ADD_EXECUTABLE(ArrayTest	TestApp.cpp ArrayTest.cpp	ArrayTest.h		${EXTRA_FILES}	${c.xsd_SRC}			)
+#ADD_EXECUTABLE(GenTest		TestApp.cpp GenTest.cpp		GenTest.h		${EXTRA_FILES}	${c.xsd_SRC} ${pawel.xsd_SRC}	)
+#ADD_EXECUTABLE(ParseTest	TestApp.cpp ParseTest.cpp 	ParseTest.h 		${EXTRA_FILES}	${c.xsd_SRC}			)
+#ADD_EXECUTABLE(UnqualTest	TestApp.cpp UnqualTest.cpp 	UnqualTest.h 		${EXTRA_FILES}	${unqual.xsd_SRC}		)
+ADD_EXECUTABLE(EnumTest		TestApp.cpp EnumTest.cpp 	EnumTest.h		${EXTRA_FILES}	${pawel.xsd_SRC}		)
+ADD_EXECUTABLE(XPathTest	TestApp.cpp XPathTest.cpp 	XPathTest.h		${EXTRA_FILES}	${pawel.xsd_SRC}		)
+ADD_EXECUTABLE(EntitiesTest	TestApp.cpp EntitiesTest.cpp 	EntitiesTest.h		${EXTRA_FILES}	${entities.xsd_SRC}		)
 
 
 

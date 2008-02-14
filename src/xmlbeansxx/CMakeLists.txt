@@ -70,12 +70,17 @@ SET(XMLBEANSXX_INSTALL_HEADERS
         NSMap.h
         XercesUtils.h
         XercesUtils.h
+	CoreTypes.h
+	config.h
 
 	${PARSERS_H}
 
 	${CMAKE_CURRENT_BINARY_DIR}/XmlTypesGen.h	
 	${xml-fragment.xsd_HEADER}
-	${CoreTypes.h_FILE}
+	
+	${configLibxml2.h_FILE}
+	${configGmpxx.h_FILE}
+	${configLog4cxx.h_FILE}
 )
 
 
@@ -135,7 +140,6 @@ SET(XMLBEANSXX_SRC
 	
 	${CMAKE_CURRENT_BINARY_DIR}/XmlTypesGen.h
 	${CMAKE_CURRENT_BINARY_DIR}/XmlTypesGen.cpp
-	${CMAKE_CURRENT_BINARY_DIR}/config_auto.h
 	
 	${xml-fragment.xsd_SRC}
 
