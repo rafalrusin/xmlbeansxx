@@ -12,7 +12,6 @@ libxmlbeansxx_la_SOURCES = \
 	configLibxml2.h.no\
 	configLog4cxx.h.yes\
 	configLog4cxx.h.no\
-	CoreTypes.h\
 	CoreTypes.cpp\
 	XmlTypesGen.xh\
 	XmlTypesGen.xcpp\
@@ -83,6 +82,7 @@ BUILT_SOURCES = \
 
 libxmlbeansxxincludedir = $(includedir)/xmlbeansxx
 libxmlbeansxxinclude_HEADERS = \
+	CoreTypes.h\
 	config.h\
 	XmlObjectDocument.h\
 	BoostAssert.h\
