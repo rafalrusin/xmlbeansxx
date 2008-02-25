@@ -1,4 +1,5 @@
 rm -rf build
 mkdir build
 cd build
-cmake ..
+cmake .. -DCMAKE_WITHOUT_GMP=1
+
