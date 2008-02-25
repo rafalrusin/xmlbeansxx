@@ -66,7 +66,9 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     boost-1_33
   )
 
+  SET(BOOST_PREFIX "")
   if (WIN32)
+    SET(BOOST_PREFIX "lib")
     # In windows, automatic linking is performed, so you do not have to specify the libraries.
     # If you are linking to a dynamic runtime, then you can choose to link to either a static or a
     # dynamic Boost library, the default is to do a static link.  You can alter this for a specific
@@ -186,7 +188,7 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     if (NOT BOOST_DATE_TIME_LIBRARY)
       find_library(BOOST_DATE_TIME_LIBRARY
         NAMES
-          boost_date_time${TMP_BOOST_LIBRARIES_SUFFIX}
+          ${BOOST_PREFIX}boost_date_time${TMP_BOOST_LIBRARIES_SUFFIX}
         PATHS
           ${BOOST_LIBRARIES_SEARCH_DIRS}
       )
@@ -206,7 +208,7 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     if (NOT BOOST_FILESYSTEM_LIBRARY)
       find_library(BOOST_FILESYSTEM_LIBRARY
         NAMES
-          boost_filesystem${TMP_BOOST_LIBRARIES_SUFFIX}
+          ${BOOST_PREFIX}boost_filesystem${TMP_BOOST_LIBRARIES_SUFFIX}
         PATHS
           ${BOOST_LIBRARIES_SEARCH_DIRS}
       )
@@ -215,7 +217,7 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     if (NOT BOOST_IOSTREAMS_LIBRARY)
       find_library(BOOST_IOSTREAMS_LIBRARY
         NAMES
-          boost_iostreams${TMP_BOOST_LIBRARIES_SUFFIX}
+          ${BOOST_PREFIX}boost_iostreams${TMP_BOOST_LIBRARIES_SUFFIX}
         PATHS
           ${BOOST_LIBRARIES_SEARCH_DIRS}
       )
@@ -224,7 +226,7 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     if (NOT BOOST_PRG_EXEC_MONITOR_LIBRARY)
       find_library(BOOST_PRG_EXEC_MONITOR_LIBRARY
         NAMES
-          boost_prg_exec_monitor${TMP_BOOST_LIBRARIES_SUFFIX}
+          ${BOOST_PREFIX}boost_prg_exec_monitor${TMP_BOOST_LIBRARIES_SUFFIX}
         PATHS
           ${BOOST_LIBRARIES_SEARCH_DIRS}
       )
@@ -233,7 +235,7 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     if (NOT BOOST_PROGRAM_OPTIONS_LIBRARY)
       find_library(BOOST_PROGRAM_OPTIONS_LIBRARY
         NAMES
-          boost_program_options${TMP_BOOST_LIBRARIES_SUFFIX}
+          ${BOOST_PREFIX}boost_program_options${TMP_BOOST_LIBRARIES_SUFFIX}
         PATHS
           ${BOOST_LIBRARIES_SEARCH_DIRS}
       )
@@ -242,7 +244,7 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     if (NOT BOOST_PYTHON_LIBRARY)
       find_library(BOOST_PYTHON_LIBRARY
         NAMES
-          boost_python${TMP_BOOST_LIBRARIES_SUFFIX}
+          ${BOOST_PREFIX}boost_python${TMP_BOOST_LIBRARIES_SUFFIX}
         PATHS
           ${BOOST_LIBRARIES_SEARCH_DIRS}
       )
@@ -251,7 +253,7 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     if (NOT BOOST_REGEX_LIBRARY)
       find_library(BOOST_REGEX_LIBRARY
         NAMES
-          boost_regex${TMP_BOOST_LIBRARIES_SUFFIX}
+          ${BOOST_PREFIX}boost_regex${TMP_BOOST_LIBRARIES_SUFFIX}
         PATHS
           ${BOOST_LIBRARIES_SEARCH_DIRS}
       )
@@ -260,7 +262,7 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     if (NOT BOOST_SERIALIZATION_LIBRARY)
       find_library(BOOST_SERIALIZATION_LIBRARY
         NAMES
-          boost_serialization${TMP_BOOST_LIBRARIES_SUFFIX}
+          ${BOOST_PREFIX}boost_serialization${TMP_BOOST_LIBRARIES_SUFFIX}
         PATHS
           ${BOOST_LIBRARIES_SEARCH_DIRS}
       )
@@ -269,21 +271,16 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     if (NOT BOOST_SIGNALS_LIBRARY)
       find_library(BOOST_SIGNALS_LIBRARY
         NAMES
-          boost_signals${TMP_BOOST_LIBRARIES_SUFFIX}
+          ${BOOST_PREFIX}boost_signals${TMP_BOOST_LIBRARIES_SUFFIX}
         PATHS
           ${BOOST_LIBRARIES_SEARCH_DIRS}
       )
     endif (NOT BOOST_SIGNALS_LIBRARY)
 
     if (NOT BOOST_TEST_EXEC_MONITOR_LIBRARY)
-      if (WIN32)
-        set (_name libboost_test_exec_monitor${TMP_BOOST_LIBRARIES_SUFFIX})
-      else (WIN32)
-        set (_name boost_test_exec_monitor${TMP_BOOST_LIBRARIES_SUFFIX})
-      endif (WIN32)
       find_library(BOOST_TEST_EXEC_MONITOR_LIBRARY
         NAMES
-          ${_name}
+	  ${BOOST_PREFIX}boost_test_exec_monitor${TMP_BOOST_LIBRARIES_SUFFIX}
         PATHS
           ${BOOST_LIBRARIES_SEARCH_DIRS}
       )
@@ -292,23 +289,17 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     if (NOT BOOST_THREAD_LIBRARY)
       find_library(BOOST_THREAD_LIBRARY
         NAMES
-          boost_thread${TMP_BOOST_LIBRARIES_SUFFIX}
-          boost_thread-mt
+          ${BOOST_PREFIX}boost_thread${TMP_BOOST_LIBRARIES_SUFFIX}
+          ${BOOST_PREFIX}boost_thread-mt
         PATHS
           ${BOOST_LIBRARIES_SEARCH_DIRS}
       )
     endif (NOT BOOST_THREAD_LIBRARY)
 
     if (NOT BOOST_UNIT_TEST_FRAMEWORK_LIBRARY)
-      set (_boost_unit_test_lib_name "")
-      if (WIN32)
-        set (_boost_unit_test_lib_name libboost_unit_test_framework${TMP_BOOST_LIBRARIES_SUFFIX})
-      else (WIN32)
-        set (_boost_unit_test_lib_name boost_unit_test_framework${TMP_BOOST_LIBRARIES_SUFFIX})
-      endif (WIN32)
       find_library(BOOST_UNIT_TEST_FRAMEWORK_LIBRARY
         NAMES
-          ${_boost_unit_test_lib_name}
+          ${BOOST_PREFIX}boost_unit_test_framework${TMP_BOOST_LIBRARIES_SUFFIX}
         PATHS
           ${BOOST_LIBRARIES_SEARCH_DIRS}
       )
@@ -317,7 +308,7 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     if (NOT BOOST_WSERIALIZATION_LIBRARY)
       find_library(BOOST_WSERIALIZATION_LIBRARY
         NAMES
-          boost_wserialization${TMP_BOOST_LIBRARIES_SUFFIX}
+          ${BOOST_PREFIX}boost_wserialization${TMP_BOOST_LIBRARIES_SUFFIX}
         PATHS
           ${BOOST_LIBRARIES_SEARCH_DIRS}
       )
