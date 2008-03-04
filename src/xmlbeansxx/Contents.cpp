@@ -23,10 +23,13 @@
 #include <string>
 #include <iostream>
 #include <map>
+#include "XmlBeans.h"
+#include "XmlTypesGen.h"
 
 #include "TypeSystem.h"
 #include "TextUtils.h"
 #include "SchemaProperty.h"
+#include "ContentsImpl.h"
 
 using namespace std;
 
@@ -76,7 +79,7 @@ void Contents::free() {
     SYNC(mutex)
     elems.free();
     attrs.free();
-    value=std::string();
+//    value=std::string();
     //logger->debug(std::string("Contents::free() - finish"));
 }
 
@@ -99,7 +102,7 @@ ContentsPtr Contents::clone()
         clone->attrs.add(it->name,it->value);
     }
 
-    clone->value=value;
+//    clone->value=value;
     return clone;
 }
 
@@ -115,12 +118,20 @@ const SchemaType * Contents::getSchemaType() const
 
 
 void Contents::setSimpleContent(const std::string &c) {
-    SYNC(mutex)
-    value=c;
+    removeElems(XmlBeans::textElementName());
+    if(c.size() > 0)
+	setElem(XmlBeans::textElementName(), ContentsPtr (new StringContents(c)));
+    
 }
 std::string Contents::getSimpleContent() const {
     SYNC(mutex)
-    return value;
+    std::string r;
+    std::vector<ContentsPtr>  txt = Contents::getElemArray(XmlBeans::textElementName());
+    XMLBEANSXX_FOREACH(std::vector<ContentsPtr>::const_iterator,it,txt) {
+    	r+=(*it)->getSimpleContent();
+    }
+    return r;
+
 }
 
 
@@ -193,11 +204,12 @@ bool Contents::hasEmptyContent() const {
     return attrs.hasEmptyContent() && elems.hasEmptyContent();
 }
 
-vector<pair<QName,ContentsPtr > > Contents::getElems() const {
+vector<pair<QName,ContentsPtr > > Contents::getElems(bool all) const {
     SYNC(mutex)
     vector<pair<QName,ContentsPtr > > v;
     XMLBEANSXX_FOREACH(ElemDict::ContentsType::const_iterator,it,elems.contents) {
-        v.push_back(pair<QName,ContentsPtr >(it->name,it->value));
+    	if(all || (it->name != XmlBeans::textElementName()))
+	        v.push_back(pair<QName,ContentsPtr >(it->name,it->value));
     }
     return v;
 }
@@ -227,7 +239,7 @@ std::string Contents::digest() const {
     Contents::Walker::ElemsType as=getAttrs2();
     Contents::Walker::ElemsType es=getElems();
 
-    sort(as.begin(),as.end());
+//    sort(as.begin(),as.end());
     XMLBEANSXX_FOREACH(Contents::Walker::ElemsType::iterator,it,as) {
     	if(it->second){
         	r+=" ";
@@ -274,6 +286,9 @@ std::string Contents::getCanonicalContent() const {
 
 	return getSimpleContent();
 }
+
+
+StringContents::StringContents(const std::string & str):Contents(xmlbeansxx::XmlString::type()),value(str){};
 
 
 

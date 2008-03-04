@@ -22,6 +22,7 @@ void NamespaceTest::namespaceTest()
 	{
 		XmlObject o=XmlObject::Factory::newInstance();
 	
+	
 		o.setElement(QName("","pawel"),XmlString("bolek"));
 	
 		XMLBEANSXX_DEBUG(logger,"object " + o.toString());

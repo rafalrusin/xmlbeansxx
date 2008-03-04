@@ -119,6 +119,7 @@ SET(XMLBEANSXX_SRC
 	macros.h
 	TextUtils.h
 	TextUtils.cpp
+	ContentsImpl.h
 	Contents.h
 	Contents.cpp
 	Dict.h

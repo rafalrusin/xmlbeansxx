@@ -23,6 +23,8 @@
 
 
 namespace xmlbeansxx {
+class SchemaType;
+
 class TextUtils {
 private:
     XMLBEANSXX_STATIC_LOGGER_PTR(log);
@@ -42,6 +44,8 @@ public:
     static std::string collapse(const std::string &str);
     static std::string exchangeEntities(const std::string& str, TextUtils::EscapeFlags escapeFlag  = StdEscapes);
     static std::string exchangeEntitiesWithCDATA(const std::string& str);
+
+    static std::string applyContentTypeRules(const std::string &str,const SchemaType * st);
 
     static bool isDigit(char c);
     static bool areDigits(const std::string &d);

@@ -164,14 +164,18 @@ void XmlObject::setSimpleContent(const std::string &value) {
     const SchemaType *st=getSchemaType();
     
     createContents();
-    SchemaType::CONTENT_TYPE ct=st->getContentType();
-    if (ct==SchemaType::SIMPLE_CONTENT || ct==SchemaType::MIXED_CONTENT || ct==SchemaType::NOT_COMPLEX_TYPE) {
+    std::string str = TextUtils::applyContentTypeRules(value,st);
+    xmlbeansxx::Contents::Walker::setSimpleContent(*this,str);
+    
+/*	 SchemaType::CONTENT_TYPE ct=->getContentType();
+    	if (ct==SchemaType::SIMPLE_CONTENT || ct==SchemaType::MIXED_CONTENT || ct==SchemaType::NOT_COMPLEX_TYPE) {
         if (getSchemaType()->whitespaceRule==SchemaType::WS_COLLAPSE) {
             xmlbeansxx::Contents::Walker::setSimpleContent(*this,TextUtils::collapse(value));
         } else {
             xmlbeansxx::Contents::Walker::setSimpleContent(*this,value);
         }
-    }
+*/
+
 }
 
 std::string XmlObject::getCanonicalContent() const {

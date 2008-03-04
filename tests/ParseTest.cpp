@@ -192,5 +192,64 @@ void ParseTest::parseTest() {
 		CPPUNIT_ASSERT_EQUAL(s_str,s_equ);
 	}
 */	
+	{ //Xercex
+		std::string cmp = 
+		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+		"<e xmlns=\"http://ala\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+		" Jeden "
+		" <a/> \n "
+		" Dwa "
+		" <b/> "
+		" Trzy \n " 
+		" <c/> "
+		"</e>\n";
+		
+		XmlObjectDocument o;
+		XercesParser p;
+		p.parse(cmp,o);
+		XMLBEANSXX_DEBUG(logger, "dump: " + Contents::Walker::dump(o.contents));
+		std::string str = o.toString();
+	        XMLBEANSXX_DEBUG(logger, "Document: " + str);
+		CPPUNIT_ASSERT_EQUAL(cmp,str);
+	}
+	{ //libxml
+		std::string cmp = 
+		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+		"<e xmlns=\"http://ala\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+		" Jeden "
+		" <a/> \n "
+		" Dwa "
+		" <b/> "
+		" Trzy \n " 
+		" <c/> "
+		"</e>\n";
+		
+		XmlObjectDocument o;
+		LibXMLParser p;
+		p.parse(cmp,o);
+		XMLBEANSXX_DEBUG(logger, "dump: " + Contents::Walker::dump(o.contents));
+		std::string str = o.toString();
+	        XMLBEANSXX_DEBUG(logger, "Document: " + str);
+		CPPUNIT_ASSERT_EQUAL(cmp,str);
+	}
+	{
+		std::string cmp = 
+		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+		"<e xmlns=\"http://ala\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+		" Jeden "
+		" <a/> \n "
+		" Dwa "
+		" <b/> "
+		" Trzy \n " 
+		" <c/> "
+		"</e>\n";
+		
+		XmlObject o = XmlObjectDocument::Factory::parse(cmp);
+		XMLBEANSXX_DEBUG(logger, "dump: " + Contents::Walker::dump(o.contents));
+		std::string str = o.toString();
+	        XMLBEANSXX_DEBUG(logger, "Document: " + str);
+		CPPUNIT_ASSERT_EQUAL(cmp,str);
+	}
+
 }
 

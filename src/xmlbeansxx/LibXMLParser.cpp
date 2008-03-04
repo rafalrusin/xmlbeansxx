@@ -18,6 +18,7 @@
 #include "BeansException.h"
 #include "Tracer.h"
 #include "defs.h"
+#include "ContentsImpl.h"
 #include <stdio.h>
 #include <boost/scoped_array.hpp>
 #include <boost/weak_ptr.hpp>
@@ -549,8 +550,6 @@ void endElementNs(void *ctx,
     LibXMLParser::StackEl e=parser->nodesStack.top();
     XmlObjectPtr n=e.obj;
 
-
-    n->setSimpleContent(e.str);
     XMLBEANSXX_DEBUG2(LOG, "added content :" + n->getSimpleContent())
     parser->xmlContext.restore();
     parser->nodesStack.pop();
@@ -567,8 +566,12 @@ void characters(void *ctx, const xmlChar *ch, int length) {
 ///    if (INSERT_INTO_CURSOR)
 ///       parser->cursor->insertChars(s);
 
-    parser->nodesStack.top().str+=s;
-    XMLBEANSXX_DEBUG2(LOG, "element content:" + s)
+	std::string str = TextUtils::applyContentTypeRules(s,parser->nodesStack.top().obj->getSchemaType());
+	
+	if(str.size()>0)
+		Contents::Walker::appendElem(*(parser->nodesStack.top().obj),XmlBeans::textElementName(),xmlbeansxx::ContentsPtr(new StringContents(str)));
+
+    XMLBEANSXX_DEBUG2(LOG, "element content:" + str)
     
 }
 

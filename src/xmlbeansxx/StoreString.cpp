@@ -109,7 +109,7 @@ void StringStorage::add(const char * cs) {
     if (!isStored(cs)) {
 	SYNC(mutex);
         const char *s(duplicate(cs));
-        contents.insert(std::pair<const char *,int>(s,stored.size()));
+        contents.insert(std::pair<const char *,IndexType>(s,2*stored.size()+1));
         SSInfo ssi;
         ssi.str=s;
         ssi.hashCode=CStrHashFn()(s);
@@ -121,11 +121,11 @@ bool StringStorage::isStored(const char *str) const {
     return  contents.find(str)!=contents.end();
 }
 
-unsigned long StringStorage::get(const char *str) const {
+StringStorage::IndexType StringStorage::get(const char *str) const {
     SYNC(mutex);    
     StoreMap::const_iterator it=contents.find(str);
     if (it!=contents.end()) {
-        return (it->second*2+1);
+        return it->second;
     } else return 0;
 }
 

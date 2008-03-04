@@ -33,6 +33,9 @@ public:
     /** xsi:type QName */
     static const QName& xsi_type();
 
+    /** QName of the text "element" name (the string content of an xml is stored as an element of this name, this element is not visible)*/
+    static const QName& textElementName();
+
     /** xsi:array QName */    
     static const QName& xsi_array();
     

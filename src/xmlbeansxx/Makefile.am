@@ -45,6 +45,7 @@ libxmlbeansxx_la_SOURCES = \
 	macros.h\
 	TextUtils.h\
 	TextUtils.cpp\
+	ContentsImpl.h\
 	Contents.h\
 	Contents.cpp\
 	Dict.h\

@@ -17,6 +17,8 @@
 #include "TextUtils.h"
 #include "Tracer.h"
 #include "defs.h"
+#include "SchemaType.h"
+
 
 #include <boost/archive/iterators/base64_from_binary.hpp>
 #include <boost/archive/iterators/binary_from_base64.hpp>
@@ -218,5 +220,21 @@ typedef transform_width< binary_from_base64<string::const_iterator>, 8, 6 > bina
     string enc(base64_t(str.begin()), base64_t(str.end()));
     return enc;
   }
+
+std::string TextUtils::applyContentTypeRules(const std::string & value,const SchemaType * st) {
+	SchemaType::CONTENT_TYPE ct=st->getContentType();
+    	if (ct==SchemaType::SIMPLE_CONTENT || ct==SchemaType::MIXED_CONTENT || ct==SchemaType::NOT_COMPLEX_TYPE) {
+	        if (st->whitespaceRule==SchemaType::WS_COLLAPSE) {
+        	    return TextUtils::collapse(value);
+	        } else {
+        	    return value;
+	        }
+	}
+	return std::string();
+}
+
+
+
+
 
 }

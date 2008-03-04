@@ -169,17 +169,14 @@ void Contents::serialize(bool printXsiType,const QName& elemName,std::ostream &o
     
     	serializeAttrs(o,ns,options);
 	
-    	{
-        	std::string cnt=TextUtils::exchangeEntities(getSimpleContent());
-        	if (cnt==std::string() && !hasElements()) {
-            		o << "/>";
-        	} else {
-        		o << ">";
-            		o << cnt;
-            		serializeElems(o,ns,options);
-            		o << "</" << name << ">";
-        	}
-    	}
+
+      	if ( !hasElements()) {
+      		o << "/>";
+      	} else {
+      		o << ">";
+       		serializeElems(o,ns,options);
+       		o << "</" << name << ">";
+      	}
 	
 	ns.restore();
 
@@ -230,6 +227,23 @@ void Contents::serializeAttrs(ostream &o,NSMapSerializer& ns, XmlOptions options
 	}
 }
 
+namespace {
+template<class T1,class T2,class T3>
+struct three {
+    T1 first; T2 second; T3 third;
+    three(const T1 &a,const T2 &b,const T3 &c): first(a), second(b),third(c) {}
+    bool operator <(const three<T1,T2,T3> &other) const {
+        if (first==other.first) return second<other.second;
+        else return first<other.first;
+    }
+};
+template<class T1,class T2,class T3>
+three<T1,T2,T3> make_three(const T1 &a,const T2 &b,const T3 &c) {
+ 	return three<T1,T2,T3>(a,b,c);
+}
+
+}
+
 
 void Contents::serializeElems(ostream &o,NSMapSerializer &ns, XmlOptions options) const {
 	SYNC(mutex)
@@ -237,8 +251,43 @@ void Contents::serializeElems(ostream &o,NSMapSerializer &ns, XmlOptions options
 
 	ns.remember();
 
+
+		// order , element, expected element type
+	typedef vector< three < int ,  ElemDict::ContentsType::const_iterator , const SchemaType * > > SortType;
+	
+	SortType sort;
+	
+
+	//sort all elements 
+	int max_order = 0;
+	// calculate the element orders
+	XMLBEANSXX_FOREACH(ElemDict::ContentsType::const_iterator,it,elems.contents) {
+		const SchemaType::ElementsType::const_iterator st_it = st->elements.find(it->name);
+		if(st_it != st->elements.end()) {
+			sort.push_back(make_three(st_it->second->order,it, st_it->second->schemaType));
+			max_order = std::max(max_order,st_it->second->order); 
+		} else {
+			//this element  has no order
+			sort.push_back(make_three(max_order,it, XmlObject::type()));
+		}
+	}
+	std::sort(sort.begin(),sort.end());
+	
+
+	//print the elements	
+	XMLBEANSXX_FOREACH(SortType::const_iterator,it,sort) {
+		const ElemDict::ContentsType::const_iterator & el_it = it->second;
+		const SchemaType * st = it->third;
+		if (el_it->value!=NULL) {
+			// print the element
+			bool printXsiType= shallPrintXsiType(st,el_it->value->st);
+			el_it->value->serialize(printXsiType,el_it->name,o,ns,options);
+		}		
+	}
+	
+
 	// order sort
-	typedef map<int,std::pair<QName,const SchemaType*> > MType;
+/*	typedef map<int,std::pair<QName,const SchemaType*> > MType;
 	MType m;
 	typedef map<QName,int> LeftType;
 	LeftType left;
@@ -268,7 +317,7 @@ void Contents::serializeElems(ostream &o,NSMapSerializer &ns, XmlOptions options
 			}
 		}
 	}
-	
+*/	
 	ns.restore();
 }
 

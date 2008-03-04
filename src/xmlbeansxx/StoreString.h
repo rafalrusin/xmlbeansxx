@@ -30,6 +30,10 @@
 #include <boost/config.hpp>
 #ifdef BOOST_HAS_THREADS
 #include <boost/thread/recursive_mutex.hpp>
+#include <boost/thread/detail/lock.hpp>
+#define XMLBEANSXX_SYNC(mutex) boost::detail::thread::scoped_lock<boost::recursive_mutex> lock(mutex);
+#else
+#define XMLBEANSXX_SYNC(mutex)
 #endif
 
 
@@ -90,34 +94,54 @@ class CStrEqFn {
 
 /** String storage collection. Contains c_str's. */
 class StringStorage {
-private:
+public:
+
+	//indexType for the "stored" table (it is in the form 2*i+1)
+    typedef unsigned long IndexType;
     //std::set<CStr> contents;
     //typedef std::set<const char *,CStrLessFn> StoreSet;
 #ifdef WIN32
-    typedef std::map<const char *,int,CStrLessFn> StoreMap;
+    typedef std::map<const char *,IndexType,CStrLessFn> StoreMap;
 #else 
-    typedef __gnu_cxx::hash_map<const char *,int,CStrHashFn,CStrEqFn> StoreMap;
+    typedef __gnu_cxx::hash_map<const char *,IndexType,CStrHashFn,CStrEqFn> StoreMap;
 #endif
 
-#ifdef BOOST_HAS_THREADS
-    mutable boost::recursive_mutex mutex;
-#endif
-
-    StoreMap contents;
-public:
     struct SSInfo {
         const char *str;
         int hashCode;
     };
-    std::vector<SSInfo> stored;
     
     StringStorage();
     void add(const std::string &str);
     void add(const char * cs);
     bool isStored(const char *str) const;
-    unsigned long get(const char *str) const;
+    IndexType get(const char *str) const;
+
+	// access to "stored" table  (SSInfo)
+    int getHashCode(IndexType index) const;
+    const char * getStr(IndexType index) const;
+
     ~StringStorage();
+
+private:
+    StoreMap contents;
+    std::vector<SSInfo> stored;
+
+#ifdef BOOST_HAS_THREADS
+    mutable boost::recursive_mutex mutex;
+#endif
+
 };
+
+inline int StringStorage::getHashCode(IndexType index) const {
+	XMLBEANSXX_SYNC(mutex);
+	return stored[index/2].hashCode;
+}
+inline const char * StringStorage::getStr(IndexType index) const {
+	XMLBEANSXX_SYNC(mutex);
+	return stored[index/2].str;
+}
+
 
 /** Immutable string with ability to remember globally some strings. User can use static method 'store' to remember some strings. */
 class StoreString {
@@ -190,12 +214,12 @@ inline bool StoreString::isStored() const {
 
 inline const char *StoreString::c_str() const {
     if (isStored()) {
-        return getStorage()->stored[buf/2].str; 
+        return getStorage()->getStr(buf); 
     } else { return (char *)buf; }
 }
 
 inline unsigned int StoreString::hashCode() const {
-    if (isStored()) { return getStorage()->stored[buf/2].hashCode; }
+    if (isStored()) { return getStorage()->getHashCode(buf); }
     else return CStrHashFn()((char *)buf);
 }
 

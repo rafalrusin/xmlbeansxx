@@ -23,6 +23,7 @@
 #include "SchemaType.h"
 #include "XmlTypesGen.h"
 #include "BeansException.h"
+#include "XmlBeans.h"
 
 #include <boost/config.hpp>
 #ifdef BOOST_HAS_THREADS
@@ -158,9 +159,12 @@ namespace xmlbeansxx {
 			s+= "@("+i->name.prefix +")"+i->name +"=" + dump(i->value); 
 		    };
 		    XMLBEANSXX_FOREACH(ElemDict::ContentsType::iterator,i,p->elems.contents){
-			s+= "("+i->name.prefix +")"+ i->name +"=" + dump(i->value); 
+			s+= "("+i->name.prefix +")"+ i->name +"=";
+			if(i->name == XmlBeans::textElementName()) 
+				s += i->value->getSimpleContent(); 	
+			else 	s += dump(i->value);
 		    };
-		    s+= p->value;
+//		    s+= p->value;
 		    s+= "}";
 		    return s;
 		}

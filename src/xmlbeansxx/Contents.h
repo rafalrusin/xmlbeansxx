@@ -66,7 +66,7 @@ public:
 
     	ElemDict attrs;
     	ElemDict elems;
-    	std::string value;
+//    	std::string value;
 	const xmlbeansxx::SchemaType * st;
 	
 #ifdef BOOST_HAS_THREADS
@@ -76,53 +76,52 @@ public:
 	Contents(const SchemaType *st):st(st){}
 	virtual ~Contents();
 
-	void setSimpleContent(const std::string &c);
-	std::string getSimpleContent() const;
-	std::string getCanonicalContent() const;
+	virtual void setSimpleContent(const std::string &c);
+	virtual std::string getSimpleContent() const;
+	virtual std::string getCanonicalContent() const;
 
 
-	ContentsPtr getAttr(const QName& attrName) const;
-	void setAttr(const QName& attrName,ContentsPtr value);
+	virtual ContentsPtr getAttr(const QName& attrName) const;
+	virtual void setAttr(const QName& attrName,ContentsPtr value);
 
 
-	ContentsPtr getElem(const QName& elemName,int index=0) const;
-	ContentsPtr cgetElem(const QName& elemName,int index=0) const;
-	void setElem(const QName& elemName,ContentsPtr value,int index=0);
-	bool isSetElem(const QName& elemName,int index=0);
-	void removeElems(const QName& elemName);
-	void removeElemAt(const QName& elemName,int index);
+	virtual ContentsPtr getElem(const QName& elemName,int index=0) const;
+	virtual void setElem(const QName& elemName,ContentsPtr value,int index=0);
+	virtual bool isSetElem(const QName& elemName,int index=0);
+	virtual void removeElems(const QName& elemName);
+	virtual void removeElemAt(const QName& elemName,int index);
 
-	int countElems(const QName& elemName) const;
-	bool hasElements() const;
+	virtual int countElems(const QName& elemName) const;
+	virtual bool hasElements() const;
 	
-	std::vector<ContentsPtr> getElemArray(const QName& elemName) const;
+	virtual std::vector<ContentsPtr> getElemArray(const QName& elemName) const;
 
 
     	/** returns true while this contents don't have any attributes and elements */
-	bool hasEmptyContent() const;
+	virtual bool hasEmptyContent() const;
 
-	std::vector<std::pair<QName,ContentsPtr> > getElems() const;
-	std::vector<std::pair<QName,std::string> > getAttrs() const;
-	std::vector<std::pair<QName,ContentsPtr> > getAttrs2() const;
+	virtual std::vector<std::pair<QName,ContentsPtr> > getElems(bool all=false) const;
+	virtual std::vector<std::pair<QName,std::string> > getAttrs() const;
+	virtual std::vector<std::pair<QName,ContentsPtr> > getAttrs2() const;
 
 	/** Copies all contents from original object */
 //	void copyFrom(const ContentsPtr &orig);
-	ContentsPtr clone();
-        void free();
+	virtual ContentsPtr clone();
+        virtual void free();
 
 
 //	void insertDefaults(const SchemaType *schemaType);
 
 //	void serialize2(int emptyNsID,bool printXsiType,const QName& elemName,std::ostream &o,const xmlbeansxx::SchemaType * st) const;
-	void serializeDocument(std::ostream &o,XmlOptions options) const;
-	void serialize(bool printXsiType,const QName &elemName,std::ostream &o,NSMapSerializer &ns,XmlOptions options) const;
+	virtual void serializeDocument(std::ostream &o,XmlOptions options) const;
+	virtual void serialize(bool printXsiType,const QName &elemName,std::ostream &o,NSMapSerializer &ns,XmlOptions options) const;
 
-	std::string digest() const;
-	const SchemaType * getSchemaType() const;
+	virtual std::string digest() const;
+	virtual const SchemaType * getSchemaType() const;
 
 private:
-	void serializeAttrs(std::ostream &o,NSMapSerializer& ns,XmlOptions options) const;
-	void serializeElems(std::ostream &o,NSMapSerializer& ns,XmlOptions options) const;
+	virtual void serializeAttrs(std::ostream &o,NSMapSerializer& ns,XmlOptions options) const;
+	virtual void serializeElems(std::ostream &o,NSMapSerializer& ns,XmlOptions options) const;
 
 
 
@@ -178,124 +177,10 @@ public:
 	};
 };
 
+
+} //namespace xmlbenasxx
+
 	
-///typedef XmlObject (*ObjectCreatorFn)();
-
-///class SchemaProperty;
-///DECLARE_PTR(SchemaProperty,SchemaPropertyPtr,constSchemaPropertyPtr)
-
-
-/*
-struct Contents {
-
-public:
-#ifdef BOOST_HAS_THREADS
-	mutable boost::recursive_mutex mutex;
-#endif
-	
-public:
-    Contents();
-    Contents(const Contents &orig);
-    ~Contents();
-	
-	void setSimpleContent(const std::string &c);
-	std::string getSimpleContent() const;
-*/
-///    void appendAttr(const std::string name,const std::string value);
-///    void appendElem(const std::string name,XmlObject value);
-
-    /** returns true while this contents don't have any attributes and elements */
-///    bool hasEmptyContent() const;
-
-    /** returns names of all sub elements */
-///    std::vector<std::pair<std::string,XmlObject> > getElems() const;
-///    std::vector<std::pair<std::string,std::string> > getAttrs() const;
-
-    /** Copies only orig contents to this object (not whole tree) */
-///    void simpleCopyFrom(const Contents &orig);
-
-    /** Copies all contents from original object */
-///    void copyFrom(const Contents &orig);
-
-    /**
-     * Chceck whether this object has elements (complex content)
-     */
-///    bool hasElements() const;
-
-///    void serialize(std::string elemName,std::ostream &o,const XmlObject obj,int emptyNsID,bool printXsiType) const;
-///    void free();
-
-///    std::string digest(XmlObject *parent);
-
-    /**
-     * This is called from serialize when object is Document type.
-     */
-///    void serializeDocument(std::ostream &o,XmlOptionsPtr options,const XmlObject obj) const;
-
-    /**
-     * Takes string value of given attribute
-     */
-///    StringPtr getAttr(std::string attrName) const;
-    
-    /**
-     * Takes attribute as XmlObject
-     */
-///    XmlObject getAttrObject(const std::string &attrName, XmlObject *parent) const;
-    
-///    XmlObject getAttrObject2(const std::string &attrName, const std::string &attrValue, XmlObject *parent) const;
-
-    /**
-     * NULL usuwa atrybut
-     */
-///    void setAttr(std::string elemName,StringPtr value);
-
-    /**
-     * retrieves element of specified name (NULL if not set)
-     */
-///    ContentsPtr getElem(std::string elemName) const;
-
-    /**
-     * retrieves element of specified name at specified position.
-     * If position is out of bounds, it returns NULL.
-     */
-///    XmlObject getElemAt(std::string elemName,int index) const;
-
-    /** gets element (creates one if there is NULL) */
-///    XmlObject cgetElemAt(std::string elemName,int index,ObjectCreatorFn createFn,XmlObject *creator);
-    
-    /**
-     * NULL removes element
-     */
-///    void setElem(std::string elemName,XmlObject value);
-
-    /**
-     * NULL removes element
-     */
-///    void setElemAt(std::string elemName,int index,XmlObject value);
-
-    /** Removes element at specified index (cutting it off) */
-///    void removeElemAt(std::string elemName,int index);
-
-    /** Removes all elements of given name */
-///    void removeElems(std::string name);
-
-    /** Counts number of elements of given name */
-///    int countElems(std::string name) const;
-///    shared_array<XmlObject > getElemArray(std::string elemName) const;
-///    void setElemArray(std::string elemName,const shared_array<XmlObject > &value);
-
-///private:
-///    void serializeAttrs(std::ostream &o) const;
-///    void serializeElems(int emptyNsID,std::ostream &o,const std::map<std::string,SchemaPropertyPtr> *order) const;
-///public:
-    
-    /** Adds default elements or attributes to this contents if they don't exist yet. */
-
-
-///};
-
-}
-
 
 #endif //XMLBEANSPP_CONTENTS_H_
 

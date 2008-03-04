@@ -34,6 +34,7 @@
 #include <xercesc/internal/XMLGrammarPoolImpl.hpp>
 #include <xercesc/util/XMLUni.hpp>
 #include <xercesc/sax2/XMLReaderFactory.hpp>
+#include "ContentsImpl.h"
 
 namespace xmlbeansxx {
 using namespace std;
@@ -196,8 +197,13 @@ void MySAX2Handler::characters(const XMLCh* const chars, const unsigned int leng
 #endif
 
         string s = transcode(chars, length);
-    	parser->nodesStack.top().str+=s;
-    	XMLBEANSXX_DEBUG2(log, std::string("element value: ") + s )
+//    	parser->nodesStack.top().str+=s;
+
+	std::string str = TextUtils::applyContentTypeRules(s,parser->nodesStack.top().obj->getSchemaType());
+	
+	if(str.size()>0)
+		Contents::Walker::appendElem(*(parser->nodesStack.top().obj),XmlBeans::textElementName(),xmlbeansxx::ContentsPtr(new StringContents(str)));
+    	XMLBEANSXX_DEBUG2(log, std::string("element value: ") + str )
 }
 
 void MySAX2Handler::endElement(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname)
@@ -205,8 +211,8 @@ void MySAX2Handler::endElement(const XMLCh* const uri, const XMLCh* const localn
     XMLBEANSXX_DEBUG2(log, std::string("end element ") + transcode(qname) )
     EmptyParser::StackEl e=parser->nodesStack.top();
     XmlObjectPtr n=e.obj;
-    n->setSimpleContent(e.str);
-    XMLBEANSXX_DEBUG2(log, std::string("element end value: ") + e.str )
+//    n->setSimpleContent(e.str);
+//    XMLBEANSXX_DEBUG2(log, std::string("element end value: ") + e.str )
     parser->xmlContext.restore();
     parser->nodesStack.pop();
 }
