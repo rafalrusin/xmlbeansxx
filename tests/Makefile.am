@@ -22,7 +22,8 @@ BUILT_SOURCES = $(SCHEMAS_CPP) $(SCHEMAS_H)
 $(SCHEMAS_CPP) $(SCHEMAS_H): $(SCHEMAS_XSD) c.xh ${top_builddir}/generator/stamp-build
 	${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen -Ddownload $(SCHEMAS_XSD)
 
-TESTS=BeansTest GenTest EntitiesTest ArrayTest EnumTest XPathTest ParseTest UnqualTest XmlArrayTest NamespaceTest XmlCursorTest
+#TESTS=BeansTest GenTest EntitiesTest ArrayTest EnumTest XPathTest ParseTest UnqualTest XmlArrayTest NamespaceTest XmlCursorTest CalendarTest
+TESTS=CalendarTest
 check_PROGRAMS = $(TESTS)
 
 BeansTest_SOURCES=TestApp.cpp BeansTest.cpp BeansTest.h
@@ -30,6 +31,8 @@ BeansTest_SOURCES=TestApp.cpp BeansTest.cpp BeansTest.h
 XmlArrayTest_SOURCES=TestApp.cpp XmlArrayTest.cpp XmlArrayTest.h
 
 XmlCursorTest_SOURCES=TestApp.cpp XmlCursorTest.cpp XmlCursorTest.h
+
+CalendarTest_SOURCES=TestApp.cpp CalendarTest.cpp CalendarTest.h
 
 ArrayTest_SOURCES=TestApp.cpp ArrayTest.cpp ArrayTest.h
 nodist_ArrayTest_SOURCES = c.cpp
