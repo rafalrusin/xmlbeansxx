@@ -68,7 +68,9 @@ libxmlbeansxx_la_SOURCES = \
 	config_auto.h\
 	XercesParser.cpp\
 	XercesUtils.cpp\
-	NSMap.cpp
+	NSMap.cpp\
+	Calendar.h\
+	Calendar.cpp
 
 nodist_libxmlbeansxx_la_SOURCES = \
 	XmlTypesGen.h\
@@ -120,7 +122,8 @@ libxmlbeansxxinclude_HEADERS = \
 	NSMap.h\
 	XercesUtils.h\
 	XercesParser.h\
-	XercesUtils.h
+	XercesUtils.h\
+	Calendar.h
 
 nodist_libxmlbeansxxinclude_HEADERS = \
 	XmlTypesGen.h\
