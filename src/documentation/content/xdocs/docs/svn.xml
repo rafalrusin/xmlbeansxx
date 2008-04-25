@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
+<document> 
+  <header> 
+    <title>xmlbeansxx documentation</title> 
+    <notice></notice>
+    <abstract></abstract> 
+    <meta name="Keywords">xmlbeans,xmlbeans port to C++, XML, XML Schema, code generator, XML Manipulation, xmlbeansc, xmlbeans++ xmlbeansc++, xmlbeansxx, xmlbeanscxx</meta>
+  </header> 
+  <body> 
+	<p> SVN repository with xmlbeansxx </p>
+
+	<p>If you want to download sources from SVN you can do it <a href="https://touk.pl/svn/public/projects/xmlbeansxx/trunk">here.</a> </p>
+  </body>
+</document>

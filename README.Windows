@@ -1,0 +1,64 @@
+
+
+======= Window users =========
+
+I. What you need.
+
+ --- REQURED ---
+ a) cmake 
+    http://www.cmake.org/
+    http://www.cmake.org/HTML/Download.html
+    
+ b) C++ compiler supported by cmake 
+
+ c) maven
+    http://maven.apache.org/
+
+ d) Boost C++ Libraries 
+    http://www.boost.org/
+    
+ e) Xerces C++ Parser 
+    http://xerces.apache.org/xerces-c/
+ 
+ f) CppUnit - C++ port of JUnit - (required for testing)
+    http://cppunit.sourceforge.net/
+ 
+ --- not required but recommended ---
+ 
+ g) log4cxx (it is required for debuging)
+    http://logging.apache.org/log4cxx/index.html
+ 
+  
+ --- not required ---
+ 
+ h) gmp, gmpxx 
+    http://swox.com/gmp/
+ 
+ i) libxml2 
+    http://xmlsoft.org/
+ 
+ 
+
+II. How to build and install.
+
+  1. with nmake
+    run:
+      nmbootstrap.bat
+      nmake 
+      nmake test
+      nmake install
+
+  2. with MS Visual Studio C++ 
+    run:
+      vsbootstrap.bat
+           
+    It should generate a Visual Studio project file:
+      build/xmlbeansxx.sln
+    
+    run the build/xmlbeansxx.sln
+    Build the ALL_BUILD target.
+    Build the RUN_TESTS target.
+    Build the INSTALL target.
+  
+  
+

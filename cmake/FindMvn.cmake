@@ -1,0 +1,32 @@
+if (WIN32)
+  if (CMAKE_BUILD_TYPE STREQUAL Debug) 
+    set(LIB_SUF "d")
+  endif (CMAKE_BUILD_TYPE STREQUAL Debug) 
+else (WIN32) 
+  set(LIB_SUF "")
+endif (WIN32)
+
+
+
+FIND_PROGRAM(MVN_PROG mvn)
+
+IF( NOT MVN_PROG )
+   MESSAGE(STATUS "mvn program not found. Install it.")
+ELSE( NOT MVN_PROG )
+	
+ENDIF( NOT MVN_PROG )
+
+
+IF (MVN_PROG)
+   SET(MVN_FOUND TRUE)
+ENDIF (MVN_PROG)
+
+IF (MVN_FOUND)
+   IF (NOT MVN_FIND_QUIETLY)
+      MESSAGE(STATUS "Found mvn: ${MVN_PROG}")
+   ENDIF (NOT MVN_FIND_QUIETLY)
+ELSE (MVN_FOUND)
+   IF (MVN_FIND_REQUIRED)
+      MESSAGE(FATAL_ERROR "Could not find mvn")
+   ENDIF (MVN_FIND_REQUIRED)
+ENDIF (MVN_FOUND)

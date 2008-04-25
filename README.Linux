@@ -1,0 +1,70 @@
+
+======= Linux users =========
+
+I. What you need.
+
+ --- REQURED ---
+ a) cmake  
+    http://www.cmake.org/
+    http://www.cmake.org/HTML/Download.html
+    
+    or 
+    
+    Autotools (GNU Build System) - RECOMMENDED
+    http://www.gnu.org/software/autoconf/
+    http://www.gnu.org/software/automake/
+  
+    
+ b) maven
+    http://maven.apache.org/
+
+ c) Boost C++ Libraries 
+    http://www.boost.org/
+    
+ d) Xerces C++ Parser 
+    http://xerces.apache.org/xerces-c/
+ 
+ e) CppUnit - C++ port of JUnit - (required for testing)
+    http://cppunit.sourceforge.net/
+ 
+ --- not required but recommended ---
+ 
+ f) log4cxx (it is required for debuging)
+    http://logging.apache.org/log4cxx/index.html
+
+ g) gmp, gmpxx 
+    http://swox.com/gmp/
+ 
+ h) libxml2 
+    http://xmlsoft.org/
+ 
+
+
+II. DEBIAN users.
+
+ 1. Installing deps.
+    #apt-get install libxml2-dev libgmpxx4 libgmp3-dev liblog4cxx9-dev libcppunit-dev libxerces28-dev libboost-dev maven2 autotools-dev automake cmake
+ 
+
+
+III. How to build and install.
+
+  1. with Autotools
+  run:
+    ./bootstrap
+    ./configure
+    make 
+    make check
+    make install
+    
+  2. with cmake
+    run:
+    ./cbootstrap
+    cd build
+    make 
+    make test
+    make install
+    
+  
+  
+

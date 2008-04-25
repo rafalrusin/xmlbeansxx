@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
+<document> 
+  <header> 
+    <title>News</title> 
+    <meta name="Keywords">xmlbeans,xmlbeans port to C++, XML, XML Schema, code generator, XML Manipulation, xmlbeansc, xmlbeans++ xmlbeansc++, xmlbeansxx, xmlbeanscxx</meta>
+  </header> 
+  <body>
+      	<section>
+      		<title>2008-04-02 - Release 0.9.1</title>
+		<p>
+		New version of <strong>xmlbeasxx</strong> has been released. 		
+		Binaries and source can be downloaded from SF <a href="https://sourceforge.net/project/showfiles.php?group_id=118556">here. </a>
+		</p>
+		<p> New features:</p>
+		<ul>
+		<li> added inline functions </li>
+		<li> added XmlCursor </li>
+		<li> added support for Microsoft Visual Studio compiler </li>
+		<li> increased portability to other compilers </li>
+		<li> fixed bugs </li>
+		</ul>
+      	</section>
+      	<section>
+      		<title>2008-02-13 - Release 0.8.13</title>
+        	<p>
+		New version of <strong>xmlbeasxx</strong> has been released. 		
+		Binaries and source can be downloaded from SF <a href="https://sourceforge.net/project/showfiles.php?group_id=118556">here. </a>
+		</p>
+      	</section>
+      	<section>
+      		<title>4th October 2005 - Release 0.7.2</title>
+        	<p>
+		New version of <strong>xmlbeasxx</strong> has been released. 
+		It contains internal changes that are aimed to get xmlbeansxx closer ot Apache XmlBeans internal solutions. 
+		Binaries and source can be downloaded from SF <a href="https://sourceforge.net/project/showfiles.php?group_id=118556">here. </a>
+		</p>
+      	</section>
+      	<section>
+      		<title>13th July 2005 - Article about xmlbeansxx at devx.com</title>
+		<p>
+		An article about xmlbeansxx has been posted at <a href="http://www.DevX.com">www.DevX.com </a>. You can read about using <strong>xmlbeansxx</strong>  <a href="http://www.devx.com/cplus/Article/28656"> here. </a>
+		</p>
+      	</section>
+      	<section>
+      		<title>6th June 2005 - Initial SourceForge release</title>
+		<p>
+		The project has been created at <a href="http://sourceforge.net">SourceForge.</a> The code developed by TouK has been published under open source Apache license. 
+		You can download binaries and source <a href="https://sourceforge.net/project/showfiles.php?group_id=118556">here.</a>
+		</p>
+      	</section>
+			
+  </body>
+</document>
