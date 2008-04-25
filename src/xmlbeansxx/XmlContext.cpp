@@ -15,6 +15,7 @@
 
 
 #include "XmlContext.h"
+#include "defs.h"
 
 
 	
@@ -60,6 +61,66 @@ XmlContext::XmlContext() {
 }
 
 XmlContext::~XmlContext() {};
+
+
+
+//  NSMapSerializer
+
+XMLBEANSXX_LOGGER_PTR_SET(NSMapSerializer::log,"xmlbeansxx.NSMapSerializer");
+
+
+std::string NSMapSerializer::printNewNS()  {
+		std::string retu;
+	    	XmlContext::StoredLinks ns=getLastStoredLinks();
+		XMLBEANSXX_FOREACH(XmlContext::StoredLinks::iterator,i,ns) {
+			if(i->first.empty())	retu+=std::string(" xmlns=\"") + i->second + "\"";
+			else			retu+=std::string(" xmlns:") + i->first  + "=\"" + i->second + "\"";
+	    	}
+		return retu;
+	}
+
+
+
+std::string NSMapSerializer::cprintQName(const QName& n) {
+		if(n.first==StoreString("")) return n.second;
+		
+		std::string prefix=n.prefix;
+        	XMLBEANSXX_DEBUG(log,std::string("printQName: ") + prefix + "{" + n.first + "}" + n.second);
+		try {
+			if(getNamespaceURI(prefix) == n.first) 
+				return printPrefixName(prefix, n.second);
+		} catch(BeansException &e) {
+			//Prefix not set (getPrefix)
+		}
+		if(prefix.empty()) {
+			try {
+				prefix = getPrefix(n.first);
+				return printPrefixName(prefix, n.second);
+				
+			} catch (BeansException &e) {
+				prefix=getNextPrefix();
+			}
+		}
+		addNamespace(prefix,n.first);
+		return printPrefixName(prefix, n.second);
+};
+	
+	
+std::string NSMapSerializer::getNextPrefix() {
+		std::string myChar(1,'a'+current++);
+		std::string prefix=prefixPrefix + myChar;
+		if(isSetPrefix(prefix)) return getNextPrefix();
+		else return prefix;
+}
+std::string NSMapSerializer::printPrefixName(const std::string& prefix,const std::string& name) {
+		if(prefix.empty()) return name;
+		return prefix + ":" + name;
+}
+
+
+
+
+
 
 
 }

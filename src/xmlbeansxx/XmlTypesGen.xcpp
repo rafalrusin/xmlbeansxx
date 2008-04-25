@@ -24,6 +24,8 @@
 #include "Query.h"
 #include "BeansException.h"
 #include "Tracer.h"
+#include "XmlObjectDocument.h"
+#include "XmlCursor.h"
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 
@@ -45,6 +47,23 @@ class NoExchangeEntitiesXmlObject: public XmlObject {
 
 DECLARE_PTR_CODE(std::string,StringPtr,constStringPtr)
 
+
+XmlObject  Factory::_parse(std::istream &in,const xmlbeansxx::XmlOptions &options,const XmlObject & newInstance) {
+	xmlbeansxx::definitions::XmlFragmentDocument doc=xmlbeansxx::definitions::XmlFragmentDocument::Factory::newInstance();
+	doc.setXmlFragment(newInstance);
+	xmlbeansxx::XmlParserPtr p = xmlbeansxx::XmlParser::Factory::newInstance(options);
+	p->parse(in,doc);
+	return doc.getXmlFragment();
+}
+
+XmlObject  Factory::_documentParse(std::istream &in,const xmlbeansxx::XmlOptions &options) {
+	XmlObjectDocument doc;
+	xmlbeansxx::XmlParserPtr p = xmlbeansxx::XmlParser::Factory::newInstance(options);
+	p->parse(in,doc);
+	return doc;
+}
+
+
 }
 
 
@@ -60,6 +79,28 @@ void XmlObject::setElement(const QName & name,const XmlObject &element,int index
 void XmlObject::setAttribute(const QName & name,const XmlAnySimpleType &attribute ) 
 {
 	Contents::Walker::setAttr(*this,name,attribute.contents);
+}
+
+XmlCursor XmlObject::newCursor() {
+	return XmlCursor(*this);
+}
+
+void XmlObject::_setXmlObject(const xmlbeansxx::XmlObject& p, bool castTest, const char* toString) {
+  if(!castTest) {
+    throw xmlbeansxx::ClassCastException(p.getSchemaType()->className + " to " + toString);
+  }
+  swapContents(p.contents);
+}
+
+void XmlAnySimpleType::_setXmlObject(const xmlbeansxx::XmlObject& p, bool castTest, const char* toString) {
+  if(!castTest) {
+    if(xmlbeansxx::_cast_test<xmlbeansxx::XmlAnySimpleType>(p)) {
+      setSimpleContent(p.getSimpleContent()); 
+      return;
+    }  	
+    throw xmlbeansxx::ClassCastException(p.getSchemaType()->className + " to " + toString);
+  }
+  swapContents(p.contents);
 }
 
 
@@ -148,10 +189,10 @@ void XmlObject::swapContents(const ContentsPtr& p)
 
 
 XmlObject XmlObject::clone() const {
-    XmlObjectPtr n=getSchemaType()->createFn();
-    n->swapContents(this->contents->clone());
-
-    return XmlObject(n->contents);
+	if(contents)
+    		return XmlObject(contents->clone());
+	
+	return XmlObject();
 }
 
 std::string XmlObject::getSimpleContent() const {

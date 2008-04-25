@@ -23,6 +23,8 @@
 #include <map>
 #include "StoreString.h"
 #include "NSMap.h"
+#include "BeansException.h"
+#include <vector>
 
 namespace xmlbeansxx {
 
@@ -51,6 +53,28 @@ public:
     /** Remembers state of links. */
     void remember();
 };
+
+
+struct NSMapSerializer : public XmlContext {
+	
+	std::vector<std::pair<std::string, StoreString> > notPrinted;
+	//prefix for prefixing the namespaces prefix :-)
+	std::string prefixPrefix;
+	int current;
+
+	NSMapSerializer():current(0){};
+
+	std::string cprintQName(const QName& n);	
+	std::string printNewNS() ;
+	
+private:
+	std::string getNextPrefix();
+	std::string printPrefixName(const std::string& prefix,const std::string& name);
+	
+	XMLBEANSXX_STATIC_LOGGER_PTR(log);	
+};
+
+
 }
 
 #endif//_XMLBEANSXX_XMLCONTEXT_H_

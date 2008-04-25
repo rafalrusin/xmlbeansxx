@@ -2,10 +2,10 @@
 # V_1_1
 AC_PREREQ(2.57)
 
-AC_INIT(XMLBEANSXX, 0.8.14, support@TouK.pl)
+AC_INIT(XMLBEANSXX, 0.9.3, support@TouK.pl)
 #Before release, change library versions 
 #Read http://www.gnu.org/software/libtool/manual.html#SEC32 before doing this
-AC_SUBST(library_version_info, 3:0:0)
+AC_SUBST(library_version_info, 4:2:0)
 
 
 AC_CONFIG_AUX_DIR([config])
@@ -76,12 +76,16 @@ AC_CHECK_LIB(boost_date_time,main,,AC_MSG_ERROR([boost_date_time library not fou
 AC_CHECK_LIB(boost_thread,main,,AC_MSG_ERROR([boost_thread library not found. Please install it.]))
 AC_CHECK_HEADERS([boost/shared_ptr.hpp boost/shared_array.hpp boost/date_time/gregorian/gregorian.hpp],,AC_MSG_ERROR([boost library headers not found. Please install boost library.]))
 
+AC_PATH_PROG(MVN, mvn, [not_found])
+AS_IF([test "x$MVN" == xnot_found], [AC_MSG_ERROR([mvn not found. Please install it.])],[])
+
+AC_SUBST(MVN)
 AC_SUBST(ac_aux_dir)
 AC_SUBST(xmlbeansxx_gen_dir)
 AC_SUBST(enable_gmpxx)
 AC_SUBST(enable_libxml2)
 AC_SUBST(enable_log4cxx)
 
-AC_CONFIG_FILES([Makefile generator/Makefile src/Makefile src/xmlbeansxx/Makefile tests/Makefile examples/Makefile examples/small/Makefile docs/Doxyfile docs/Makefile])
+AC_CONFIG_FILES([Makefile generator/Makefile src/Makefile src/xmlbeansxx/Makefile tests/Makefile examples/Makefile examples/small/Makefile docs/Doxyfile docs/Makefile cmake/Makefile])
 
 AC_OUTPUT

@@ -14,6 +14,6 @@
 
 
 ACLOCAL = aclocal -I m4
-EXTRA_DIST = bootstrap m4/acx_pthread.m4 m4/BB_ENABLE_DOXYGEN.m4
+EXTRA_DIST = bootstrap m4/acx_pthread.m4 m4/BB_ENABLE_DOXYGEN.m4 CMakeLists.txt README.Windows LICENSE.txt  cbootstrap nmbootstrap.bat nmbootstrapr.bat vsbootstrap.bat vsbootstrapr.bat README.Linux
 
-SUBDIRS = generator src examples tests docs
+SUBDIRS = generator src examples tests docs cmake

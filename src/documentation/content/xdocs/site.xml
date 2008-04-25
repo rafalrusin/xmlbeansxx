@@ -34,8 +34,9 @@ See http://forrest.apache.org/docs/linking.html for more info
   <about label="Home">
     <index label="About" href="index.html" description="Welcome to xmlbeansxx"/>
     <developers label="Developers" href="developers.html" description="List of xmlbeansxx developers" />
-    <changes label="Changes" href="changes.html" description="History of Changes" />
-    <todo label="Todo" href="todo.html" description="Todo List" />
+    <news label="New" href="news.html" description="xmlbeansxx news"/>
+<!--    <changes label="Changes" href="changes.html" description="History of Changes" /> -->
+<!--    <todo label="Todo" href="todo.html" description="Todo List" /> -->
   </about>
 
   <downloads label="Download" href="download/" tab="downloads">
@@ -63,6 +64,7 @@ See http://forrest.apache.org/docs/linking.html for more info
   
   <external-links>
     <boost href="http://www.boost.org/"/>
+    <log4cxx href="http://logging.apache.org/log4cxx/"/>
     <log4cxx href="http://logging.apache.org/log4cxx/"/>
   </external-links>
   

@@ -25,9 +25,9 @@
 namespace xmlbeansxx {
 
 class XmlOptions {
-    bool v,d,tp,sit,st;
+    bool v,d,tp,sit,st,pers;
 public:
-    XmlOptions():v(false),d(true),tp(true),st(false),sit(false) {}
+    XmlOptions():v(false),d(true),tp(true),st(false),sit(false),pers(false) {}
 
     void setValidation(bool v) {
         XmlOptions::v=v;
@@ -62,10 +62,23 @@ public:
     bool getSerializeTypes() {
         return st;
     }
+
+    bool getSerializePersistent() {
+        return pers;
+    }
+    void setSerializePersistent(bool v) {
+    	if(v) setSerializeInnerTypes(true);
+	pers=v;
+    }
     
     static XmlOptions serializeInnerTypes() { 
     	XmlOptions o;
 	o.setSerializeInnerTypes(true);
+	return o;
+    }
+    static XmlOptions serializePersistent() { 
+    	XmlOptions o;
+	o.setSerializePersistent(true);
 	return o;
     }
     static XmlOptions serializeTypes() { 

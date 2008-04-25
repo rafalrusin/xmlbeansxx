@@ -63,7 +63,6 @@ int ElemDict::count(const QName& u) const {
 /** Duplicates u, but not v */
 void ElemDict::add(const QName& u,ElemDict::data_type v) {
     contents.push_back(value_type(u,v));
-    //logger.debug("ElemDict::add - %s",v->className());
 }
 
 void ElemDict::set(const QName& u,int pos,ElemDict::data_type v) {

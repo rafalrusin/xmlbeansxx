@@ -27,5 +27,6 @@
 #include <xmlbeansxx/NullPtr.h>
 #include <xmlbeansxx/shared_array.h>
 #include <xmlbeansxx/XmlParser.h>
+#include <xmlbeansxx/XmlObjectDocument.h>
 
 #endif

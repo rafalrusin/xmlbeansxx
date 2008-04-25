@@ -119,7 +119,6 @@ namespace xmlbeansxx {
     return s;
 
 #else    
-//        XMLBEANSXX_DEBUG(log,std::string("exchange entities in:") + str);
 
         XMLCh* toFormat = XMLString::transcode (str.c_str ());
         
@@ -140,7 +139,6 @@ namespace xmlbeansxx {
         string res(s);
         XMLString::release(&s);
         
-//        XMLBEANSXX_DEBUG(log,std::string("res:") + res);
         return res; 
 #endif
 }

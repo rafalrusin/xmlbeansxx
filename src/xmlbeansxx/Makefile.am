@@ -1,11 +1,14 @@
 SUBDIRS =
-EXTRA_DIST = xml-fragment.xsd
+EXTRA_DIST = xml-fragment.xsd CMakeLists.txt
 
 AM_CPPFLAGS = -I${top_srcdir}/src -I${top_builddir}/src
 
 lib_LTLIBRARIES = libxmlbeansxx.la
 libxmlbeansxx_la_LDFLAGS = -version-info $(library_version_info)
 libxmlbeansxx_la_SOURCES = \
+	Map.cpp\
+	XmlCursor.cpp\
+	XmlCursor.h\
 	configGmpxx.h.yes\
 	configGmpxx.h.no\
 	configLibxml2.h.yes\
@@ -36,6 +39,7 @@ libxmlbeansxx_la_SOURCES = \
 	XmlException.h\
 	XmlOptions.h\
 	QName.h\
+	QName.cpp\
 	Query.cpp\
 	Query.h\
 	LibXMLParser.cpp\
@@ -83,6 +87,7 @@ BUILT_SOURCES = \
 
 libxmlbeansxxincludedir = $(includedir)/xmlbeansxx
 libxmlbeansxxinclude_HEADERS = \
+	XmlCursor.h\
 	CoreTypes.h\
 	config.h\
 	XmlObjectDocument.h\
@@ -124,7 +129,7 @@ nodist_libxmlbeansxxinclude_HEADERS = \
 	configLibxml2.h\
 	configLog4cxx.h
 
-XmlTypesGen.h XmlTypesGen.cpp:  ${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-genbuiltin XmlTypesGen.xh XmlTypesGen.xcpp 
+XmlTypesGen.h XmlTypesGen.cpp: ${top_builddir}/generator/stamp-build  ${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-genbuiltin XmlTypesGen.xh XmlTypesGen.xcpp 
 	${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-genbuiltin ${srcdir}/
 
 xml-fragment.h xml-fragment.cpp: ${top_builddir}/generator/stamp-build ${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen xml-fragment.xsd

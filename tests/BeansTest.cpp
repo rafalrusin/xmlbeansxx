@@ -216,7 +216,7 @@ void namespaceTests() {
         ar.setArray(2,XmlPositiveInteger("104"));
         XMLBEANSXX_DEBUG(logger,"XmlArray ar: " + ar.toString(XmlOptions::serializeTypes()));
         XMLBEANSXX_DEBUG(logger,"!a");
-        ar2=XmlObject::Factory::parse(ar.toString(XmlOptions::serializeTypes()));
+/*        ar2=XmlObject::Factory::parse(ar.toString(XmlOptions::serializeTypes()));
         XMLBEANSXX_DEBUG(logger,"XmlArray ar2: " + ar2.toString());
 	
 	XMLBEANSXX_DEBUG(logger,"XmlArray ar2 dump: " + Contents::Walker::dump(ar2.contents));
@@ -224,7 +224,7 @@ void namespaceTests() {
         CPPUNIT_ASSERT(ar2.getArray(0).getSimpleContent()=="102");
         CPPUNIT_ASSERT(ar2.getArray(1).getSimpleContent()=="103");
         CPPUNIT_ASSERT(ar2.getArray(2).getSimpleContent()=="104");
-    }
+ */   }
     {
         //array cast
       	XmlArray<XmlInteger>  a=XmlArray<XmlInteger>::Factory::newInstance();
@@ -320,5 +320,32 @@ void namespaceTests() {
         CPPUNIT_ASSERT(test2);
 	
     }
+    
+    	{
+	       	XMLBEANSXX_DEBUG(logger,"testing Cast:");		
+		XmlBoolean b(true);
+		XmlString s1(b);
+		XmlObject o(b);
+		XmlString s2(o);
+	       	XMLBEANSXX_DEBUG(logger,"s1 string:" + s2.toString());		
+		CPPUNIT_ASSERT_EQUAL(s1.toString(),s2.toString());
+	}
+	{
+	       	XMLBEANSXX_DEBUG(logger,"testing boolean true:");		
+		XmlString b("TruE");
+		XmlObject o(b);
+		XmlBoolean s2(o);
+	       	XMLBEANSXX_DEBUG(logger,"s1 string:" + s2.toString());		
+		CPPUNIT_ASSERT_EQUAL(bool(s2),true);
+	}
+	{
+	       	XMLBEANSXX_DEBUG(logger,"testing boolean false:");		
+		XmlString b("FalSe");
+		XmlObject o(b);
+		XmlBoolean s2(o);
+	       	XMLBEANSXX_DEBUG(logger,"s1 string:" + s2.toString());		
+		CPPUNIT_ASSERT_EQUAL(bool(s2),false);
+	}
+
 }
 

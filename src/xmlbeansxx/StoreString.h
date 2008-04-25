@@ -30,8 +30,7 @@
 #include <boost/config.hpp>
 #ifdef BOOST_HAS_THREADS
 #include <boost/thread/recursive_mutex.hpp>
-#include <boost/thread/detail/lock.hpp>
-#define XMLBEANSXX_SYNC(mutex) boost::detail::thread::scoped_lock<boost::recursive_mutex> lock(mutex);
+#define XMLBEANSXX_SYNC(mutex) boost::recursive_mutex::scoped_lock lock(mutex);
 #else
 #define XMLBEANSXX_SYNC(mutex)
 #endif

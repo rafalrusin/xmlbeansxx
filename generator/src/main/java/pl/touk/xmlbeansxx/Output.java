@@ -20,7 +20,8 @@ import java.io.*;
 import java.util.*;
 
 public class Output {
-    public PrintWriter h, cpp;
+    public PrintWriter h, hEnd, cpp;
+    private ByteArrayOutputStream _hEnd;
 
     public Output(String name) throws IOException {
         String hname = name + ".h", cppname = name + ".cpp";
@@ -29,6 +30,9 @@ public class Output {
                 new FileOutputStream(hname)));
         cpp = new PrintWriter(new BufferedOutputStream(new FileOutputStream(
                 cppname)));
+        
+        _hEnd = new ByteArrayOutputStream();
+        hEnd = new PrintWriter(_hEnd);
         h.println("#ifndef _" + onlyAlNum(name.toUpperCase()) + "_H_");
         h.println("#define _" + onlyAlNum(name.toUpperCase()) + "_H_");
     
@@ -36,6 +40,9 @@ public class Output {
 
     public void close() {
         exitNamespace();
+        hEnd.close();
+        h.println(_hEnd.toString());
+        
         h.println("#endif");
         h.close();
         cpp.close();
@@ -61,10 +68,12 @@ public class Output {
             while (t.hasMoreTokens()) {
                 String s = "namespace " + t.nextToken() + " {";
                 h.print(s);
+                hEnd.print(s);
                 cpp.print(s);
                 nsDepth++;
             }
             h.println();
+            hEnd.println();
             cpp.println();
             
             currentNamespace=namespace;
@@ -75,10 +84,12 @@ public class Output {
         if (nsDepth==-2) return;
         for (int i = 0; i < nsDepth; i++) {
             h.print("}");
+            hEnd.print("}");
             cpp.print("}");
         }
         nsDepth = -2;
         h.println("//--namespace");
+        hEnd.println("//--namespace");
         cpp.println("//--namespace");
     }
 

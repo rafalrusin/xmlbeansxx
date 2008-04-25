@@ -1,11 +1,6 @@
 
 
 
-#stamp-build: $(shell find . -regex '\./\(src\|pom\.xml\).*' -not -regex '.*/\..*' | grep -v stamp)
-#	cp ${srcdir}/pom.xml .; mvn -Dbase=${srcdir} -Prelease package 
-#	touch stamp-build
-
-
 
 
 SET(GENDIR ${PROJECT_BINARY_DIR}/generator/target/xmlbeansxx-gen/)
@@ -36,14 +31,14 @@ ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pom.xml
 	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/pom.xml ${CMAKE_CURRENT_BINARY_DIR}/
 )
 
-#ADD_CUSTOM_COMMAND(OUTPUT ${XMLBEANSXX_GENBUILDIN_PROG} ${XMLBEANSXX_GEN_PROG} ${GEN_BINFILES} ${GEN_LIBFILES} ${GEN_JAR}
 ADD_CUSTOM_COMMAND(OUTPUT ${GEN_BINFILES} ${GEN_LIBFILES} ${GEN_JAR}
-	COMMAND mvn -Dbase=${CMAKE_CURRENT_SOURCE_DIR} -Prelease package
+	COMMAND ${MVN_PROG} -o -Dbase=${CMAKE_CURRENT_SOURCE_DIR} -Prelease package
+	MAIN_DEPENDENCY ${CMAKE_CURRENT_BINARY_DIR}/pom.xml
 	DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/pom.xml
 )
 
 ADD_CUSTOM_TARGET(generator
-	DEPENDS ${GEN_BINFILES} ${GEN_LIBFILES} ${GEN_JAR} ${CMAKE_CURRENT_BINARY_DIR}/pom.xml 
+	DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/pom.xml ${GEN_BINFILES} ${GEN_LIBFILES} ${GEN_JAR} 
 )
 
 

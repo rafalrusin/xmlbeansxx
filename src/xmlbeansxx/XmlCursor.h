@@ -19,6 +19,8 @@
 
 
 #include "XmlTypesGen.h"
+#include "XmlBeans.h"
+#include <stack>
 
 namespace xmlbeansxx {
 
@@ -44,50 +46,103 @@ public:
         /** The comment token.  (not used) */ 
         INT_COMMENT   = 8,
         /** The processing instruction token. (not used)  */ 
-        INT_PROCINST  = 9,
+        INT_PROCINST  = 9
 	};
-	
-	TokenType _currentTokenType;
-	
-	TokenType currentTokenType() {
-		return _currentTokenType;
-	}
-	
+		
 	
 	        /** True if no token. */
-        bool isNone      ( ) { return currentTokenType() == INT_NONE;      }
+        bool isNone      ( ) const { return currentTokenType() == INT_NONE;      }
         /** True if is start-document token. */
-        bool isStartdoc  ( ) { return currentTokenType() == INT_STARTDOC;  }
+        bool isStartdoc  ( ) const { return currentTokenType() == INT_STARTDOC;  }
         /** True if is end-document token. */
-        bool isEnddoc    ( ) { return currentTokenType() == INT_ENDDOC;    }
+        bool isEnddoc    ( ) const { return currentTokenType() == INT_ENDDOC;    }
         /** True if is start-element token. */
-        bool isStart     ( ) { return currentTokenType() == INT_START;     }
+        bool isStart     ( ) const { return currentTokenType() == INT_START;     }
         /** True if is end-element token. */
-        bool isEnd       ( ) { return currentTokenType() == INT_END;       }
+        bool isEnd       ( ) const { return currentTokenType() == INT_END;       }
         /** True if is text token. */
-        bool isText      ( ) { return currentTokenType() == INT_TEXT;      }
+        bool isText      ( ) const { return currentTokenType() == INT_TEXT;      }
         /** True if is attribute token. */
-        bool isAttr      ( ) { return currentTokenType() == INT_ATTR;      }
+        bool isAttr      ( ) const { return currentTokenType() == INT_ATTR;      }
         /** True if is namespace declaration token. */
-        bool isNamespace ( ) { return currentTokenType() == INT_NAMESPACE; }
+        bool isNamespace ( ) const { return currentTokenType() == INT_NAMESPACE; }
         /** True if is comment token. */
-        bool isComment   ( ) { return currentTokenType() == INT_COMMENT;   }
+        bool isComment   ( ) const { return currentTokenType() == INT_COMMENT;   }
         /** True if is processing instruction token. */
-        bool isProcinst  ( ) { return currentTokenType() == INT_PROCINST;  }
+        bool isProcinst  ( ) const { return currentTokenType() == INT_PROCINST;  }
 
         /** True if is start-document or start-element token */
-        bool isContainer ( ) { return currentTokenType() == INT_STARTDOC  || currentTokenType() == INT_START; }
+        bool isContainer ( ) const { return currentTokenType() == INT_STARTDOC  || currentTokenType() == INT_START; }
         /** True if is end-document or end-element token */
-        bool isFinish    ( ) { return currentTokenType() == INT_ENDDOC    || currentTokenType() == INT_END;   }
+        bool isFinish    ( ) const { return currentTokenType() == INT_ENDDOC    || currentTokenType() == INT_END;   }
         /** True if is attribute or namespace declaration token */
-        bool isAnyAttr   ( ) { return currentTokenType() == INT_NAMESPACE || currentTokenType() == INT_ATTR;  }
+        bool isAnyAttr   ( ) const { return currentTokenType() == INT_NAMESPACE || currentTokenType() == INT_ATTR;  }
 
 
-	XmlCursor(const XmlOcject& o,TokenType c = INT_START): XmlObject(o) , _currentTokenType(c) {};
+	XmlCursor(const XmlObject& o): XmlObject(o) , pos(-1) {};
 
-	p
-	vector
+	
+	QName getName() const ;	
+	TokenType currentTokenType() const ;
+	XmlObject getObject();
+	void beginElement(const QName &name) ;
+	int comparePosition(const XmlCursor &cursor) const ;
+	std::string getAttributeText(const QName &attrName) const ;
+	bool hasNextToken() const ;
+	
+	bool hasPrevToken() const ;
+	int insertAttributeWithValue(const QName &name,const XmlAnySimpleType &o) ;	
+	int insertAttributeWithValue(const QName &name,const std::string &value) ;
+	int insertElement(const QName &name,const XmlObject &o);
+	int insertNamespace(std::string prefix, std::string namespaceURI) ;
+//	bool removeAttribute(const QName& attrName) ;
+	void setName(const QName &name) ;
+	bool toChild(int index=1) ;
+	bool toChild(const QName &name, int index=1) ;	
+	TokenType toEndToken() ;
+	bool toFirstAttribute() ;
+	bool toFirstChild() ;
+	
+	TokenType toFirstContentToken() ;
+	bool toLastAttribute() ;
+	bool toLastChild() ;
+	bool toNextAttribute() ;
+	bool toNextSibling(int index = 1) ;
+	bool toNextSibling(const QName &name,int index = 1) ;
+	TokenType toNextToken() ;
+	TokenType toPrevToken() ;
+	
+	bool toParent() ;
+	bool toPrevAttribute() ;
+	bool toPrevSibling(int index=1) ;
+	void toStartDoc() ;
+	
+	std::string getTextValue() ;
+	void setTextValue(const std::string& s) ;
+	void insertChars(const std::string& text);
+	bool removeXml();
 
+
+
+//private:
+
+	typedef int posType;
+	typedef std::stack<std::pair<posType,ContentsPtr> > stackType;	
+	stackType stack;	
+	posType pos;
+
+	TokenType getAttributeType(const QName& name) const ;
+	TokenType getElementType(const QName& name) const ;
+	void remember();
+	void restore();
+	void rememberAndSwap(ContentsPtr c);
+	
+	ElemDict::value_type &getPos() const ;
+
+	int countElems() const ;
+	int countAttrs() const ;
+
+	
 };
 
 

@@ -25,22 +25,28 @@ private:
 public:
     
     /** Schema namespaceURI name. */
-    static StoreString xs_ns();
+    static const StoreString xs_ns();
     /** Schema instance namespaceURI name. */
-    static StoreString xsi_ns();
+    static const StoreString xsi_ns();
     /** inner Type namespaceURI name */
-    static StoreString innerType_ns();
+    static const StoreString innerType_ns();
     /** xsi:type QName */
     static const QName& xsi_type();
 
     /** QName of the text "element" name (the string content of an xml is stored as an element of this name, this element is not visible)*/
     static const QName& textElementName();
+    
+    static const QName& xml_fragment();
+
 
     /** xsi:array QName */    
     static const QName& xsi_array();
     
     /** xmlns namespaceURI name*/
-    static StoreString xmlns();
+    static const StoreString xmlns();
+
+    /** a name prefix indicating that the element is temporary (not set in the orginal xml) */
+    static const std::string& persistentPrefix();
    
     static std::string encoding(std::string encoding = std::string());
     

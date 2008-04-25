@@ -37,7 +37,7 @@ XmlObjectPtr SchemaType::createSubObject(const QName &name) const {
     SchemaPropertyPtr sp;
     Map_QName_SchemaPropertyPtr::const_iterator it=elements.find(name);
     if (it!=elements.end()) {
-        return it->second->schemaType->createFn();
+        return globalTypeSystem()->createByName(it->second->schemaTypeName);
     } else {
     	//searching for a Document type
 	XmlObjectPtr root = globalTypeSystem()->createDocumentByName(name);
@@ -67,5 +67,23 @@ SchemaPropertyPtr SchemaType::findElement(const QName &name) const {
 SchemaType::CONTENT_TYPE SchemaType::getContentType() const {
     return contentType;
 }
+
+void SchemaType::propertyElem(int elems, const char * elemTable[]) {
+	for(int i=0;i<elems;i++){
+		QName name = QName::store(elemTable[i * 5 + 0],elemTable[i * 5 + 1]);
+		QName type = QName::store(elemTable[i * 5 + 2],elemTable[i * 5 + 3]);
+		std::string defString = elemTable[i * 5 + 4];
+		elements[name] = xmlbeansxx::SchemaPropertyPtr(new xmlbeansxx::SchemaProperty(i + 1, type, defString));
+	}
+}
+void SchemaType::propertyAttr(int attrs,  const char * attrTable[]) {
+	for(int i=0;i<attrs;i++){
+		QName name = QName::store(attrTable[i * 5 + 0],attrTable[i * 5 + 1]);
+		QName type = QName::store(attrTable[i * 5 + 2],attrTable[i * 5 + 3]);
+		std::string defString = attrTable[i * 5 + 4];
+		attributes[name] = xmlbeansxx::SchemaPropertyPtr(new xmlbeansxx::SchemaProperty(i + 1, type, defString));
+	}
+}
+
 
 }

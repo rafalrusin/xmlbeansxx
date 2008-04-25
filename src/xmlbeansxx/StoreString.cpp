@@ -24,8 +24,8 @@
 
 #include <boost/config.hpp>
 #ifdef BOOST_HAS_THREADS
-#include <boost/thread/detail/lock.hpp>
-#define SYNC(mutex) boost::detail::thread::scoped_lock<boost::recursive_mutex> lock(mutex);
+#include <boost/thread/recursive_mutex.hpp>
+#define SYNC(mutex) boost::recursive_mutex::scoped_lock lock(mutex);
 #else
 #define SYNC(mutex)
 #endif

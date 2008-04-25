@@ -8,6 +8,7 @@
 #include "XercesParser.h"
 #include "LibXMLParser.h"
 #include "XmlObjectDocument.h"
+#include "xml-fragment.h"
 #include <fstream>
 
 CPPUNIT_TEST_SUITE_REGISTRATION( ParseTest );
@@ -23,6 +24,8 @@ using namespace xmlbeansxx;
 using namespace com::p4::mind::mytest;
 using namespace std;
 using namespace ala;
+using namespace xmlbeansxx::definitions;
+
 
 void ParseTest::parseTest() {
 
@@ -148,12 +151,35 @@ void ParseTest::parseTest() {
 		Klient k2=Klient::Factory::parse(k_str);
 	        XMLBEANSXX_DEBUG(logger, "klient2: " + k2.toString());
 	}
+
+	// persistent => serialize <-> parse 
+	
+	{
+		XmlObject o = XmlObjectDocument::Factory::newInstance();
+		XMLBEANSXX_DEBUG(logger, "persistent string0:" + o.toString());
+		XmlFragmentDocument f=XmlFragmentDocument::Factory::newInstance();
+		f.setXmlFragment(o);
+		std::string s = f.toString(XmlOptions::serializePersistent());
+		XMLBEANSXX_DEBUG(logger, "persistent string:" + s);
+		XmlObjectDocument o2=XmlObjectDocument::Factory::parse(s);
+		XMLBEANSXX_DEBUG(logger, "persistent string2:" + o2.toString());
+		o = XmlString("bolek"); //delete old
+		if( o2.getSchemaType() == XmlFragmentDocument::type()) {
+			XmlFragmentDocument f(o2);
+			o = f.getXmlFragment();
+		}
+		XMLBEANSXX_DEBUG(logger, "persistent string3:" + o.toString());
+		CPPUNIT_ASSERT_EQUAL(XmlObjectDocument::type(),o.getSchemaType());
+		std::string c=Contents::Walker::dump(o.contents);
+		XMLBEANSXX_DEBUG(logger, "persistent dump:" + c);
+		CPPUNIT_ASSERT_EQUAL(c,std::string("{}"));
+	}
 	{
 		XmlObject s=XmlString::Factory::parse("<test> something </test>");
 		std::string s_str=s.toString(XmlOptions::serializeTypes());
 		std::string s_equ=
 			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-			"<a:xml-fragment xsi:type=\"b:string\" xmlns:a=\"http://xmlbeans.apache.org/definitions\" xmlns:b=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"\
+			"<a:xml-fragment c:type=\"b:string\" xmlns:a=\"http://xmlbeans.apache.org/definitions\" xmlns:b=\"http://www.w3.org/2001/XMLSchema\" xmlns:c=\"http://www.w3.org/2001/XMLSchema-instance\">"\
 				" something "
 			"</a:xml-fragment>\n";
 		XMLBEANSXX_DEBUG(logger, "something: " + s_str);
@@ -232,7 +258,7 @@ void ParseTest::parseTest() {
 	        XMLBEANSXX_DEBUG(logger, "Document: " + str);
 		CPPUNIT_ASSERT_EQUAL(cmp,str);
 	}
-	{
+	{ //standart parser (xerces)
 		std::string cmp = 
 		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 		"<e xmlns=\"http://ala\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"

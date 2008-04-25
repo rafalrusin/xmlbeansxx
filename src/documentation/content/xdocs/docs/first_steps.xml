@@ -21,11 +21,7 @@ that <em>schema.xsd</em> defines document element named <em>root</em>.</p>
 </section>
 <section>
 <title>Generate classes</title>
-<p>First, we have to install <strong>xmlbeansxx-gen</strong>
-and add <em>xmlbeansxx-gen/dist/bin</em> directory to execution path.
-Then we install <strong>xmlbeansxx</strong> library.</p>
-
-<p>Now we are ready to generate classes. We do this by command:</p>
+<p>We are ready to generate classes. We do this by command:</p>
 
 <p><em>scompxx schema.xsd schema2.xsd</em></p>
 
@@ -43,15 +39,15 @@ translates them into package names.</p>
   <ol>
 	<li>Parsing and creating documents without validation.
 	<p>In files <em>schema.h</em> and <em>schema2.h</em> there are defined
-	classes, which derive from XmlObject. They have static methods
-	<em>parse()</em> and <em>fromString()</em>, which can be used to parse
-	document. Also there are virtual methods <em>serialize()</em> and
+	classes, which derive from XmlObject. They have a static method
+	<em>parse()</em>, which can be used to parse
+	documents. Also there are virtual methods <em>serialize()</em> and
 	<em>toString()</em> on <em>XmlObject</em>, which can be used to
 	serialize. To see examples, look at directory <em>examples/simple</em>
 	in <strong>xmlbeansxx</strong>.</p></li>
 
         <li>Parsing with validation.
-        <p>Validation in <strong>XmlBeans++</strong> is performed using
+        <p>Validation in <strong>xmlbeansxx</strong> is performed using
         <strong>xerces-c</strong> schema
 	validator. To do this, we create <em>XmlParser</em> object.
 	Then, using <em>XmlParser::loadGrammar()</em> function, we load our

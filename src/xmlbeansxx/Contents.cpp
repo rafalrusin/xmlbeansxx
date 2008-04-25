@@ -38,11 +38,12 @@ using namespace std;
 
 #include <boost/config.hpp>
 #ifdef BOOST_HAS_THREADS
-#include <boost/thread/detail/lock.hpp>
-#define SYNC(mutex) boost::detail::thread::scoped_lock<boost::recursive_mutex> lock(mutex);
+#include <boost/thread/recursive_mutex.hpp>
+#define SYNC(mutex) boost::recursive_mutex::scoped_lock lock(mutex);
 #else
 #define SYNC(mutex)
 #endif
+
 
 
 namespace xmlbeansxx {
@@ -75,34 +76,29 @@ Contents::~Contents() {
 }
 
 void Contents::free() {
-    //logger->debug(std::string("Contents::free() - start"));
     SYNC(mutex)
     elems.free();
     attrs.free();
-//    value=std::string();
-    //logger->debug(std::string("Contents::free() - finish"));
 }
 
 
 
-ContentsPtr Contents::clone()
+ContentsPtr Contents::clone() 
 {
+    SYNC(mutex)
     ContentsPtr clone(new Contents(st));
     XMLBEANSXX_FOREACH(ElemDict::ContentsType::iterator,it,elems.contents) {
         ContentsPtr o=it->value;
-        if (o!=NULL)
-            o=o->clone();
-        clone->elems.add(it->name,o);
+        if(o) 	clone->elems.add(it->name,o->clone());
+	else	clone->elems.add(it->name,ContentsPtr());
     }
 
     XMLBEANSXX_FOREACH(ElemDict::ContentsType::iterator,it,attrs.contents) {
         ContentsPtr o=it->value;
-        if (o!=NULL)
-            o=o->clone();
-        clone->attrs.add(it->name,it->value);
+        if(o)	clone->attrs.add(it->name,o->clone());
+	else 	clone->attrs.add(it->name,ContentsPtr());
     }
 
-//    clone->value=value;
     return clone;
 }
 

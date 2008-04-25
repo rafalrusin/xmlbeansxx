@@ -21,23 +21,20 @@
 #include "macros.h"
 #include "NullPtr.h"
 #include <string>
+#include "QName.h"
 
 namespace xmlbeansxx {
     
 class SchemaProperty;
 DECLARE_PTR(SchemaProperty,SchemaPropertyPtr,constSchemaPropertyPtr)
-//typedef SchemaProperty*  SchemaPropertyPtr;
-
-typedef boost::shared_ptr<std::string> StringPtr;
-class SchemaType;
 
 class SchemaProperty {
 public:
     int order;
-    const SchemaType *schemaType;
-    StringPtr singletonDefault;
+    const QName schemaTypeName;
+    std::string singletonDefault;
 
-    SchemaProperty(int order,const SchemaType *type, StringPtr singletonDefault);
+    SchemaProperty(int order,const QName &typeName, const std::string &singletonDefault);
 };
 
 }

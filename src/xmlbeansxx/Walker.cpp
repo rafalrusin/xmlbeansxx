@@ -24,6 +24,7 @@
 #include "XmlTypesGen.h"
 #include "BeansException.h"
 #include "XmlBeans.h"
+#include "XmlCursor.h"
 
 #include <boost/config.hpp>
 #ifdef BOOST_HAS_THREADS
@@ -127,11 +128,6 @@ namespace xmlbeansxx {
 			XMLBEANSXX_FOREACH(std::vector<ContentsPtr>::const_iterator, i,v) appendElem(obj,elemName,(*i));
 		};
 
-/*		 void insertDefaults(ContentsPtr &p,const SchemaType *schemaType){
-			if(!p) p = ContentsPtr(new Contents);
-			p->insertDefaults(schemaType);
-		};
-*/
 		 void Contents::Walker::serializeDocument(const XmlObject& obj,std::ostream &o,XmlOptions options,const xmlbeansxx::SchemaType * st) {
 			if(!obj.hasContents()) throw NullPtrException("Cannot serialize an empty XmlObject: " + obj.getSchemaType()->className);
 			obj.contents->serializeDocument(o,options);
@@ -141,7 +137,6 @@ namespace xmlbeansxx {
 			obj.contents->setSimpleContent(c);
 		}
 		 std::string Contents::Walker::getSimpleContent(const XmlObject& obj) {
-//			if(!obj.hasContents()) throw NullPtrException("Cannot getSimpleContent from a empty XmlObject");
 			if(!obj.hasContents()) return std::string();
 			return obj.contents->getSimpleContent();
 		}
@@ -164,7 +159,6 @@ namespace xmlbeansxx {
 				s += i->value->getSimpleContent(); 	
 			else 	s += dump(i->value);
 		    };
-//		    s+= p->value;
 		    s+= "}";
 		    return s;
 		}

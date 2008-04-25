@@ -24,17 +24,20 @@
 #include "logger.h"
 #include "Tracer.h"
 #include "XmlBeans.h"
+#include "XmlTypesGen.h"
 
 
 #include <xercesc/util/PlatformUtils.hpp>
 
+
 #include <boost/config.hpp>
 #ifdef BOOST_HAS_THREADS
-#include <boost/thread/detail/lock.hpp>
-#define SYNC(mutex) boost::detail::thread::scoped_lock<boost::recursive_mutex> lock(mutex);
+#include <boost/thread/recursive_mutex.hpp>
+#define SYNC(mutex) boost::recursive_mutex::scoped_lock lock(mutex);
 #else
 #define SYNC(mutex)
 #endif
+
 
 
 using namespace std;
@@ -106,28 +109,15 @@ XmlObjectPtr TypeSystem::createByName(const QName &typeName) const{
     }
 }
 
-XmlObjectPtr TypeSystem::createArrayByName(const QName &typeName) const {
-    TRACER(log(),"createArrayByName");
-
-    const SchemaType * st=0;
-    {
+const SchemaType * TypeSystem::getSchemaType(const QName &typeName) const {
     	SYNC(mutex);
     	TypeCreators_type::const_iterator i = typeCreators.find(typeName);
-	if(i != typeCreators.end()) 
-		st=i->second;
-    }
-    if(!st) {
-        XMLBEANSXX_DEBUG(log(),std::string("typeName:")+typeName+std::string(" Object not registered ,  returning NULL pointer"));
-        return XmlObjectPtr();
-    }
-    CreateObjFn f=st->createArrayFn;
-    if (f==NULL) {
-        XMLBEANSXX_DEBUG(log(),std::string("typeName:")+typeName+std::string(" returning NULL pointer"));
-        return XmlObjectPtr();
-    } else {
-        XMLBEANSXX_DEBUG(log(),std::string("typeName:")+typeName+std::string(" using creator"));
-        return f();
-    }
+	if(i == typeCreators.end()) {
+//		throw XmlException( "getSchemaType: schema type not defined: " + typeName.toString()  );
+		return XmlObject::type();
+	}
+
+	return i->second;
 }
 
 void TypeSystem::addType(const SchemaType *st) {

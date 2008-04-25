@@ -18,16 +18,21 @@
 #define _XMLBEANSXX_CORE_TYPES_H_
 
 
+#include "config.h"
+
 #include "BoostAssert.h"
 #include <boost/shared_array.hpp>
 #include <string>
 #include <boost/date_time/gregorian/gregorian.hpp>
+
+#ifdef XMLBEANSXX_WITH_GMPXX
 #include <gmp.h>
 #include <gmpxx.h>
+#endif
+
 #include <sstream>
 
 #include "QName.h"
-#include "config.h"
 
 
 namespace xmlbeansxx {

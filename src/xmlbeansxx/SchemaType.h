@@ -52,13 +52,15 @@ public:
     ElementsType elements;
 
     CreateObjFn createFn;
-    CreateObjFn createArrayFn;
+//    CreateObjFn createArrayFn;
     
     std::string className;
     QName name;
     QName documentElementName;
     bool processContents;
     bool isArray;
+    /** -1 while not set */
+    int fractionDigits;
 
     const std::type_info &classTypeInfo;
    
@@ -66,7 +68,9 @@ public:
     CONTENT_TYPE contentType;
     
     //methods
-    SchemaType(const std::type_info &classTypeInfo);
+    SchemaType(	const std::type_info &classTypeInfo);
+    void propertyElem(int elems, const char * elemTable[]);
+    void propertyAttr(int attr,  const char * attrTable[]);
     
     XmlObjectPtr createSubObject(const QName &name) const;
 
@@ -77,8 +81,6 @@ public:
 
     //schema facets
 
-    /** -1 while not set */
-    int fractionDigits;
 };
 
 }

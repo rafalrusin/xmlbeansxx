@@ -12,11 +12,14 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */
+
 #ifndef XMLBEANSXX_QNAME_INCLUDED
 #define XMLBEANSXX_QNAME_INCLUDED
+
 #include "BoostAssert.h"
 #include "StoreString.h"
 #include <string>
+
 namespace xmlbeansxx {
 /**
 * Objects of this class represent qualified name, which contains namespace URI and localPart. Corresponds to javax.xml.namespace.QName class.
@@ -48,15 +51,10 @@ public:
     	if(std::string(first).size()>0)	return second + std::string("@") + first;
 	else				return second;
     }
-    static QName store(const std::string &namespaceURI, const std::string& localPart) {
-    	return QName(StoreString::store(namespaceURI), StoreString::store(localPart));
-    }
-    static QName store(const std::string &namespaceURI, const std::string& localPart,const std::string& prefix) {
-    	return QName(StoreString::store(namespaceURI), StoreString::store(localPart), prefix);
-    }
-    static QName store(const char * namespaceURI, const char * localPart) {
-    	return QName(StoreString::store(namespaceURI), StoreString::store(localPart));
-    }
+    static QName store(const std::string& namespaceURI, const std::string& localPart);
+    static QName store(const std::string& namespaceURI, const std::string& localPart,const std::string& prefix);
+    static QName store(const char * namespaceURI, const char * localPart);
+
     std::string prefix;
 };
 

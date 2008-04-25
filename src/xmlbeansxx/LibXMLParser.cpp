@@ -372,6 +372,13 @@ inline string getAttrValue(const xmlChar **attributes) {
     return string((const char *) start, len);
 }
 
+namespace {
+inline bool isPersistPrefix(const std::string& prefix){
+	return (0 == prefix.compare(0,XmlBeans::persistentPrefix().length(),XmlBeans::persistentPrefix()));
+}
+};
+
+
 // prefix     - when not provided is NULL
 // URI        - when not provided is NULL
 // namespaces - consists of prefix/namespace pairs
@@ -441,7 +448,6 @@ void startElementNs(void *ctx,
             parser->xmlContext.addNamespace(prefix == NULL ? "" : prefix, ns);
         }
     }
-
     
     QName name(parser->getQName((const char *) prefix, (const char *) localname));
     XMLBEANSXX_DEBUG2(LOG, std::string("begin element: ") + name)
@@ -489,7 +495,7 @@ void startElementNs(void *ctx,
 	    } else if(name == XmlBeans::xsi_array()) {
 		QName value=parser->nsSplit(getAttrValue(attributes + current));
         	XMLBEANSXX_DEBUG2(LOG, std::string("xsi:array = ") + value)
-		n = globalTypeSystem()->createArrayByName(value);
+//		n = globalTypeSystem()->createArrayByName(value);
 		if (!n) throw XmlException(string("Xsd Type '")+value+string("' not defined in builtin type system"));					   
 	    
 	    }
@@ -520,9 +526,11 @@ void startElementNs(void *ctx,
     {	//add namespaces as attributes
 	    XmlContext::StoredLinks ns=parser->xmlContext.getLastStoredLinks();
 	    XMLBEANSXX_FOREACH(XmlContext::StoredLinks::iterator,i,ns) {
-	    	QName name(XmlBeans::xmlns(),i->first);
-    	    	XMLBEANSXX_DEBUG2(LOG, std::string("namespace attribute name: ")+ name + " = " + std::string(i->second) )
-	    	xmlbeansxx::Contents::Walker::setAttr(*n,name, i->second);
+	    	if(!isPersistPrefix(i->first)) {
+		    	QName name(XmlBeans::xmlns(),i->first);
+    		    	XMLBEANSXX_DEBUG2(LOG, std::string("namespace attribute name: ")+ name + " = " + std::string(i->second) )
+	    		xmlbeansxx::Contents::Walker::setAttr(*n,name, i->second);
+		}
 	    }
     }
 

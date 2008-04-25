@@ -34,8 +34,8 @@
       <title>Introduction to Schema Type System</title>
       <p>
         As we strongly based <strong>xmlbeansxx</strong> on
-        <a href="http://xmlbeansxx.apache.org/">Apache XmlBeans</a> please read
-        <a href="http://xmlbeans.apache.org/docs/guide/conIntroToTheSchemaTypeSystem.html">this document</a>.
+        <a href="http://xmlbeans.apache.org/">Apache XmlBeans</a> please read
+        <a href="http://xmlbeans.apache.org/documentation/index.html">this document</a>.
         The way it is implemented in <strong>xmlbeansxx</strong> is exactly the same.
       </p>
     </section>

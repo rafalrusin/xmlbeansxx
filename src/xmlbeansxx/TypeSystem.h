@@ -49,7 +49,9 @@ public:
 
     XmlObjectPtr createDocumentByName(const QName &typeName) const;
     XmlObjectPtr createByName(const QName &typeName) const;
-    XmlObjectPtr createArrayByName(const QName &typeName) const;
+    const SchemaType * getSchemaType(const QName &typeName) const;
+    
+//    XmlObjectPtr createArrayByName(const QName &typeName) const;
     
     void addDocumentType(const SchemaType *st);
     void addType(const SchemaType *st);

@@ -1,4 +1,4 @@
-EXTRA_DIST = a.xml b.xml bad_c.xml c.xml c.xsd c.xh entities.xml entities.xsd log4j.xml pawel.xsd unqual.xml unqual.xsd
+EXTRA_DIST = a.xml b.xml bad_c.xml c.xml c.xsd c.xh entities.xml entities.xsd log4j.xml pawel.xsd unqual.xml unqual.xsd CMakeLists.txt entities.xml.default entities.xsd.default log4j.xml.default
 
 
 LIBADD =
@@ -22,12 +22,14 @@ BUILT_SOURCES = $(SCHEMAS_CPP) $(SCHEMAS_H)
 $(SCHEMAS_CPP) $(SCHEMAS_H): $(SCHEMAS_XSD) c.xh ${top_builddir}/generator/stamp-build
 	${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen -Ddownload $(SCHEMAS_XSD)
 
-TESTS=BeansTest GenTest EntitiesTest ArrayTest EnumTest XPathTest ParseTest UnqualTest XmlArrayTest NamespaceTest
+TESTS=BeansTest GenTest EntitiesTest ArrayTest EnumTest XPathTest ParseTest UnqualTest XmlArrayTest NamespaceTest XmlCursorTest
 check_PROGRAMS = $(TESTS)
 
 BeansTest_SOURCES=TestApp.cpp BeansTest.cpp BeansTest.h
 
 XmlArrayTest_SOURCES=TestApp.cpp XmlArrayTest.cpp XmlArrayTest.h
+
+XmlCursorTest_SOURCES=TestApp.cpp XmlCursorTest.cpp XmlCursorTest.h
 
 ArrayTest_SOURCES=TestApp.cpp ArrayTest.cpp ArrayTest.h
 nodist_ArrayTest_SOURCES = c.cpp

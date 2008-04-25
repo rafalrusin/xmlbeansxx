@@ -5,8 +5,6 @@
 XMLBEANSXX_GEN(xml-fragment.xsd xml-fragment.cpp xml-fragment.h)
 
 
-#make a config file
-#XMLBEANSXX_COPY(config_auto.h.default config_auto.h)
 SET(XMLBEANSXX_EXTRA_INCLUDE_DIRS "")
 SET(XMLBEANSXX_OPTIONAL_LIBS "")
 
@@ -42,6 +40,7 @@ ENDIF (LOG4CXX_FOUND)
 
 
 SET(XMLBEANSXX_INSTALL_HEADERS 
+	XmlCursor.h
         XmlObjectDocument.h
         BoostAssert.h
         TypeSystem.h
@@ -87,6 +86,8 @@ SET(XMLBEANSXX_INSTALL_HEADERS
 
 
 SET(XMLBEANSXX_SRC 
+	XmlCursor.cpp
+	XmlCursor.h
 	XmlTypesGen.xh
 	XmlTypesGen.xcpp
 	BoostAssert.h
@@ -105,13 +106,13 @@ SET(XMLBEANSXX_SRC
 	xmlbeansxx.h
 	TypeSystem.cpp
 	Walker.cpp
-	Serialize.cpp
 	BeansException.h
 	BeansException.cpp
 	XmlBeans.cpp
 	XmlException.h
 	XmlOptions.h
 	QName.h
+	QName.cpp
 	Query.cpp
 	Query.h
 	XmlParser.cpp
@@ -146,6 +147,8 @@ SET(XMLBEANSXX_SRC
 	${xml-fragment.xsd_SRC}
 
 	${XMLBEANSXX_INSTALL_HEADERS}
+
+	Serialize.cpp
 )
 
 INCLUDE_DIRECTORIES(

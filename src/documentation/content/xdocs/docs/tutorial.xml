@@ -22,35 +22,11 @@
 <title>Introduction</title>
 <p>This tutorial introduces <strong>xmlbeansxx</strong> basics. Through it, you'll get a hands on view of
                 the three technologies that make up version 1 of <strong>xmlbeansxx</strong>: strongly-typed access to
-                XML through compiled schema, type-agnostic access to XML through the XML cursor (not
-                yet implemented) and xpath query system called XQuery (not yet implemented).
+                XML through compiled schema, type-agnostic access to XML through the XML cursor 
+		and xpath query system called XQuery (not yet implemented).
                 This tutorial describes what <strong>xmlbeansxx</strong> is and introduces a few of the tools that come
                 with an <strong>xmlbeansxx</strong> installation.</p>
 
-<p>To get started, you'll need the following:</p>
-<ul>
-<li>JDK 1.4 for version 1 <strong>xmlbeansxx</strong> releases. You can download the JDK
-    <a href="http://java.sun.com/j2se/1.4.2/download.html">here</a>.</li>
-<li>An <strong>xmlbeansxx</strong> version 1 installation. If you don't have this yet, you'll find
-                    installation instructions at <a href="how_to_install.html">Installing xmlbeansxx</a>.</li>
-<li>An editor for writing C++ code. This could be a text editor or your favorite C++ IDE.</li>
-<li><strong>TODO TODO Write exact prerequisites TODO TODO</strong></li>
-</ul>
-
-<p>You'll create a few files as part of this tutorial. Start out by creating a new
-                tutorials directory just under your XMLBEANS_HOME directory. This will hold the
-                files you create in the course of this tutorial. While you're at it, create the
-                following subdirectories under the tutorials directory: classes, instances, src,
-                lib. If you're working with <strong>xmlbeansxx</strong> version 1.0.3, your hierarchy should look
-                something like this:</p>
-<source>xmlbeansxx-1.0
-    ...
-    tutorials
-        gettingstarted
-            classes
-            instances
-            lib
-            src</source>
 </section>
 <section>        
 <title>Get Acquainted with the Basics</title>
@@ -58,7 +34,7 @@
                 nutshell, <strong>xmlbeansxx</strong> offers three complementary technologies:</p>
 
 <ul>
-<li>A schema-oriented way to view XML instances through Java types based on the schema.</li>
+<li>A schema-oriented way to view XML instances through C++ types based on the schema.</li>
 <li>A schema-agnostic way to traverse the full XML infoset.</li>
 <li>A schema object model through which, in Java code, you can examine a compiled
                     XML schema. (Note: this aspect of <strong>xmlbeansxx</strong> is not covered in this tutorial. For
@@ -75,9 +51,51 @@
 <title>Getting Started with Handling XML Through Schema</title>
 <p>One of the things <strong>xmlbeansxx</strong> does best is provide a way for you to handle XML by using
                 a schema to which the XML conforms. With <strong>xmlbeansxx</strong> you can compile one or more schema
-                (XSD) files to generate Java types. By binding XML instance documents to these Java
-                types, you provide yourself a way to access the instances in Java in a
+                (XSD) files to generate C++ types. By binding XML instance documents to these C++
+                types, you provide yourself a way to access the instances in C++ in a
                 schema-oriented way.</p>
+		<p>Lets look at this schema (easypo.xsd):</p>
+<source><![CDATA[
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:po="http://openuri.org/easypo"
+    targetNamespace="http://openuri.org/easypo"
+    elementFormDefault="qualified">
+    <xs:element name="purchase-order">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="customer" type="po:customer"/>
+                <xs:element name="date" type="xs:dateTime"/>
+                <xs:element name="line-item" type="po:line-item" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="shipper" type="po:shipper" minOccurs="0" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="customer">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="address" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="age" type="xs:int"/>
+        <xs:attribute name="moo" type="xs:int" default="100"/>
+        <xs:attribute name="poo" type="xs:int" fixed="200"/>
+    </xs:complexType>
+    <xs:complexType name="line-item">
+        <xs:sequence>
+            <xs:element name="description" type="xs:string"/>
+            <xs:element name="per-unit-ounces" type="xs:decimal"/>
+            <xs:element name="price" type="xs:decimal"/>
+            <xs:element name="quantity" type="xs:integer"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="shipper">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="per-ounce-rate" type="xs:decimal"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
+]]></source>
 
 <p>If you don't know anything about schema, here are a few basics for this one:</p>
 <ul>
@@ -94,9 +112,7 @@
                     as defined in the schema's respective <em>&lt;complexType&gt;</em> elements.</li>
             
 </ul>
-<p>Now take a look at an XML document based on this schema. Copy the following XML from
-                this page into a new XML file called easypo.xml, then put the file in the
-                tutorials\gettingstarted\instances directory you created at the beginning of this tutorial.</p>
+<p>Now take a look at an XML document based on this schema. </p>
 <source>&lt;purchase-order xmlns="http://openuri.org/easypo"&gt;
     &lt;customer&gt;
         &lt;name&gt;Gladys Kravitz&lt;/name&gt;
@@ -129,10 +145,17 @@
 <p>Now to try these examples out with <strong>xmlbeansxx</strong>. Among the tools included with <strong>xmlbeansxx</strong>
                 is scompxx, a script that executes the schema compiler (part of the <strong>xmlbeansxx</strong> API) to
                 compile a schema or directory of schemas. Use scompxx to compile the <a href="http://svn.apache.org/viewcvs.cgi/*checkout*/xmlbeans/trunk/samples/SchemaEnum/schemas/EasyPO.xsd">easypo schema</a>. On
-                Windows, use the following command (this script is also available on UNIX):</p>
-<source>scompxx schemas\easypo\easypo.xsd</source>
-<p>You'll end up with easypo.so in the .lib directory of your tutorial hierarchy. You can now <strong>make install</strong> it.</p>
-
+                Unix, use the following command (in a new directory):</p>
+<source>
+scompxx -out easypo easypo.xsd
+make
+sudo make install
+</source>
+<p>You'll end up with:  /usr/local/lib/easypo.so and /usr/local/include/easypo/easypo.h.</p>
+<p>Windows users must use the xmlbeansxx-gen.bat command: </p>
+<source>
+xmlbeansxx-gen.bat easypo.xsd
+</source>
 <section>
 <title>Results of Compiling the Schema</title>
 <p>[This section describes the interfaces generated by the schema compiler. If
@@ -187,21 +210,21 @@
                         according to JavaBeans conventions. For example, for the
                         <code>&lt;date&gt;</code> element you have the following:</p>
 <source>public:
-        xmlbeansxx::CalendarPtr getDate()
-        void setDate ( xmlbeansxx::CalendarPtr )</source>
+        boost::posix_time::ptime getDate()
+        void setDate (boost::posix_time::ptime )</source>
 
 <p>This is one of two ways that the schema compiler provides for access to the
                         <code>&lt;date&gt;</code> element &mdash; a more convenient, Java-native
                         way, one might say. These accessors are a kind of convenience pair (you're
-                        likely to want a <code>Calendar</code> instance when working with a date).
+                        likely to want a <code>boost::posix_time::ptime</code> instance when working with a date).
                         However, because the <code>&lt;date&gt;</code> element's type,
                         <code>xs:dateTime</code>, is a built-in schema type, the schema compiler
-                        provides accessors that get and set its value with another Java type that
+                        provides accessors that get and set its value with another C++ type that
                         <strong>xmlbeansxx</strong> defines:</p>
 
 <source>public:
-        xmlbeansxx::XmlDateTimePtr xgetDate()
-        void xsetDate( xmlbeansxx::XmlDateTimePtr )</source>
+        xmlbeansxx::XmlDateTime xgetDate()
+        void xsetDate( xmlbeansxx::XmlDateTime  )</source>
 <!-- <p>
                         
 <a href="http://xmlbeans.apache.org/docs/reference/org/apache/xmlbeans/XmlDateTime.html">
@@ -229,7 +252,7 @@
                         <code>customer</code> type.</p>
 <source>public:
         org::openuri::easypo::Customer getCustomer()
-        void setCustomer( org::openuri::easypo::Customer )</source>
+        void setCustomer(org::openuri::easypo::Customer )</source>
 <p>In other words you can call <code>getCustomer</code> to retrieve its
                         <code>Customer</code> instance, then update the instance's contents &mdash; which
                         is how you update the content of the <code>&lt;customer&gt;</code>
@@ -238,9 +261,9 @@
 <p>Along the same lines, you get a convenience method for complex types like
                         <code>customer</code>, like so:</p>
 <source>public:
-        org::openuri::easypo::Customer addNewCustomer()</source>
-<p>Through an <code>add*</code> method such as this one, you can add a new
-                        <code>&lt;customer&gt;</code> element to the
+        org::openuri::easypo::Customer cgetCustomer()</source>
+<p>Through an <code>cget*</code> (create get) method such as this one, you can add a new
+                        <code>&lt;customer&gt;</code> element to the 
                         <code>&lt;purchase-order&gt;</code> element. The method returns a
                         <code>Customer</code> instance so that you can update the new element's
                         contents. </p>
@@ -253,8 +276,8 @@
                         for the instance to be valid. To find out if it's there and to remove it if
                         it is, you get these methods:</p>
 <source>public:
-        boolean isSetShipper ( ) 
-        void unsetShipper ( )</source>
+        bool isSetShipper () 
+        void unsetShipper ()</source>
 </section>
 
 <section>
@@ -271,21 +294,24 @@
 
 <source>public:
         // Get or set the whole array.
-        org::openuri::easypo::LineItem[] getLineItemArray ( )
-        void setLineItemArray ( org::openuri::easypo::LineItem[] )
+        std::vector&lt;org::openuri::easypo::LineItem&gt; getLineItemArray ()
+        void setLineItemArray (std::vector&lt;org::openuri::easypo::LineItem&gt; &amp; )
 
         // Get or set a single item.
-        org::openuri::easypo::LineItem getLineItemArray ( int )
-        void setLineItemArray( int, org::openuri::easypo::LineItem )
+        org::openuri::easypo::LineItem getLineItemArray (int )
+        void setLineItemArray(int, org::openuri::easypo::LineItem)
 
         // Add or remove an item.
-        org::openuri::easypo::LineItem insertNewLineItem( int )
-        void removeLineItem( int )
+        org::openuri::easypo::LineItem addNewLineItem();
+        void removeLineItem(int )
 
         // Get the array's size (without having to get the array, then call .length).
         int sizeOfLineItemArray()</source>
 <p>Finally, you'll notice that the schema compiler has generated a <code>field</code>:</p>
-<source>public static final org.apache.xmlbeans.SchemaType type</source>
+<source>
+public:
+static const xmlbeansxx::SchemaType *type
+</source>
 <p>You can use this field for access to a <a href="http://xmlbeans.apache.org/docs/reference/org/apache/xmlbeans/SchemaType.html">
                             <code>SchemaType</code>
                         </a> instance that represents the underlying schema type itself. This
@@ -296,7 +322,7 @@ For more information about the types generated from schema, see
         <a href="generated_classes.html">C++ Classes Generated from User-Derived Schema Types</a>.
         To learn more about generated methods, see
         <a href="generated_methods.html">Methods in Classes Generated from Schema</a>.
-        Also, <strong>xmlbeansxx</strong> provides its own Java types for built-in schema data types such as
+        Also, <strong>xmlbeansxx</strong> provides its own C++ types for built-in schema data types such as
         <code>xs:dateTime</code>, <code>xs:decimal</code>, and so on.
         To read more about these, see the original document
         <a href="http://xmlbeans.apache.org/docs/guide/conIntroToTheSchemaTypeSystem.html">
@@ -310,11 +336,10 @@ For more information about the types generated from schema, see
                     It turns out that Gladys wants to add another book to her order. Your code will
                     accept the existing order along with raw data for the new item, then add the
                     item and return the updated XML.</p>
-<p>Start out by creating a POUpdater.cpp file in the
-                    <code>tutorials\gettingstarted\src</code> directory. Add the following code to
+<p>Start out by creating a POUpdater.cpp file. Add the following code to
                     that file:</p>
 <source>#include &lt;fstream&gt;
-#include &lt;easypo.h&gt;
+#include &lt;easypo/easypo.h&gt;
 
 using namespace std;
 using namespace org::openuri::easypo;
@@ -324,10 +349,9 @@ string addLineItem(istream purchaseOrder, string itemDescription,
                                           string itemPriceString,
 					  string itemQuantityString) {
         // Bind the incoming XML to an xmlbeansxx type.
-        PurchaseOrderDocumentPtr poDoc;
-        poDoc = PurchaseOrderDocument::parse(purchaseOrder);
+        PurchaseOrderDocument poDoc = PurchaseOrderDocument::Factory::parse(purchaseOrder);
 
-        return poDoc->toString();
+        return poDoc.toString();
 }</source>
 <p>So far, the <code>addLineItem</code> function binds the incoming XML to an <strong>xmlbeansxx</strong>
                     type generated by compiling the schema. This snippet creates a function that
@@ -350,15 +374,13 @@ string addLineItem(istream purchaseOrder, string itemDescription,
                     that in <strong>xmlbeansxx</strong>, you get at the type representing a global element by going
                     through the <code>"Document"</code> type that contains it &mdash; here, with the
                     <code>getPurchaseOrder</code> method. </p>
-<source>mpz_class perUnitOunces (perUnitOuncesString);
-mpz_class itemPrice (itemPriceString);
-mpz_class itemQuantity (itemQuantityString);
+<source>
 
-LineItemPtr newItem = poDoc->getPurchaseOrder()->addNewLineItem();
-newItem->setDescription(itemDescription);
-newItem->setPerUnitOunces(perUnitOunces);
-newItem->setPrice(itemPrice);
-newItem->setQuantity(itemQuantity);</source>
+LineItem newItem = poDoc.getPurchaseOrder().addNewLineItem();
+newItem.setDescription(itemDescription);
+newItem.setPerUnitOunces(perUnitOuncesString);
+newItem.setPrice(itemPriceString);
+newItem.setQuantity(itemQuantityString);</source>
 <p>That's pretty much all there is to it. The JavaBeans-style access provided by
                     compiling your schema greatly simplifies your access to XML instances based on
                     the schema. We believe, that implementing JavaBeans-style access to XML in C++
@@ -378,27 +400,18 @@ string addLineItem(istream& purchaseOrder, string itemDescription,
 	                                   string itemQuantityString)
 {
     // Bind the incoming XML to an xmlbeansxx type.
-    PurchaseOrderDocumentPtr poDoc;
-    poDoc = PurchaseOrderDocument::Factory::parse(purchaseOrder);
-
-    // Convert incoming data to types that can be used in accessors.
-    mpz_class perUnitOunces(perUnitOuncesString);
-    mpz_class itemPrice(itemPriceString);
-    mpz_class itemQuantity(itemQuantityString);
+    PurchaseOrderDocument poDoc = PurchaseOrderDocument::Factory::parse(purchaseOrder);
 
     // Add the new <line-item> element.
-    PurchaseOrderDocument_PurchaseOrderPtr po(poDoc->getPurchaseOrder());
-    if (!po) {
-        return string("NULL PURCHASE-ORDER");
-    }
+    PurchaseOrderDocument_PurchaseOrder po=poDoc.cgetPurchaseOrder();
 
-    LineItemPtr newItem = po->addNewLineItem();
+    LineItem newItem = po.addNewLineItem();
 
-    newItem->setDescription(itemDescription);
-    newItem->setPerUnitOunces(perUnitOunces);
-    newItem->setPrice(itemPrice);
-    newItem->setQuantity(itemQuantity);
-    string res(poDoc->toString());
+    newItem.setDescription(itemDescription);
+    newItem.setPerUnitOunces(perUnitOuncesString);
+    newItem.setPrice(itemPriceString);
+    newItem.setQuantity(itemQuantityString);
+    return poDoc.toString();
 }
 
 int main(int argc, char* argv[]) {
@@ -418,13 +431,10 @@ int main(int argc, char* argv[]) {
 <p>Now, compile the code with a command such as the following (the line is
                     broken for readability):</p>
 
-<source>g++ -o sample src/cpp/sample.cpp
-	-I/home/pb/TouK/touk/trunk/xxx/include
-	-L/home/pb/TouK/touk/trunk/xxx/lib
-	-lxerces-c -lgmp -lgmpxx -lxmltypes -pthread</source>
+<source>g++ -o POUpdater POUpdater.cpp -leasypo </source>
 
 <p>After you compile, you can try out the sample with the following command:</p>
-<source>./sample "a new item" 5.0 20.00 6</source>
+<source>./POUpdater easypo.xml "Backyard Astronomer's Guide, The" 5.0 49.95 2</source>
 
 <p>The output should look like the instance output above, but with the following
                     added as the last <code>&lt;line-item&gt;</code> element, immediately
@@ -438,7 +448,7 @@ int main(int argc, char* argv[]) {
 
 <p>Obviously, you need a schema to use this aspect of <strong>xmlbeansxx</strong>. But you may find
                     yourself creating a schema where you only have instances so that you can compile
-                    it to generate those Java types &mdash; just to make your life a little easier.</p>
+                    it to generate those C++ types &mdash; just to make your life a little easier.</p>
 </section>
 </section>
 </section>
@@ -446,7 +456,7 @@ int main(int argc, char* argv[]) {
 
 <section>        
 <title>Getting Started with the XML Cursor</title>
-<p>This part will be added after XML Cursor functionality is implemented.</p>
+<p>This part will be added soon.</p>
 </section>
       
 <section>

@@ -36,7 +36,7 @@
       <title>Features</title>
         <ul>
 	  <li>Easy access to <em>XmlSchema</em> based XML data through <strong>generated C++ classes</strong>.</li>
-	  <li>Easy iteration over any XML data, even with no schema file, through <strong>XmlCursor iterators</strong> (being implemented).</li>
+	  <li>Easy iteration over any XML data, even with no schema file, through <strong>XmlCursor iterators</strong>.</li>
 	  <li>Runtime XPath queries, through <strong>XQuery</strong> technology (being implemented).</li>
 	  <li>Memory safe - uses <a href="site:boost"><strong>boost::smart_ptr</strong></a> technology.</li>
 	  <li>Clear, configurable logging - uses <a href="site:log4cxx"><strong>log4cxx</strong></a>.</li>
@@ -49,20 +49,24 @@
       <p>Supported Operating Systems:</p>
       <ul>
         <li>Linux (tested under RedHat and Debian)</li>
-<!--	<li>Windows (will be implemented in the future)</li>
-	<li>other Unix (will be implemented in the future)</li> -->
+	<li>Windows</li>
+<!--	<li>other Unix (will be implemented in the future)</li> -->
       </ul>
       <p/>
-      <p>Installed libraries:</p>
+      <p>Installed libraries (required):</p>
       
 	<ul>
+	  <li>cmake or autotools</li>
+	  <li>maven</li>
 	  <li>xerces-c</li>
-	  <li>gmpxx</li>
 	  <li>boost</li>
+	  <li>CppUnit</li>
+	</ul>
+      <p>Installed libraries (recommended):</p>
+        <ul>
 	  <li>log4cxx</li>
-	  <!--
-	  <li><strong>OTHER - write them</strong></li>
-	  -->
+	  <li>gmpxx</li>
+	  <li>libxml2</li>
 	</ul>
     </section>
     

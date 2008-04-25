@@ -34,18 +34,33 @@ XmlObject XmlObjectDocument::Factory::parse(const std::string &str,xmlbeansxx::X
 }
 */
 
+void XmlObjectDocument::_setXmlObject(const xmlbeansxx::XmlObject& p, bool castTest, const char* toString) {
+  if(!castTest) {
+    xmlbeansxx::Contents::Walker::ElemsType elements = xmlbeansxx::Contents::Walker::getElems(p);
+    if(elements.size()==1) { 
+      XmlObject e = elements[0].second;
+      createContents();
+      xmlbeansxx::Contents::Walker::setElem(*this,getSchemaType()->documentElementName,e.contents);
+      return;
+    }
+
+    throw xmlbeansxx::ClassCastException(p.getSchemaType()->className + " to " + toString);
+  }
+  swapContents(p.contents);
+}
+
+
 xmlbeansxx::SchemaType XmlObjectDocument::initSchemaType() {
   xmlbeansxx::SchemaType st(typeid(xmlbeansxx::XmlObjectDocument));
   st.createFn=xmlbeansxx::XmlObjectDocument::Factory::newInstanceXmlObject;
-  st.createArrayFn=xmlbeansxx::XmlObjectDocument::Factory::newXmlArrayInstance;
   st.whitespaceRule=xmlbeansxx::SchemaType::WS_UNSPECIFIED;
   st.className="xmlbeansxx::XmlObjectDocument";
   st.contentType=xmlbeansxx::SchemaType::ELEMENT_CONTENT;
+  st.name = xmlbeansxx::QName::store("http://xmlbeansxx.touk.pl/xmlbeansxx/innerType", "xmlbeansxx__XmlObjectDocument");
   st.processContents=true;
   return st;
 }
-XmlObjectDocument::XmlObjectDocument(const xmlbeansxx::Void &v):xmlbeansxx::XmlObject(v) { }
-XmlObjectDocument::XmlObjectDocument():xmlbeansxx::XmlObject(xmlbeansxx::Void()) {  }
+XmlObjectDocument::XmlObjectDocument():xmlbeansxx::XmlObject() {  }
 XmlObjectDocument::XmlObjectDocument(const xmlbeansxx::ContentsPtr& p):xmlbeansxx::XmlObject(p) { } 
 
 XmlObjectDocument::XmlObjectDocument(const xmlbeansxx::XmlObject& p) {
@@ -69,9 +84,8 @@ xmlbeansxx::XmlObjectDocument XmlObjectDocument::Factory::newInstance() {
 xmlbeansxx::XmlObjectPtr XmlObjectDocument::Factory::newInstanceXmlObject() {
   return xmlbeansxx::XmlObjectPtr(new XmlObjectDocument());
 }
-xmlbeansxx::XmlObjectPtr XmlObjectDocument::Factory::newXmlArrayInstance() { return xmlbeansxx::XmlObjectPtr(new xmlbeansxx::XmlArray<XmlObjectDocument >()); }
 XmlObjectDocument XmlObjectDocument::Factory::parse(std::istream &in,xmlbeansxx::XmlOptions options) {
-  XmlObjectDocument doc;
+  XmlObjectDocument doc=XmlObjectDocument::Factory::newInstance();
   xmlbeansxx::XmlParserPtr p = XmlParser::Factory::newInstance(options);
   p->parse(in,doc);
   return doc;
@@ -89,7 +103,8 @@ namespace   {
 class TypesExistence {
   public:
   TypesExistence() {
-    xmlbeansxx::XmlObjectDocument::type();
+    xmlbeansxx::globalTypeSystem()->addDocumentType(xmlbeansxx::XmlObjectDocument::type());
+
   }
 };
 static TypesExistence te;

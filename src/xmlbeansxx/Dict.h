@@ -36,7 +36,6 @@ DECLARE_PTR(XmlObject,XmlObjectPtr,constXmlObjectPtr)
 
 template<class T>
 struct DictEl {
-    //std::string name;
     QName name;
     T value;
 
@@ -52,8 +51,6 @@ struct DictEl {
 
 
 class Contents;
-//typedef boost::intrusive_ptr<Contents> ContentsPtr;
-//typedef Contents * ContentsPtr;
 typedef boost::shared_ptr<Contents> ContentsPtr;
 
 struct ElemDict {

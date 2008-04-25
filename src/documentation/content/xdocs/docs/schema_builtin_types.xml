@@ -13,7 +13,7 @@
     <note>
       <strong>xmlbeansxx</strong> was inspired by <a href="http://xmlbeans.apache.org">Apache XMLBeans</a> (developed by
       <a href="http://www.apache.org">The Apache XML Project</a>). This document strongly based on
-      <a href="http://xmlbeans.apache.org/docs/guide/conXMLBeansSupportBuiltInSchemaTypes.html">XMLBeans Support for Built-In Schema Types</a>.
+      <a href="http://xmlbeans.apache.org/docs/2.0.0/guide/conXMLBeansSupportBuiltInSchemaTypes.html">XMLBeans Support for Built-In Schema Types</a>.
     </note>
     
     <section>
@@ -30,7 +30,7 @@
 	Built-in schema types are common types defined by the XML schema specification. User-derived
 	types are those you define in your schema. This topic lists the built-in types provided with
 	<strong>xmlbeansxx</strong>. For information about user-derived types and the C++ types generated
-	from them, see <a href="">C++ Types Generated from User-Derived Schema Types</a>.
+	from them, see <a href="generated_classes.html">C++ Types Generated from User-Derived Schema Types</a>.
       </p>
       <p>
         See <a href="http://xmlbeans.apache.org/docs/guide/conXMLBeansSupportBuiltInSchemaTypes.html">the figure</a>
@@ -93,19 +93,19 @@
       <tr> <td>xs:base64Binary</td> <td>XmlBase64Binary</td> <td>xmlbeansxx::shared_array&lt;unsigned char&gt;</td> </tr>
       <tr> <td>xs:boolean</td> <td>XmlBoolean</td> <td>bool</td> </tr>
       <tr> <td>xs:byte</td> <td>XmlByte</td> <td>unsigned char</td> </tr>
-      <tr> <td>xs:date</td> <td>XmlDate</td> <td>boost::shared_ptr&lt;xmlbeansxx::Calendar&gt;</td> </tr>
-      <tr> <td>xs:dateTime</td> <td>XmlDateTime</td> <td>boost::shared_ptr&lt;xmlbeansxx::Calendar&gt;</td> </tr>
+      <tr> <td>xs:date</td> <td>XmlDate</td> <td>boost::posix_time::ptime</td> </tr>
+      <tr> <td>xs:dateTime</td> <td>XmlDateTime</td> <td>boost::posix_time::ptime</td> </tr>
       <tr> <td>xs:decimal</td> <td>XmlDecimal</td> <td>mpf_class</td> </tr>
       <tr> <td>xs:double</td> <td>XmlDouble</td> <td>double</td> </tr>
-      <tr> <td>xs:duration</td> <td>XmlDuration</td> <td>boost::shared_ptr&lt;xmlbeansxx::GDuration&gt;</td> </tr>
+      <tr> <td>xs:duration</td> <td>XmlDuration</td> <td>boost::shared_ptr&lt;xmlbeansxx::GDuration&gt; (not implemented)</td> </tr>
       <tr> <td>xs:ENTITIES</td> <td>XmlENTITIES</td> <td>std::string</td> </tr>
       <tr> <td>xs:ENTITY</td> <td>XmlENTITY</td> <td>std::string</td> </tr>
       <tr> <td>xs:float</td> <td>XmlFloat</td> <td>float</td> </tr>
-      <tr> <td>xs:gDay</td> <td>XmlGDay</td> <td>boost::shared_ptr&lt;xmlbeansxx::Calendar&gt;</td> </tr>
-      <tr> <td>xs:gMonth</td> <td>XmlGMonth</td> <td>boost::shared_ptr&lt;xmlbeansxx::Calendar&gt;</td> </tr>
-      <tr> <td>xs:gMonthDay</td> <td>XmlGMonthDay</td> <td>boost::shared_ptr&lt;xmlbeansxx::Calendar&gt;</td> </tr>
-      <tr> <td>xs:gYear</td> <td>XmlGYear</td> <td>boost::shared_ptr&lt;xmlbeansxx::Calendar&gt;</td> </tr>
-      <tr> <td>xs:gYearMonth</td> <td>XmlGYearMonth</td> <td>boost::shared_ptr&lt;xmlbeansxx::Calendar&gt;</td> </tr>
+      <tr> <td>xs:gDay</td> <td>XmlGDay</td> <td>boost::posix_time::ptime</td> </tr>
+      <tr> <td>xs:gMonth</td> <td>XmlGMonth</td> <td>boost::posix_time::ptime</td> </tr>
+      <tr> <td>xs:gMonthDay</td> <td>XmlGMonthDay</td> <td>boost::posix_time::ptime</td> </tr>
+      <tr> <td>xs:gYear</td> <td>XmlGYear</td> <td>boost::posix_time::ptime</td> </tr>
+      <tr> <td>xs:gYearMonth</td> <td>XmlGYearMonth</td> <td>boost::posix_time::ptime</td> </tr>
       <tr> <td>xs:hexBinary</td> <td>XmlHexBinary</td> <td>xmlbeansxx::shared_array&lt;unsigned char&gt;</td> </tr>
       <tr> <td>xs:ID</td> <td>XmlID</td> <td>std::string</td> </tr>
       <tr> <td>xs:IDREF</td> <td>XmlIDREF</td> <td>std::string</td> </tr>
@@ -124,10 +124,10 @@
       <tr> <td>xs:normalizedString</td> <td>XmlNormalizedString</td> <td>std::string</td> </tr>
       <tr> <td>xs:NOTATION</td> <td>XmlNOTATION</td> <td>Not supported</td> </tr>
       <tr> <td>xs:positiveInteger</td> <td>XmlPositiveInteger</td> <td>mpz_class</td> </tr>
-      <tr> <td>xs:QName</td> <td>XmlQName</td> <td>boost::shared_ptr&lt;xmlbeansxx::QName&gt;</td> </tr>
+      <tr> <td>xs:QName</td> <td>XmlQName</td> <td>boost::shared_ptr&lt;xmlbeansxx::QName&gt; (not implemented)</td> </tr>
       <tr> <td>xs:short</td> <td>XmlShort</td> <td>short</td> </tr>
       <tr> <td>xs:string</td> <td>XmlString</td> <td>std::string</td> </tr>
-      <tr> <td>xs:time</td> <td>XmlTime</td> <td>boost::shared_ptr&lt;xmlbeansxx::Calendar&gt;</td> </tr>
+      <tr> <td>xs:time</td> <td>XmlTime</td> <td>boost::posix_time::ptime</td> </tr>
       <tr> <td>xs:token</td> <td>XmlToken</td> <td>std::string</td> </tr>
       <tr> <td>xs:unsignedByte</td> <td>XmlUnsignedByte</td> <td>short</td> </tr>
       <tr> <td>xs:unsignedInt</td> <td>XmlUnsignedInt</td> <td>mpz_class</td> </tr>

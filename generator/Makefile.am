@@ -13,14 +13,16 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
+EXTRA_DIST = CMakeLists.txt
+
 all-local: stamp-build 
 
 stamp-build: $(shell find . -regex '\./\(src\|pom\.xml\).*' -not -regex '.*/\..*' | grep -v stamp)
-	cp ${srcdir}/pom.xml .; mvn -U -Dbase=${srcdir} -Prelease package 
+	cp ${srcdir}/pom.xml .; ${MVN} -U -Dbase=${srcdir} -Prelease package 
 	touch stamp-build
 
 clean-local:
-	mvn clean
+	${MVN} clean
 	rm -f stamp-build
 	if [ "x`readlink -f ${srcdir}`" != "x`readlink -f .`" ]; then rm -f pom.xml; true ; fi 
 

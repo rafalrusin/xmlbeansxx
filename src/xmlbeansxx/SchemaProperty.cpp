@@ -20,6 +20,6 @@
 	
 namespace xmlbeansxx {
 
-SchemaProperty::SchemaProperty(int order,const SchemaType *type, StringPtr singletonDefault):order(order),schemaType(type), singletonDefault(singletonDefault) {}
+SchemaProperty::SchemaProperty(int order,const QName &type, const std::string &singletonDefault):order(order),schemaTypeName(type), singletonDefault(singletonDefault) {}
 
 }

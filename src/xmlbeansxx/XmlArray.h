@@ -40,28 +40,26 @@ namespace xmlbeansxx {
 extern XMLBEANSXX_LOGGER_PTR(XmlArray_log);
 #endif
 
-extern QName XmlArray_elemName;
+class AnyXmlArray: public XmlObject {
+public:
+    class Names {
+    public:
+    	static const QName elementName;
+    };
+    class Factory {
+    public:
+	static AnyXmlArray newInstance();
+	static xmlbeansxx::XmlObjectPtr newInstanceXmlObject();
+    };
+    
+    static SchemaType initSchemaType();
+    virtual const xmlbeansxx::SchemaType *getOrginSchemaType() const;
+    static const xmlbeansxx::SchemaType *type() ;
+
+};
 
 template<class T>
-static SchemaType XmlArray_initSchemaType() {
-      	xmlbeansxx::SchemaType st(typeid(T));
-      	st.createFn=T::Factory::newXmlArrayInstance;
-        st.createArrayFn=T::Factory::newInstanceXmlObject;
-      	st.whitespaceRule=xmlbeansxx::SchemaType::WS_COLLAPSE;
-      	T o=T::Factory::newInstance();
-      	st.className=o.getSchemaType()->className;
-      	st.name=o.getSchemaType()->name;
-	
-	st.isArray=true;
-	st.processContents=true;
-	
-	st.elements[QName::store("http://xmlbeans.apache.org/definitions","e")]=xmlbeansxx::SchemaPropertyPtr(new xmlbeansxx::SchemaProperty(1 ,T::type(), xmlbeansxx::StringPtr()));
-	return st;
-}
-
-
-template<class T>
-class XmlArray:public XmlObject {
+class XmlArray:public AnyXmlArray {
 public:
     class Factory {
     public:
@@ -73,11 +71,7 @@ public:
 	static xmlbeansxx::XmlObjectPtr newInstanceXmlObject(){
 	    return xmlbeansxx::XmlObjectPtr(new XmlArray<T>());
 	}
-/*	static XmlArray<T> parse(std::istream &in,xmlbeansxx::XmlOptions options=xmlbeansxx::XmlOptions());
-	static XmlArray<T> parse(const std::string &str,xmlbeansxx::XmlOptions options=xmlbeansxx::XmlOptions());
-*/
-		
-	
+			
     };
 
 
@@ -94,62 +88,58 @@ public:
     }
     XmlArray(const XmlObject &p) {
     	if(!p.getSchemaType()->isArray) {
-		throw xmlbeansxx::ClassCastException( ((p) ? p.getSchemaType()->className : "unknow") + " to XmlArray");
+		throw xmlbeansxx::ClassCastException(p.getSchemaType()->className + " to XmlArray");
 	}
 	if(!p.hasContents()) {
-		throw xmlbeansxx::ClassCastException("Empty XmlObject to XmlArray");
+		return ;
 	}
-	
-	boost::shared_ptr<xmlbeansxx::XmlObject> o = p.getSchemaType()->createArrayFn();
-	if(boost::dynamic_pointer_cast<T>(o)) {
-		swapContents(p.contents);
-	} else throw xmlbeansxx::ClassCastException( "XmlArray<" + ((p) ? p.getSchemaType()->className : "unknow") + "> to XmlArray");
+
+	swapContents(p.contents);	
     }
-  
-    virtual const xmlbeansxx::SchemaType *getOrginSchemaType() const {
-	return XmlArray<T>::type();
-    }
-    static const xmlbeansxx::SchemaType *type() {
-        static xmlbeansxx::SchemaType schemaType(XmlArray_initSchemaType<T>());
-	return &schemaType; 
-    }
-
-
-
-
+    
+    template<class T2>
+    XmlArray(const XmlArray<T2> &p) {
+    	if(!_cast_test<T>(T2::Factory::newInstance())) {
+		throw xmlbeansxx::ClassCastException("xmlbeansxx::XmlArray<" + T2::type()->className + ">" + " to xmlbeansxx::XmlArray<" + T::type()->className + ">");
+	}
+	if(!p.hasContents()) {
+		return ;
+	}
+	swapContents(p.contents);	
+   }
     
     T getArray(int i) const {
         TRACER(XmlArray_log,"getArrayAt");
-        return xmlbeansxx::Contents::Walker::getElem(*this,XmlArray_elemName,i);
+        return xmlbeansxx::Contents::Walker::getElem(*this,XmlArray::Names::elementName,i);
     }
     T cgetArray(int i) {
         TRACER(XmlArray_log,"cgetArrayAt");
-        return xmlbeansxx::Contents::Walker::cgetElem(*this,XmlArray_elemName,i);
+        return xmlbeansxx::Contents::Walker::cgetElem(*this,XmlArray::Names::elementName,i);
     }
-    XmlArray<T>& setArray(int i,T value) {
+    XmlArray<T>& setArray(int i,const T &value) {
         TRACER(XmlArray_log,"setArrayAt");
-        xmlbeansxx::Contents::Walker::setElem(*this,XmlArray_elemName,value.contents,i);
+        xmlbeansxx::Contents::Walker::setElem(*this,XmlArray::Names::elementName,value.contents,i);
 	return *this;
     }
     
     T xgetArray(int i) const { return getArray(i); }
     T xcgetArray(int i) { return cgetArray(i); }
-    XmlArray<T>& xsetArray(int i,T value) { return setArray(i,value); }
+    XmlArray<T>& xsetArray(int i,const T &value) { return setArray(i,value); }
     
-    XmlArray<T>& append(T value) {
+    XmlArray<T>& append(const T &value) {
         TRACER(XmlArray_log,"append");
-        xmlbeansxx::Contents::Walker::appendElem(*this,XmlArray_elemName,value.contents);
+        xmlbeansxx::Contents::Walker::appendElem(*this,XmlArray::Names::elementName,value.contents);
 	return *this;
     }
     XmlArray<T>&  unset() {
         TRACER(XmlArray_log,"unset");
-        xmlbeansxx::Contents::Walker::removeElems(*this,XmlArray_elemName);
+        xmlbeansxx::Contents::Walker::removeElems(*this,XmlArray::Names::elementName);
 	return *this;
     }
     
     int size() const {
         TRACER(XmlArray_log,"size");
-        return xmlbeansxx::Contents::Walker::countElems(*this,XmlArray_elemName);
+        return xmlbeansxx::Contents::Walker::countElems(*this,XmlArray::Names::elementName);
     }
 
     XmlInteger length() const {
@@ -158,18 +148,18 @@ public:
 
     XmlArray<T>& setArray(const std::vector<T> &vec) {
         TRACER(XmlArray_log,"setArrayT");
-	xmlbeansxx::Contents::Walker::setElemArray(*this,XmlArray_elemName,vec);
+	xmlbeansxx::Contents::Walker::setElemArray(*this,XmlArray::Names::elementName,vec);
 	return *this;
     }
     XmlArray<T>&  setArray(const std::vector<ContentsPtr> &vec) {
         TRACER(XmlArray_log,"setArray");
-	xmlbeansxx::Contents::Walker::setElemArray(*this,XmlArray_elemName,vec);
+	xmlbeansxx::Contents::Walker::setElemArray(*this,XmlArray::Names::elementName,vec);
 	return *this;
     }
 
     std::vector<T> getArray() const {
         TRACER(XmlArray_log,"getArray");
-	std::vector<T> a(xmlbeansxx::vector_conv<T>(xmlbeansxx::Contents::Walker::getElemArray(*this,XmlArray_elemName)));
+	std::vector<T> a(xmlbeansxx::vector_conv<T>(xmlbeansxx::Contents::Walker::getElemArray(*this,XmlArray::Names::elementName)));
    	return a;
     }
 };

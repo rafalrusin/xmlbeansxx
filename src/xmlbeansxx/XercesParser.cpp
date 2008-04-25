@@ -60,6 +60,11 @@ std::string getPrefix(const std::string &qname){
     return std::string();
 }
 
+namespace {
+inline bool isPersistPrefix(const std::string& prefix){
+	return (0 == prefix.compare(0,XmlBeans::persistentPrefix().length(),XmlBeans::persistentPrefix()));
+}
+};
 
 void MySAX2Handler::startElement(	const XMLCh* const uri, 
 					const XMLCh* const localname, 
@@ -85,7 +90,10 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
     }
 
     std::string prefix = getPrefix(transcode(qname));
-    QName name(transcode(uri), transcode(localname), prefix);
+    QName name;
+    if(isPersistPrefix(prefix))
+    	 name = QName(transcode(uri), transcode(localname));
+    else name = QName(transcode(uri), transcode(localname), prefix);
     
     XMLBEANSXX_DEBUG2(log, std::string("begin element: ") + name)
     XMLBEANSXX_DEBUG2(log, std::string("prefix: ") + prefix)
@@ -134,7 +142,7 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
 	    } else if(name == XmlBeans::xsi_array()) {
 		QName value=parser->nsSplit(transcode(attrs.getValue(i)));
         	XMLBEANSXX_DEBUG2(log, std::string("xsi:array = ") + value)
-		n = globalTypeSystem()->createArrayByName(value);
+//		n = globalTypeSystem()->createArrayByName(value);
 		if (!n) throw XmlException(string("Xsd Type '")+value+string("' not defined in builtin type system"));
 	    
 	    }
@@ -166,9 +174,11 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
     {	//add namespaces as attributes
 	    XmlContext::StoredLinks ns=parser->xmlContext.getLastStoredLinks();
 	    XMLBEANSXX_FOREACH(XmlContext::StoredLinks::iterator,i,ns) {
-	    	QName name(XmlBeans::xmlns(),i->first);
-    	    	XMLBEANSXX_DEBUG2(log, std::string("namespace attribute name: ")+ name + " = " + std::string(i->second) )
-	    	xmlbeansxx::Contents::Walker::setAttr(*n,name, i->second);
+	    	if(!isPersistPrefix(i->first)) {
+	    		QName name(XmlBeans::xmlns(),i->first);
+    	    		XMLBEANSXX_DEBUG2(log, std::string("namespace attribute name: ")+ name + " = " + std::string(i->second) )
+	    		xmlbeansxx::Contents::Walker::setAttr(*n,name, i->second);
+		}
 	    }
     }
     

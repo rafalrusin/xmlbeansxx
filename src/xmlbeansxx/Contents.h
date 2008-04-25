@@ -26,6 +26,7 @@
 #include "XmlOptions.h"
 #include "SchemaType.h"
 #include "QName.h"
+#include "XmlContext.h"
 
 #include <boost/config.hpp>
 #ifdef BOOST_HAS_THREADS
@@ -36,27 +37,15 @@
 
 class xmlbeansxx::Contents;
 
-/** intrusive_ptr
-namespace boost
-{
-    void intrusive_ptr_add_ref(xmlbeansxx::Contents * p);
-    void intrusive_ptr_release(xmlbeansxx::Contents * p);
-};
-*/
 
 namespace xmlbeansxx {
 
 class SchemaType;
 class XmlObject;
-class NSMapSerializer;
-
 class Contents;
+
 typedef boost::shared_ptr<Contents> ContentsPtr;
 typedef boost::shared_ptr<const Contents> constContentsPtr;
-typedef boost::shared_ptr<std::string> StringPtr;
-//typedef boost::intrusive_ptr<Contents> ContentsPtr;
-//typedef Contents * ContentsPtr;
-
 
 
 class Contents : public boost::enable_shared_from_this<Contents> {
@@ -66,7 +55,6 @@ public:
 
     	ElemDict attrs;
     	ElemDict elems;
-//    	std::string value;
 	const xmlbeansxx::SchemaType * st;
 	
 #ifdef BOOST_HAS_THREADS
@@ -104,22 +92,17 @@ public:
 	virtual std::vector<std::pair<QName,std::string> > getAttrs() const;
 	virtual std::vector<std::pair<QName,ContentsPtr> > getAttrs2() const;
 
-	/** Copies all contents from original object */
-//	void copyFrom(const ContentsPtr &orig);
 	virtual ContentsPtr clone();
         virtual void free();
 
 
-//	void insertDefaults(const SchemaType *schemaType);
-
-//	void serialize2(int emptyNsID,bool printXsiType,const QName& elemName,std::ostream &o,const xmlbeansxx::SchemaType * st) const;
 	virtual void serializeDocument(std::ostream &o,XmlOptions options) const;
-	virtual void serialize(bool printXsiType,const QName &elemName,std::ostream &o,NSMapSerializer &ns,XmlOptions options) const;
 
 	virtual std::string digest() const;
 	virtual const SchemaType * getSchemaType() const;
 
 private:
+	virtual void serialize(bool printXsiType,const QName &elemName,std::ostream &o,NSMapSerializer &ns,XmlOptions options) const;
 	virtual void serializeAttrs(std::ostream &o,NSMapSerializer& ns,XmlOptions options) const;
 	virtual void serializeElems(std::ostream &o,NSMapSerializer& ns,XmlOptions options) const;
 
@@ -163,7 +146,6 @@ public:
 		static void setElemArray(XmlObject& obj,const QName& elemName,const ContentsPtrArrayType& v);
 
 		static void serializeDocument(const XmlObject& obj,std::ostream &o,XmlOptions options,const xmlbeansxx::SchemaType * st);
-//		static void serialize2(XmlObject& obj,int emptyNsID,bool printXsiType,const QName& elemName,std::ostream &o,const xmlbeansxx::SchemaType * st);
 
 		static void setSimpleContent(XmlObject& obj,const std::string &c);
 		static std::string getSimpleContent(const XmlObject& obj);

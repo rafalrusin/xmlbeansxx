@@ -15,6 +15,7 @@
 
 
 #include "XmlParser.h"
+#include "XmlBeans.h"
 
 #include "config.h"
 
@@ -84,11 +85,22 @@ QName EmptyParser::nsSplit(const std::string &str, bool isAttr) {
 
 }
 
+namespace {
+inline bool isPersistPrefix(const std::string& prefix){
+	return (0 == prefix.compare(0,XmlBeans::persistentPrefix().length(),XmlBeans::persistentPrefix()));
+}
+};
+
+
 QName EmptyParser::getQName(const char *prefix, const char *localname, bool isAttr) {
     if (prefix == NULL) {
     	if (isAttr) return QName("", localname);
 	else return QName(xmlContext.getNamespaceURI(""), localname);
-    } else return QName(xmlContext.getNamespaceURI(prefix), localname,prefix);
+    } else {
+    	if(isPersistPrefix(prefix))
+		return QName(xmlContext.getNamespaceURI(prefix), localname);
+    	else 	return QName(xmlContext.getNamespaceURI(prefix), localname,prefix);
+    }
 }
 
 std::pair<std::string, std::string> EmptyParser::tagSplit(const std::string &str) {

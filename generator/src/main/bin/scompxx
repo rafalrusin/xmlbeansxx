@@ -30,6 +30,8 @@ Usage: $0 [-out lib_name] [-V lib_version] [dirs]* [files.xsd]*
 -nopvr		- do not enforce the particle valid (restriction) rule
 -srconly 	- do not compile .cpp files.
 
+-inline 	- generate \"inline\" methods
+
 files.xsd	- Type system schema files
 dirs		- directores with type system schema files (search recursively)
 
@@ -64,6 +66,9 @@ while test $# -gt 0; do
 		LIB_VERSION="$1"
 		;;
 	-dl)	XMLBEANSXX_OPTS="$XMLBEANSXX_OPTS -Ddownload"
+		;;
+	-inline)
+		XMLBEANSXX_OPTS="$XMLBEANSXX_OPTS -Dinline"
 		;;
 	-noupa)	XMLBEANSXX_OPTS="$XMLBEANSXX_OPTS -DnoUpa"
                 ;;
@@ -165,7 +170,7 @@ for i in "${ALL_XSD[@]}"; do
 		echo "spliting: $CPPFILE into: $CPPFILES"
 		SPLITS[${SPLITS[@]}]="
 $CPPFILES: $CPPFILE
-	$BIN/xmlbeansxx-split $CPPFILE
+	\${XMLBEANSXX_SPLIT} $CPPFILE
 
 "
 		COMP_TO_SPLIT_CPP[${#COMP_TO_SPLIT_CPP[@]}]=$CPPFILE
@@ -197,7 +202,7 @@ ${LIB_FULLNAME}_la_LDFLAGS = -version-info $LIB_VERSION -lxmlbeansxx
 dist_${LIB_FULLNAME}_la_SOURCES = \$(COMP_H) \$(COMP_SPLITED_CPP) \$(COMP_CPP)
 
 \$(COMP_H) \$(COMP_CPP) \$(COMP_TO_SPLIT_CPP): ${MAKEFILE_XSD_FILES[*]}
-	$BIN/xmlbeansxx-gen $XMLBEANSXX_OPTS ${MAKEFILE_XSD_FILES[*]}
+	\${XMLBEANSXX_GEN} ${XMLBEANSXX_OPTS} ${MAKEFILE_XSD_FILES[*]}
 
 ${SPLITS[*]}
 
@@ -208,7 +213,7 @@ ${LINK_NAME}:
 	ln -s . ${LINK_NAME}
 
 ${LIB_NAME}_headers.h: \$(COMP_H) ${LINK_NAME}
-	$BIN/xmlbeansxx-geninclude ${LIB_NAME}_headers.h ${LINK_NAME}
+	\${XMLBEANSXX_GENINCLUDE} ${LIB_NAME}_headers.h ${LINK_NAME}
 
 
 MOSTLYCLEANFILES = \$(COMP_H) \$(COMP_CPP) \$(COMP_TO_SPLIT_CPP) \$(COMP_SPLITED_CPP) ${LIB_NAME}_headers.h ${LINK_NAME}
@@ -256,7 +261,7 @@ if ! [ -e m4/acx_pthread.m4 ]; then
     cp $BIN/acx_pthread.m4 m4
 fi
 
-if ! [ -e configure.ac ]; then
+#if ! [ -e configure.ac ]; then
 
 cat <<EOF >configure.ac
 AC_PREREQ(2.57)
@@ -303,6 +308,13 @@ fi
 
 AC_CHECK_HEADERS([boost/smart_ptr.hpp boost/any.hpp], , AC_MSG_ERROR([boost library is required]))
 
+AC_PATH_PROG(XMLBEANSXX_GEN, xmlbeansxx-gen)
+AC_SUBST(XMLBEANSXX_GEN)
+AC_PATH_PROG(XMLBEANSXX_GENINCLUDE, xmlbeansxx-geninclude)
+AC_SUBST(XMLBEANSXX_GENINCLUDE)
+AC_PATH_PROG(XMLBEANSXX_SPLIT, xmlbeansxx-split)
+AC_SUBST(XMLBEANSXX_SPLIT)
+
 AC_SUBST(ac_aux_dir)
 
 AC_CONFIG_FILES([Makefile $SRC_DIR/Makefile])
@@ -311,9 +323,9 @@ AC_OUTPUT
 EOF
 RUN_CONFIGURE=1
 RUN_BOOTSTRAP=1
-fi
+#fi
 
-if ! [ -e bootstrap ]; then
+#if ! [ -e bootstrap ]; then
     cat <<EOF >bootstrap
 #!/bin/sh
 set -x
@@ -322,7 +334,7 @@ EOF
 chmod +x bootstrap
 RUN_BOOTSTRAP=1
 RUN_CONFIGURE=1
-fi
+#fi
 
 RUN_BOOTSTRAP=1
 RUN_CONFIGURE=1

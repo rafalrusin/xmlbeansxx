@@ -1,4 +1,6 @@
 #include "XmlArrayTest.h"
+#include "XmlOptions.h"
+
 #include <string>
 
 #include <xmlbeansxx/logger.h>
@@ -13,6 +15,8 @@ using namespace xmlbeansxx;
 
 void XmlArrayTest::xmlArrayTest() 
 {
+
+	
 	try {
 		XmlArray<XmlString> a;
 		a = XmlString("test1");
@@ -56,30 +60,15 @@ void XmlArrayTest::xmlArrayTest()
 		}
 		
 	}	
+
 	{
-	       	XMLBEANSXX_DEBUG(logger,"testing Cast:");		
-		XmlBoolean b(true);
-		XmlString s1(b);
-		XmlObject o(b);
-		XmlString s2(o);
-	       	XMLBEANSXX_DEBUG(logger,"s1 string:" + s2.toString());		
-		CPPUNIT_ASSERT_EQUAL(s1.toString(),s2.toString());
-	}
-	{
-	       	XMLBEANSXX_DEBUG(logger,"testing boolean true:");		
-		XmlString b("TruE");
-		XmlObject o(b);
-		XmlBoolean s2(o);
-	       	XMLBEANSXX_DEBUG(logger,"s1 string:" + s2.toString());		
-		CPPUNIT_ASSERT_EQUAL(bool(s2),true);
-	}
-	{
-	       	XMLBEANSXX_DEBUG(logger,"testing boolean false:");		
-		XmlString b("FalSe");
-		XmlObject o(b);
-		XmlBoolean s2(o);
-	       	XMLBEANSXX_DEBUG(logger,"s1 string:" + s2.toString());		
-		CPPUNIT_ASSERT_EQUAL(bool(s2),false);
-	}
+		XmlArray<XmlObject> a1=XmlArray<XmlObject>::Factory::newInstance();
+		a1.append(XmlString("bolek"));
+		a1.append(XmlString("lolek"));
+		a1.append(XmlInteger(12));
+		
+	       	XMLBEANSXX_DEBUG(logger,"a1:" + a1.toString(XmlOptions::serializeInnerTypes()));
+				
+	}	
 
 }

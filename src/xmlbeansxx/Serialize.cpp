@@ -39,88 +39,15 @@ using namespace std;
 
 #include <boost/config.hpp>
 #ifdef BOOST_HAS_THREADS
-#include <boost/thread/detail/lock.hpp>
-#define SYNC(mutex) boost::detail::thread::scoped_lock<boost::recursive_mutex> lock(mutex);
+#include <boost/thread/recursive_mutex.hpp>
+#define SYNC(mutex) boost::recursive_mutex::scoped_lock lock(mutex);
 #else
 #define SYNC(mutex)
 #endif
 
 
 
-
-
 namespace xmlbeansxx {
-
-
-struct NSMapSerializer : public XmlContext {
-	
-	std::vector<std::pair<std::string, StoreString> > notPrinted;
-	int current;
-
-	NSMapSerializer():current(0){};
-
-
-/*	virtual bool addNamespace(const std::string& prefix,StoreString ns) {
-	    if(true){ //!isSetNamespaceURI(ns)
-	    	NSMap::addNamespace(prefix, ns);
-		std::pair<std::string, StoreString> a(prefix, ns);
-		notPrinted.push_back(a);
-	    	return true;
-	    }
-	    return false;
-	}
-
-*/	
-	std::string cprintQName(const QName& n) {
-		if(n.first==StoreString("")) return n.second;
-		
-		std::string prefix=n.prefix;
-        	XMLBEANSXX_DEBUG(log,std::string("printQName: ") + prefix + "{" + n.first + "}" + n.second);
-		try {
-			if(getNamespaceURI(prefix) == n.first) 
-				return printPrefixName(prefix, n.second);
-		} catch(BeansException &e) {
-			//Prefix not set (getPrefix)
-		}
-		if(prefix.empty()) {
-			try {
-				prefix = getPrefix(n.first);
-				return printPrefixName(prefix, n.second);
-				
-			} catch (BeansException &e) {
-				prefix=getNextPrefix();
-			}
-		}
-		addNamespace(prefix,n.first);
-		return printPrefixName(prefix, n.second);
-	};
-	
-	
-	std::string printNewNS() {
-		std::string retu;
-	    	XmlContext::StoredLinks ns=getLastStoredLinks();
-		XMLBEANSXX_FOREACH(XmlContext::StoredLinks::iterator,i,ns) {
-			if(i->first.empty())	retu+=std::string(" xmlns=\"") + i->second + "\"";
-			else			retu+=std::string(" xmlns:") + i->first  + "=\"" + i->second + "\"";
-	    	}
-		return retu;
-	}
-	
-private:
-	std::string getNextPrefix() {
-		std::string prefix(1,'a'+current++);
-		if(isSetPrefix(prefix)) return getNextPrefix();
-		else 
-			return prefix;
-	}
-	std::string printPrefixName(const std::string& prefix,const std::string& name) {
-		if(prefix.empty()) return name;
-		return prefix + ":" + name;
-	}
-	XMLBEANSXX_STATIC_LOGGER_PTR(log);	
-};
-
-XMLBEANSXX_LOGGER_PTR_SET(NSMapSerializer::log,"xmlbeansxx.NSMapSerializer");
 
 
 namespace {
@@ -130,7 +57,6 @@ bool shallPrintXsiType(const SchemaType *xsdDefined,const SchemaType * st) {
         && st->classTypeInfo != xsdDefined->classTypeInfo;
 }
 }
-
 
 
 void Contents::serialize(bool printXsiType,const QName& elemName,std::ostream &o,NSMapSerializer &ns,XmlOptions options) const {
@@ -162,8 +88,9 @@ void Contents::serialize(bool printXsiType,const QName& elemName,std::ostream &o
         //it's an object
     	if (printXsiType && options.getSerializeTypes()) {
 		if( options.getSerializeInnerTypes() || !(st->name.first == XmlBeans::innerType_ns()) ) {
-    			if(st->isArray) o << " " << ns.cprintQName(XmlBeans::xsi_array()) << "=\"" << ns.cprintQName(st->name) << "\"";
-			else 		o << " " << ns.cprintQName(XmlBeans::xsi_type())  << "=\"" << ns.cprintQName(st->name) << "\"";
+//    			if(st->isArray) o << " " << ns.cprintQName(XmlBeans::xsi_array()) << "=\"" << ns.cprintQName(st->name) << "\"";
+//			else 		o << " " << ns.cprintQName(XmlBeans::xsi_type())  << "=\"" << ns.cprintQName(st->name) << "\"";
+	 		o << " " << ns.cprintQName(XmlBeans::xsi_type())  << "=\"" << ns.cprintQName(st->name) << "\"";
 		}
         }
     
@@ -194,6 +121,7 @@ void Contents::serializeDocument(ostream &o,XmlOptions options) const {
         return;
 
     NSMapSerializer ns;
+    if(options.getSerializePersistent()) ns.prefixPrefix=XmlBeans::persistentPrefix();
     
     const std::map<QName,SchemaPropertyPtr> *order=&(st->elements);
     std::map<QName,SchemaPropertyPtr>::const_iterator propIt=order->find(it->name);
@@ -207,15 +135,14 @@ void Contents::serializeDocument(ostream &o,XmlOptions options) const {
         XMLBEANSXX_DEBUG(log,msg);
 	printXsiType=false;
 //        throw XmlException(msg);
-    } else printXsiType=shallPrintXsiType(prop->schemaType,it->value->st);
+    } else printXsiType=shallPrintXsiType(globalTypeSystem()->getSchemaType(prop->schemaTypeName),it->value->st);
     //----------
     it->value->serialize(printXsiType,it->name,o,ns,options);
     o<<"\n";
     
 }
 
-
-void Contents::serializeAttrs(ostream &o,NSMapSerializer& ns, XmlOptions options) const {
+void Contents::serializeAttrs(std::ostream &o,NSMapSerializer& ns,XmlOptions options) const {
 	SYNC(mutex)
 	XMLBEANSXX_FOREACH(ElemDict::ContentsType::const_iterator,it,attrs.contents) {
 		if(!(it->name.first == XmlBeans::xmlns())) {		
@@ -245,6 +172,8 @@ three<T1,T2,T3> make_three(const T1 &a,const T2 &b,const T3 &c) {
 }
 
 
+#define MAX(a,b) ((a>b)?(a):(b))
+
 void Contents::serializeElems(ostream &o,NSMapSerializer &ns, XmlOptions options) const {
 	SYNC(mutex)
 	TRACER(log,"serializeElems");
@@ -264,8 +193,8 @@ void Contents::serializeElems(ostream &o,NSMapSerializer &ns, XmlOptions options
 	XMLBEANSXX_FOREACH(ElemDict::ContentsType::const_iterator,it,elems.contents) {
 		const SchemaType::ElementsType::const_iterator st_it = st->elements.find(it->name);
 		if(st_it != st->elements.end()) {
-			sort.push_back(make_three(st_it->second->order,it, st_it->second->schemaType));
-			max_order = std::max(max_order,st_it->second->order); 
+			sort.push_back(make_three(st_it->second->order,it, globalTypeSystem()->getSchemaType(st_it->second->schemaTypeName)));
+			max_order = MAX(max_order,st_it->second->order); 
 		} else {
 			//this element  has no order
 			sort.push_back(make_three(max_order,it, XmlObject::type()));
@@ -286,38 +215,6 @@ void Contents::serializeElems(ostream &o,NSMapSerializer &ns, XmlOptions options
 	}
 	
 
-	// order sort
-/*	typedef map<int,std::pair<QName,const SchemaType*> > MType;
-	MType m;
-	typedef map<QName,int> LeftType;
-	LeftType left;
-	int order=-1;
-	XMLBEANSXX_FOREACH_BACKWARD(ElemDict::ContentsType::const_reverse_iterator,it,elems.contents) 
-		left.insert(make_pair(it->name,order--));
-	
-	XMLBEANSXX_FOREACH(SchemaType::ElementsType::const_iterator,it,st->elements){
-		m[it->second->order]=std::pair<QName,const SchemaType*>(it->first,it->second->schemaType);
-		left.erase(it->first);
-	}
-	XMLBEANSXX_FOREACH(LeftType::const_iterator,it,left) {
-		m[it->second]=std::pair<QName,const SchemaType*>(it->first,XmlObject::type());
-	}
-	
-		
-	XMLBEANSXX_FOREACH(MType::iterator,it,m){
-		std::pair<QName,const SchemaType*> v=it->second;
-		const QName &elemName = v.first;
-		const SchemaType * elemSt = v.second;
-		int count = elems.count(elemName);
-		for(int i=0;i<count;i++) {
-			ElemDict::value_type value(elems.find(elemName,i));
-			if (value.value!=NULL) {
-				bool printXsiType= shallPrintXsiType(elemSt,value.value->st);
-				value.value->serialize(printXsiType,value.name,o,ns,options);
-			}
-		}
-	}
-*/	
 	ns.restore();
 }
 

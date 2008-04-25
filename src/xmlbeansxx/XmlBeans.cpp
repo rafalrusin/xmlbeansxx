@@ -21,23 +21,23 @@
 namespace xmlbeansxx {
 
 
-StoreString XmlBeans::xs_ns() {
+const StoreString XmlBeans::xs_ns() {
     static StoreString ns = StoreString::store("http://www.w3.org/2001/XMLSchema");
     return ns;
 }
 
-StoreString XmlBeans::xsi_ns() {
+const StoreString XmlBeans::xsi_ns() {
     static StoreString ns = StoreString::store("http://www.w3.org/2001/XMLSchema-instance");
     return ns;
 }
 
-StoreString XmlBeans::innerType_ns() {
+const StoreString XmlBeans::innerType_ns() {
     static StoreString ns = StoreString::store("http://xmlbeansxx.touk.pl/xmlbeansxx/innerType");
     return ns;
 }
 
 
-StoreString XmlBeans::xmlns() {
+const StoreString XmlBeans::xmlns() {
     static StoreString ns = StoreString::store("http://www.w3.org/2000/xmlns/");
     return ns;
 }
@@ -47,15 +47,25 @@ const QName& XmlBeans::textElementName() {
     return n;
 }
 
+const QName& XmlBeans::xml_fragment() {
+    static QName n = QName::store("http://xmlbeans.apache.org/definitions", "xml-fragment");
+    return n;
+}
+
 
 const QName& XmlBeans::xsi_type() {
-    static QName n = QName::store("http://www.w3.org/2001/XMLSchema-instance","type","xsi");
+    static QName n = QName::store("http://www.w3.org/2001/XMLSchema-instance","type");
     return n;
 }
 
 const QName& XmlBeans::xsi_array() {
-    static QName n = QName::store("http://www.w3.org/2001/XMLSchema-instance","array","xsi");
+    static QName n = QName::store("http://www.w3.org/2001/XMLSchema-instance","array");
     return n;
+}
+
+const std::string& XmlBeans::persistentPrefix() {
+	static std::string p = "xbsxxP_";
+	return p;
 }
 
 

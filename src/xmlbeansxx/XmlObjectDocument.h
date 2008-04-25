@@ -27,9 +27,9 @@ namespace xmlbeansxx {
 class XmlObjectDocument: public xmlbeansxx::XmlObject {
   private:
   static xmlbeansxx::SchemaType initSchemaType();
-  //Constructors
   protected:
-  XmlObjectDocument(const xmlbeansxx::Void &v);
+  virtual void _setXmlObject(const xmlbeansxx::XmlObject& p, bool castTest, const char* toString);
+  //Constructors
   public:
   XmlObjectDocument();
   XmlObjectDocument(const xmlbeansxx::ContentsPtr& p);
@@ -43,8 +43,6 @@ public:
     //Empty Object Creation
     static xmlbeansxx::XmlObjectDocument newInstance();
     static xmlbeansxx::XmlObjectPtr newInstanceXmlObject();
-    //Empty Array Creation
-    static xmlbeansxx::XmlObjectPtr newXmlArrayInstance();
     //Object Creation using parsing
     static XmlObjectDocument parse(std::istream &in,xmlbeansxx::XmlOptions options=xmlbeansxx::XmlOptions());
     static XmlObjectDocument parse(const std::string &str,xmlbeansxx::XmlOptions options=xmlbeansxx::XmlOptions());

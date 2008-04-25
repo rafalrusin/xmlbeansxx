@@ -56,18 +56,19 @@ public:
     	/** returns true while this contents don't have any attributes and elements */
 	virtual bool hasEmptyContent() const { return true; };
 
-	virtual std::vector<std::pair<QName,ContentsPtr> > getElems(bool ) const { std::vector<std::pair<QName,ContentsPtr> >(); }
-	virtual std::vector<std::pair<QName,std::string> > getAttrs() const { std::vector<std::pair<QName,std::string> > (); } 
-	virtual std::vector<std::pair<QName,ContentsPtr> > getAttrs2() const { std::vector<std::pair<QName,ContentsPtr> >(); }
+	virtual std::vector<std::pair<QName,ContentsPtr> > getElems(bool ) const { return std::vector<std::pair<QName,ContentsPtr> >(); }
+	virtual std::vector<std::pair<QName,std::string> > getAttrs() const { return std::vector<std::pair<QName,std::string> > (); } 
+	virtual std::vector<std::pair<QName,ContentsPtr> > getAttrs2() const { return std::vector<std::pair<QName,ContentsPtr> >(); }
 
 	virtual ContentsPtr clone(){  return ContentsPtr(new StringContents(st,value)); }
         virtual void free() { value.clear(); };
 
 	virtual void serializeDocument(std::ostream &o,XmlOptions options) const { throw IllegalStateException("serializeDocument on StringContents"); }
-	virtual void serialize(bool printXsiType,const QName &elemName,std::ostream &o,NSMapSerializer &ns,XmlOptions options) const { o << TextUtils::exchangeEntities(value); }
 
 
 private:
+	virtual void serialize(bool printXsiType,const QName &elemName,std::ostream &o,NSMapSerializer &ns,XmlOptions options) const { o << TextUtils::exchangeEntities(value); }
+	
 	virtual void serializeAttrs(std::ostream &o,NSMapSerializer& ns,XmlOptions options) const { }
 	virtual void serializeElems(std::ostream &o,NSMapSerializer& ns,XmlOptions options) const { }
 
