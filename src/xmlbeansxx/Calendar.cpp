@@ -79,7 +79,6 @@ int getInt(std::string sint) {
 	return len;
 }
 
-///////////////////////////////////////////////////
 
 Calendar::Calendar() {
 	flags = 0;
@@ -178,7 +177,7 @@ Calendar::Calendar(std::string str) {
 	
 }
 
-Calendar& Calendar::setgDate(std::string str) {
+Calendar& Calendar::setDate(std::string str) {
 	//str = CCYY-MM-DD(Z|(+|-)hh:mm)
 	char * sign = "?";
 	std::string pt, tz;
@@ -235,7 +234,7 @@ Calendar& Calendar::setgDate(std::string str) {
 }
 
 
-Calendar& Calendar::setgTime(std::string str) { 
+Calendar& Calendar::setTime(std::string str) { 
 	//str = hh-mm-ss(.sss)(Z|(+|-)hh:mm)
 	char * sign = "?";
 	std::string pt, frac, tz;
@@ -303,7 +302,7 @@ Calendar& Calendar::setgTime(std::string str) {
 	return *this;
 }
 
-Calendar& Calendar::setgYearMonth(std::string str) {
+Calendar& Calendar::setYearMonth(std::string str) {
 	//str = CCYY-MM(Z|(+|-)hh:mm)
 	char * sign = "?";
 	std::string pt, tz;
@@ -385,7 +384,7 @@ Calendar& Calendar::setgYear(std::string str) {
 	return *this;
 }
 
-Calendar& Calendar::setgMonthDay(std::string str) {
+Calendar& Calendar::setMonthDay(std::string str) {
 	//str = --MM-DD(Z|(+|-)hh:mm)
 	char * sign = "?";
 	std::string pt, tz;
@@ -505,7 +504,6 @@ Calendar& Calendar::setgDay(std::string str) {
 	}
 	return *this;
 }
-///////////////////////////////////////////////////
 
 // Year
 Calendar& Calendar::setYear(int year) {
@@ -675,7 +673,6 @@ bool Calendar::hasFracSec() {
 	return ((flags & has_fracsec) != 0);	
 }
 
-////////////////////////////
 
 bool Calendar::hasFullDateInfo() {
 	return hasYear() && hasMonth() && hasDay();	 
@@ -697,22 +694,22 @@ void Calendar::fixTm() {
 	};
 }
 
-boost::gregorian::date Calendar::getBDate() {
+boost::gregorian::date Calendar::getDate() {
 	boost::gregorian::date ret = boost::gregorian::date(boost::gregorian::not_a_date_time);
 	if (hasFullDateInfo()) 
 		ret = boost::gregorian::date(getYear(), getMonth(), getDay());
 	return ret;
 }
 
-std::string Calendar::bDateToString() {
-	return boost::gregorian::to_iso_extended_string(getBDate()); 
+std::string Calendar::dateToString() {
+	return boost::gregorian::to_iso_extended_string(getDate()); 
 }
 
-boost::posix_time::ptime Calendar::getBPtime() {
+boost::posix_time::ptime Calendar::getPtime() {
 	if (hasFullDateInfo() && hasFullTimeInfo()) 
 		if (hasFracSec())
 			return boost::posix_time::ptime(
-					getBDate(),
+					getDate(),
 					boost::posix_time::hours(getHour()) +
 					boost::posix_time::minutes(getMinutes()) +
 					boost::posix_time::seconds(getSeconds()) +
@@ -720,7 +717,7 @@ boost::posix_time::ptime Calendar::getBPtime() {
 					);
 		else
 			return boost::posix_time::ptime(
-					getBDate(),
+					getDate(),
 					boost::posix_time::hours(getHour()) +
 					boost::posix_time::minutes(getMinutes()) +
 					boost::posix_time::seconds(getSeconds())
@@ -729,8 +726,8 @@ boost::posix_time::ptime Calendar::getBPtime() {
 		return boost::posix_time::ptime(boost::gregorian::not_a_date_time);
 }
 
-std::string Calendar::bPtimeToString() {
-	return boost::posix_time::to_iso_extended_string(getBPtime());	 
+std::string Calendar::ptimeToString() {
+	return boost::posix_time::to_iso_extended_string(getPtime());	 
 }
 
 //DST
@@ -806,7 +803,7 @@ std::string Calendar::timeZoneToString() {
 }
 
 bool Calendar::hasTimeZone() {
-	return ((flags & has_timezone) != 0) && isSetDst();
+	return ((flags & has_timezone) != 0);
 }
 
 boost::posix_time::ptime Calendar::getUTCPtime() {
@@ -814,7 +811,7 @@ boost::posix_time::ptime Calendar::getUTCPtime() {
 
 	if (hasFullDateInfo() && hasFullTimeInfo())
 		if (hasTimeZone()) {
-			tmp = getBPtime() - boost::posix_time::hours(gmt_off_hours) - boost::posix_time::minutes(gmt_off_minutes);
+			tmp = getPtime() - boost::posix_time::hours(gmt_off_hours) - boost::posix_time::minutes(gmt_off_minutes);
 			if (isDstOn()) 
 				tmp = tmp - boost::posix_time::hours(1);
 		}  
@@ -831,7 +828,7 @@ boost::posix_time::ptime Calendar::getLocalPtime() {
 
 	if (hasFullDateInfo() && hasFullTimeInfo())
 		if (hasTimeZone()) 
-			tmp = getBPtime();
+			tmp = getPtime();
 
 	return tmp;
 }
@@ -951,24 +948,6 @@ std::string Calendar::toXsdMonthDay() {
 	return ret;
 }
 
-
-////////////////////////////////////////////////
-// DURATION
-////////////////////////////////////////////////
-/*
-	private:
-		int years;
-		int months;
-		int days;
-		int hours;
-		int minutes;
-		int seconds;
-		int frac_sec;
-
-		bool neg;
-
-		int flags;
-*/
 
 
 Duration::Duration() {

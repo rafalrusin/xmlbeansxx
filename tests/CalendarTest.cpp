@@ -64,11 +64,11 @@ void CalendarTest::calendarTest () {
 	CPPUNIT_ASSERT(c.hasFullTimeInfo() == true);
 	CPPUNIT_ASSERT(c.hasFracSec() == false);
 
-	XMLBEANSXX_DEBUG(logger, "c.getBDate(): " + boost::gregorian::to_simple_string(c.getBDate()));
-	XMLBEANSXX_DEBUG(logger, "c.getBPtime(): " + boost::posix_time::to_simple_string(c.getBPtime()));
+	XMLBEANSXX_DEBUG(logger, "c.getDate(): " + boost::gregorian::to_simple_string(c.getDate()));
+	XMLBEANSXX_DEBUG(logger, "c.getPtime(): " + boost::posix_time::to_simple_string(c.getPtime()));
 
 	c.setFracSec(123);
-	XMLBEANSXX_DEBUG(logger, "c.getBPtime(): " + boost::posix_time::to_simple_string(c.getBPtime()));
+	XMLBEANSXX_DEBUG(logger, "c.getPtime(): " + boost::posix_time::to_simple_string(c.getPtime()));
 
 	XMLBEANSXX_DEBUG(logger, "+++++++ Time Zone Test +++++++");
 
@@ -102,7 +102,7 @@ void CalendarTest::calendarTest () {
 	XMLBEANSXX_DEBUG(logger, "d.hasTimeZone: " + TextUtils::boolToString(d.hasTimeZone()));
 	XMLBEANSXX_DEBUG(logger, "d.isDstOn: " + TextUtils::boolToString(d.isDstOn()));
 	XMLBEANSXX_DEBUG(logger, "d.isSetDst: " + TextUtils::boolToString(d.isSetDst()));
-	XMLBEANSXX_DEBUG(logger, "d.getBPtime: " + boost::posix_time::to_simple_string(d.getBPtime()));
+	XMLBEANSXX_DEBUG(logger, "d.getPtime: " + boost::posix_time::to_simple_string(d.getPtime()));
 	XMLBEANSXX_DEBUG(logger, "d.getUTCPtime: " + boost::posix_time::to_simple_string(d.getUTCPtime()));
 	XMLBEANSXX_DEBUG(logger, "d.getLocalPtime: " + boost::posix_time::to_simple_string(d.getLocalPtime()));
 	XMLBEANSXX_DEBUG(logger, "d.toXsdDateTime: " + d.toXsdDateTime());

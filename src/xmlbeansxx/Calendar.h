@@ -34,11 +34,11 @@ class Calendar {
 		Calendar(boost::posix_time::ptime);
 		Calendar(std::string); //xsd:DateTime
 
-		Calendar& setgDate(std::string); //xsd:Date
-		Calendar& setgTime(std::string); //xsd:Time
-		Calendar& setgYearMonth(std::string); //xsd:YearMonth
+		Calendar& setDate(std::string); //xsd:Date
+		Calendar& setTime(std::string); //xsd:Time
+		Calendar& setYearMonth(std::string); //xsd:YearMonth
 		Calendar& setgYear(std::string); //xsd:Year
-		Calendar& setgMonthDay(std::string); //xsd:MonthDay
+		Calendar& setMonthDay(std::string); //xsd:MonthDay
 		Calendar& setgMonth(std::string); //xsd:Month
 		Calendar& setgDay(std::string); //xsd:Day
 
@@ -90,13 +90,13 @@ class Calendar {
 		bool isSetDst();
 		int getDst(); 
 		
-		boost::gregorian::date getBDate();
-		boost::posix_time::ptime getBPtime();
+		boost::gregorian::date getDate();
+		boost::posix_time::ptime getPtime();
 		boost::posix_time::ptime getUTCPtime();
 		boost::posix_time::ptime getLocalPtime();
 		
-		std::string bDateToString();
-		std::string bPtimeToString();
+		std::string dateToString();
+		std::string ptimeToString();
 		std::string utcPtimeToString();
 		std::string localPtimeToString();
 
@@ -108,15 +108,10 @@ class Calendar {
 		std::string toXsdMonthDay();
 		std::string toXsdDay();
 		std::string toXsdMonth();
-	/*	
-		operator ptime() {
-		 return getBPtime()
+		
+		inline operator boost::posix_time::ptime() {
+			return getPtime();
 		}
-		operator tm();
-		Calendar operator+=(duration&))
-
-		toString;
-	*/
 
 	private:
 		struct tm cal_tm;
