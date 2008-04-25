@@ -44,6 +44,9 @@ string BeansException::getMessage() const {
 NotImplementedException::NotImplementedException(const std::string msg):BeansException("Not implemented:"+msg) {}
 
 XmlException::XmlException(const std::string msg):BeansException("Xml:"+msg) {}
+
+CalendarException::CalendarException(const std::string msg):BeansException("Calendar: "+msg) {}
+
 XmlParseException::XmlParseException(const std::string msg):XmlException(string("While parsing: ")+msg) {}
 XmlSerializeException::XmlSerializeException(const std::string msg):XmlException(string("While serializing: ")+msg) {}
 XmlIllegalValueException::XmlIllegalValueException(std::string schemaTypeName,std::string setValue):XmlException("Setting invalid value '"+setValue+"' into object of type '"+schemaTypeName+"'") {}

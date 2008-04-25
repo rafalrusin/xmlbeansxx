@@ -75,6 +75,12 @@ class ClassCastException:public BeansException {
     ClassCastException(std::string msg);
 };
 
+class CalendarException:public BeansException {
+    public:
+    CalendarException(std::string msg);
+};
+
+
 class IllegalArgumentsException:public BeansException {
     public:
     IllegalArgumentsException(std::string msg);
