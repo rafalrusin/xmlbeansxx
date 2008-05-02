@@ -32,6 +32,7 @@
 #include "SchemaProperty.h"
 #include "SchemaType.h"
 #include "StoreString.h"
+#include "Calendar.h"
 
 #include <boost/date_time/posix_time/posix_time_types.hpp>
 //bug fix - win32 visual studio 8
@@ -403,6 +404,7 @@ public:
 %%class xmlbeansxx::XmlDateTime
 public:
     XmlDateTime(const boost::posix_time::ptime &pt);
+    XmlDateTime(const xmlbeansxx::Calendar &pt);
 
     //operators
     bool operator==(const XmlDateTime &b) const;
@@ -418,13 +420,14 @@ private:
 public:
     XmlTime timePart() const;
     XmlDate datePart() const;
-    virtual boost::posix_time::ptime getCalendarValue() const;
-    virtual void setCalendarValue(const boost::posix_time::ptime &v);
+    virtual xmlbeansxx::Calendar getCalendarValue() const;
+    virtual void setCalendarValue(const xmlbeansxx::Calendar &v);
 
 %%class xmlbeansxx::XmlTime
 public:
     XmlTime(const boost::posix_time::ptime &pt);
     XmlTime(const boost::posix_time::time_duration &td);
+    XmlTime(const xmlbeansxx::Calendar &td);
 
     bool operator==(const XmlTime &b) const;
     bool operator!=(const XmlTime &b) const;
@@ -433,8 +436,8 @@ public:
     bool operator>(const XmlTime &b) const;
     bool operator<(const XmlTime &b) const;
     //----------------------------
-    virtual boost::posix_time::ptime getCalendarValue() const;
-    virtual void setCalendarValue(const boost::posix_time::ptime &v);
+    virtual xmlbeansxx::Calendar getCalendarValue() const;
+    virtual void setCalendarValue(const xmlbeansxx::Calendar &v);
 
     boost::posix_time::time_duration getTimeValue() const;
     void setTimeValue(const boost::posix_time::time_duration &d);
@@ -446,6 +449,7 @@ private:
 public:
     XmlDate(const boost::posix_time::ptime &pt);
     XmlDate(const boost::gregorian::date &gd);
+    XmlDate(const xmlbeansxx::Calendar &td);
 
     operator boost::gregorian::date() const;
     bool operator==(const XmlDate &b) const;
@@ -459,8 +463,8 @@ public:
     boost::gregorian::date getDateValue() const;
     void setDateValue(const boost::gregorian::date &d);
     
-    virtual boost::posix_time::ptime getCalendarValue() const;
-    virtual void setCalendarValue(const boost::posix_time::ptime& v);
+    virtual xmlbeansxx::Calendar getCalendarValue() const;
+    virtual void setCalendarValue(const xmlbeansxx::Calendar& v);
     
     XmlInteger daysFrom(const XmlDate &from) const;
 
@@ -469,24 +473,24 @@ private:
 
 
 %%class xmlbeansxx::XmlGDay
-    virtual boost::posix_time::ptime getCalendarValue() const;
-    virtual void setCalendarValue(const boost::posix_time::ptime &v);
+    virtual xmlbeansxx::Calendar getCalendarValue() const;
+    virtual void setCalendarValue(const xmlbeansxx::Calendar &v);
     
 %%class xmlbeansxx::XmlGMonth
-    virtual boost::posix_time::ptime getCalendarValue() const;
-    virtual void setCalendarValue(const boost::posix_time::ptime &v);
+    virtual xmlbeansxx::Calendar getCalendarValue() const;
+    virtual void setCalendarValue(const xmlbeansxx::Calendar &v);
     
 %%class xmlbeansxx::XmlGMonthDay
-    virtual boost::posix_time::ptime getCalendarValue() const;
-    virtual void setCalendarValue(const boost::posix_time::ptime &v);
+    virtual xmlbeansxx::Calendar getCalendarValue() const;
+    virtual void setCalendarValue(const xmlbeansxx::Calendar &v);
     
 %%class xmlbeansxx::XmlGYear
-    virtual boost::posix_time::ptime getCalendarValue() const;
-    virtual void setCalendarValue(const boost::posix_time::ptime &v);
+    virtual xmlbeansxx::Calendar getCalendarValue() const;
+    virtual void setCalendarValue(const xmlbeansxx::Calendar &v);
     
 %%class xmlbeansxx::XmlGYearMonth
-    virtual boost::posix_time::ptime getCalendarValue() const;
-    virtual void setCalendarValue(const boost::posix_time::ptime &v);
+    virtual xmlbeansxx::Calendar getCalendarValue() const;
+    virtual void setCalendarValue(const xmlbeansxx::Calendar &v);
     
 %%class xmlbeansxx::XmlBase64Binary
     virtual xmlbeansxx::shared_array<unsigned char> getByteArrayValue() const;

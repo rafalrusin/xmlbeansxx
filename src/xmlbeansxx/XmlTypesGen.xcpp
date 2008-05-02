@@ -494,6 +494,10 @@ XmlDateTime::XmlDateTime(const boost::posix_time::ptime &pt) {
     setCalendarValue(pt);
 }
 
+XmlDateTime::XmlDateTime(const xmlbeansxx::Calendar &c) {
+    setCalendarValue(c);
+}
+
 
 bool XmlDateTime::operator==(const XmlDateTime &b) const {
     return !((*this)<b) && !(b<(*this));
@@ -538,14 +542,12 @@ XmlDate XmlDateTime::datePart() const {
     return XmlDate(dt.substr(0,p));
 }
 
-boost::posix_time::ptime XmlDateTime::getCalendarValue() const {
-    return boost::posix_time::ptime(datePart().getDateValue(),timePart().getTimeValue());
+xmlbeansxx::Calendar XmlDateTime::getCalendarValue() const {
+    return xmlbeansxx::Calendar(getSimpleContent());
 }
 
-void XmlDateTime::setCalendarValue(const boost::posix_time::ptime &v) {
-    XmlDate d(v);	
-    XmlTime t(v);
-    setSimpleContent(d.getSimpleContent() + "T" + t.getSimpleContent());
+void XmlDateTime::setCalendarValue(const xmlbeansxx::Calendar &v) {    
+    setSimpleContent(v.toXsdDateTime());
 }
 
 %%class xmlbeansxx::XmlTime
@@ -557,6 +559,10 @@ XmlTime::XmlTime(const boost::posix_time::ptime &pt) {
 }
 XmlTime::XmlTime(const boost::posix_time::time_duration &td) {
     setTimeValue(td);
+}
+
+XmlTime::XmlTime(const xmlbeansxx::Calendar &td) {
+    setCalendarValue(td);
 }
 
 
@@ -580,19 +586,23 @@ bool XmlTime::operator<(const XmlTime &b) const {
 }
 
 boost::posix_time::time_duration XmlTime::getTimeValue() const {
-    return boost::posix_time::duration_from_string(getSimpleContent());
+    return getCalendarValue().getTimeDuration();
 }
 void XmlTime::setTimeValue(const boost::posix_time::time_duration &d) {
-    setSimpleContent(boost::posix_time::to_simple_string(d));
+    xmlbeansxx::Calendar c;
+    c.setTime(boost::posix_time::to_simple_string(d));
+    setCalendarValue(c);
 }
 
 
-boost::posix_time::ptime XmlTime::getCalendarValue() const {
-    return boost::posix_time::ptime(boost::gregorian::date(),getTimeValue());
+xmlbeansxx::Calendar XmlTime::getCalendarValue() const {
+    xmlbeansxx::Calendar c;
+    c.setTime(getSimpleContent());
+    return c;
 }
 
-void XmlTime::setCalendarValue(const boost::posix_time::ptime & v) {
-    setTimeValue(v.time_of_day());
+void XmlTime::setCalendarValue(const xmlbeansxx::Calendar& v) {
+    setSimpleContent(v.toXsdTime());
 }
 
 %%class xmlbeansxx::XmlDate
@@ -603,6 +613,10 @@ XmlDate::XmlDate(const boost::posix_time::ptime &pt) {
 }
 XmlDate::XmlDate(const boost::gregorian::date &gd) {
     setDateValue(gd);
+}
+
+XmlDate::XmlDate(const xmlbeansxx::Calendar &c) {
+    setCalendarValue(c);
 }
 
 
@@ -631,23 +645,22 @@ bool XmlDate::operator<(const XmlDate &b) const {
 }
 
 boost::gregorian::date XmlDate::getDateValue() const {
-    std::string v=TextUtils::collapse(getSimpleContent());
-    if (!TextUtils::checkDate(v)) {
-        throw XmlIllegalValueException("xs:date",v);
-    }
-    return boost::gregorian::from_string(v);
+    return getCalendarValue().getDate();
 }
     
-boost::posix_time::ptime XmlDate::getCalendarValue() const {
-    return boost::posix_time::ptime(getDateValue());
+xmlbeansxx::Calendar XmlDate::getCalendarValue() const {
+    xmlbeansxx::Calendar c;
+    c.setDate(getSimpleContent());
+    return c;
 }
 
-void XmlDate::setCalendarValue(const boost::posix_time::ptime &v) {
-	setDateValue(v.date());
+void XmlDate::setCalendarValue(const xmlbeansxx::Calendar &v) {
+    setSimpleContent(v.toXsdDate());
 }
 
 void XmlDate::setDateValue(const boost::gregorian::date &d) {
-    setSimpleContent(boost::gregorian::to_iso_extended_string(d));
+    xmlbeansxx::Calendar c(d);
+    setCalendarValue(c);
 }
 
 XmlInteger XmlDate::daysFrom(const XmlDate &from) const {
@@ -655,47 +668,47 @@ XmlInteger XmlDate::daysFrom(const XmlDate &from) const {
 }
 
 %%class xmlbeansxx::XmlGDay
-boost::posix_time::ptime XmlGDay::getCalendarValue() const {
+ xmlbeansxx::Calendar XmlGDay::getCalendarValue() const {
     throw NotImplementedException("XmlGDay::getCalendarValue");
 }
 
-void XmlGDay::setCalendarValue(const boost::posix_time::ptime & v) {
+void XmlGDay::setCalendarValue(const xmlbeansxx::Calendar & v) {
     throw NotImplementedException("XmlGDay::setCalendarValue");
 }
     
 %%class xmlbeansxx::XmlGMonth
-boost::posix_time::ptime XmlGMonth::getCalendarValue() const {
+xmlbeansxx::Calendar XmlGMonth::getCalendarValue() const {
     throw NotImplementedException("XmlGMonth::getCalendarValue");
 }
 
-void XmlGMonth::setCalendarValue(const boost::posix_time::ptime & v) {
+void XmlGMonth::setCalendarValue(const  xmlbeansxx::Calendar & v) {
     throw NotImplementedException("XmlGMonth::setCalendarValue");
 }
     
 %%class xmlbeansxx::XmlGMonthDay
-boost::posix_time::ptime XmlGMonthDay::getCalendarValue() const {
+ xmlbeansxx::Calendar XmlGMonthDay::getCalendarValue() const {
     throw NotImplementedException("XmlGMonthDay::getCalendarValue");
 }
 
-void XmlGMonthDay::setCalendarValue(const boost::posix_time::ptime & v) {
+void XmlGMonthDay::setCalendarValue(const  xmlbeansxx::Calendar& v) {
     throw NotImplementedException("XmlGMonthDay::getCalendarValue");
 }
     
 %%class xmlbeansxx::XmlGYear
-boost::posix_time::ptime  XmlGYear::getCalendarValue() const {
+ xmlbeansxx::Calendar  XmlGYear::getCalendarValue() const {
     throw NotImplementedException("XmlGYear::getCalendarValue");
 }
 
-void XmlGYear::setCalendarValue(const boost::posix_time::ptime & v) {
+void XmlGYear::setCalendarValue(const xmlbeansxx::Calendar & v) {
     throw NotImplementedException("XmlGYear::getCalendarValue");
 }
     
 %%class xmlbeansxx::XmlGYearMonth
-boost::posix_time::ptime XmlGYearMonth::getCalendarValue() const {
+xmlbeansxx::Calendar XmlGYearMonth::getCalendarValue() const {
     throw NotImplementedException("XmlGYearMonth::getCalendarValue");
 }
 
-void XmlGYearMonth::setCalendarValue(const boost::posix_time::ptime & v) {
+void XmlGYearMonth::setCalendarValue(const  xmlbeansxx::Calendar & v) {
     throw NotImplementedException("XmlGYearMonth::getCalendarValue");
 }
     

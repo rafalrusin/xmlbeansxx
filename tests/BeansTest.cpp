@@ -141,14 +141,14 @@ void namespaceTests() {
 		XMLBEANSXX_DEBUG(logger,std::string("time: ") + t.getSimpleContent()); 
 		CPPUNIT_ASSERT(t.getSimpleContent()=="01:02:03");
 		CPPUNIT_ASSERT(t.getTimeValue()==time_duration(1,2,3));
-		CPPUNIT_ASSERT(t.getCalendarValue()==ptime(date(),time_duration(1,2,3)));
+		CPPUNIT_ASSERT(t.getCalendarValue().getTime()==ptime(date(),time_duration(1,2,3)));
 	}
 	{
 		XmlTime t("	01:02:03  ");
 		XMLBEANSXX_DEBUG(logger,std::string("time: ") + t.getSimpleContent()); 
 		CPPUNIT_ASSERT(t.getSimpleContent()=="01:02:03");
 		CPPUNIT_ASSERT(t.getTimeValue()==time_duration(1,2,3));
-		CPPUNIT_ASSERT(t.getCalendarValue()==ptime(date(),time_duration(1,2,3)));
+		CPPUNIT_ASSERT(t.getCalendarValue().getTime()==ptime(date(),time_duration(1,2,3)));
 	}
 	
 	
@@ -161,8 +161,8 @@ void namespaceTests() {
 	        XmlDateTime b("   2004-01-12T23:50:22Z \n");
 	        XmlDateTime c("   2004-01-12T23:50:24 \n");
 	        XmlDateTime d("   2004-01-11T23:50:24 \n");
-		XmlDateTime e(XmlAnySimpleType(" 2004-01-11T23:50:24 "));
-	        CPPUNIT_ASSERT(a.getSimpleContent()=="2004-01-12T23:50:22");
+					XmlDateTime e(XmlAnySimpleType(" 2004-01-11T23:50:24 "));
+					CPPUNIT_ASSERT(a.getSimpleContent()=="2004-01-12T23:50:22");
 	        CPPUNIT_ASSERT(a.datePart().getSimpleContent()=="2004-01-12");
 	        CPPUNIT_ASSERT(a.timePart().getSimpleContent()=="23:50:22");
 	        CPPUNIT_ASSERT(a.datePart().getDateValue()==date(2004,01,12));

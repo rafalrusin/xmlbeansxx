@@ -88,9 +88,6 @@ namespace xmlbeansxx {
 #endif 
 
     typedef boost::shared_ptr<QName> QNamePtr;
-    class Calendar {
-    };
-    typedef boost::shared_ptr<Calendar> CalendarPtr;
     
     class GDate {
     };

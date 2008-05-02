@@ -25,93 +25,103 @@
 
 namespace xmlbeansxx {
 			
-XMLBEANSXX_LOGGER_PTR_SET(Calendar_log, "xmlbeansxx.Calendar");
+
+class Duration;
 
 class Calendar {
+	XMLBEANSXX_STATIC_LOGGER_PTR(Calendar_log);
+
 	public:
 		Calendar();
-		Calendar(boost::gregorian::date);
-		Calendar(boost::posix_time::ptime);
-		Calendar(std::string); //xsd:DateTime
+		Calendar(const boost::gregorian::date&);
+		Calendar(const boost::posix_time::ptime&);
+		Calendar(const std::string&); //xsd:DateTime
 
-		Calendar& setDate(std::string); //xsd:Date
-		Calendar& setTime(std::string); //xsd:Time
-		Calendar& setYearMonth(std::string); //xsd:YearMonth
-		Calendar& setgYear(std::string); //xsd:Year
-		Calendar& setMonthDay(std::string); //xsd:MonthDay
-		Calendar& setgMonth(std::string); //xsd:Month
-		Calendar& setgDay(std::string); //xsd:Day
+		Calendar& setDate(const std::string&); //xsd:Date
+		Calendar& setTime(const std::string&); //xsd:Time
+		Calendar& setYearMonth(const std::string&); //xsd:YearMonth
+		Calendar& setgYear(const std::string&); //xsd:Year
+		Calendar& setMonthDay(const std::string&); //xsd:MonthDay
+		Calendar& setgMonth(const std::string&); //xsd:Month
+		Calendar& setgDay(const std::string&); //xsd:Day
 
 		Calendar& setYear(int);
-		Calendar& setYear(std::string);
-		int getYear();
-		bool hasYear();
+		Calendar& setYear(const std::string&);
+		int getYear() const;
+		bool hasYear() const;
 
 		Calendar& setMonth(int);
-		Calendar& setMonth(std::string);
-		int getMonth();
-		bool hasMonth();
+		Calendar& setMonth(const std::string&);
+		int getMonth() const;
+		bool hasMonth() const;
 
 		Calendar& setDay(int);
-		Calendar& setDay(std::string);
-		int getDay();
-		bool hasDay();
+		Calendar& setDay(const std::string&);
+		int getDay() const;
+		bool hasDay() const;
 
 		Calendar& setHour(int);
-		Calendar& setHour(std::string);
-		int getHour();
-		bool hasHour();
+		Calendar& setHour(const std::string&);
+		int getHour() const;
+		bool hasHour() const;
 
 		Calendar& setMinutes(int);
-		Calendar& setMinutes(std::string);
-		int getMinutes();
-		bool hasMinutes();
+		Calendar& setMinutes(const std::string&);
+		int getMinutes() const;
+		bool hasMinutes() const;
 
 		Calendar& setSeconds(int);
-		Calendar& setSeconds(std::string);
-		int getSeconds();
-		bool hasSeconds();
+		Calendar& setSeconds(const std::string&);
+		int getSeconds() const;
+		bool hasSeconds() const;
 
 		Calendar& setFracSec(int);
-		Calendar& setFracSec(std::string);
-		int getFracSec();
-		bool hasFracSec();
+		Calendar& setFracSec(const std::string&);
+		int getFracSec() const;
+		bool hasFracSec() const;
 
-		bool hasFullTimeInfo();
-		bool hasFullDateInfo();
+		bool hasFullTimeInfo() const;
+		bool hasFullDateInfo() const;
 
 		Calendar& setGmtOff(int, int);
-		bool hasTimeZone();
+		bool hasTimeZone() const;
 
 		Calendar& dstOn();
 		Calendar& dstOff();
 		Calendar& dstUnknown();
-		bool isDstOn();
-		bool isSetDst();
-		int getDst(); 
+		bool isDstOn() const;
+		bool isSetDst() const;
+		int getDst() const; 
 		
-		boost::gregorian::date getDate();
-		boost::posix_time::ptime getPtime();
-		boost::posix_time::ptime getUTCPtime();
-		boost::posix_time::ptime getLocalPtime();
+		boost::gregorian::date getDate() const;
+		boost::posix_time::ptime getTime() const;
+		boost::posix_time::time_duration getTimeDuration() const;
+		boost::posix_time::ptime getUTCTime() const;
+		boost::posix_time::ptime getLocalTime() const;
 		
-		std::string dateToString();
-		std::string ptimeToString();
-		std::string utcPtimeToString();
-		std::string localPtimeToString();
+		std::string dateToString() const;
+		std::string ptimeToString() const;
+		std::string utcPtimeToString() const;
+		std::string localPtimeToString() const;
 
-		std::string toXsdDateTime();
-		std::string toXsdDate();
-		std::string toXsdTime();
-		std::string toXsdYearMonth();
-		std::string toXsdYear();
-		std::string toXsdMonthDay();
-		std::string toXsdDay();
-		std::string toXsdMonth();
-		
-		inline operator boost::posix_time::ptime() {
-			return getPtime();
+		std::string toXsdDateTime() const;
+		std::string toXsdDate() const;
+		std::string toXsdTime() const;
+		std::string toXsdYearMonth() const;
+		std::string toXsdYear() const;
+		std::string toXsdMonthDay() const;
+		std::string toXsdDay() const;
+		std::string toXsdMonth() const;
+
+		std::string toString() const;
+
+		inline operator boost::posix_time::ptime() const{
+			return getTime();
 		}
+
+		Calendar &operator= (const Calendar &);
+		Calendar &operator+ (const Duration &);
+		Calendar &operator- (const Duration &);
 
 	private:
 		struct tm cal_tm;
@@ -119,8 +129,11 @@ class Calendar {
 		int gmt_off_hours;
 		int gmt_off_minutes;
 		int flags;
+
 		void fixTm();
-		std::string timeZoneToString();
+		std::string timeZoneToString() const;
+		Calendar &applyDuration(xmlbeansxx::Duration);
+		Calendar(struct tm, int /*frac_sec*/, int /*gmt_off_hours*/, int /*gmt_off_minutes*/, int, int /*flags*/);
 
 };
 
@@ -128,45 +141,53 @@ class Calendar {
 class Duration {
 	public:
 		Duration();
-		Duration(std::string); 
+		Duration(const std::string&); 
+		Duration(const boost::posix_time::time_duration&); 
 		
 		Duration& setYears(int);
-		Duration& setYears(std::string);
+		Duration& setYears(const std::string&);
 		int getYears();
 		bool hasYears();
 
 		Duration& setMonths(int);
-		Duration& setMonths(std::string);
+		Duration& setMonths(const std::string&);
 		int getMonths();
 		bool hasMonths();
 		
 		Duration& setDays(int);
-		Duration& setDays(std::string);
+		Duration& setDays(const std::string&);
 		int getDays();
 		bool hasDays();
 
 		Duration& setHours(int);
-		Duration& setHours(std::string);
+		Duration& setHours(const std::string&);
 		int getHours();
 		bool hasHours();
 		
 		Duration& setMinutes(int);
-		Duration& setMinutes(std::string);
+		Duration& setMinutes(const std::string&);
 		int getMinutes();
 		bool hasMinutes();
 
 		Duration& setSeconds(int);
-		Duration& setSeconds(std::string);
+		Duration& setSeconds(const std::string&);
 		int getSeconds();
 		bool hasSeconds();
 		
 		Duration& setFracSec(int);
-		Duration& setFracSec(std::string);
+		Duration& setFracSec(const std::string&);
 		int getFracSec();
 		bool hasFracSec();
 
-		bool isNeg();
+		bool hasFullDateInfo();
+		bool hasFullTimeInfo();
+
+		Duration& setNeg(bool);
+		bool isNeg() const;
 		std::string toString();
+
+		Duration &operator= (const Duration &);
+		//Duration &operator+ (const Duration &);
 		
 	private:
 		int years;
@@ -180,9 +201,9 @@ class Duration {
 		bool neg;
 
 		int flags;
-		
-};
 
+		Duration(int, int, int, int, int, int, int, bool, int);
+};
 
 }
 

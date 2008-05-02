@@ -302,7 +302,7 @@ public class ClassGen {
                 return "xmlbeansxx::GDatePtr";
             case SchemaProperty.JAVA_GDURATION:
                 //return "org.apache.xmlbeans.GDuration";
-            	return "xmlbeansxx::GDurationPtr";
+            	return "xmlbeansxx::Duration";
             case SchemaProperty.JAVA_DATE:
                 return "boost::gregorian::date";
             case SchemaProperty.JAVA_QNAME:
@@ -311,7 +311,7 @@ public class ClassGen {
                 //return "xmlbeansxx::ListPtr";
                 return "std::string";
             case SchemaProperty.JAVA_CALENDAR:
-                return "boost::posix_time::ptime";
+                return "xmlbeansxx::Calendar";
 
             case SchemaProperty.JAVA_ENUM:
             	return "int";
@@ -386,7 +386,7 @@ public class ClassGen {
 	            return "GDate";
 	
 	        case SchemaProperty.JAVA_GDURATION:
-	            return "GDuration";
+	            return "Duration";
 	
 	        case SchemaProperty.JAVA_CALENDAR:
 	            return "Calendar";
