@@ -100,9 +100,9 @@ class Calendar {
 		boost::posix_time::ptime getLocalTime() const;
 		
 		std::string dateToString() const;
-		std::string ptimeToString() const;
-		std::string utcPtimeToString() const;
-		std::string localPtimeToString() const;
+		std::string timeToString() const;
+		std::string utcTimeToString() const;
+		std::string localTimeToString() const;
 
 		std::string toXsdDateTime() const;
 		std::string toXsdDate() const;
@@ -123,6 +123,8 @@ class Calendar {
 		Calendar &operator+ (const Duration &);
 		Calendar &operator- (const Duration &);
 
+		Calendar &timeZoneGuess();
+
 	private:
 		struct tm cal_tm;
 		int frac_sec;
@@ -134,7 +136,7 @@ class Calendar {
 		std::string timeZoneToString() const;
 		Calendar &applyDuration(xmlbeansxx::Duration);
 		Calendar(struct tm, int /*frac_sec*/, int /*gmt_off_hours*/, int /*gmt_off_minutes*/, int, int /*flags*/);
-
+		boost::posix_time::ptime timeZoneMagic(const boost::posix_time::ptime&);
 };
 
 

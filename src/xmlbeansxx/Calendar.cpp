@@ -788,7 +788,7 @@ boost::posix_time::time_duration Calendar::getTimeDuration() const {
 
 
 
-std::string Calendar::ptimeToString() const {
+std::string Calendar::timeToString() const {
 	return boost::posix_time::to_iso_extended_string(getTime());	 
 }
 
@@ -877,7 +877,7 @@ boost::posix_time::ptime Calendar::getUTCTime() const {
 	return tmp;
 }
 
-std::string Calendar::utcPtimeToString() const {
+std::string Calendar::utcTimeToString() const {
 	return boost::posix_time::to_iso_extended_string(getUTCTime());
 }
 
@@ -891,13 +891,11 @@ boost::posix_time::ptime Calendar::getLocalTime() const {
 	return tmp;
 }
 
-std::string Calendar::localPtimeToString() const {
+std::string Calendar::localTimeToString() const {
 	return boost::posix_time::to_iso_extended_string(getLocalTime());
 }
 
 std::string Calendar::toXsdDateTime() const {
-//	boost::posix_time::ptime tmp = getLocalTime();
-//	std::string ret = boost::posix_time::to_iso_extended_string(tmp);		 
 	std::string ret("not-a-date-time");
 	if (hasFullDateInfo() && hasFullTimeInfo()) {
 		ret = boost::gregorian::to_iso_extended_string(
@@ -915,12 +913,10 @@ std::string Calendar::toXsdDateTime() const {
 			ss << ".";
 			ss << std::setw(3) << std::setfill('0') << getFracSec();
 		}
-	
 		ss >> ret2;
 		ret += ret2;
 		ret += timeZoneToString();
 }
-
 	return ret;
 }
 
@@ -1022,6 +1018,43 @@ std::string Calendar::toXsdMonthDay() const {
 	ss >> ret;
 	return ret;
 }
+
+boost::posix_time::ptime Calendar::timeZoneMagic(const boost::posix_time::ptime& t) {
+	boost::gregorian::date time_t_start_day(1970, 1, 1);
+	boost::posix_time::ptime time_t_start_time(time_t_start_day, boost::posix_time::time_duration(0, 0, 0));
+	if (t < time_t_start_time)
+		throw std::out_of_range("Cannot convert dates prior to Jan 1, 1970");
+	
+	boost::gregorian::date_duration dd = t.date() - time_t_start_day;
+	boost::posix_time::time_duration td = t.time_of_day();
+	std::time_t t2 = dd.days()*86400 + td.hours()*3600 + td.minutes()*60 + td.seconds();
+	std::tm tms, *tms_ptr;
+	tms_ptr = boost::date_time::c_time::gmtime(&t2, &tms);
+	tms_ptr->tm_isdst = -1;
+	std::time_t t3 = ::mktime(tms_ptr);
+	tms_ptr = boost::date_time::c_time::gmtime(&t3,&tms);
+	boost::gregorian::date d(static_cast<unsigned short>(tms_ptr->tm_year + 1900),
+			                       static_cast<unsigned short>(tms_ptr->tm_mon + 1),
+														 static_cast<unsigned short>(tms_ptr->tm_mday));
+	boost::posix_time::time_duration td2(tms_ptr->tm_hour,
+																			 tms_ptr->tm_min,
+																			 tms_ptr->tm_sec,
+																			 t.time_of_day().fractional_seconds());
+
+	return boost::posix_time::ptime(d,td2);
+}
+	 
+Calendar& Calendar::timeZoneGuess() {
+	if (!hasTimeZone()) {
+		//Guess time zone offset
+		xmlbeansxx::Calendar pom(timeZoneMagic(getTime()));
+		boost::posix_time::time_duration td = getTime() - pom.getTime();
+		setGmtOff(td.hours(), td.minutes()).dstOff();
+	} 
+	return *this;
+}
+				 
+
 
 Duration::Duration() {
 	flags = 0;	 
