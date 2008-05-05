@@ -9,13 +9,16 @@
 
 #include "xmlbeansxx/BeansException.h"
 
+#include <xmlbeansxx/xmlbeansxx.h>
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION (CalendarTest);
 
-using namespace std;
-using namespace xmlbeansxx;
 
 XMLBEANSXX_LOGGER_PTR_SET(logger, "test.CalendarTest");
+
+using namespace std;
+using namespace xmlbeansxx;
 
 void CalendarTest::calendarTest () {
 
@@ -144,11 +147,11 @@ void CalendarTest::calendarTest () {
 	XMLBEANSXX_DEBUG(logger, "e.getBDate: " + boost::gregorian::to_simple_string(e.getDate()));
 	XMLBEANSXX_DEBUG(logger, "-->e.getBDate: " + e.dateToString());
 	XMLBEANSXX_DEBUG(logger, "e.getBPtime: " + boost::posix_time::to_simple_string(e.getTime()));
-	XMLBEANSXX_DEBUG(logger, "-->e.getBPtime: " + e.ptimeToString());
+	XMLBEANSXX_DEBUG(logger, "-->e.getBPtime: " + e.timeToString());
 	XMLBEANSXX_DEBUG(logger, "e.getUTCTime: " + boost::posix_time::to_simple_string(e.getUTCTime()));
-	XMLBEANSXX_DEBUG(logger, "-->e.getUTCTime: " + e.utcPtimeToString());
+	XMLBEANSXX_DEBUG(logger, "-->e.getUTCTime: " + e.utcTimeToString());
 	XMLBEANSXX_DEBUG(logger, "e.getLocalTime: " + boost::posix_time::to_simple_string(e.getLocalTime()));
-	XMLBEANSXX_DEBUG(logger, "-->e.getLocalTime: " + e.localPtimeToString());
+	XMLBEANSXX_DEBUG(logger, "-->e.getLocalTime: " + e.localTimeToString());
 	XMLBEANSXX_DEBUG(logger, "e.toXsdDateTime: " + e.toXsdDateTime());
 	XMLBEANSXX_DEBUG(logger, "e.toXsdDate: " + e.toXsdDate());
 	XMLBEANSXX_DEBUG(logger, "e.toXsdTime: " + e.toXsdTime());
@@ -160,11 +163,11 @@ void CalendarTest::calendarTest () {
 	CPPUNIT_ASSERT(boost::gregorian::to_simple_string(e.getDate()) == "2008-Dec-12");
 	CPPUNIT_ASSERT(e.dateToString() == "2008-12-12");
 	CPPUNIT_ASSERT(boost::posix_time::to_simple_string(e.getTime()) == "2008-Dec-12 12:12:12.121000");
-	CPPUNIT_ASSERT(e.ptimeToString() == "2008-12-12T12:12:12.121000");
+	CPPUNIT_ASSERT(e.timeToString() == "2008-12-12T12:12:12.121000");
 	CPPUNIT_ASSERT(boost::posix_time::to_simple_string(e.getUTCTime()) == "2008-Dec-12 12:12:12.121000");
-	CPPUNIT_ASSERT(e.utcPtimeToString() == "2008-12-12T12:12:12.121000");
+	CPPUNIT_ASSERT(e.utcTimeToString() == "2008-12-12T12:12:12.121000");
 	CPPUNIT_ASSERT(boost::posix_time::to_simple_string(e.getLocalTime()) == "2008-Dec-12 12:12:12.121000");
-	CPPUNIT_ASSERT(e.localPtimeToString() == "2008-12-12T12:12:12.121000");
+	CPPUNIT_ASSERT(e.localTimeToString() == "2008-12-12T12:12:12.121000");
 	CPPUNIT_ASSERT(e.toXsdDateTime() == "2008-12-12T12:12:12.121Z");
 	CPPUNIT_ASSERT(e.toXsdDate() == "2008-12-12Z");
 	CPPUNIT_ASSERT(e.toXsdTime() == "12:12:12.121Z");
@@ -178,11 +181,11 @@ void CalendarTest::calendarTest () {
 	XMLBEANSXX_DEBUG(logger, "e.getBDate: " + boost::gregorian::to_simple_string(e.getDate()));
 	XMLBEANSXX_DEBUG(logger, "-->e.getBDate: " + e.dateToString());
 	XMLBEANSXX_DEBUG(logger, "e.getBPtime: " + boost::posix_time::to_simple_string(e.getTime()));
-	XMLBEANSXX_DEBUG(logger, "-->e.getBPtime: " + e.ptimeToString());
+	XMLBEANSXX_DEBUG(logger, "-->e.getBPtime: " + e.timeToString());
 	XMLBEANSXX_DEBUG(logger, "e.getUTCTime: " + boost::posix_time::to_simple_string(e.getUTCTime()));
-	XMLBEANSXX_DEBUG(logger, "-->e.getUTCTime: " + e.utcPtimeToString());
+	XMLBEANSXX_DEBUG(logger, "-->e.getUTCTime: " + e.utcTimeToString());
 	XMLBEANSXX_DEBUG(logger, "e.getLocalTime: " + boost::posix_time::to_simple_string(e.getLocalTime()));
-	XMLBEANSXX_DEBUG(logger, "-->e.getLocalTime: " + e.localPtimeToString());
+	XMLBEANSXX_DEBUG(logger, "-->e.getLocalTime: " + e.localTimeToString());
 	XMLBEANSXX_DEBUG(logger, "e.toXsdDateTime: " + e.toXsdDateTime());
 	XMLBEANSXX_DEBUG(logger, "e.toXsdDate: " + e.toXsdDate());
 	XMLBEANSXX_DEBUG(logger, "e.toXsdTime: " + e.toXsdTime());
@@ -200,11 +203,11 @@ void CalendarTest::calendarTest () {
 	CPPUNIT_ASSERT(boost::gregorian::to_simple_string(e.getDate()) == "2008-Dec-22");
 	CPPUNIT_ASSERT(e.dateToString() == "2008-12-22");
 	CPPUNIT_ASSERT(boost::posix_time::to_simple_string(e.getTime()) == "2008-Dec-22 12:12:12.121000");
-	CPPUNIT_ASSERT(e.ptimeToString() == "2008-12-22T12:12:12.121000");
+	CPPUNIT_ASSERT(e.timeToString() == "2008-12-22T12:12:12.121000");
 	CPPUNIT_ASSERT(boost::posix_time::to_simple_string(e.getUTCTime()) == "2008-Dec-22 00:00:12.121000");
-	CPPUNIT_ASSERT(e.utcPtimeToString() == "2008-12-22T00:00:12.121000");
+	CPPUNIT_ASSERT(e.utcTimeToString() == "2008-12-22T00:00:12.121000");
 	CPPUNIT_ASSERT(boost::posix_time::to_simple_string(e.getLocalTime()) == "2008-Dec-22 12:12:12.121000");
-	CPPUNIT_ASSERT(e.localPtimeToString() == "2008-12-22T12:12:12.121000");
+	CPPUNIT_ASSERT(e.localTimeToString() == "2008-12-22T12:12:12.121000");
 	CPPUNIT_ASSERT(e.toXsdDateTime() == "2008-12-22T12:12:12.121+12:12");
 	CPPUNIT_ASSERT(e.toXsdDate() == "2008-12-22+12:12");
 	CPPUNIT_ASSERT(e.toXsdTime() == "12:12:12.121+12:12");
@@ -213,6 +216,38 @@ void CalendarTest::calendarTest () {
 	CPPUNIT_ASSERT(e.toXsdMonthDay() == "--12-22+12:12");
 	CPPUNIT_ASSERT(e.toXsdMonth() == "--12+12:12");
 	CPPUNIT_ASSERT(e.toXsdDay() == "---22+12:12");
+
+	XMLBEANSXX_DEBUG(logger, "+++++++ Guessing Time Zone +++++++");
+
+	Calendar a(" 2008-05-05T15:11:22 \n\n\n");
+	Calendar b(" 2008-01-01T15:11:22 \n\n\n");
+	XMLBEANSXX_DEBUG(logger, "a -> " + a.toXsdDateTime());
+	XMLBEANSXX_DEBUG(logger, "b -> " + b.toXsdDateTime());
+
+	CPPUNIT_ASSERT(a.hasTimeZone() == false);
+	CPPUNIT_ASSERT(a.isSetDst() == false);
+	CPPUNIT_ASSERT(b.hasTimeZone() == false);
+	CPPUNIT_ASSERT(b.isSetDst() == false);
+
+	a.timeZoneGuess();
+	XMLBEANSXX_DEBUG(logger, "a -> " + a.toXsdDateTime());
+	b.timeZoneGuess();
+	XMLBEANSXX_DEBUG(logger, "b -> " + b.toXsdDateTime());
+	
+	CPPUNIT_ASSERT(a.hasTimeZone() == true);
+	CPPUNIT_ASSERT(a.isSetDst() == true);
+	CPPUNIT_ASSERT(b.hasTimeZone() == true);
+	CPPUNIT_ASSERT(b.isSetDst() == true);
+	
+	CPPUNIT_ASSERT(a.localTimeToString() == "2008-05-05T15:11:22");
+	CPPUNIT_ASSERT(b.localTimeToString() == "2008-01-01T15:11:22");
+
+	//Time Zone Specific Test! Working in CET/CEST time zone 
+	CPPUNIT_ASSERT(a.toXsdDateTime() == "2008-05-05T15:11:22+02:00");
+	CPPUNIT_ASSERT(a.utcTimeToString() == "2008-05-05T13:11:22");
+	CPPUNIT_ASSERT(b.toXsdDateTime() == "2008-01-01T15:11:22+01:00");
+	CPPUNIT_ASSERT(b.utcTimeToString() == "2008-01-01T14:11:22");
+	//Time Zone Specific Test!
 	
 	XMLBEANSXX_DEBUG(logger, "+++++++ Duration Test +++++++");
 
@@ -239,7 +274,6 @@ void CalendarTest::calendarTest () {
 	XMLBEANSXX_DEBUG(logger, "test ->" + test.toXsdDateTime());
 	Duration dur(" 	P1Y3M5DT7H10M3.3S ");
 	XMLBEANSXX_DEBUG(logger, "dur  ->" + dur.toString());
-	//Calendar sol = test.applyDuration(dur);
 	Calendar sol = test + dur;
 
 	CPPUNIT_ASSERT(sol.toXsdDateTime() == "2001-04-17T19:23:17.003Z");
@@ -251,7 +285,6 @@ void CalendarTest::calendarTest () {
 	XMLBEANSXX_DEBUG(logger, "test2 ->" + test2.toXsdYearMonth());
 	Duration dur2(" 	-P3M ");
 	XMLBEANSXX_DEBUG(logger, "dur  ->" + dur2.toString());
-	//Calendar sol2 = test2.applyDuration(dur2);
 	Calendar sol2 = test2 + dur2;
 
 	XMLBEANSXX_DEBUG(logger, "sol2 = test2 + dur2 -> " + sol2.toXsdYearMonth());
@@ -267,7 +300,6 @@ void CalendarTest::calendarTest () {
 
 	XMLBEANSXX_DEBUG(logger, "test3 ->" + test3.toXsdDate());
 	XMLBEANSXX_DEBUG(logger, "dur  ->" + dur3.toString());
-	//Calendar sol3 = test3.applyDuration(dur3);
 	Calendar sol3 = test3 + dur3;
 
 	XMLBEANSXX_DEBUG(logger, "sol3 = test3 + dur3 -> " + sol3.toXsdDate());
@@ -279,7 +311,6 @@ void CalendarTest::calendarTest () {
 
 	XMLBEANSXX_DEBUG(logger, "test4 ->" + test4.toXsdDate());
 	XMLBEANSXX_DEBUG(logger, "dur  ->" + dur4.toString());
-	//Calendar sol4 = test4.applyDuration(dur4);
 	Calendar sol4 = test4 +dur4;
 
 	XMLBEANSXX_DEBUG(logger, "sol4 = test4 + dur4 -> " + sol4.toXsdDate());
@@ -292,7 +323,6 @@ void CalendarTest::calendarTest () {
 	XMLBEANSXX_DEBUG(logger, test4.toXsdDate() + " - " + dur4.toString() + " = " + cl2.toXsdDate());
 
 	CPPUNIT_ASSERT(cl2.toXsdDate() == "1978-02-28");
-
 
 	//CPPUNIT_ASSERT (false);
 	/*
