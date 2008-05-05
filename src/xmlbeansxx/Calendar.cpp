@@ -193,12 +193,16 @@ Calendar::Calendar(const std::string &str) {
 		if (sign == "Z") {
 			gmt_off_hours = 0; 
 			gmt_off_minutes = 0; 
-		} else if (sign == "+") {
-			gmt_off_hours = getInt(tz.substr(1,2)); 
-			gmt_off_minutes = getInt(tz.substr(4,5)); 
 		} else {
-			gmt_off_hours = -getInt(tz.substr(1,2)); //- 
-			gmt_off_minutes = -getInt(tz.substr(4,5)); //-
+			if (tz[3] != ':' || tz.length() != 6) 
+				throw CalendarException("Bad TimeZone format!");
+			if (sign == "+") {
+				gmt_off_hours = getInt(tz.substr(1,2)); 
+				gmt_off_minutes = getInt(tz.substr(4,5)); 
+			} else {
+				gmt_off_hours = -getInt(tz.substr(1,2)); //- 
+				gmt_off_minutes = -getInt(tz.substr(4,5)); //-
+			}
 		}
 		cal_tm.tm_isdst = 0; 
 		flags |= has_timezone;
@@ -248,16 +252,21 @@ Calendar& Calendar::setDate(const std::string &str) {
 		if (sign == "Z") {
 			gmt_off_hours = 0; 
 			gmt_off_minutes = 0; 
-		} else if (sign == "+") {
-			gmt_off_hours = getInt(tz.substr(1,2)); 
-			gmt_off_minutes = getInt(tz.substr(4,5)); 
 		} else {
-			gmt_off_hours = -getInt(tz.substr(1,2)); 
-			gmt_off_minutes = -getInt(tz.substr(4,5)); 
+			if (tz[3] != ':' || tz.length() != 6) 
+				throw CalendarException("Bad TimeZone format!");
+			if (sign == "+") {
+				gmt_off_hours = getInt(tz.substr(1,2)); 
+				gmt_off_minutes = getInt(tz.substr(4,5)); 
+			} else {
+				gmt_off_hours = -getInt(tz.substr(1,2)); //- 
+				gmt_off_minutes = -getInt(tz.substr(4,5)); //-
+			}
 		}
 		cal_tm.tm_isdst = 0; 
 		flags |= has_timezone;
 	}
+
 	return *this;
 }
 
@@ -316,12 +325,16 @@ Calendar& Calendar::setTime(const std::string &str) {
 		if (sign == "Z") {
 			gmt_off_hours = 0; 
 			gmt_off_minutes = 0; 
-		} else if (sign == "+") {
-			gmt_off_hours = getInt(tz.substr(1,2)); 
-			gmt_off_minutes = getInt(tz.substr(4,5)); 
 		} else {
-			gmt_off_hours = -getInt(tz.substr(1,2)); 
-			gmt_off_minutes = -getInt(tz.substr(4,5)); 
+			if (tz[3] != ':' || tz.length() != 6) 
+				throw CalendarException("Bad TimeZone format!");
+			if (sign == "+") {
+				gmt_off_hours = getInt(tz.substr(1,2)); 
+				gmt_off_minutes = getInt(tz.substr(4,5)); 
+			} else {
+				gmt_off_hours = -getInt(tz.substr(1,2)); //- 
+				gmt_off_minutes = -getInt(tz.substr(4,5)); //-
+			}
 		}
 		cal_tm.tm_isdst = 0; 
 		flags |= has_timezone;
@@ -358,12 +371,16 @@ Calendar& Calendar::setYearMonth(const std::string &str) {
 		if (sign == "Z") {
 			gmt_off_hours = 0; 
 			gmt_off_minutes = 0; 
-		} else if (sign == "+") {
-			gmt_off_hours = getInt(tz.substr(1,2)); 
-			gmt_off_minutes = getInt(tz.substr(4,5)); 
 		} else {
-			gmt_off_hours = -getInt(tz.substr(1,2)); 
-			gmt_off_minutes = -getInt(tz.substr(4,5)); 
+			if (tz[3] != ':' || tz.length() != 6) 
+				throw CalendarException("Bad TimeZone format!");
+			if (sign == "+") {
+				gmt_off_hours = getInt(tz.substr(1,2)); 
+				gmt_off_minutes = getInt(tz.substr(4,5)); 
+			} else {
+				gmt_off_hours = -getInt(tz.substr(1,2)); //- 
+				gmt_off_minutes = -getInt(tz.substr(4,5)); //-
+			}
 		}
 		cal_tm.tm_isdst = 0; 
 		flags |= has_timezone;
@@ -398,12 +415,16 @@ Calendar& Calendar::setgYear(const std::string &str) {
 		if (sign == "Z") {
 			gmt_off_hours = 0; 
 			gmt_off_minutes = 0; 
-		} else if (sign == "+") {
-			gmt_off_hours = getInt(tz.substr(1,2)); 
-			gmt_off_minutes = getInt(tz.substr(4,5)); 
 		} else {
-			gmt_off_hours = -getInt(tz.substr(1,2)); 
-			gmt_off_minutes = -getInt(tz.substr(4,5)); 
+			if (tz[3] != ':' || tz.length() != 6) 
+				throw CalendarException("Bad TimeZone format!");
+			if (sign == "+") {
+				gmt_off_hours = getInt(tz.substr(1,2)); 
+				gmt_off_minutes = getInt(tz.substr(4,5)); 
+			} else {
+				gmt_off_hours = -getInt(tz.substr(1,2)); //- 
+				gmt_off_minutes = -getInt(tz.substr(4,5)); //-
+			}
 		}
 		cal_tm.tm_isdst = 0; 
 		flags |= has_timezone;
@@ -440,12 +461,16 @@ Calendar& Calendar::setMonthDay(const std::string &str) {
 		if (sign == "Z") {
 			gmt_off_hours = 0; 
 			gmt_off_minutes = 0; 
-		} else if (sign == "+") {
-			gmt_off_hours = getInt(tz.substr(1,2)); 
-			gmt_off_minutes = getInt(tz.substr(4,5)); 
 		} else {
-			gmt_off_hours = -getInt(tz.substr(1,2)); 
-			gmt_off_minutes = -getInt(tz.substr(4,5)); 
+			if (tz[3] != ':' || tz.length() != 6) 
+				throw CalendarException("Bad TimeZone format!");
+			if (sign == "+") {
+				gmt_off_hours = getInt(tz.substr(1,2)); 
+				gmt_off_minutes = getInt(tz.substr(4,5)); 
+			} else {
+				gmt_off_hours = -getInt(tz.substr(1,2)); //- 
+				gmt_off_minutes = -getInt(tz.substr(4,5)); //-
+			}
 		}
 		cal_tm.tm_isdst = 0; 
 		flags |= has_timezone;
@@ -480,12 +505,16 @@ Calendar& Calendar::setgMonth(const std::string &str) {
 		if (sign == "Z") {
 			gmt_off_hours = 0; 
 			gmt_off_minutes = 0; 
-		} else if (sign == "+") {
-			gmt_off_hours = getInt(tz.substr(1,2)); 
-			gmt_off_minutes = getInt(tz.substr(4,5)); 
 		} else {
-			gmt_off_hours = -getInt(tz.substr(1,2)); 
-			gmt_off_minutes = -getInt(tz.substr(4,5)); 
+			if (tz[3] != ':' || tz.length() != 6) 
+				throw CalendarException("Bad TimeZone format!");
+			if (sign == "+") {
+				gmt_off_hours = getInt(tz.substr(1,2)); 
+				gmt_off_minutes = getInt(tz.substr(4,5)); 
+			} else {
+				gmt_off_hours = -getInt(tz.substr(1,2)); //- 
+				gmt_off_minutes = -getInt(tz.substr(4,5)); //-
+			}
 		}
 		cal_tm.tm_isdst = 0; 
 		flags |= has_timezone;
@@ -519,12 +548,16 @@ Calendar& Calendar::setgDay(const std::string &str) {
 		if (sign == "Z") {
 			gmt_off_hours = 0; 
 			gmt_off_minutes = 0; 
-		} else if (sign == "+") {
-			gmt_off_hours = getInt(tz.substr(1,2)); 
-			gmt_off_minutes = getInt(tz.substr(4,5)); 
 		} else {
-			gmt_off_hours = -getInt(tz.substr(1,2)); 
-			gmt_off_minutes = -getInt(tz.substr(4,5)); 
+			if (tz[3] != ':' || tz.length() != 6) 
+				throw CalendarException("Bad TimeZone format!");
+			if (sign == "+") {
+				gmt_off_hours = getInt(tz.substr(1,2)); 
+				gmt_off_minutes = getInt(tz.substr(4,5)); 
+			} else {
+				gmt_off_hours = -getInt(tz.substr(1,2)); //- 
+				gmt_off_minutes = -getInt(tz.substr(4,5)); //-
+			}
 		}
 		cal_tm.tm_isdst = 0; 
 		flags |= has_timezone;
