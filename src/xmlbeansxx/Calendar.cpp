@@ -1045,7 +1045,7 @@ boost::posix_time::ptime Calendar::timeZoneMagic(const boost::posix_time::ptime&
 }
 	 
 Calendar& Calendar::timeZoneGuess() {
-	if (!hasTimeZone()) {
+	if (hasFullDateInfo() && hasFullTimeInfo() && !hasTimeZone()) {
 		//Guess time zone offset
 		xmlbeansxx::Calendar pom(timeZoneMagic(getTime()));
 		boost::posix_time::time_duration td = getTime() - pom.getTime();
@@ -1053,8 +1053,6 @@ Calendar& Calendar::timeZoneGuess() {
 	} 
 	return *this;
 }
-				 
-
 
 Duration::Duration() {
 	flags = 0;	 

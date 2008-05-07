@@ -242,12 +242,13 @@ void CalendarTest::calendarTest () {
 	CPPUNIT_ASSERT(a.localTimeToString() == "2008-05-05T15:11:22");
 	CPPUNIT_ASSERT(b.localTimeToString() == "2008-01-01T15:11:22");
 
-	//Time Zone Specific Test! Working in CET/CEST time zone 
+	XMLBEANSXX_INFO(logger, "Time Zone Specific Test! Start"); 
+	//Working in CET/CEST time zone
 	CPPUNIT_ASSERT(a.toXsdDateTime() == "2008-05-05T15:11:22+02:00");
 	CPPUNIT_ASSERT(a.utcTimeToString() == "2008-05-05T13:11:22");
 	CPPUNIT_ASSERT(b.toXsdDateTime() == "2008-01-01T15:11:22+01:00");
 	CPPUNIT_ASSERT(b.utcTimeToString() == "2008-01-01T14:11:22");
-	//Time Zone Specific Test!
+	XMLBEANSXX_INFO(logger, "Time Zone Specific Test! End");
 	
 	XMLBEANSXX_DEBUG(logger, "+++++++ Duration Test +++++++");
 
