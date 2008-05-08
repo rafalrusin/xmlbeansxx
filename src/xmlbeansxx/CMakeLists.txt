@@ -72,6 +72,7 @@ SET(XMLBEANSXX_INSTALL_HEADERS
         XercesUtils.h
 	CoreTypes.h
 	config.h
+	Calendar.h
 
 	${PARSERS_H}
 
@@ -138,6 +139,7 @@ SET(XMLBEANSXX_SRC
 	NSMap.h
 	NSMap.cpp
 	XercesUtils.cpp
+	Calendar.cpp
 	
 	${PARSERS_CPP}
 	
