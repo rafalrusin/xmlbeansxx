@@ -33,11 +33,6 @@
 #include <boost/thread/recursive_mutex.hpp>
 #endif
 
-
-
-class xmlbeansxx::Contents;
-
-
 namespace xmlbeansxx {
 
 class SchemaType;

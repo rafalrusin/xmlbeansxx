@@ -139,7 +139,7 @@ Calendar::Calendar(const boost::posix_time::ptime &ptime) {
 Calendar::Calendar(const std::string &str) { 
 	//str = CCYY-MM-DDThh:mm:ss(.sss)(Z|(+|-)hh:mm)
 	flags = 0;
-	char * sign = "?";
+	const char * sign = "?";
 	std::string pt, frac, tz;
 	
 	pt = TextUtils::collapse(str);
@@ -211,7 +211,7 @@ Calendar::Calendar(const std::string &str) {
 
 Calendar& Calendar::setDate(const std::string &str) {
 	//str = CCYY-MM-DD(Z|(+|-)hh:mm)
-	char * sign = "?";
+	const char * sign = "?";
 	std::string pt, tz;
 
 	pt = TextUtils::collapse(str);
@@ -273,7 +273,7 @@ Calendar& Calendar::setDate(const std::string &str) {
 
 Calendar& Calendar::setTime(const std::string &str) { 
 	//str = hh:mm:ss(.sss)(Z|(+|-)hh:mm)
-	char * sign = "?";
+	const char * sign = "?";
 	std::string pt, frac, tz;
 
 	pt = TextUtils::collapse(str);
@@ -344,7 +344,7 @@ Calendar& Calendar::setTime(const std::string &str) {
 
 Calendar& Calendar::setYearMonth(const std::string &str) {
 	//str = CCYY-MM(Z|(+|-)hh:mm)
-	char * sign = "?";
+	const char * sign = "?";
 	std::string pt, tz;
 
 	pt = TextUtils::collapse(str);
@@ -390,7 +390,7 @@ Calendar& Calendar::setYearMonth(const std::string &str) {
 
 Calendar& Calendar::setgYear(const std::string &str) {
 	//str = CCYY(Z|(+|-)hh:mm)
-	char * sign = "?";
+	const char * sign = "?";
 	std::string pt, tz;
 
 	pt = TextUtils::collapse(str);
@@ -434,7 +434,7 @@ Calendar& Calendar::setgYear(const std::string &str) {
 
 Calendar& Calendar::setMonthDay(const std::string &str) {
 	//str = --MM-DD(Z|(+|-)hh:mm)
-	char * sign = "?";
+	const char * sign = "?";
 	std::string pt, tz;
 
 	pt = TextUtils::collapse(str);
@@ -480,7 +480,7 @@ Calendar& Calendar::setMonthDay(const std::string &str) {
 
 Calendar& Calendar::setgMonth(const std::string &str) {
 	//str = --MM(Z|(+|-)hh:mm)
-	char * sign = "?";
+	const char * sign = "?";
 	std::string pt, tz;
 
 	pt = TextUtils::collapse(str);
@@ -524,7 +524,7 @@ Calendar& Calendar::setgMonth(const std::string &str) {
 
 Calendar& Calendar::setgDay(const std::string &str) {
 	//str = ---DD(Z|(+|-)hh:mm)
-	char * sign = "?";
+	const char * sign = "?";
 	std::string pt, tz;
 
 	pt = TextUtils::collapse(str);

@@ -19,6 +19,7 @@
 
 //#include <set>
 #include <string>
+#include <cstring>
 #include <map>
 #include <vector>
 
