@@ -577,7 +577,7 @@ Calendar& Calendar::setYear(int year) {
 }
 
 Calendar& Calendar::setYear(const std::string &year) {
-	setYear(getInt(year));
+	return setYear(getInt(year));
 }
 
 int Calendar::getYear() const {
@@ -601,7 +601,7 @@ Calendar& Calendar::setMonth(int month) {
 }
 
 Calendar& Calendar::setMonth(const std::string &month) {
-	setMonth(getInt(month));
+	return setMonth(getInt(month));
 }
 
 int Calendar::getMonth() const {
@@ -625,7 +625,7 @@ Calendar& Calendar::setDay(int day) {
 }
 
 Calendar& Calendar::setDay(const std::string &day) {
-	setDay(getInt(day));
+	return setDay(getInt(day));
 }
 
 int Calendar::getDay() const {
@@ -648,7 +648,7 @@ Calendar& Calendar::setHour(int hour) {
 }
 
 Calendar& Calendar::setHour(const std::string &hour) {
-	setHour(getInt(hour));
+	return setHour(getInt(hour));
 }
 
 int Calendar::getHour() const {
@@ -671,7 +671,7 @@ Calendar& Calendar::setMinutes(int min) {
 }
 
 Calendar& Calendar::setMinutes(const std::string &min) {
-	setMinutes(getInt(min));
+	return setMinutes(getInt(min));
 }
 
 int Calendar::getMinutes() const {
@@ -694,7 +694,7 @@ Calendar& Calendar::setSeconds(int sec) {
 }
 
 Calendar& Calendar::setSeconds(const std::string &sec) {
-	setSeconds(getInt(sec));
+	return setSeconds(getInt(sec));
 }
 
 int Calendar::getSeconds() const {
@@ -717,7 +717,7 @@ Calendar& Calendar::setFracSec(int fsec) {
 }
 
 Calendar& Calendar::setFracSec(const std::string &fsec) {
-	setFracSec(getInt(fsec));
+	return setFracSec(getInt(fsec));
 }
 
 int Calendar::getFracSec() const {
@@ -783,6 +783,7 @@ boost::posix_time::time_duration Calendar::getTimeDuration() const {
 				getFracSec()
 				);	 
 	}
+	return boost::posix_time::time_duration();
 };
 
 
@@ -1129,7 +1130,7 @@ Duration& Duration::setYears(int y) {
 }
 
 Duration& Duration::setYears(const std::string &y) {
-	setYears(getInt(y));
+	return setYears(getInt(y));
 }
 
 int Duration::getYears() {
@@ -1149,7 +1150,7 @@ Duration& Duration::setMonths(int m) {
 }
 
 Duration& Duration::setMonths(const std::string &m) {
-	setMonths(getInt(m));
+	return setMonths(getInt(m));
 }
 
 int Duration::getMonths() {
@@ -1169,7 +1170,7 @@ Duration& Duration::setDays(int d) {
 }
 
 Duration& Duration::setDays(const std::string &d) {
-	setDays(getInt(d));
+	return setDays(getInt(d));
 }
 
 int Duration::getDays() {
@@ -1189,7 +1190,7 @@ Duration& Duration::setHours(int h) {
 }
 
 Duration& Duration::setHours(const std::string &h) {
-	setHours(getInt(h));
+	return setHours(getInt(h));
 }
 
 int Duration::getHours() {
@@ -1209,7 +1210,8 @@ Duration& Duration::setMinutes(int m) {
 }
 
 Duration& Duration::setMinutes(const std::string &m) {
-	setMinutes(getInt(m));
+	return setMinutes(getInt(m));
+	
 }
 
 int Duration::getMinutes() {
@@ -1229,7 +1231,7 @@ Duration& Duration::setSeconds(int s) {
 }
 
 Duration& Duration::setSeconds(const std::string &s) {
-	setSeconds(getInt(s));
+	return setSeconds(getInt(s));
 }
 
 int Duration::getSeconds() {
@@ -1250,6 +1252,7 @@ Duration& Duration::setFracSec(int f) {
 
 Duration& Duration::setFracSec(const std::string &f) {
 	setFracSec(getInt(f));
+	return *this;
 }
 
 int Duration::getFracSec() {
@@ -1341,7 +1344,7 @@ Calendar::Calendar(struct tm stm, int fs, int gh, int gm, int dst, int f) {
 Calendar &Calendar::applyDuration(Duration dur) {
 	boost::posix_time::time_duration tmp;
 	boost::posix_time::ptime ret;
-	int year = 0, month = 0, day = 0, fl = flags;
+	int year = 0, month = 0, fl = flags;
 
 	tmp = boost::posix_time::hours(dur.getHours()) 
 			+ boost::posix_time::minutes(dur.getMinutes()) 

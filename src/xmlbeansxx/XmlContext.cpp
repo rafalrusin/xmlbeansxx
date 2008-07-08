@@ -36,9 +36,9 @@ void XmlContext::remember() {
 
 XmlContext::StoredLinks XmlContext::getLastStoredLinks() {
 	StoredLinks retu;
-	int start=0;
+	StoredLinks::size_type start=0;
 	if(rememberedPositions.size()>0)  start=rememberedPositions.top();
-	for(int i=start;i<restoreLinks.size();i++) {
+	for(StoredLinks::size_type i=start;i<restoreLinks.size();i++) {
 		std::string prefix = restoreLinks[i].first;
 		retu.push_back(make_pair(prefix,getNamespaceURI(prefix)));
 	}

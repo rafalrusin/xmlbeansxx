@@ -25,7 +25,7 @@
 namespace xmlbeansxx {
 
 class XmlOptions {
-    bool v,d,tp,sit,st,pers;
+    bool v,d,tp,st,sit,pers;
 public:
     XmlOptions():v(false),d(true),tp(true),st(false),sit(false),pers(false) {}
 

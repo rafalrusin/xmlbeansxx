@@ -98,7 +98,7 @@ XmlCursor::TokenType XmlCursor::currentTokenType() const {
 
 XmlObject XmlCursor::getObject(){
 		ElemDict::value_type v = getPos();
-		if(v.name == XmlBeans::textElementName()) return XmlString(v.value->getSimpleContent());1;
+		if(v.name == XmlBeans::textElementName()) return XmlString(v.value->getSimpleContent());
 		return XmlObject(v.value);
 }
 void XmlCursor::beginElement(const QName &name) {
@@ -262,7 +262,7 @@ bool XmlCursor::toNextSibling(const QName &name,int index) {
 		if(pos>=A+B-1) return false;
 		pos++;
 		if(pos < A) pos = A;
-		for(pos;pos<A+B;pos++) {
+		for(;pos<A+B;pos++) {
 			if(getPos().name==name) {
 				if(!(--index)) return true;
 			}
@@ -329,7 +329,7 @@ bool XmlCursor::toPrevSibling(int index) {
 		if(pos <=1) return false;
 		pos--;
 		if(pos > A+B-1) pos=A+B-1;
-		for(pos;pos>=A;pos--) {
+		for(;pos>=A;pos--) {
 			if(getPos().name!=XmlBeans::textElementName()) {
 				if(!(--index)) return true;
 			}
