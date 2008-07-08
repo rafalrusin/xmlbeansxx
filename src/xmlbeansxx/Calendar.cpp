@@ -138,6 +138,7 @@ Calendar::Calendar(const boost::posix_time::ptime &ptime) {
 
 Calendar::Calendar(const std::string &str) { 
 	//str = CCYY-MM-DDThh:mm:ss(.sss)(Z|(+|-)hh:mm)
+	XMLBEANSXX_DEBUG(Calendar_log, "creating Calendar from str: " + str);
 	flags = 0;
 	const char * sign = "?";
 	std::string pt, frac, tz;
