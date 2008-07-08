@@ -278,8 +278,10 @@ Calendar& Calendar::setTime(const std::string &str) {
 
 	const char * sign = "?";
 	std::string pt, frac, tz;
+	XMLBEANSXX_DEBUG(Calendar_log, "11pt,tz,frac  str: " + pt + "," + tz + "," + frac);
 
 	pt = TextUtils::collapse(str);
+	XMLBEANSXX_DEBUG(Calendar_log, "12pt,tz,frac  str: " + pt + "," + tz + "," + frac);
 
 	if (pt.rfind('+') != std::string::npos)
 		sign = "+";
@@ -288,10 +290,13 @@ Calendar& Calendar::setTime(const std::string &str) {
 	else 	if (pt.rfind('-') != std::string::npos)
 		sign = "-";
 
+	XMLBEANSXX_DEBUG(Calendar_log, "13pt,tz,frac  str: " + pt + "," + tz + "," + frac);
+
 	if (sign != "?") {
 		tz = pt.substr(pt.rfind(sign), pt.length());
 		pt = pt.substr(0, pt.rfind(sign));
 	}
+	XMLBEANSXX_DEBUG(Calendar_log, "14pt,tz,frac  str: " + pt + "," + tz + "," + frac);
 
 	if (pt.rfind('.') != std::string::npos) {
 		frac = pt.substr(pt.rfind('.') + 1, pt.length());
