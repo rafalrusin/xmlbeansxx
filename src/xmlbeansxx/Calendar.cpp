@@ -297,6 +297,8 @@ Calendar& Calendar::setTime(const std::string &str) {
 		frac = pt.substr(pt.rfind('.') + 1, pt.length());
 		pt = pt.substr(0, pt.rfind('.'));
 	}
+
+	XMLBEANSXX_DEBUG(Calendar_log, "pt,tz,frac  str: " + pt + "," + tz + "," + frac);
 	
 	boost::posix_time::time_duration td(boost::posix_time::duration_from_string(pt));
 
@@ -314,6 +316,7 @@ Calendar& Calendar::setTime(const std::string &str) {
 		cal_tm.tm_year = tmp.tm_year;
 		cal_tm.tm_isdst = tmp.tm_isdst;
 	}
+	XMLBEANSXX_DEBUG(Calendar_log, "2pt,tz,frac  str: " + pt + "," + tz + "," + frac);
 
 	if (!frac.empty()) {
 		int fsec = getInt(frac);
@@ -342,6 +345,7 @@ Calendar& Calendar::setTime(const std::string &str) {
 		cal_tm.tm_isdst = 0; 
 		flags |= has_timezone;
 	}
+	XMLBEANSXX_DEBUG(Calendar_log, "3pt,tz,frac  str: " + pt + "," + tz + "," + frac);
 	return *this;
 }
 
