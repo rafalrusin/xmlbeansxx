@@ -140,19 +140,19 @@ Calendar::Calendar(const std::string &str) {
 	//str = CCYY-MM-DDThh:mm:ss(.sss)(Z|(+|-)hh:mm)
 	XMLBEANSXX_DEBUG(Calendar_log, "creating Calendar from str: " + str);
 	flags = 0;
-	const char * sign = "?";
+	char sign = '?';
 	std::string pt, frac, tz;
 	
 	pt = TextUtils::collapse(str);
 
 	if (pt.rfind('+') != std::string::npos)
-		sign = "+";
+		sign = '+';
 	else if (pt.rfind('Z') != std::string::npos)
-		sign = "Z";
+		sign = 'Z';
 	else if (pt.rfind('-') > pt.find('T'))
-		sign = "-";
+		sign = '-';
 
-	if (sign != "?") {
+	if (sign != '?') {
 		tz = pt.substr(pt.rfind(sign), pt.length());
 		pt = pt.substr(0, pt.rfind(sign));
 	}
@@ -190,14 +190,14 @@ Calendar::Calendar(const std::string &str) {
 			throw CalendarException("Bad FracSec value!");
 	}
 
-	if (sign != "?") {
-		if (sign == "Z") {
+	if (sign != '?') {
+		if (sign == 'Z') {
 			gmt_off_hours = 0; 
 			gmt_off_minutes = 0; 
 		} else {
 			if (tz[3] != ':' || tz.length() != 6) 
 				throw CalendarException("Bad TimeZone format!");
-			if (sign == "+") {
+			if (sign == '+') {
 				gmt_off_hours = getInt(tz.substr(1,2)); 
 				gmt_off_minutes = getInt(tz.substr(4,5)); 
 			} else {
@@ -212,19 +212,19 @@ Calendar::Calendar(const std::string &str) {
 
 Calendar& Calendar::setDate(const std::string &str) {
 	//str = CCYY-MM-DD(Z|(+|-)hh:mm)
-	const char * sign = "?";
+	char sign = '?';
 	std::string pt, tz;
 
 	pt = TextUtils::collapse(str);
 
 	if (pt.rfind('+') != std::string::npos)
-		sign = "+";
+		sign = '+';
 	else if (pt.rfind('Z') != std::string::npos)
-		sign = "Z";
+		sign = 'Z';
 	else 	if (pt.rfind('-') - pt.find('-') == 2)
-		sign = "-";
+		sign = '-';
 
-	if (sign != "?") {
+	if (sign != '?') {
 		tz = pt.substr(pt.rfind(sign), pt.length());
 		pt = pt.substr(0, pt.rfind(sign));
 	}
@@ -249,14 +249,14 @@ Calendar& Calendar::setDate(const std::string &str) {
 		fixTm();
 	}
 
-	if (sign != "?") {
-		if (sign == "Z") {
+	if (sign != '?') {
+		if (sign == 'Z') {
 			gmt_off_hours = 0; 
 			gmt_off_minutes = 0; 
 		} else {
 			if (tz[3] != ':' || tz.length() != 6) 
 				throw CalendarException("Bad TimeZone format!");
-			if (sign == "+") {
+			if (sign == '+') {
 				gmt_off_hours = getInt(tz.substr(1,2)); 
 				gmt_off_minutes = getInt(tz.substr(4,5)); 
 			} else {
@@ -276,34 +276,29 @@ Calendar& Calendar::setTime(const std::string &str) {
 	//str = hh:mm:ss(.sss)(Z|(+|-)hh:mm)
 	XMLBEANSXX_DEBUG(Calendar_log, "setting Time from str: " + str);
 
-	const char * sign = "?";
+	char sign = '?';
 	std::string pt, frac, tz;
-	XMLBEANSXX_DEBUG(Calendar_log, "11pt,tz,frac  str: " + pt + "," + tz + "," + frac);
 
 	pt = TextUtils::collapse(str);
-	XMLBEANSXX_DEBUG(Calendar_log, "12pt,tz,frac  str: " + pt + "," + tz + "," + frac);
 
 	if (pt.rfind('+') != std::string::npos)
-		sign = "+";
+		sign = '+';
 	else if (pt.rfind('Z') != std::string::npos)
-		sign = "Z";
+		sign = 'Z';
 	else 	if (pt.rfind('-') != std::string::npos)
-		sign = "-";
+		sign = '-';
 
-	XMLBEANSXX_DEBUG(Calendar_log, "13pt,tz,frac  str: " + pt + "," + tz + "," + frac);
 
-	if (sign != "?") {
+	if (sign != '?') {
 		tz = pt.substr(pt.rfind(sign), pt.length());
 		pt = pt.substr(0, pt.rfind(sign));
 	}
-	XMLBEANSXX_DEBUG(Calendar_log, "14pt,tz,frac  str: " + pt + "," + tz + "," + frac);
 
 	if (pt.rfind('.') != std::string::npos) {
 		frac = pt.substr(pt.rfind('.') + 1, pt.length());
 		pt = pt.substr(0, pt.rfind('.'));
 	}
 
-	XMLBEANSXX_DEBUG(Calendar_log, "pt,tz,frac  str: " + pt + "," + tz + "," + frac);
 	
 	boost::posix_time::time_duration td(boost::posix_time::duration_from_string(pt));
 
@@ -321,7 +316,6 @@ Calendar& Calendar::setTime(const std::string &str) {
 		cal_tm.tm_year = tmp.tm_year;
 		cal_tm.tm_isdst = tmp.tm_isdst;
 	}
-	XMLBEANSXX_DEBUG(Calendar_log, "2pt,tz,frac  str: " + pt + "," + tz + "," + frac);
 
 	if (!frac.empty()) {
 		int fsec = getInt(frac);
@@ -332,14 +326,14 @@ Calendar& Calendar::setTime(const std::string &str) {
 			throw CalendarException("Bad FracSec value!");
 	}
 
-	if (sign != "?") {
-		if (sign == "Z") {
+	if (sign != '?') {
+		if (sign == 'Z') {
 			gmt_off_hours = 0; 
 			gmt_off_minutes = 0; 
 		} else {
 			if (tz[3] != ':' || tz.length() != 6) 
 				throw CalendarException("Bad TimeZone format!");
-			if (sign == "+") {
+			if (sign == '+') {
 				gmt_off_hours = getInt(tz.substr(1,2)); 
 				gmt_off_minutes = getInt(tz.substr(4,5)); 
 			} else {
@@ -350,25 +344,24 @@ Calendar& Calendar::setTime(const std::string &str) {
 		cal_tm.tm_isdst = 0; 
 		flags |= has_timezone;
 	}
-	XMLBEANSXX_DEBUG(Calendar_log, "3pt,tz,frac  str: " + pt + "," + tz + "," + frac);
 	return *this;
 }
 
 Calendar& Calendar::setYearMonth(const std::string &str) {
 	//str = CCYY-MM(Z|(+|-)hh:mm)
-	const char * sign = "?";
+	char sign = '?';
 	std::string pt, tz;
 
 	pt = TextUtils::collapse(str);
 
 	if (pt.rfind('+') != std::string::npos)
-		sign = "+";
+		sign = '+';
 	else if (pt.rfind('Z') != std::string::npos)
-		sign = "Z";
+		sign = 'Z';
 	else 	if (pt.rfind('-') != pt.find('-'))
-		sign = "-";
+		sign = '-';
 
-	if (sign != "?") {
+	if (sign != '?') {
 		tz = pt.substr(pt.rfind(sign), pt.length());
 		pt = pt.substr(0, pt.rfind(sign));
 	}
@@ -379,14 +372,14 @@ Calendar& Calendar::setYearMonth(const std::string &str) {
 	flags |= has_month;
 	fixTm();
 
-	if (sign != "?") {
-		if (sign == "Z") {
+	if (sign != '?') {
+		if (sign == 'Z') {
 			gmt_off_hours = 0; 
 			gmt_off_minutes = 0; 
 		} else {
 			if (tz[3] != ':' || tz.length() != 6) 
 				throw CalendarException("Bad TimeZone format!");
-			if (sign == "+") {
+			if (sign == '+') {
 				gmt_off_hours = getInt(tz.substr(1,2)); 
 				gmt_off_minutes = getInt(tz.substr(4,5)); 
 			} else {
@@ -402,19 +395,19 @@ Calendar& Calendar::setYearMonth(const std::string &str) {
 
 Calendar& Calendar::setgYear(const std::string &str) {
 	//str = CCYY(Z|(+|-)hh:mm)
-	const char * sign = "?";
+	char sign = '?';
 	std::string pt, tz;
 
 	pt = TextUtils::collapse(str);
 
 	if (pt.rfind('+') != std::string::npos)
-		sign = "+";
+		sign = '+';
 	else if (pt.rfind('Z') != std::string::npos)
-		sign = "Z";
+		sign = 'Z';
 	else 	if (pt.rfind('-') != 1)
-		sign = "-";
+		sign = '-';
 
-	if (sign != "?") {
+	if (sign != '?') {
 		tz = pt.substr(pt.rfind(sign), pt.length());
 		pt = pt.substr(0, pt.rfind(sign));
 	}
@@ -423,14 +416,14 @@ Calendar& Calendar::setgYear(const std::string &str) {
 	flags |= has_year;
 	fixTm();
 
-	if (sign != "?") {
-		if (sign == "Z") {
+	if (sign != '?') {
+		if (sign == 'Z') {
 			gmt_off_hours = 0; 
 			gmt_off_minutes = 0; 
 		} else {
 			if (tz[3] != ':' || tz.length() != 6) 
 				throw CalendarException("Bad TimeZone format!");
-			if (sign == "+") {
+			if (sign == '+') {
 				gmt_off_hours = getInt(tz.substr(1,2)); 
 				gmt_off_minutes = getInt(tz.substr(4,5)); 
 			} else {
@@ -446,19 +439,19 @@ Calendar& Calendar::setgYear(const std::string &str) {
 
 Calendar& Calendar::setMonthDay(const std::string &str) {
 	//str = --MM-DD(Z|(+|-)hh:mm)
-	const char * sign = "?";
+	char sign = '?';
 	std::string pt, tz;
 
 	pt = TextUtils::collapse(str);
 
 	if (pt.rfind('+') != std::string::npos)
-		sign = "+";
+		sign = '+';
 	else if (pt.rfind('Z') != std::string::npos)
-		sign = "Z";
+		sign = 'Z';
 	else 	if (pt.rfind('-') - pt.find('-') == 7)
-		sign = "-";
+		sign = '-';
 
-	if (sign != "?") {
+	if (sign != '?') {
 		tz = pt.substr(pt.rfind(sign), pt.length());
 		pt = pt.substr(0, pt.rfind(sign));
 	}
@@ -469,14 +462,14 @@ Calendar& Calendar::setMonthDay(const std::string &str) {
 	flags |= has_day;
 	fixTm();
 
-	if (sign != "?") {
-		if (sign == "Z") {
+	if (sign != '?') {
+		if (sign == 'Z') {
 			gmt_off_hours = 0; 
 			gmt_off_minutes = 0; 
 		} else {
 			if (tz[3] != ':' || tz.length() != 6) 
 				throw CalendarException("Bad TimeZone format!");
-			if (sign == "+") {
+			if (sign == '+') {
 				gmt_off_hours = getInt(tz.substr(1,2)); 
 				gmt_off_minutes = getInt(tz.substr(4,5)); 
 			} else {
@@ -492,19 +485,19 @@ Calendar& Calendar::setMonthDay(const std::string &str) {
 
 Calendar& Calendar::setgMonth(const std::string &str) {
 	//str = --MM(Z|(+|-)hh:mm)
-	const char * sign = "?";
+	char sign = '?';
 	std::string pt, tz;
 
 	pt = TextUtils::collapse(str);
 
 	if (pt.rfind('+') != std::string::npos)
-		sign = "+";
+		sign = '+';
 	else if (pt.rfind('Z') != std::string::npos)
-		sign = "Z";
+		sign = 'Z';
 	else 	if (pt.rfind('-') - pt.find('-') == 7)
-		sign = "-";
+		sign = '-';
 
-	if (sign != "?") {
+	if (sign != '?') {
 		tz = pt.substr(pt.rfind(sign), pt.length());
 		pt = pt.substr(0, pt.rfind(sign));
 	}
@@ -513,14 +506,14 @@ Calendar& Calendar::setgMonth(const std::string &str) {
 	flags |= has_month;
 	fixTm();
 
-	if (sign != "?") {
-		if (sign == "Z") {
+	if (sign != '?') {
+		if (sign == 'Z') {
 			gmt_off_hours = 0; 
 			gmt_off_minutes = 0; 
 		} else {
 			if (tz[3] != ':' || tz.length() != 6) 
 				throw CalendarException("Bad TimeZone format!");
-			if (sign == "+") {
+			if (sign == '+') {
 				gmt_off_hours = getInt(tz.substr(1,2)); 
 				gmt_off_minutes = getInt(tz.substr(4,5)); 
 			} else {
@@ -536,19 +529,19 @@ Calendar& Calendar::setgMonth(const std::string &str) {
 
 Calendar& Calendar::setgDay(const std::string &str) {
 	//str = ---DD(Z|(+|-)hh:mm)
-	const char * sign = "?";
+	char sign = '?';
 	std::string pt, tz;
 
 	pt = TextUtils::collapse(str);
 
 	if (pt.rfind('+') != std::string::npos)
-		sign = "+";
+		sign = '+';
 	else if (pt.rfind('Z') != std::string::npos)
-		sign = "Z";
+		sign = 'Z';
 	else 	if (pt.rfind('-') - pt.find('-') == 5)
-		sign = "-";
+		sign = '-';
 
-	if (sign != "?") {
+	if (sign != '?') {
 		tz = pt.substr(pt.rfind(sign), pt.length());
 		pt = pt.substr(0, pt.rfind(sign));
 	}
@@ -556,14 +549,14 @@ Calendar& Calendar::setgDay(const std::string &str) {
 	flags |= has_day;
 	fixTm();
 
-	if (sign != "?") {
-		if (sign == "Z") {
+	if (sign != '?') {
+		if (sign == 'Z') {
 			gmt_off_hours = 0; 
 			gmt_off_minutes = 0; 
 		} else {
 			if (tz[3] != ':' || tz.length() != 6) 
 				throw CalendarException("Bad TimeZone format!");
-			if (sign == "+") {
+			if (sign == '+') {
 				gmt_off_hours = getInt(tz.substr(1,2)); 
 				gmt_off_minutes = getInt(tz.substr(4,5)); 
 			} else {
