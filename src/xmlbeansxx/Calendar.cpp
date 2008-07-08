@@ -274,7 +274,7 @@ Calendar& Calendar::setDate(const std::string &str) {
 
 Calendar& Calendar::setTime(const std::string &str) { 
 	//str = hh:mm:ss(.sss)(Z|(+|-)hh:mm)
-	XMLBEANSXX_DEBUG(Calendar_log, "seting Time from str: " + str);
+	XMLBEANSXX_DEBUG(Calendar_log, "setting Time from str: " + str);
 
 	const char * sign = "?";
 	std::string pt, frac, tz;
