@@ -60,5 +60,59 @@ II. How to build and install.
     Build the RUN_TESTS target.
     Build the INSTALL target.
   
-  
+
+
+III. Library files.
+It is useful to make, a UNIX style directory tree.
+You should make a "c:\usr\" directory, and there you should install all
+required libraries.
+
+There should be:
+1. for "log4cxx", CMAKE_BUILD_TYPE=DEBUG 
+        c:\usr\include\log4cxx\logger.h  - and other headers
+        c:\usr\lib\log4cxxd.lib
+        c:\usr\lib\log4cxxd.dll
+
+   for "log4cxx", CMAKE_BUILD_TYPE=Release
+        c:\usr\include\log4cxx\logger.h  - and other headers
+        c:\usr\lib\log4cxx.lib
+        c:\usr\lib\log4cxx.dll
+        
+2. for "gmp" and "gmpxx", CMAKE_BUILD_TYPE=DEBUG 
+        c:\usr\include\gmpxx.h  
+        c:\usr\include\gmp.h 
+        c:\usr\lib\gmpd.lib
+        c:\usr\lib\gmpd.dll
+        c:\usr\lib\gmpxxd.lib
+
+   for "gmp" and "gmpxx", CMAKE_BUILD_TYPE=Release
+        c:\usr\include\gmpxx.h  
+        c:\usr\include\gmp.h 
+        c:\usr\lib\gmp.lib
+        c:\usr\lib\gmp.dll
+        c:\usr\lib\gmpxx.lib
+
+3. for "xerces", CMAKE_BUILD_TYPE=DEBUG 
+        c:\usr\include\xerces\util\PlatformUtils.hpp
+        c:\usr\include\xerces\*  - other xerces headers
+        c:\usr\lib\xerces-c_3D.lib
+
+   for "xerces", CMAKE_BUILD_TYPE=Release
+        c:\usr\include\xerces\util\PlatformUtils.hpp
+        c:\usr\include\xerces\*  - other xerces headers
+        c:\usr\lib\xerces-c_3.lib
+
+if you have a different version of "xerces", change lines 3 and 5
+"set(LIB_SUF ???)" in the file FindXerces.cmake 
+
+
+4. for "boost" you should not have problems.
+
+
+As you can see for the CMAKE_BUILD_TYPE=DEBUG mode the library files
+are ending with an "d" letter. (excluding "boost")
+You should compile the libraries i "Debug" mode then install them and
+rename the names adding the "d" letter.
+
+To disable log4cxx library add -DWITHOUT_LOG4CXX=1  attribute to cmake
 
