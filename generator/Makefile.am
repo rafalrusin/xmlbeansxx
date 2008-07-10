@@ -18,7 +18,8 @@ EXTRA_DIST = CMakeLists.txt
 all-local: stamp-build 
 
 stamp-build: $(shell find . -regex '\./\(src\|pom\.xml\).*' -not -regex '.*/\..*' | grep -v stamp)
-	cp ${srcdir}/pom.xml .; ${MVN} -U -Dbase=${srcdir} -Prelease package 
+	if [ "x`readlink -f ${srcdir}`" != "x`readlink -f .`" ]; then cp ${srcdir}/pom.xml . ; fi
+	${MVN} -U -Dbase=${srcdir} -Prelease package 
 	touch stamp-build
 
 clean-local:
