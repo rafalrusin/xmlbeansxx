@@ -20,23 +20,23 @@ I. What you need.
  e) Xerces C++ Parser 
     http://xerces.apache.org/xerces-c/
  
- f) CppUnit - C++ port of JUnit - (required for testing)
-    http://cppunit.sourceforge.net/
  
  --- not required but recommended ---
  
- g) log4cxx (it is required for debuging)
+ f) log4cxx (it is required for debuging)
     http://logging.apache.org/log4cxx/index.html
  
   
  --- not required ---
  
- h) gmp, gmpxx 
+ g) gmp, gmpxx 
     http://swox.com/gmp/
  
- i) libxml2 
+ h) libxml2 
     http://xmlsoft.org/
  
+ i) CppUnit - C++ port of JUnit - (required for testing)
+    http://cppunit.sourceforge.net/
  
 
 II. How to build and install.
@@ -64,7 +64,7 @@ II. How to build and install.
 
 III. Library files.
 It is useful to make, a UNIX style directory tree.
-You should make a "c:\usr\" directory, and there you should install all
+You should make a "c:\usr\" directory, and there you should install (copy) all
 required libraries.
 
 There should be:
@@ -106,7 +106,15 @@ if you have a different version of "xerces", change lines 3 and 5
 "set(LIB_SUF ???)" in the file FindXerces.cmake 
 
 
-4. for "boost" you should not have problems.
+4. for "boost", CMAKE_BUILD_TYPE=DEBUG 
+        c:\usr\include\boost\config.hpp
+        c:\usr\include\boost\*  - other boost headers
+        c:\usr\lib\boost_*.lib  - boost libraries with "mt-gd-{version}" suffix
+	
+ for "boost", CMAKE_BUILD_TYPE=Release
+        c:\usr\include\boost\config.hpp
+        c:\usr\include\boost\*  - other boost headers
+        c:\usr\lib\boost_*.lib  - boost libraries with "mt-{version}" suffix
 
 
 As you can see for the CMAKE_BUILD_TYPE=DEBUG mode the library files
@@ -114,5 +122,9 @@ are ending with an "d" letter. (excluding "boost")
 You should compile the libraries i "Debug" mode then install them and
 rename the names adding the "d" letter.
 
-To disable log4cxx library add -DWITHOUT_LOG4CXX=1  attribute to cmake
+IV. Disabling log4cxx library.
+
+To disable log4cxx library add -DWITHOUT_LOG4CXX=1  attribute to cmake in
+nmbootstrap.bat or vsboostrap.bat
+
 
