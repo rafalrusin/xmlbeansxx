@@ -7,6 +7,19 @@
   </header> 
   <body>
       	<section>
+      		<title>2008-07-20 - Release 0.9.6</title>
+		<p>
+		New version of <strong>xmlbeasxx</strong> has been released. 		
+		Binaries and source can be downloaded from SF <a href="https://sourceforge.net/project/showfiles.php?group_id=118556">here. </a>
+		</p>
+		<p> New features:</p>
+		<ul>
+		<li> added xmlbeasxx::Calendar </li>
+		<li> added support for boost 1.35 on Windows platforms </li>
+		<li> fixed bugs </li>
+		</ul>
+      	</section>
+      	<section>
       		<title>2008-04-02 - Release 0.9.1</title>
 		<p>
 		New version of <strong>xmlbeasxx</strong> has been released. 		

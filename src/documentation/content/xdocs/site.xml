@@ -52,7 +52,7 @@ See http://forrest.apache.org/docs/linking.html for more info
     <manifesto label="The Manifesto" href="manifesto.html"/>
     <start label="First steps" href="first_steps.html"/>
     <tutorial label="Short tutorial" href="tutorial.html"/>
-    <schematype label="Schema type system" href="http://xmlbeans.apache.org/docs/guide/conIntroToTheSchemaTypeSystem.html"/>
+    <schematype label="Schema type system" href="http://xmlbeans.apache.org/docs/2.0.0/guide/conIntroToTheSchemaTypeSystem.html"/> 
     <schemabuiltin label="Schema built-in types" href="schema_builtin_types.html"/>
     <genclasses label="Generated classes" href="generated_classes.html"/>
     <genmethods label="Generated methods" href="generated_methods.html"/>

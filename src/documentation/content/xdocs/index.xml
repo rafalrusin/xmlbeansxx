@@ -60,14 +60,14 @@
 	  <li>maven</li>
 	  <li>xerces-c</li>
 	  <li>boost</li>
-	  <li>CppUnit</li>
 	</ul>
       <p>Installed libraries (recommended):</p>
         <ul>
 	  <li>log4cxx</li>
 	  <li>gmpxx</li>
-	  <li>libxml2</li>
+	  <li>CppUnit - for testing</li>
 	</ul>
+
     </section>
     
     <section>
