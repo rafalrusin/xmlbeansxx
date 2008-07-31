@@ -1,0 +1,35 @@
+project (geoip)
+cmake_minimum_required(VERSION 2.4.7)
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+include(UsePkgConfig)
+
+IF(MSVC_IDE)
+	include_directories("c:/usr/include")
+ENDIF(MSVC_IDE)
+
+if(WIN32)
+	SET(CMAKE_CXX_WARNING_LEVEL 1)
+	IF(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
+		STRING(REGEX REPLACE "/W[0-4]" "/W1"
+            	CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+   	ELSE(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
+     		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W1")
+	ENDIF(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
+	add_definitions(-DIBPP_WINDOWS)
+else(WIN32)
+	add_definitions(-DIBPP_LINUX)
+endif(WIN32)
+
+find_package(Log4cxx REQUIRED)
+find_package(Curl REQUIRED)
+find_package(Boost REQUIRED)
+FIND_PACKAGE(Xmlbeansxx REQUIRED)
+include_directories (${geoip_SOURCE_DIR}/src ${geoip_BINARY_DIR}/src)
+subdirs(src)
+
+SET(CPACK_PACKAGE_NAME "geoip")
+SET(CPACK_PACKAGE_VERSION_MAJOR 1)
+SET(CPACK_PACKAGE_VERSION_MINOR 0)
+SET(CPACK_PACKAGE_VERSION_PATCH 0)
+include(CPack)
+
