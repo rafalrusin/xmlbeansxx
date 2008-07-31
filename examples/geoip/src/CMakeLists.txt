@@ -10,4 +10,4 @@ add_executable(geoip
         ${soapEnvelope.xsd_SRC}
         )
 target_link_libraries(geoip ${XERCES_LIBRARY} ${XMLBEANSXX_LIBRARY} ${CURL_LIBRARY} ${BOOST_THREAD_LIBRARY} ${BOOST_DATE_TIME_LIBRARY} ${LOG4CXX_LIBRARY})
-
+INSTALL(TARGETS geoip DESTINATION "")
