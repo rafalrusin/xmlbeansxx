@@ -1,6 +1,8 @@
 XMLBEANSXX_GEN(geoip_xsd.xsd geoip_xsd.cpp geoip_xsd.h)
 XMLBEANSXX_GEN(soapEnvelope.xsd soapEnvelope.cpp soapEnvelope.h)
 
+INSTALL(FILES log4j.xml DESTINATION "")
+
 add_executable(geoip 
         geoip.cpp
         HttpClient.cpp
