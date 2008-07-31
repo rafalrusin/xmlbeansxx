@@ -24,6 +24,7 @@ find_package(Log4cxx REQUIRED)
 find_package(Curl REQUIRED)
 find_package(Boost REQUIRED)
 FIND_PACKAGE(Xmlbeansxx REQUIRED)
+FIND_PACKAGE(Xerces REQUIRED)
 include_directories (${geoip_SOURCE_DIR}/src ${geoip_BINARY_DIR}/src)
 subdirs(src)
 
