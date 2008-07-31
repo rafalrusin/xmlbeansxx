@@ -10,7 +10,7 @@
     </appender>
 
     <appender name="FILE" class="org.apache.log4j.FileAppender">
-	<param name="file" value="dluznik.log"/>
+	<param name="file" value="geoip.log"/>
 	<param name="maxFileSize" value="5MB" />
 	<param name="maxBackupIndex" value="5" />
 	<layout class="org.apache.log4j.PatternLayout">
