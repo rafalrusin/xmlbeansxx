@@ -37,14 +37,14 @@ class WsClientImpl: public WsClient {
                 } catch(...){
                 ;
                 }
-                throw SoapFaultException("Błąd komunikacji z InfoMonitorem.\nOpis: " + opis,fault);
+                throw SoapFaultException("Soap fault.\nOpis: " + opis,fault);
             } catch(xmlbeansxx::BeansException &e){}  //soap::fault not recognised
             
             return outDocument.getEnvelope().getBody();
             
         } catch(xmlbeansxx::BeansException &e) { //not a soap answer
             LOG4CXX_ERROR(log,"error in response parsing.");
-            throw HttpClientException("Błąd komunikacji HTTP. \nOpis: 'Got a not correct SOAP response'.");
+            throw HttpClientException("HTTP Error. 'Got a not correct SOAP response'.");
         } 
 	}
 };

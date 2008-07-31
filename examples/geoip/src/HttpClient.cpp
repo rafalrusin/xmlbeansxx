@@ -64,10 +64,6 @@ HttpClient::~HttpClient()
 {
 }
 
-/**
- * Wraper dla biblioteki cURL, implementujący interfejs HttpClient.
- * Obsługuje całą komunikację po protokole HTTP.
- */
 class CurlHttpClient: public HttpClient {
     static log4cxx::LoggerPtr log;
 public:
@@ -138,8 +134,8 @@ public:
 	    curl_easy_cleanup(curl);
 		if (result != CURLE_OK) {
             LOG4CXX_ERROR(log,"HttpClientException: " +string(curl_errbuf) );
-            std::string error = "Błąd komunikacji HTTP.";
-            if(string(curl_errbuf).size() > 2) error += "\nOpis: " + string(curl_errbuf);
+            std::string error = "HTTP communication error.";
+            if(string(curl_errbuf).size() > 2) error += "\nDescription: " + string(curl_errbuf);
 			throw HttpClientException(error);
 		}
         return out.str();
