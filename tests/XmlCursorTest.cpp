@@ -274,6 +274,21 @@ void XmlCursorTest::xmlCursorTest() {
 		CPPUNIT_ASSERT(s!=r);	
 	
 	}
+	{	// instertDocument
+		std::string str =  "<Test> <b> del </b> </Test>\n";
+		std::string cmp =  "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+				   "<Test><Test> <b> del </b> </Test> <b> del </b> </Test>\n";
+		XmlObject o = XmlObjectDocument::Factory::parse(str);
+		XmlObject o2 = XmlObjectDocument::Factory::parse(str);
+		XmlCursor cursor(o);
+		cursor.toChild();
+		cursor.toNextToken();
+		cursor.insertDocument(o2);
+		std::string out =o.toString();
+		XMLBEANSXX_DEBUG(logger,"insertDocument: " + out);
+		CPPUNIT_ASSERT_EQUAL(cmp,out);	
+	
+	}
 	
 	
 

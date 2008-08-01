@@ -24,6 +24,8 @@
 
 namespace xmlbeansxx {
 
+class XmlObjectDocument;
+
 class XmlCursor : public  XmlObject {
 public:
 	enum TokenType {
@@ -94,6 +96,7 @@ public:
 	int insertAttributeWithValue(const QName &name,const XmlAnySimpleType &o) ;	
 	int insertAttributeWithValue(const QName &name,const std::string &value) ;
 	int insertElement(const QName &name,const XmlObject &o);
+	int insertDocument(const XmlObjectDocument &d);
 	int insertNamespace(std::string prefix, std::string namespaceURI) ;
 //	bool removeAttribute(const QName& attrName) ;
 	void setName(const QName &name) ;

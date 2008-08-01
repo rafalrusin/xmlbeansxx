@@ -173,7 +173,7 @@ const SchemaType * XmlObject::getSchemaType() const {
 }
 
 
-/** STAWEL ??????????
+/** STAWEL - not needed for shared_ptr
 #ifdef BOOST_HAS_THREADS
 boost::recursive_mutex &XmlObject::mutex() const {
     return contents->mutex;
@@ -196,27 +196,16 @@ XmlObject XmlObject::clone() const {
 }
 
 std::string XmlObject::getSimpleContent() const {
-    //logger.debug("XmlObject::getSimpleContent");
     return xmlbeansxx::Contents::Walker::getSimpleContent(*this);
 }
 
 void XmlObject::setSimpleContent(const std::string &value) {
-    //logger.debug("XmlObject::setSimpleContent");
     const SchemaType *st=getSchemaType();
     
     createContents();
     std::string str = TextUtils::applyContentTypeRules(value,st);
     xmlbeansxx::Contents::Walker::setSimpleContent(*this,str);
     
-/*	 SchemaType::CONTENT_TYPE ct=->getContentType();
-    	if (ct==SchemaType::SIMPLE_CONTENT || ct==SchemaType::MIXED_CONTENT || ct==SchemaType::NOT_COMPLEX_TYPE) {
-        if (getSchemaType()->whitespaceRule==SchemaType::WS_COLLAPSE) {
-            xmlbeansxx::Contents::Walker::setSimpleContent(*this,TextUtils::collapse(value));
-        } else {
-            xmlbeansxx::Contents::Walker::setSimpleContent(*this,value);
-        }
-*/
-
 }
 
 std::string XmlObject::getCanonicalContent() const {
@@ -237,27 +226,6 @@ std::string XmlObject::exchangeEntities(const std::string& str) const {
     return TextUtils::exchangeEntities(str);
 }
 
-/*
-template<class T>
-boost::shared_ptr<T> XmlObject::defaultValue(boost::shared_ptr<T> value,std::string defaultText) const {
-    if (value==NULL) { 
-        value=boost::shared_ptr<T>(new T());
-        value->setSimpleContent(defaultText);
-    }
-    return value;
-}
-
-template<class T>
-std::vector<boost::shared_ptr<T> > &XmlObject::defaultArrayValue(std::vector<boost::shared_ptr<T> > &array_value,std::string defaultText) const {
-    typename std::vector<boost::shared_ptr<T> >::iterator it;
-    for(it=array_value.begin();it!=array_value.end();it++) {
-        if (*it==NULL) {
-            *it=boost::shared_ptr<T>(new T());
-            it->setSimpleContent(defaultText);
-        }
-    }
-    return array_value;
-}*/
 
 %%class xmlbeansxx::XmlAnySimpleType
 std::string XmlAnySimpleType::getStringValue() const {
@@ -276,7 +244,6 @@ bool XmlBoolean::getBooleanValue() const {
     TRACER(log,"getBooleanValue");
     XMLBEANSXX_DEBUG(log,"value:"+getSimpleContent());
     std::string s = getSimpleContent();
-//    std::transform(s.begin(), s.end(), s.begin(), tolower);
     boost::to_lower(s);
     bool boolVal;
     if (s=="0") {
@@ -401,16 +368,7 @@ mpf_class XmlDecimal::getMpfValue() const {
 }
 
 void XmlDecimal::setMpfValue(const mpf_class &v) {
-    int fd=getSchemaType()->fractionDigits;
-    std::ostringstream ss;
-    if (fd!=-1) {
-        ss << std::fixed;
-        ss.precision(fd);
-	ss << v;
-    } else {
-        ss << v;
-    }
-    XmlObject::setSimpleContent(ss.str());
+    XmlObject::setSimpleContent(TextUtils::mpfToString(v,getSchemaType()->fractionDigits));    
 }
 
 mpz_class XmlDecimal::getMpzValue() const {
@@ -422,16 +380,13 @@ mpz_class XmlDecimal::getMpzValue() const {
 }
 
 void XmlDecimal::setMpzValue(const mpz_class &v) {
-    std::ostringstream ss;
-    ss << v;
-    XmlObject::setSimpleContent(ss.str());
+    XmlObject::setSimpleContent(TextUtils::mpzToString(v));
 }
 
 int XmlDecimal::getIntValue() const {
     mpz_class v=getMpzValue();
-//    if (v.fits_sint_p()) {
     if (mpzFitsToInt(v)) {
-        return mpzToInt(v);//v.get_si();
+        return mpzToInt(v);
     } else {
         throw IllegalArgumentsException(std::string("Cannot convert decimal='")+getSimpleContent()+std::string("' to int."));
         return 0;
@@ -760,7 +715,7 @@ float XmlFloat::getFloatValue() const {
 }
 
 void XmlFloat::setFloatValue(float v) {
-  setSimpleContent(TextUtils::floatToString(v));
+  setSimpleContent(TextUtils::floatToString(v,getSchemaType()->fractionDigits));
 }
 
 %%class xmlbeansxx::XmlDouble
@@ -780,7 +735,7 @@ double XmlDouble::getDoubleValue() const {
 }
 
 void XmlDouble::setDoubleValue(double v) {
-  setSimpleContent(TextUtils::doubleToString(v));
+  setSimpleContent(TextUtils::doubleToString(v,getSchemaType()->fractionDigits));
 }
     
 %%

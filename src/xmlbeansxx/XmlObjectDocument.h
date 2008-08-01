@@ -29,6 +29,7 @@ class XmlObjectDocument: public xmlbeansxx::XmlObject {
   static xmlbeansxx::SchemaType initSchemaType();
   protected:
   virtual void _setXmlObject(const xmlbeansxx::XmlObject& p, bool castTest, const char* toString);
+  XmlObject _setXmlObjectOrGetInnerElement(const xmlbeansxx::XmlObject& p, bool castTest, const char* toString);
   //Constructors
   public:
   XmlObjectDocument();

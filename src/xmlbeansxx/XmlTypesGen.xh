@@ -74,9 +74,6 @@ bool _cast_test(const T &a) {
 }
 
 
-const int DECIMAL_PRECISION = 4;
-const int BIT_PRECISION = 100;
-
 class XmlCursor;
 
 class Factory {

@@ -1692,7 +1692,24 @@ public class ClassGen {
 		
 		
 		{
-			String body = "  _setXmlObject(p, xmlbeansxx::_cast_test<" + className(st) + " >(p) , \"" + fullClassName(st) + "\"); ";
+			String body = "";
+			if(st.isDocumentType()) {
+				SchemaProperty elemProp=st.getElementProperty(st.getDocumentElementName());
+                       		PropGen pg=new PropGen(elemProp);
+				String x="";
+				if(pg.hasHolder()) {
+					x = "x";
+				}
+
+				body = "  XmlObject e = _setXmlObjectOrGetInnerElement(p, xmlbeansxx::_cast_test<" + className(st) + " >(p) , \"" + fullClassName(st) + "\"); \n"
+					+     "  if (e) {\n"
+					+     "    createContents();\n"
+					+     "    " + x + "set"+javaPropertyName(elemProp) + "(e);\n" 
+					+     "  }";
+			
+			} else {
+				body = "  _setXmlObject(p, xmlbeansxx::_cast_test<" + className(st) + " >(p) , \"" + fullClassName(st) + "\"); ";
+			}
 			genMethod("virtual", "void", className(st), "setXmlObject", "const xmlbeansxx::XmlObject& p", body, true);
 		}
 

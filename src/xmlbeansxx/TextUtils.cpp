@@ -24,6 +24,7 @@
 #include <boost/archive/iterators/binary_from_base64.hpp>
 #include <boost/archive/iterators/transform_width.hpp>
 #include <string>
+#include <iomanip>
 
 
 #include "config.h"
@@ -48,30 +49,84 @@ using namespace boost::archive::iterators;
 XERCES_CPP_NAMESPACE_USE
 
 
+
+
 namespace xmlbeansxx {
+
+
+static int precision = XMLBEANSXX_TEXTUTILS_DEFAULT_PRECISION;
+
 
   XMLBEANSXX_LOGGER_PTR_SET(TextUtils::log,"xmlbeansxx.TextUtils");
 
   TextUtils::TextUtils() {}
+  
+  int TextUtils::getPrecision(){
+  	return precision;
+  }
+  void TextUtils::setPrecision(int p){
+  	precision = p;
+#ifdef XMLBEANSXX_WITH_GMPXX
+	mpf_set_default_prec(8*p);
+#endif
+  }
+
+
+namespace {
+template<class T>
+std::string decimalToString(T f,int _p) {
+    ostringstream ss;
+    int p=TextUtils::getPrecision();
+    if(_p>=0) {
+    	p = _p;
+    	ss << std::fixed;
+    }
+    ss << std::setprecision(p) << f;
+    return ss.str();
+}
+}
 
 
   std::string TextUtils::intToString(int i) {
     ostringstream ss;
-    ss<<i;
+    ss << i;
+    return ss.str();
+  }
+
+  std::string TextUtils::mpzToString(const mpz_class & i) {
+    ostringstream ss;
+    ss << i;
     return ss.str();
   }
 
   std::string TextUtils::floatToString(float f) {
-    ostringstream ss;
-    ss<<f;
-    return ss.str();
+  	return TextUtils::floatToString(f,-1);
+  }
+  std::string TextUtils::doubleToString(double d) {
+  	return TextUtils::doubleToString(d,-1);
+  }
+  std::string TextUtils::longDoubleToString(long double d) {
+  	return TextUtils::longDoubleToString(d,-1);
+  }
+  std::string TextUtils::mpfToString(const mpf_class & d) {
+  	return TextUtils::mpfToString(d,-1);  
+  }
+  std::string TextUtils::floatToString(float d,int _p) {
+  	return decimalToString<float>(d,_p);
+  }
+  
+  std::string TextUtils::doubleToString(double d,int _p) {
+  	return decimalToString<double>(d,_p);
+  }
+  
+  std::string TextUtils::longDoubleToString(long double d,int _p) {
+  	return decimalToString<long double>(d,_p);
   }
 
-  std::string TextUtils::doubleToString(double d) {
-    ostringstream ss;
-    ss<<d;
-    return ss.str();
+  std::string TextUtils::mpfToString(const mpf_class & d,int _p) {
+  	return decimalToString<const mpf_class &>(d,_p);  
   }
+  
 
   std::string TextUtils::ptrToString(const void *ptr) {
     char buf[100];

@@ -128,3 +128,13 @@ To disable log4cxx library add -DWITHOUT_LOG4CXX=1  attribute to cmake in
 nmbootstrap.bat or vsboostrap.bat
 
 
+V. precision of xsd:decimal numbers.
+
+To increase the precision of decimal numbers use:
+ xmlbeansxx::TextUtils::setPrecision(int precision);
+if you use gmpxx the precision can by very large.
+
+
+
+
+ 

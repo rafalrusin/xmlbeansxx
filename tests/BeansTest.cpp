@@ -106,6 +106,7 @@ void namespaceTests() {
         //XmlInteger
         CPPUNIT_ASSERT(((int)XmlInteger("125"))==125);
         CPPUNIT_ASSERT((XmlInteger("-3")+XmlInteger("-5"))==XmlInteger("-8"));
+	XMLBEANSXX_DEBUG(logger,"-3.5 + (-5.7) = " + (XmlDecimal("-3.5")+XmlDecimal("-5.7")).toString());
         CPPUNIT_ASSERT((XmlDecimal("-3.5")+XmlDecimal("-5.7"))==XmlDecimal("-9.2"));
         XmlInteger a(10),b(11);
         a+=b;
@@ -345,6 +346,33 @@ void namespaceTests() {
 		XmlBoolean s2(o);
 	       	XMLBEANSXX_DEBUG(logger,"s1 string:" + s2.toString());		
 		CPPUNIT_ASSERT_EQUAL(bool(s2),false);
+	}
+
+	{ //Decimal
+		
+		{
+			TextUtils::setPrecision(13);
+			XmlDecimal d(0.1234567891234);
+			XmlDecimal d2=XmlDecimal::Factory::parse(d.toString());
+		       	XMLBEANSXX_DEBUG(logger,"decimal string:" + d2.toString());		
+			CPPUNIT_ASSERT_EQUAL(d2.getSimpleContent(),std::string("0.1234567891234"));
+		}
+
+	
+#ifdef XMLBEANSXX_WITH_GMPXX
+		{
+			TextUtils::setPrecision(100);
+			XmlDecimal d("1.000000000001");
+			XmlDecimal d2=d*d*d*d*d;
+	       		XMLBEANSXX_DEBUG(logger,"decimal string:" + d2.toString());		
+			CPPUNIT_ASSERT_EQUAL(d2.getSimpleContent(),std::string("1.000000000005000000000010000000000010000000000005000000000001"));
+		}
+#endif		
+
+		XmlFloat f;
+		f.setFloatValue(1./3.);
+	       	XMLBEANSXX_DEBUG(logger,"decimal string:" + f.toString());		
+	
 	}
 
 }

@@ -22,32 +22,29 @@
 
 using namespace xmlbeansxx;
 
-/*XmlObject XmlObjectDocument::Factory::parse(std::istream &in,xmlbeansxx::XmlOptions options) {
-  XmlObject doc=XmlObject::Factory::newInstance();
-  xmlbeansxx::LibXMLParser p(options);
-  p.parse(in,doc);
-  return doc;
-}
-XmlObject XmlObjectDocument::Factory::parse(const std::string &str,xmlbeansxx::XmlOptions options) { 
-  std::istringstream in(str);
-  return parse(in,options);
-}
-*/
 
-void XmlObjectDocument::_setXmlObject(const xmlbeansxx::XmlObject& p, bool castTest, const char* toString) {
+void XmlObjectDocument::_setXmlObject(const xmlbeansxx::XmlObject& p, bool castTest, const char* toString) {  
+  XmlObject e = _setXmlObjectOrGetInnerElement(p,castTest,toString);
+  if(e) {
+      createContents();
+      xmlbeansxx::Contents::Walker::setElem(*this,getSchemaType()->documentElementName,e.contents);
+  }
+}
+
+XmlObject XmlObjectDocument::_setXmlObjectOrGetInnerElement(const xmlbeansxx::XmlObject& p, bool castTest, const char* toString) {
   if(!castTest) {
     xmlbeansxx::Contents::Walker::ElemsType elements = xmlbeansxx::Contents::Walker::getElems(p);
     if(elements.size()==1) { 
       XmlObject e = elements[0].second;
-      createContents();
-      xmlbeansxx::Contents::Walker::setElem(*this,getSchemaType()->documentElementName,e.contents);
-      return;
+      return e;
     }
 
     throw xmlbeansxx::ClassCastException(p.getSchemaType()->className + " to " + toString);
   }
   swapContents(p.contents);
+  return XmlObject();
 }
+
 
 
 xmlbeansxx::SchemaType XmlObjectDocument::initSchemaType() {

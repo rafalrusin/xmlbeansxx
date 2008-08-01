@@ -10,6 +10,7 @@
 #include "XmlObjectDocument.h"
 #include "xml-fragment.h"
 #include <fstream>
+#include "XmlCursor.h"
 
 CPPUNIT_TEST_SUITE_REGISTRATION( ParseTest );
 
@@ -275,6 +276,52 @@ void ParseTest::parseTest() {
 		std::string str = o.toString();
 	        XMLBEANSXX_DEBUG(logger, "Document: " + str);
 		CPPUNIT_ASSERT_EQUAL(cmp,str);
+	}
+	
+	{ //XmlObjectDocument cast test
+		std::string str = 
+			"<xml>"
+			"  <castTest xmlns='http://ala'>"
+			"     <digit>12</digit>"
+			"     <data> some data </data>"
+			"  </castTest>"
+			"</xml>";
+
+		std::string str2 = 
+			"<xml>"
+			"  <castTest2 xmlns='http://ala'>"
+			"     <digit>12</digit>"
+			"     <data> some data </data>"
+			"  </castTest2>"
+			"</xml>";
+
+
+		try{
+			CastTestDocument d = CastTestDocument::Factory::parse(str);
+			CPPUNIT_ASSERT(false);
+		} catch(xmlbeansxx::ClassCastException &e){ } 
+		
+		{ // casting the inner element of str (should work)
+			XmlObjectDocument doc = XmlObjectDocument::Factory::parse(str);
+			XmlCursor c(doc);
+			c.toFirstChild();
+			XmlObject e = c.getObject();		
+			XMLBEANSXX_DEBUG(logger, "castTest: " + e.toString());
+			CastTestDocument d(e);
+			XMLBEANSXX_DEBUG(logger, "castTest: " + d.toString());
+		}
+		{ // casting the inner element of str2 (should not work)
+			XmlObjectDocument doc = XmlObjectDocument::Factory::parse(str2);
+			XmlCursor c(doc);
+			c.toFirstChild();
+			XmlObject e = c.getObject();		
+			XMLBEANSXX_DEBUG(logger, "castTest: " + e.toString());
+			try{
+				CastTestDocument d(e);
+				CPPUNIT_ASSERT(false);
+			} catch(xmlbeansxx::ClassCastException &e){ } 
+		}
+		
 	}
 
 }

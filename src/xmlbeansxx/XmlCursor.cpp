@@ -16,6 +16,7 @@
 
 #include "XmlCursor.h"
 #include "ContentsImpl.h"
+#include "XmlObjectDocument.h"
 
 namespace xmlbeansxx {
 
@@ -144,6 +145,17 @@ int XmlCursor::insertElement(const QName &name,const XmlObject &o){
 		contents->elems.contents.insert(contents->elems.contents.begin()+count,ElemDict::value_type(name,o.contents));
 		return count+A;
 }
+int XmlCursor::insertDocument(const XmlObjectDocument &doc) {
+		if(!doc)
+			throw IllegalStateException("XmlCursor insertDocument: document is empty ");
+			
+		XmlCursor dCursor(doc);	
+		if(!dCursor.toFirstChild())
+                	throw IllegalStateException("XmlCursor insertDocument: document is empty ");
+	
+		return insertElement(dCursor.getName(),dCursor.getObject());
+} 
+
 int XmlCursor::insertNamespace(std::string prefix, std::string namespaceURI) {
 		return insertAttributeWithValue(QName(XmlBeans::xmlns(),prefix),namespaceURI);
 } 

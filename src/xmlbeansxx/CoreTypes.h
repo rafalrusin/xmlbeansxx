@@ -48,15 +48,15 @@ namespace xmlbeansxx {
     	return v.get_si();
     } 
     inline mpz_class stringToMpz(const std::string &v) {
-    	mpz_class r;
-    	std::stringstream ss(v);
-	ss >> r;
+    	mpz_class r(v);
+//    	std::stringstream ss(v);
+//	ss >> r;
 	return r;
     }
     inline mpf_class stringToMpf(const std::string &v) {
-    	mpf_class r;
-    	std::stringstream ss(v);
-	ss >> r;
+    	mpf_class r(v);
+//    	std::stringstream ss(v);
+//	ss >> r;
 	return r;
     }
 //XMLBEANSXX_WITH_GMPXX
@@ -84,8 +84,8 @@ namespace xmlbeansxx {
 	ss >> r;
 	return r;
     }
-//XMLBEANSXX_WITH_GMPXX
-#endif 
+#endif //XMLBEANSXX_WITH_GMPXX
+
 
     typedef boost::shared_ptr<QName> QNamePtr;
     

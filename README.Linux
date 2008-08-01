@@ -67,4 +67,9 @@ III. How to build and install.
     
   
   
+IV. precision of xsd:decimal numbers.
+
+To increase the precision of decimal numbers use:
+ xmlbeansxx::TextUtils::setPrecision(int precision);
+if you use gmpxx the precision can by very large.
 
