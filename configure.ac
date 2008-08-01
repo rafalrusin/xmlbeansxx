@@ -86,6 +86,6 @@ AC_SUBST(enable_gmpxx)
 AC_SUBST(enable_libxml2)
 AC_SUBST(enable_log4cxx)
 
-AC_CONFIG_FILES([Makefile generator/Makefile src/Makefile src/xmlbeansxx/Makefile tests/Makefile examples/Makefile examples/small/Makefile docs/Doxyfile docs/Makefile cmake/Makefile])
+AC_CONFIG_FILES([Makefile generator/Makefile src/Makefile src/xmlbeansxx/Makefile tests/Makefile examples/Makefile examples/small/Makefile examples/geoip/Makefile docs/Doxyfile docs/Makefile cmake/Makefile])
 
 AC_OUTPUT
