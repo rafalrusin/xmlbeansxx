@@ -7,6 +7,20 @@
   </header> 
   <body>
       	<section>
+      		<title>2008-08-01 - Release 0.9.7</title>
+		<p>
+		New version of <strong>xmlbeasxx</strong> has been released. 		
+		Binaries and source can be downloaded from SF <a href="https://sourceforge.net/project/showfiles.php?group_id=118556">here. </a>
+		</p>
+		<p> New features:</p>
+		<ul>
+		<li> new WebService Client example added by Rafal Rusin </li>
+		<li> precision bug fixed </li>
+		<li> ClassCastExepion bug fixed </li>
+		<li> insertDocument method added to XmlCursor </li>
+		</ul>
+      	</section>
+      	<section>
       		<title>2008-07-20 - Release 0.9.6</title>
 		<p>
 		New version of <strong>xmlbeasxx</strong> has been released. 		

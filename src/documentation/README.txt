@@ -8,9 +8,12 @@ sitemap.xmap     # Optional. This sitemap is consulted before all core sitemaps.
 
 
 
-Using (you need JAVA 5 !!!):
+you need:
+1. JAVA 5 !!!
+2. apache-forrest-0.8
 
-export FORREST_HOME=?
-export PATH=$PATH:$FORREST_HOME/bin
+run:
 
-forrest site
+#export FORREST_HOME=?
+#export PATH=$PATH:$FORREST_HOME/bin
+#forrest site
