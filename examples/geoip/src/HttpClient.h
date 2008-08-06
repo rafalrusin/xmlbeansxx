@@ -16,7 +16,6 @@
 #ifndef HTTPCLIENT_H_
 #define HTTPCLIENT_H_
 
-#include <boost/thread.hpp>
 #include <boost/shared_ptr.hpp>
 #include <vector>
 #include <string>
@@ -44,7 +43,6 @@ public:
 class HttpClient
 {
 public:
-	boost::mutex crit;
 	std::string cacert;
 	
 	HttpClient();

@@ -16,30 +16,15 @@
 #include "HttpClient.h"
 
 #include <stdio.h>
-#include <boost/thread.hpp>
 #include <curl/curl.h>
 #include <iostream>
 #include <sstream>
 #include <log4cxx/logger.h>
 
 using namespace boost;
-using namespace boost::detail::thread;
 using namespace std;
 
 namespace {
-
-mutex *mutex_buf = NULL;
-scoped_lock<mutex> **lock_buf = NULL;
-
-
-unsigned long id_function(void)
-{
-#ifdef WIN32
-  return (unsigned long)GetCurrentThreadId();
-#else 
-  return (unsigned long)pthread_self();
-#endif
-}
 
 size_t curl_stream_result(bool result, size_t requestedLength) {
 	if (requestedLength == 0) {
@@ -94,7 +79,6 @@ public:
               
 		string ca;
 		{
-			scoped_lock<mutex> lock(crit);
 			ca = cacert;
 		}
         
