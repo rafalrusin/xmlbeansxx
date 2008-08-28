@@ -19,6 +19,7 @@
 #include <fstream>
 #include <xmlbeansxx/XmlCursor.h>
 #include <iostream>
+#include <log4cxx/logger.h>
 using namespace xmlbeansxx;
 using namespace org::xmlsoap::schemas::soap::envelope;
 using namespace std;
