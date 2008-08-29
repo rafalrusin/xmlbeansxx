@@ -23,7 +23,13 @@ using namespace std;
 using namespace net::webservicex;
 using namespace xmlbeansxx;
 
-int main() {
+int main(int argc, char *argv[]) {
+
+    if (argc != 2) {
+      cerr<<"Usage: "<<argv[0]<<" ip_address"<<endl;
+      return 1;
+    }
+
 
 	// create an instance of wsClient and httpClient
     WsClientPtr wsClient(WsClient::create());
@@ -33,9 +39,10 @@ int main() {
     
        // create a request: GetGeoIPDocument
     GetGeoIPDocument getGeoIP = GetGeoIPDocument::Factory::newInstance();
-    getGeoIP.cgetGetGeoIP().setIPAddress("64.233.167.99");  // this is the google.com ip
+    getGeoIP.cgetGetGeoIP().setIPAddress(argv[1]);  // this is the google.com ip
 
        // invoke the request
+    cout<<"Please wait..."<<endl;
     XmlObject response1 = wsClient->invoke(Url("http://www.webservicex.net/geoipservice.asmx", "", ""), getGeoIP, "http://www.webservicex.net/GetGeoIP");
     
        // convert the response to GetGeoIPResponseDocument 
@@ -44,6 +51,7 @@ int main() {
     
        // print out some data
     GeoIP geoIPResult = response.getGetGeoIPResponse().getGetGeoIPResult();
+    cout<<"ip address: "<<argv[1]<<endl;
     cout<<"country name: "<<geoIPResult.getCountryName()<<endl; 
     cout<<"country code: "<<geoIPResult.getCountryCode()<<endl;
     return 0;
