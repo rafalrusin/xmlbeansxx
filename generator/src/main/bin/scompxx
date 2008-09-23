@@ -307,6 +307,7 @@ else
 fi
 
 AC_CHECK_HEADERS([boost/smart_ptr.hpp boost/any.hpp], , AC_MSG_ERROR([boost library is required]))
+AC_CHECK_HEADERS([xmlbeansxx/xmlbeansxx.h], , AC_MSG_ERROR([xmlbeansxx-dev library is required]))
 
 AC_PATH_PROG(XMLBEANSXX_GEN, xmlbeansxx-gen)
 AC_SUBST(XMLBEANSXX_GEN)
