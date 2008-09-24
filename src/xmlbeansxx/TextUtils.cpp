@@ -255,11 +255,40 @@ std::string decimalToString(T f,int _p) {
 typedef base64_from_binary< transform_width<string::const_iterator, 6, 8> > base64_t;
 typedef transform_width< binary_from_base64<string::const_iterator>, 8, 6 > binary_t;
 
+bool _inBase64(char c){
+	return 	(c>='0' && c<='9') ||
+		(c>='A' && c<='Z') ||
+		(c>='a' && c<='z') ||
+		 c=='+' || 
+		 c=='/' ||
+		 c=='=' ;
+};
 
+std::string _toCanolicalBase64(const std::string &s) {
+	std::string retu;
+	for(unsigned i=0;i<s.size();i++) {
+		if(_inBase64(s[i]))
+			retu += s[i];
+	}
+	return retu;
+}
 
-  xmlbeansxx::shared_array<unsigned char> TextUtils::base64Decode(const std::string &what) {
+xmlbeansxx::shared_array<unsigned char> TextUtils::base64Decode(const std::string &what2) {
+  
+    std::string what = _toCanolicalBase64(what2);    
+    int size = what.size();
+    int pads = 0;
+    if(size>2){
+	for(int i=0;i<2;i++)
+		if(what[--size] == '=') { 
+			pads++;
+			what[size]='0';
+		}
+    }
+    
     string dec(binary_t(what.begin()),binary_t(what.end()));
     unsigned int outLen=dec.length();
+    outLen -= pads;
     xmlbeansxx::shared_array<unsigned char> a(outLen);
     for(unsigned int i=0;i<outLen;i++) {
       a[i]=dec[i];
@@ -269,8 +298,12 @@ typedef transform_width< binary_from_base64<string::const_iterator>, 8, 6 > bina
 
   std::string TextUtils::base64Encode(xmlbeansxx::shared_array<unsigned char> what) {
     string str((char*)what.get(),what.size());
-    str.append((3-((str.length())%3)) % 3 ,'\0');
+    int pads = (3-((str.length())%3)) % 3;
+    str.append(pads ,'\0');
     string enc(base64_t(str.begin()), base64_t(str.end()));
+    for(int i=1;i<=pads;i++){    
+    	enc[enc.size()-i]='=';
+    }
     return enc;
   }
 

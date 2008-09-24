@@ -5,6 +5,10 @@
 #include <xmlbeansxx/xmlbeansxx.h>
 #include <boost/shared_array.hpp>
 
+using namespace xmlbeansxx;
+using namespace boost::posix_time;
+using namespace boost::gregorian;
+
 CPPUNIT_TEST_SUITE_REGISTRATION( BeansTest );
 
 void namespaceTests();
@@ -21,9 +25,30 @@ void BeansTest::beansTest() {
 }
 
 
-using namespace xmlbeansxx;
-using namespace boost::posix_time;
-using namespace boost::gregorian;
+void testBase64(std::string cmp,std::string cmp2)
+{	//base64
+		
+		xmlbeansxx::shared_array<unsigned char> cmp3(cmp2.size());
+		for(unsigned i=0;i<cmp2.size();i++) cmp3[i]=cmp2[i];
+		
+       		XMLBEANSXX_DEBUG(logger,"base64 string cmp:" +cmp);		
+       		XMLBEANSXX_DEBUG(logger,"base64 string cmp2:" +cmp2);		
+
+		xmlbeansxx::shared_array<unsigned char> a = TextUtils::base64Decode(cmp);
+		std::string b = TextUtils::base64Encode(cmp3);
+
+		std::string a_str= std::string((char*)a.get(),a.size());
+		
+       		XMLBEANSXX_DEBUG(logger,"base64 string a:" +a_str);
+       		XMLBEANSXX_DEBUG(logger,"base64 string b:" +b);		
+		
+		CPPUNIT_ASSERT_EQUAL(cmp2,a_str);
+		CPPUNIT_ASSERT_EQUAL(cmp,b);
+		
+}
+
+
+
 
 void namespaceTests() {
     {
@@ -373,6 +398,19 @@ void namespaceTests() {
 		f.setFloatValue(1./3.);
 	       	XMLBEANSXX_DEBUG(logger,"decimal string:" + f.toString());		
 	
+	}
+
+	{ //base64 
+		testBase64("UGF3ZWwgU3Rhd2lja2k=",     "Pawel Stawicki");
+		testBase64("UGF3ZWwgU3Rhd2lja2ky",     "Pawel Stawicki2");
+		testBase64("", "");
+		testBase64("YQ==", "a");
+		testBase64("YWE=", "aa");
+		testBase64("YWFh", "aaa");
+		testBase64("YWFhYQ==", "aaaa");
+		
+		
+
 	}
 
 }
