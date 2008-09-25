@@ -1,0 +1,5 @@
+Release: 0.9.8:                    Thu Sep 25 12:34:40 CEST 2008
+
+	* ChangeLog: added (-:
+	* base64 bugfix
+	* more userfrielndly geoip example
