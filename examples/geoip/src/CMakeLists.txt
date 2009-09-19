@@ -4,7 +4,7 @@ XMLBEANSXX_GEN(geoip_xsd.xsd geoip_xsd.cpp geoip_xsd.h)
 XMLBEANSXX_GEN(soapEnvelope.xsd soapEnvelope.cpp soapEnvelope.h)
 
 
-INSTALL(FILES log4j.xml DESTINATION "")
+INSTALL(FILES log4j.xml DESTINATION "bin")
 
 add_executable(geoip 
         geoip.cpp
@@ -18,4 +18,4 @@ add_executable(geoip
 	
 #link owher program with some libraries
 target_link_libraries(geoip ${XERCES_LIBRARY} ${XMLBEANSXX_LIBRARY} ${CURL_LIBRARY} ${BOOST_THREAD_LIBRARY} ${BOOST_DATE_TIME_LIBRARY} ${LOG4CXX_LIBRARY})
-INSTALL(TARGETS geoip DESTINATION "")
+INSTALL(TARGETS geoip DESTINATION "bin")

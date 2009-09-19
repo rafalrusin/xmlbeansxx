@@ -17,19 +17,20 @@
 #include <geoip_xsd.h>
 #include <WsClient.h>
 #include <iostream>
+#include <log4cxx/stream.h>
 
 
 using namespace std;
 using namespace net::webservicex;
 using namespace xmlbeansxx;
 
+log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger("geoip");
+
 int main(int argc, char *argv[]) {
-
     if (argc != 2) {
-      cerr<<"Usage: "<<argv[0]<<" ip_address"<<endl;
-      return 1;
+        LOG4CXX_INFO(logger, "Usage: "<<argv[0]<<" ip_address");
+        return 1;
     }
-
 
 	// create an instance of wsClient and httpClient
     WsClientPtr wsClient(WsClient::create());
@@ -42,7 +43,7 @@ int main(int argc, char *argv[]) {
     getGeoIP.cgetGetGeoIP().setIPAddress(argv[1]);  // this is the google.com ip
 
        // invoke the request
-    cout<<"Please wait..."<<endl;
+    LOG4CXX_INFO(logger, "Please wait...");
     XmlObject response1 = wsClient->invoke(Url("http://www.webservicex.net/geoipservice.asmx", "", ""), getGeoIP, "http://www.webservicex.net/GetGeoIP");
     
        // convert the response to GetGeoIPResponseDocument 
@@ -51,8 +52,8 @@ int main(int argc, char *argv[]) {
     
        // print out some data
     GeoIP geoIPResult = response.getGetGeoIPResponse().getGetGeoIPResult();
-    cout<<"ip address: "<<argv[1]<<endl;
-    cout<<"country name: "<<geoIPResult.getCountryName()<<endl; 
-    cout<<"country code: "<<geoIPResult.getCountryCode()<<endl;
+    LOG4CXX_INFO(logger, "ip address: "<<argv[1]);
+    LOG4CXX_INFO(logger, "country name: "<<geoIPResult.getCountryName()); 
+    LOG4CXX_INFO(logger, "country code: "<<geoIPResult.getCountryCode());
     return 0;
 }

@@ -44,9 +44,10 @@ class WsClientImpl: public WsClient {
 	}
 
         string responseString;
+        LOG4CXX_INFO(log,string("sending request String: ") + doc.toString() + " to url " + url.url );
         responseString = httpClient->post(url, doc.toString() ,headers);
         
-        LOG4CXX_INFO(log,"response String: " + responseString);
+        LOG4CXX_INFO(log,string("response String: ") + responseString);
         try {
     		EnvelopeDocument outDocument(EnvelopeDocument::Factory::parse(responseString));
             try {  //test for soap::fault answer 

@@ -5,7 +5,7 @@
     <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
         <layout class="org.apache.log4j.PatternLayout">
             <!--param name="ConversionPattern" value="%d{ISO8601} %-5p [%6t] %16.16c %X{method} %X{stateId} %X{instanceId} (%F:%L) - %m %n"/-->
-            <param name="ConversionPattern" value="(%F:%L) - %m %n"/>
+            <param name="ConversionPattern" value="%d{ISO8601} (%F:%L) - %m %n"/>
         </layout>
     </appender>
 
@@ -19,8 +19,8 @@
     </appender>   
     
     <root>
-        <priority value="DEBUG"/> 
-        <appender-ref ref="FILE"/> 
+        <priority value="INFO"/> 
+        <appender-ref ref="CONSOLE"/> 
     </root>
 
 </log4j:configuration>
