@@ -25,34 +25,27 @@
  -  log4cxx 1.10 (not required, but highly recommended
     http://logging.apache.org/log4cxx/index.html
 
+ -  maven2 (for building xsd to cpp generator)
+
 * Installing deps.
 
  - Ubuntu 9.04:
-    #apt-get install liblog4cxx10-dev libcppunit-dev libxerces-c2-dev libboost-dev autotools-dev automake cmake
+    #apt-get install liblog4cxx10-dev libcppunit-dev libxerces-c2-dev libboost-dev autotools-dev automake cmake maven2
  
-III. How to build and install.
-
-  1. with Autotools
-  run:
-    ./bootstrap
-    ./configure
-    make 
-    make check
-    make install
-    
-  2. with cmake
+* How to build and install.
+  - with cmake
     run:
     ./cbootstrap
     cd build
     make 
     make test
     make install
-    
-  
-  
-IV. precision of xsd:decimal numbers.
 
-To increase the precision of decimal numbers use:
- xmlbeansxx::TextUtils::setPrecision(int precision);
-if you use gmpxx the precision can by very large.
+  - with Autotools
+    run:
+      ./bootstrap
+      ./configure
+      make 
+      make check
+      make install
 
