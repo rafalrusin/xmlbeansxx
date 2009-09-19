@@ -1,4 +1,4 @@
-
+cmake_minimum_required(VERSION 2.6)
 PROJECT (xmlbeansxx)
 
 SET(XMLBEANSXX_VERSION 0.9.8)
