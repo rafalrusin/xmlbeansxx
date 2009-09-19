@@ -40,10 +40,10 @@ I. What you need.
  
 
 
-II. DEBIAN users.
+II. Installing deps.
 
- 1. Installing deps.
-    #apt-get install libxml2-dev libgmpxx4 libgmp3-dev liblog4cxx9-dev libcppunit-dev libxerces28-dev libboost-dev maven2 autotools-dev automake cmake
+ 1. Ubuntu 9.04:
+    #apt-get install liblog4cxx10-dev libcppunit-dev libxerces-c2-dev libboost-dev autotools-dev automake cmake
  
 
 
