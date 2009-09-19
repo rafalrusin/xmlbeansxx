@@ -1,5 +1,7 @@
 * Dependencies
 
+ -  g++ 4.3.3 or MSVC 8.0
+
  -  cmake 2.6
     http://www.cmake.org/
     http://www.cmake.org/HTML/Download.html
