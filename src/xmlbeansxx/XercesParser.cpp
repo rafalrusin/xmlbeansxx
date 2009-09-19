@@ -316,7 +316,7 @@ void XercesParser::parse(const std::string &str, XmlObject &documentRoot){
 
 void XercesParser::parse(istream &in,XmlObject &documentRoot) {
     TRACER(log,"parse");
-    XMLBEANSXX_INFO(log,std::string("XmlParser::parse() - start"));
+    XMLBEANSXX_DEBUG(log,std::string("XmlParser::parse() - start"));
 
     updateOptions();
 
@@ -330,7 +330,7 @@ void XercesParser::parse(istream &in,XmlObject &documentRoot) {
 
 
     StdInputSource s(in);
-    XMLBEANSXX_INFO(log,"parsing:");
+    XMLBEANSXX_DEBUG(log,"parsing:");
     sax2->parse(s);
     nodesStack.pop();
     BOOST_ASSERT(nodesStack.empty());
