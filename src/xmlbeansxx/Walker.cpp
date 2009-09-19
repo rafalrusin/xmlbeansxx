@@ -34,7 +34,7 @@
 
 #include "defs.h"
 
-class xmlbeansxx::Contents;
+//class xmlbeansxx::Contents;
 
 using namespace xmlbeansxx;
 

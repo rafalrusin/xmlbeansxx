@@ -23,11 +23,6 @@
 #include <map>
 #include <vector>
 
-#ifndef WIN32
-#include <ext/hash_map>
-#endif
-
-
 #include <boost/config.hpp>
 #ifdef BOOST_HAS_THREADS
 #include <boost/thread/recursive_mutex.hpp>
@@ -98,13 +93,11 @@ public:
 
 	//indexType for the "stored" table (it is in the form 2*i+1)
     typedef unsigned long IndexType;
-    //std::set<CStr> contents;
-    //typedef std::set<const char *,CStrLessFn> StoreSet;
-#ifdef WIN32
+    //typedef Map<const char *,IndexType,CStrHashFn,CStrEqFn>::type StoreMap;
     typedef std::map<const char *,IndexType,CStrLessFn> StoreMap;
-#else 
-    typedef __gnu_cxx::hash_map<const char *,IndexType,CStrHashFn,CStrEqFn> StoreMap;
-#endif
+
+    //You can use hash_map for speed, but it's commented out due to compatibility reasons
+    //typedef __gnu_cxx::hash_map<const char *,IndexType,CStrHashFn,CStrEqFn> StoreMap;
 
     struct SSInfo {
         const char *str;

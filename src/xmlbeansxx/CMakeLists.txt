@@ -51,7 +51,6 @@ SET(XMLBEANSXX_INSTALL_HEADERS
         BeansException.h
         XmlException.h
         XmlOptions.h
-        Map.h
         QName.h
         XmlParser.h
         XmlBeans.h
