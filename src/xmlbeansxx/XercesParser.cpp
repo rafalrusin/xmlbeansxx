@@ -31,7 +31,7 @@
 #include <set>
 
 #include <xercesc/framework/XMLGrammarPool.hpp>
-#include <xercesc/internal/XMLGrammarPoolImpl.hpp>
+//#include <xercesc/internal/XMLGrammarPoolImpl.hpp>
 #include <xercesc/util/XMLUni.hpp>
 #include <xercesc/sax2/XMLReaderFactory.hpp>
 #include "ContentsImpl.h"
