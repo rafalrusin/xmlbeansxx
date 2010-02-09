@@ -6,7 +6,6 @@ AM_CPPFLAGS = -I${top_srcdir}/src -I${top_builddir}/src
 lib_LTLIBRARIES = libxmlbeansxx.la
 libxmlbeansxx_la_LDFLAGS = -version-info $(library_version_info)
 libxmlbeansxx_la_SOURCES = \
-	Map.cpp\
 	XmlCursor.cpp\
 	XmlCursor.h\
 	configGmpxx.h.yes\
@@ -102,7 +101,6 @@ libxmlbeansxxinclude_HEADERS = \
 	BeansException.h\
 	XmlException.h\
 	XmlOptions.h\
-	Map.h\
 	QName.h\
 	LibXMLParser.h\
 	XmlParser.h\
