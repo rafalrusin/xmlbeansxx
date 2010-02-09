@@ -37,6 +37,8 @@ namespace xmlbeansxx {
 
 
 #if (XERCES_VERSION_MAJOR == 3)
+#include <xercesc/util/XMLUni.hpp>
+
 // for xerces 3.0
 /** Provides a xerces input stream to read from std::istream */
 class BinStdInputStream: public xercesc::BinInputStream {
@@ -46,6 +48,7 @@ public:
     BinStdInputStream(std::istream &in);
     XMLFilePos curPos() const;
     XMLSize_t readBytes(XMLByte *const toFill,const XMLSize_t  maxToRead);
+    virtual const XMLCh* getContentType() const { return XERCES_CPP_NAMESPACE::XMLUni::fgUTF8EncodingString; }
 };
 
 /** Provides a xerces XMLFormatTarget that writes to String. */

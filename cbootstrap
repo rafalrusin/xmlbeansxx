@@ -1,6 +1,6 @@
 rm -rf build
 mkdir build
 cd build
-#cmake .. -DWITHOUT_GMP=1
+cmake .. -DWITHOUT_GMP=1
 
-cmake ..
+#cmake ..

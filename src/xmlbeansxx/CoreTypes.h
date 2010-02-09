@@ -63,7 +63,7 @@ namespace xmlbeansxx {
 #else 
 // dont use gmpxx 
 
-    typedef long int mpz_class;
+    typedef long long mpz_class;
     typedef long double mpf_class;
 
     inline bool mpzFitsToInt(const mpz_class &v) {
