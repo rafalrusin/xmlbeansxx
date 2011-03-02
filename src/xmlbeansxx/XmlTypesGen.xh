@@ -468,6 +468,9 @@ public:
 private:
     XMLBEANSXX_STATIC_LOGGER_PTR(log);
 
+%%class xmlbeansxx::XmlDuration
+    virtual xmlbeansxx::Duration getDurationValue() const;
+    virtual void setDurationValue(const xmlbeansxx::Duration &d);
 
 %%class xmlbeansxx::XmlGDay
     virtual xmlbeansxx::Calendar getCalendarValue() const;

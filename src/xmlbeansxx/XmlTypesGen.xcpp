@@ -622,6 +622,15 @@ XmlInteger XmlDate::daysFrom(const XmlDate &from) const {
     return XmlInteger((int)((getDateValue()-from.getDateValue()).days()));
 }
 
+%%class xmlbeansxx::XmlDuration
+xmlbeansxx::Duration XmlDuration::getDurationValue() const {
+    throw NotImplementedException("XmlDuration::getDurationValue");
+}
+
+void XmlDuration::setDurationValue(const xmlbeansxx::Duration &d) {
+    throw NotImplementedException("XmlDuration::setDurationValue");
+}
+
 %%class xmlbeansxx::XmlGDay
  xmlbeansxx::Calendar XmlGDay::getCalendarValue() const {
     throw NotImplementedException("XmlGDay::getCalendarValue");
