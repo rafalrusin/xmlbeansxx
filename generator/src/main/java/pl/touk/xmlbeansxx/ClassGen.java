@@ -30,7 +30,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.xmlbeans.*;
 import org.apache.commons.logging.*;
-import org.apache.internal.xmlbeans.wsdlsubst.DefinitionsDocument.Definitions.Factory;
+//import org.apache.internal.xmlbeans.wsdlsubst.DefinitionsDocument.Definitions.Factory;
 
 import com.sun.org.apache.xml.internal.utils.XMLString;
 

@@ -18,12 +18,12 @@ package pl.touk.xmlbeansxx;
 
 import org.apache.xmlbeans.impl.schema.SchemaTypeSystemCompiler;
 import org.apache.xmlbeans.impl.schema.PathResourceLoader;
-import org.apache.xmlbeans.impl.schema.ResourceLoader;
+import org.apache.xmlbeans.ResourceLoader;
 import org.apache.xmlbeans.impl.schema.StscState;
 import org.apache.xmlbeans.impl.schema.SchemaTypeLoaderImpl;
 import org.apache.xmlbeans.impl.common.XmlErrorPrinter;
 import org.apache.xmlbeans.impl.common.XmlErrorWatcher;
-import org.apache.xmlbeans.impl.common.XmlErrorContext;
+import org.apache.xmlbeans.XmlError;
 import org.apache.xmlbeans.impl.values.XmlListImpl;
 import org.apache.xmlbeans.SchemaTypeSystem;
 import org.apache.xmlbeans.SchemaTypeLoader;
@@ -32,13 +32,17 @@ import org.apache.xmlbeans.XmlOptions;
 import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.SimpleValue;
-import org.apache.xml.xmlbeans.x2004.x02.xbean.config.ConfigDocument;
+//import org.apache.xml.xmlbeans.x2004.x02.xbean.config.ConfigDocument;
 
 import java.io.File;
 import java.util.*;
 import java.net.URI;
 
-import org.w3.x2001.xmlSchema.SchemaDocument;
+//import org.w3.x2001.xmlSchema.SchemaDocument;
+
+import org.apache.xmlbeans.impl.xb.xsdschema.SchemaDocument.Schema;
+import org.apache.xmlbeans.impl.xb.xsdschema.SchemaDocument;
+import org.apache.xmlbeans.BindingConfig;
 
 public class TSLoader {
     public static SchemaTypeSystem loadTypeSystem(String name, File[] xsdFiles, File baseDir) {
@@ -89,7 +93,7 @@ public class TSLoader {
                     XmlObject schemadoc = loader.parse(xsdFiles[i], null, options);
                     if (!(schemadoc instanceof SchemaDocument))
                     {
-                        StscState.addError(errorListener, "Document " + xsdFiles[i] + " is not a schema file", XmlErrorContext.CANNOT_LOAD_XSD_FILE, schemadoc);
+                        StscState.addError(errorListener, "Document " + xsdFiles[i] + " is not a schema file", XmlError.SEVERITY_ERROR, schemadoc);
                     }
                     else
                     {
@@ -105,7 +109,7 @@ public class TSLoader {
                 }
                 catch (Exception e)
                 {
-                    StscState.addError(errorListener, "Cannot load file " + xsdFiles[i] + ": " + e, XmlErrorContext.CANNOT_LOAD_XSD_FILE, xsdFiles[i]);
+//                    StscState.addError(errorListener, "Cannot load file " + xsdFiles[i] + ": " + e, XmlErrorContext.CANNOT_LOAD_XSD_FILE, xsdFiles[i]);
                 }
             }
         }
@@ -114,7 +118,7 @@ public class TSLoader {
 
         // now the config files.
         ArrayList cdoclist = new ArrayList();
-        ConfigDocument.Config[] cdocs = (ConfigDocument.Config[])cdoclist.toArray(new ConfigDocument.Config[cdoclist.size()]);
+//        BindingConfig cdocs = (ConfigDocument.Config[])cdoclist.toArray(new ConfigDocument.Config[cdoclist.size()]);
 
         SchemaTypeLoader linkTo = SchemaTypeLoaderImpl.build(null, cpResourceLoader, null);
 
@@ -137,7 +141,7 @@ public class TSLoader {
         SchemaTypeSystemCompiler.Parameters params = new SchemaTypeSystemCompiler.Parameters();
         params.setName(name);
         params.setSchemas(sdocs);
-        params.setConfigs(cdocs);
+//        params.setConfigs(cdocs);
         params.setLinkTo(linkTo);
         params.setOptions(opts);
         params.setErrorListener(errorListener);

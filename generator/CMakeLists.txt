@@ -19,7 +19,7 @@ SET(GEN_BINFILES
 )
 SET(GEN_LIBFILES
 	${GENDIR}/lib/commons-logging-1.1.jar
-	${GENDIR}/lib/xbean-1.0.4.jar
+	${GENDIR}/lib/xmlbeans-2.4.0.jar
 	${GENDIR}/lib/log4j-1.2.12.jar
 )
 SET(GEN_JAR
