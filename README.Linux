@@ -45,6 +45,8 @@ II. Installing deps.
  1. Ubuntu 9.04:
     #apt-get install liblog4cxx10-dev libcppunit-dev libxerces-c2-dev libboost-dev autotools-dev automake cmake
  
+ 2. Gentoo
+    #USE="-nocxx icu" emerge ">=dev-util/cmake-2.6" automake ">=sys-devel/gcc-4.3.3" ">=dev-libs/xerces-c-2.8" ">=dev-libs/boost-1.34" ">=dev-util/cppunit-1.12" log4cxx maven-bin
 
 
 III. How to build and install.
