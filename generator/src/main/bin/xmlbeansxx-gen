@@ -32,6 +32,8 @@ if test $# -eq 0; then
 fi
 
 basefile=`readlink -f $0`
+basepath=`dirname "${basefile}"`
+
 for i; do
     if [ "`echo $i| dd count=1 ibs=1 2>/dev/null `" = "-" ]; then
         opts="$opts $i"
@@ -41,6 +43,6 @@ for i; do
 done
 
 
-java $opts -jar `dirname ${basefile}`/../xmlbeansxx-gen.jar "${args[@]}"
+java $opts -jar "${basepath}/../xmlbeansxx-gen.jar" "${args[@]}"
 #`dirname $0`/xmlbeans++split.pl $1.cpp
 

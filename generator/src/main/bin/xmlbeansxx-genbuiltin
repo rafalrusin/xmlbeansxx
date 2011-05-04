@@ -17,5 +17,6 @@
 #
 
 basefile=`readlink -f $0`
+basepath=`dirname "${basefile}"`
 
-java -Dgenbuiltin -DinputPath=$1 -jar `dirname ${basefile}`/../xmlbeansxx-gen.jar 
+java -Dgenbuiltin -DinputPath="$1" -jar "${basepath}/../xmlbeansxx-gen.jar" 
