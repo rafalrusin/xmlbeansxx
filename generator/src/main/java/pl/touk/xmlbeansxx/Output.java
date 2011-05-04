@@ -22,6 +22,23 @@ import java.util.*;
 public class Output {
     public PrintWriter h, hEnd, cpp;
     private ByteArrayOutputStream _hEnd;
+    
+    private static final Set keywords = new HashSet<String>(Arrays.asList(
+   	     new String[] { "using", "namespace", "operator", 
+   	     "inline", "const", "static", "friend", "virtual",
+   	     "mutable", "volatile", "template", "enum",
+   	     "class", "union", "struct", "public", "private", "protected", 
+   	     "for", "do", "while", "if", "else", "switch", 
+   	     "case", "default", "continue", "break", "goto",
+   	     "double", "float", "char", "int", "long", "short", "void",
+   	     "signed", "unsigned",
+   	     "true", "false",
+   	     "new", "delete", 
+   	     "this", "throw", "try",
+   	     "sizeof",
+   	     "static_cast", "reinterpret_cast", "const_cast", "dynamic_cast",
+   	     "return" }
+   	));  
 
     public Output(String name) throws IOException {
         String hname = name + ".h", cppname = name + ".cpp";
@@ -66,7 +83,7 @@ public class Output {
             StringTokenizer t = new StringTokenizer(namespace, "::");
             nsDepth = 0;
             while (t.hasMoreTokens()) {
-                String s = "namespace " + t.nextToken() + " {";
+                String s = "namespace " + skipKeywords(t.nextToken()) + " {";
                 h.print(s);
                 hEnd.print(s);
                 cpp.print(s);
@@ -116,5 +133,11 @@ public class Output {
     		}
     	}
     	return b.toString();
+    }
+    public static String skipKeywords(String s) {
+    	if(keywords.contains(s))  {
+    		return "_" + s;
+    	} 
+    	return s;
     }
 }

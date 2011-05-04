@@ -488,12 +488,15 @@ public class ClassGen {
 		return sType;
 	}
 
+	public static String skipKeywords(String x) {
+		return Output.skipKeywords(x);
+	}
 	public static String javaToCpp(String x) {
 		x = x.replace('$', '_');
 		StringTokenizer t = new StringTokenizer(x, ".");
 		StringBuffer b = new StringBuffer();
 		while (t.hasMoreTokens()) {
-			b.append("::" + t.nextToken());
+			b.append("::" + skipKeywords(t.nextToken()));
 		}
 		return b.substring(2);
 	}
