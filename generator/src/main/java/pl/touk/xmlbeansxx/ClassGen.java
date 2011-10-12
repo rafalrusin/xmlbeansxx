@@ -460,10 +460,22 @@ public class ClassGen {
 	 */
 
 	static String getFullJavaName(SchemaType st) {
-		String s=st.getFullJavaName();
+		String s;
+		String fullJavaName = st.getFullJavaName();
+		QName name = st.getName();
+		if(name != null)
+		{
+			String javaNamespace = fullJavaName.substring(0, st.getFullJavaName().lastIndexOf('.')) ;
+			String localPart = st.getName().getLocalPart();
+			s=javaNamespace + '.' + localPart ;
+		}
+		else
+		{
+			s = fullJavaName;
+		}
 		final String q="org.apache.xmlbeans.";
-		if (s.length()>=q.length() && s.substring(0,q.length()).equals(q)) {
-			return "xmlbeansxx." + s.substring(q.length());
+		if (fullJavaName.length()>=fullJavaName.length() && fullJavaName.substring(0,q.length()).equals(q)) {
+			return "xmlbeansxx." + fullJavaName.substring(q.length());
 		} else return s;
 	}
 	
