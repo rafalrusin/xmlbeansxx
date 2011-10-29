@@ -130,7 +130,7 @@ nodist_libxmlbeansxxinclude_HEADERS = \
 	configLibxml2.h\
 	configLog4cxx.h
 
-XmlTypesGen.h XmlTypesGen.cpp: ${top_builddir}/generator/stamp-build  ${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-genbuiltin XmlTypesGen.xh XmlTypesGen.xcpp 
+XmlTypesGen.h XmlTypesGen.cpp: ${top_builddir}/generator/stamp-build  ${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-genbuiltin XmlTypesGen.xh XmlTypesGen.xcpp
 	${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-genbuiltin ${srcdir}/
 
 xml-fragment.h xml-fragment.cpp: ${top_builddir}/generator/stamp-build ${top_builddir}/generator/target/xmlbeansxx-gen/bin/xmlbeansxx-gen xml-fragment.xsd

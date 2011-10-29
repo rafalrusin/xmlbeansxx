@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -71,12 +71,12 @@ XmlObject  Factory::_documentParse(std::istream &in,const xmlbeansxx::XmlOptions
 %%class xmlbeansxx::XmlObject
 XMLBEANSXX_LOGGER_PTR_SET(XmlObject::log,"xmlbeansxx.XmlObject");
 
-void XmlObject::setElement(const QName & name,const XmlObject &element,int index) 
+void XmlObject::setElement(const QName & name,const XmlObject &element,int index)
 {
 	Contents::Walker::setElem(*this,name,element.contents,index);
 
 }
-void XmlObject::setAttribute(const QName & name,const XmlAnySimpleType &attribute ) 
+void XmlObject::setAttribute(const QName & name,const XmlAnySimpleType &attribute )
 {
 	Contents::Walker::setAttr(*this,name,attribute.contents);
 }
@@ -95,9 +95,9 @@ void XmlObject::_setXmlObject(const xmlbeansxx::XmlObject& p, bool castTest, con
 void XmlAnySimpleType::_setXmlObject(const xmlbeansxx::XmlObject& p, bool castTest, const char* toString) {
   if(!castTest) {
     if(xmlbeansxx::_cast_test<xmlbeansxx::XmlAnySimpleType>(p)) {
-      setSimpleContent(p.getSimpleContent()); 
+      setSimpleContent(p.getSimpleContent());
       return;
-    }  	
+    }
     throw xmlbeansxx::ClassCastException(p.getSchemaType()->className + " to " + toString);
   }
   swapContents(p.contents);
@@ -130,7 +130,7 @@ int XmlObject::documentElementNamespaceID() const { return -1; }
 
 std::string XmlObject::digest() const{
 	if(!contents) return "NULL";
-    	return contents->digest(); 
+    	return contents->digest();
 }
 
 XmlObject::operator bool() const{
@@ -141,7 +141,7 @@ bool XmlObject::setAnyElement(const QName& elementName,const std::string& anyCon
     NoExchangeEntitiesXmlObject obj;
     obj.setSimpleContent(anyContent);
     xmlbeansxx::Contents::Walker::setElem(*this,elementName,obj.contents);
- 
+
     return true;
 }
 
@@ -150,9 +150,9 @@ void XmlObject::serialize(std::ostream &o,XmlOptions options)  const{
     TRACER(log,"serialize");
     if(!hasContents()) throw NullPtrException("Cannot serialize an empty XmlObject = " + getSchemaType()->className);
 
-    if(getSchemaType() != getOrginSchemaType()) 
+    if(getSchemaType() != getOrginSchemaType())
         return Contents::Walker::OrginalXmlObject(contents)->serialize(o,options);
-    
+
 
 
     xmlbeansxx::definitions::XmlFragmentDocument doc=xmlbeansxx::definitions::XmlFragmentDocument::Factory::newInstance();
@@ -191,7 +191,7 @@ void XmlObject::swapContents(const ContentsPtr& p)
 XmlObject XmlObject::clone() const {
 	if(contents)
     		return XmlObject(contents->clone());
-	
+
 	return XmlObject();
 }
 
@@ -201,11 +201,11 @@ std::string XmlObject::getSimpleContent() const {
 
 void XmlObject::setSimpleContent(const std::string &value) {
     const SchemaType *st=getSchemaType();
-    
+
     createContents();
     std::string str = TextUtils::applyContentTypeRules(value,st);
     xmlbeansxx::Contents::Walker::setSimpleContent(*this,str);
-    
+
 }
 
 std::string XmlObject::getCanonicalContent() const {
@@ -321,13 +321,13 @@ XmlString XmlString::substring(int beginIndex,int endIndex) const {
     if (endIndex<0) {
         endIndex+=s.size();
     }
-    if (!( beginIndex>=0 && beginIndex<=int(s.size()) && 
+    if (!( beginIndex>=0 && beginIndex<=int(s.size()) &&
            endIndex>=0 && endIndex<=int(s.size()) &&
            beginIndex<=endIndex ))
         throw IllegalArgumentsException(std::string("in substring '")+s
                 +"' beginIndex:"+TextUtils::intToString(beginIndex)
                 +" endIndex:"+TextUtils::intToString(endIndex));
-    
+
     return XmlString(s.substr(beginIndex,endIndex-beginIndex));
 }
 
@@ -362,19 +362,19 @@ XMLBEANSXX_LOGGER_PTR_SET(XmlDecimal::log,"xmlbeansxx.XmlDecimal");
 mpf_class XmlDecimal::getMpfValue() const {
     TRACER(log,"getMpfValue");
     std::string v=TextUtils::collapse(getSimpleContent());
-    if (!TextUtils::checkDecimal(v)) 
+    if (!TextUtils::checkDecimal(v))
         throw XmlIllegalValueException("xs:decimal",v);
     return stringToMpf(v);
 }
 
 void XmlDecimal::setMpfValue(const mpf_class &v) {
-    XmlObject::setSimpleContent(TextUtils::mpfToString(v,getSchemaType()->fractionDigits));    
+    XmlObject::setSimpleContent(TextUtils::mpfToString(v,getSchemaType()->fractionDigits));
 }
 
 mpz_class XmlDecimal::getMpzValue() const {
     TRACER(log,"getMpzValue");
     std::string v=TextUtils::collapse(getSimpleContent());
-    if (!TextUtils::checkInteger(v)) 
+    if (!TextUtils::checkInteger(v))
         throw XmlIllegalValueException("xs:integer",v);
     return stringToMpz(v);
 }
@@ -404,7 +404,7 @@ mpz_class XmlDecimal::getLongValue() const {
 void XmlDecimal::setLongValue(const mpz_class &v) {
     setMpzValue(v);
 }
-    
+
 short XmlDecimal::getShortValue() const {
     int v=getIntValue();
     if (!(v>=-32768 && v<=32767)) {
@@ -501,7 +501,7 @@ xmlbeansxx::Calendar XmlDateTime::getCalendarValue() const {
     return xmlbeansxx::Calendar(getSimpleContent());
 }
 
-void XmlDateTime::setCalendarValue(const xmlbeansxx::Calendar &v) {    
+void XmlDateTime::setCalendarValue(const xmlbeansxx::Calendar &v) {
     setSimpleContent(v.toXsdDateTime());
 }
 
@@ -602,7 +602,7 @@ bool XmlDate::operator<(const XmlDate &b) const {
 boost::gregorian::date XmlDate::getDateValue() const {
     return getCalendarValue().getDate();
 }
-    
+
 xmlbeansxx::Calendar XmlDate::getCalendarValue() const {
     xmlbeansxx::Calendar c;
     c.setDate(getSimpleContent());
@@ -639,7 +639,7 @@ void XmlDuration::setDurationValue(const xmlbeansxx::Duration &d) {
 void XmlGDay::setCalendarValue(const xmlbeansxx::Calendar & v) {
     throw NotImplementedException("XmlGDay::setCalendarValue");
 }
-    
+
 %%class xmlbeansxx::XmlGMonth
 xmlbeansxx::Calendar XmlGMonth::getCalendarValue() const {
     throw NotImplementedException("XmlGMonth::getCalendarValue");
@@ -648,7 +648,7 @@ xmlbeansxx::Calendar XmlGMonth::getCalendarValue() const {
 void XmlGMonth::setCalendarValue(const  xmlbeansxx::Calendar & v) {
     throw NotImplementedException("XmlGMonth::setCalendarValue");
 }
-    
+
 %%class xmlbeansxx::XmlGMonthDay
  xmlbeansxx::Calendar XmlGMonthDay::getCalendarValue() const {
     throw NotImplementedException("XmlGMonthDay::getCalendarValue");
@@ -657,7 +657,7 @@ void XmlGMonth::setCalendarValue(const  xmlbeansxx::Calendar & v) {
 void XmlGMonthDay::setCalendarValue(const  xmlbeansxx::Calendar& v) {
     throw NotImplementedException("XmlGMonthDay::getCalendarValue");
 }
-    
+
 %%class xmlbeansxx::XmlGYear
  xmlbeansxx::Calendar  XmlGYear::getCalendarValue() const {
     throw NotImplementedException("XmlGYear::getCalendarValue");
@@ -666,7 +666,7 @@ void XmlGMonthDay::setCalendarValue(const  xmlbeansxx::Calendar& v) {
 void XmlGYear::setCalendarValue(const xmlbeansxx::Calendar & v) {
     throw NotImplementedException("XmlGYear::getCalendarValue");
 }
-    
+
 %%class xmlbeansxx::XmlGYearMonth
 xmlbeansxx::Calendar XmlGYearMonth::getCalendarValue() const {
     throw NotImplementedException("XmlGYearMonth::getCalendarValue");
@@ -675,7 +675,7 @@ xmlbeansxx::Calendar XmlGYearMonth::getCalendarValue() const {
 void XmlGYearMonth::setCalendarValue(const  xmlbeansxx::Calendar & v) {
     throw NotImplementedException("XmlGYearMonth::getCalendarValue");
 }
-    
+
 
 %%class xmlbeansxx::XmlBase64Binary
 xmlbeansxx::shared_array<unsigned char> XmlBase64Binary::getByteArrayValue() const {
@@ -685,7 +685,7 @@ xmlbeansxx::shared_array<unsigned char> XmlBase64Binary::getByteArrayValue() con
 void XmlBase64Binary::setByteArrayValue(xmlbeansxx::shared_array<unsigned char> v) {
     setSimpleContent(TextUtils::base64Encode(v));
 }
-    
+
 
 %%class xmlbeansxx::XmlHexBinary
 xmlbeansxx::shared_array<unsigned char> XmlHexBinary::getByteArrayValue() const {
@@ -696,7 +696,7 @@ xmlbeansxx::shared_array<unsigned char> XmlHexBinary::getByteArrayValue() const 
 void XmlHexBinary::setByteArrayValue(xmlbeansxx::shared_array<unsigned char> v) {
     throw NotImplementedException("XmlHexBinary::getByteValue");
 }
-    
+
 %%class xmlbeansxx::XmlQName
 boost::shared_ptr<xmlbeansxx::QName> XmlQName::getQNameValue() const {
     throw NotImplementedException("XmlQName::getQNameValue");
@@ -746,6 +746,6 @@ double XmlDouble::getDoubleValue() const {
 void XmlDouble::setDoubleValue(double v) {
   setSimpleContent(TextUtils::doubleToString(v,getSchemaType()->fractionDigits));
 }
-    
+
 %%
 

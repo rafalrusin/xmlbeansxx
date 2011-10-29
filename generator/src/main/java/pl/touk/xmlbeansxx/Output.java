@@ -1,6 +1,6 @@
 /*
  *  Copyright 2004-2008 TouK sp. z o.o. s.k.a.
- * 
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -30,26 +30,26 @@ public class Output {
                 new FileOutputStream(hname)));
         cpp = new PrintWriter(new BufferedOutputStream(new FileOutputStream(
                 cppname)));
-        
+
         _hEnd = new ByteArrayOutputStream();
         hEnd = new PrintWriter(_hEnd);
         h.println("#ifndef _" + onlyAlNum(name.toUpperCase()) + "_H_");
         h.println("#define _" + onlyAlNum(name.toUpperCase()) + "_H_");
-    
+
     }
 
     public void close() {
         exitNamespace();
         hEnd.close();
         h.println(_hEnd.toString());
-        
+
         h.println("#endif");
         h.close();
         cpp.close();
     }
 
     int nsDepth = -2;
-    
+
     public void splitCpp() {
     	String cns=currentNamespace;
     	enterNamespace("");
@@ -62,7 +62,7 @@ public class Output {
     public void enterNamespace(String namespace) {
         if (!currentNamespace.equals(namespace)) {
             if (!currentNamespace.equals("")) exitNamespace();
-            
+
             StringTokenizer t = new StringTokenizer(namespace, "::");
             nsDepth = 0;
             while (t.hasMoreTokens()) {
@@ -75,7 +75,7 @@ public class Output {
             h.println();
             hEnd.println();
             cpp.println();
-            
+
             currentNamespace=namespace;
         }
     }
@@ -105,7 +105,7 @@ public class Output {
         h.print(t);
         cpp.print(t);
     }
-    
+
     private String onlyAlNum(String s) {
     	StringBuffer b=new StringBuffer();
     	for(int i=0;i<s.length();i++) {

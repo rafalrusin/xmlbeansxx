@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -42,7 +42,7 @@ using namespace std;
 //Xml Parser
 
 #define ENCODING "utf8"
-#define TRACER2(a,b) 
+#define TRACER2(a,b)
 #define XMLBEANSXX_DEBUG2(a,b) XMLBEANSXX_DEBUG(a,b)
 
 
@@ -56,7 +56,7 @@ MySAX2Handler::MySAX2Handler(XercesParser *p): parser(p) {}
 
 std::string getPrefix(const std::string &qname){
     std::string::size_type p=qname.find(":");
-    if(p!=std::string::npos) return qname.substr(0,p);	
+    if(p!=std::string::npos) return qname.substr(0,p);
     return std::string();
 }
 
@@ -66,9 +66,9 @@ inline bool isPersistPrefix(const std::string& prefix){
 }
 };
 
-void MySAX2Handler::startElement(	const XMLCh* const uri, 
-					const XMLCh* const localname, 
-					const XMLCh* const qname, 
+void MySAX2Handler::startElement(	const XMLCh* const uri,
+					const XMLCh* const localname,
+					const XMLCh* const qname,
 					const Attributes& attrs)
 {
     {
@@ -77,8 +77,8 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
         XMLBEANSXX_DEBUG2(log, string("localname: ") + transcode(localname))
         XMLBEANSXX_DEBUG2(log, string("URI      : ") + transcode(uri))
         XMLBEANSXX_DEBUG2(log, string("qname    : ") + transcode(qname))
-        
-        
+
+
         XMLBEANSXX_DEBUG2(log, "attributes...");
         for(unsigned int i=0; i<attrs.getLength(); i++) {
             XMLBEANSXX_DEBUG2(log, string("localname: ") + transcode(attrs.getLocalName(i)));
@@ -94,17 +94,17 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
     if(isPersistPrefix(prefix))
     	 name = QName(transcode(uri), transcode(localname));
     else name = QName(transcode(uri), transcode(localname), prefix);
-    
+
     XMLBEANSXX_DEBUG2(log, std::string("begin element: ") + name)
     XMLBEANSXX_DEBUG2(log, std::string("prefix: ") + prefix)
-    
+
     if(parser->nodesStack.empty())
 	throw XmlException(string("no XmlObject on XercesParser stack"));
 
 
     XmlObjectPtr top=parser->nodesStack.top().obj;
     XmlObjectPtr n;
-    if(!top) throw XmlException(string("no XmlObjectPtr on XercesParser stack"));					   
+    if(!top) throw XmlException(string("no XmlObjectPtr on XercesParser stack"));
 
     if(parser->nodesStack.size()==1){
 	//hack for type casting. Runtime defined type
@@ -115,7 +115,7 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
         	XMLBEANSXX_DEBUG2(log, std::string("predefined type found:") + n->getSchemaType()->name);
 		name = e.front().first;
 	}
-	
+
 	//this is the ROOT element
 	top->free();
 	XmlObjectPtr root = globalTypeSystem()->createDocumentByName(name);
@@ -126,8 +126,8 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
 
     }
 
-    top->createContents();	
-	        
+    top->createContents();
+
     {
 	if(!n) n=top->getSchemaType()->createSubObject(name);
 
@@ -144,33 +144,33 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
         	XMLBEANSXX_DEBUG2(log, std::string("xsi:array = ") + value)
 //		n = globalTypeSystem()->createArrayByName(value);
 		if (!n) throw XmlException(string("Xsd Type '")+value+string("' not defined in builtin type system"));
-	    
+
 	    }
-	}	
-	
+	}
+
 	if(!n) throw XmlException(string("Cannot create subelement '")+name+string("' on object of class "+top->getSchemaType()->className));
 
 
 
-    }	
+    }
 
     n->createContents();
-    
+
 
     {
         XMLBEANSXX_DEBUG2(log, "add attributes")
         for (unsigned int i = 0;i < attrs.getLength(); i++) {
 	    QName name(transcode(attrs.getURI(i)), transcode(attrs.getLocalName(i)), getPrefix(transcode(attrs.getQName(i))));
     	    XMLBEANSXX_DEBUG2(log, std::string("attribute name (prefix): (") +  name.prefix + ")" + name)
-	    
+
 	    if (name == XmlBeans::xsi_type()) continue;
 	    if (name == XmlBeans::xsi_array()) continue;
 	    std::string value(transcode(attrs.getValue(i)));
             xmlbeansxx::Contents::Walker::setAttr(*n,name, value);
         }
     }
-    
-    
+
+
     {	//add namespaces as attributes
 	    XmlContext::StoredLinks ns=parser->xmlContext.getLastStoredLinks();
 	    XMLBEANSXX_FOREACH(XmlContext::StoredLinks::iterator,i,ns) {
@@ -181,7 +181,7 @@ void MySAX2Handler::startElement(	const XMLCh* const uri,
 		}
 	    }
     }
-    
+
     parser->xmlContext.remember();
 
     {
@@ -196,7 +196,7 @@ void MySAX2Handler::startPrefixMapping(const XMLCh* const _prefix, const XMLCh* 
     	//NAMESPACES
 	std::string prefix = transcode(_prefix);
 	std::string uri = transcode(_uri);
-        parser->xmlContext.addNamespace(prefix, uri); 
+        parser->xmlContext.addNamespace(prefix, uri);
 }
 
 
@@ -210,7 +210,7 @@ void MySAX2Handler::characters(const XMLCh* const chars, const unsigned int leng
 //    	parser->nodesStack.top().str+=s;
 
 	std::string str = TextUtils::applyContentTypeRules(s,parser->nodesStack.top().obj->getSchemaType());
-	
+
 	if(str.size()>0)
 		Contents::Walker::appendElem(*(parser->nodesStack.top().obj),XmlBeans::textElementName(),xmlbeansxx::ContentsPtr(new StringContents(str)));
     	XMLBEANSXX_DEBUG2(log, std::string("element value: ") + str )
@@ -276,10 +276,10 @@ XercesParser::XercesParser(const XmlOptions &opts):EmptyParser(opts),transcoder(
 void XercesParser::init(bool reinit) {
     XMLBEANSXX_DEBUG(log,"start");
 /*    static bool initialized = false;
-    
+
     if(!initialized) {
     	XMLBEANSXX_DEBUG(log,"initializing xerces-c");
-	XMLPlatformUtils::Initialize(); 
+	XMLPlatformUtils::Initialize();
 	initialized=true;
     }
 */
@@ -288,7 +288,7 @@ void XercesParser::init(bool reinit) {
     sax2->setContentHandler(handler.get());
     sax2->setErrorHandler(handler.get());
 
-    sax2->setFeature(XMLUni::fgSAX2CoreNameSpaces, true); 
+    sax2->setFeature(XMLUni::fgSAX2CoreNameSpaces, true);
     sax2->setFeature(XMLUni::fgXercesCacheGrammarFromParse, true);
 
     XMLBEANSXX_DEBUG(log,"finish");
@@ -325,7 +325,7 @@ void XercesParser::parse(istream &in,XmlObject &documentRoot) {
 
     documentRoot.createContents();
     XmlObjectPtr root_ptr=boost::shared_ptr<XmlObject>(&documentRoot,null_deleter2());
-    
+
     nodesStack.push(StackEl(root_ptr,documentRoot.getSchemaType()->processContents,QName()));
 
 

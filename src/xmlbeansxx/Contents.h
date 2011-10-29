@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -51,7 +51,7 @@ public:
     	ElemDict attrs;
     	ElemDict elems;
 	const xmlbeansxx::SchemaType * st;
-	
+
 #ifdef BOOST_HAS_THREADS
 	mutable boost::recursive_mutex mutex;
 #endif
@@ -76,7 +76,7 @@ public:
 
 	virtual int countElems(const QName& elemName) const;
 	virtual bool hasElements() const;
-	
+
 	virtual std::vector<ContentsPtr> getElemArray(const QName& elemName) const;
 
 
@@ -112,11 +112,11 @@ public:
 		typedef std::vector<std::pair<QName,std::string> > AttrsType;
 		typedef std::vector<std::pair<QName,ContentsPtr> > ElemsType;
 		typedef std::vector<ContentsPtr> ContentsPtrArrayType;
-		
+
 		static ContentsPtr getAttr(const XmlObject& obj,const QName& x);
 		static std::string getAttrString(const XmlObject& obj,const QName& x);
 		static void setAttr(XmlObject& obj,const QName &x,const ContentsPtr& y);
-		static void setAttr(XmlObject& obj,const QName &x,const std::string& y);		
+		static void setAttr(XmlObject& obj,const QName &x,const std::string& y);
 		static ContentsPtr getElem(const XmlObject& obj,const QName& x,int index = 0);
 		static ContentsPtr cgetElem(XmlObject& obj,const QName& x,int index = 0);
 		static void setElem(XmlObject& obj,const QName& x,const ContentsPtr& y,int index = 0);
@@ -126,10 +126,10 @@ public:
 		static void removeElemAt(XmlObject& obj,const QName& x,int index);
 		static int countElems(const XmlObject& obj,const QName& x);
 		static bool hasElements(const XmlObject& obj);
-		
+
 		static ElemsType getElems(const XmlObject& obj);
-		static AttrsType getAttrs(const XmlObject& obj);		
-		static AttrObjectsType getAttrObjects(const XmlObject& obj);		
+		static AttrsType getAttrs(const XmlObject& obj);
+		static AttrObjectsType getAttrObjects(const XmlObject& obj);
 		static ContentsPtrArrayType getElemArray(const XmlObject& obj,const QName& elemName);
 //		static std::vector<XmlObject> getElemArray(const XmlObject& obj,const QName& elemName);
 		template <typename T>
@@ -148,7 +148,7 @@ public:
 		    /** returns true while this contents don't have any attributes and elements */
 		static bool hasEmptyContent(XmlObject& obj);
 		static std::string dump(const ContentsPtr& p);
-		
+
 		static XmlObjectPtr OrginalXmlObject(const ContentsPtr &p);
 		static std::string digest(const XmlObject& obj);
 	};
@@ -157,7 +157,7 @@ public:
 
 } //namespace xmlbenasxx
 
-	
+
 
 #endif //XMLBEANSPP_CONTENTS_H_
 

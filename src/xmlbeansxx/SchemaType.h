@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -26,7 +26,7 @@
 
 
 namespace xmlbeansxx {
-    
+
 class SchemaType;
 DECLARE_PTR(SchemaType,SchemaTypePtr,constSchemaTypePtr)
 
@@ -39,7 +39,7 @@ struct Map_QName_SchemaPropertyPtr: std::map<QName,SchemaPropertyPtr> {
     Map_QName_SchemaPropertyPtr(const Map_QName_SchemaPropertyPtr &b);
 };
 
-    
+
 class SchemaType {
 private:
     /** Sets default values */
@@ -53,7 +53,7 @@ public:
 
     CreateObjFn createFn;
 //    CreateObjFn createArrayFn;
-    
+
     std::string className;
     QName name;
     QName documentElementName;
@@ -63,15 +63,15 @@ public:
     int fractionDigits;
 
     const std::type_info &classTypeInfo;
-   
+
     enum CONTENT_TYPE {EMPTY_CONTENT,SIMPLE_CONTENT,ELEMENT_CONTENT,MIXED_CONTENT,NOT_COMPLEX_TYPE};
     CONTENT_TYPE contentType;
-    
+
     //methods
     SchemaType(	const std::type_info &classTypeInfo);
     void propertyElem(int elems, const char * elemTable[]);
     void propertyAttr(int attr,  const char * attrTable[]);
-    
+
     XmlObjectPtr createSubObject(const QName &name) const;
 
     SchemaPropertyPtr findAttribute(const QName &name) const;

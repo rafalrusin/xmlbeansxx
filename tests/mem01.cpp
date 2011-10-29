@@ -52,7 +52,7 @@ void namespaceTests() {
         XmlBase64Binary b=XmlBase64Binary::Factory::newInstance();
         b.setByteArrayValue(a);
         XMLBEANSXX_DEBUG(logger,"Base64 xml:" + b.toString());
-		
+
 		shared_array<unsigned char> c = b.getByteArrayValue();
 		XMLBEANSXX_DEBUG(logger, "tu");
 #if NNN
@@ -60,5 +60,5 @@ void namespaceTests() {
         //LOG << "abc" << 15 << LOG4CXX_ENDMSG;
 #endif
     } while(true);
-    
+
 }

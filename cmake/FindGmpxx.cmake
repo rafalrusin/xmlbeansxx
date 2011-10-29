@@ -1,8 +1,8 @@
 if (WIN32)
-  if (CMAKE_BUILD_TYPE STREQUAL Debug) 
+  if (CMAKE_BUILD_TYPE STREQUAL Debug)
     set(LIB_SUF "d")
-  endif (CMAKE_BUILD_TYPE STREQUAL Debug) 
-else (WIN32) 
+  endif (CMAKE_BUILD_TYPE STREQUAL Debug)
+else (WIN32)
   set(LIB_SUF "")
 endif (WIN32)
 

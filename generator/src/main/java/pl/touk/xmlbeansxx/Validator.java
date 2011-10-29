@@ -1,6 +1,6 @@
 /*
  *  Copyright 2004-2008 TouK sp. z o.o. s.k.a.
- * 
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -42,18 +42,18 @@ public class Validator {
 	}
 	public static void go(String xml,String[] xsds) throws Exception {
 		String[] xmls={xml};
-		
+
 		SchemaTypeSystem ts=ClassGen.loadTS("",xsds);
 		SchemaTypeLoader tl;
 		/*
 		{
 			XmlObject[] array = new XmlObject[xsds.length];
 			for(int i=0;i<array.length;i++) array[i] = XmlObject.Factory.parse(new File(xsds[i]));
-			
+
 			typeSystem = XmlBeans.compileXsd(array, XmlBeans
 					.getBuiltinTypeSystem(), null);
-			
-			
+
+
 			List allSeenTypes = new ArrayList();
 			allSeenTypes.addAll(Arrays.asList(typeSystem.documentTypes()));
 			allSeenTypes.addAll(Arrays.asList(typeSystem.attributeTypes()));
@@ -69,27 +69,27 @@ public class Validator {
 				System.out.println("Visiting <"+sType.getClass().getName()+"> " + sType.toString());
 				allSeenTypes.addAll(Arrays.asList(sType.getAnonymousTypes()));
 			}
-			
+
 		}
-		
+
 		*/
 			tl=XmlBeans.typeLoaderUnion(
 					new SchemaTypeLoader[] { ts, XmlBeans.getBuiltinTypeSystem() });
-		
+
 		{
 			for(int i=0;i<xmls.length;i++) {
 				XmlObject mydoc = tl.parse(new File(xmls[i]), null, null);
-				
+
 				// Create an XmlOptions instance and set the error listener.
 				XmlOptions validateOptions = new XmlOptions();
 				ArrayList errorList = new ArrayList();
 				validateOptions.setErrorListener(errorList);
-				
+
 				// Validate the XML.
 				boolean isValid = mydoc.validate(validateOptions);
 				if (isValid) { System.out.println(xmls[i]+" is valid"); }
 				else { System.out.println(xmls[i]+" is not valid"); }
-				
+
 				// If the XML isn't valid, loop through the listener's contents,
 				// printing contained messages.
 				if (!isValid)
@@ -97,13 +97,13 @@ public class Validator {
 					for (int j = 0; i < errorList.size(); i++)
 					{
 						XmlError error = (XmlError)errorList.get(j);
-						
+
 						System.out.println("\n");
 						System.out.println("Message: " + error.getMessage() + "\n");
-						System.out.println("Location of invalid XML: " + 
+						System.out.println("Location of invalid XML: " +
 								error.getCursorLocation().xmlText() + "\n");
 					}
-				}			
+				}
 			}
 		}
 	}

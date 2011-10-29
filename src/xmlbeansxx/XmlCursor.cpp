@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -23,15 +23,15 @@ namespace xmlbeansxx {
 
 
 
-	
-	// position in the current XmlObject 
+
+	// position in the current XmlObject
 	// |                       |atributes| = A                      |                              |elements| = B                            |
 	// |------------------------------------------------------------|------------------------------------------------------------------------|----------------|
 	// |pos=0(first attr)    pos=i(i-th attr)     pos=A-1(last attr)|pos=A (first elem)   pos=A+i (i-th elem)            pos=A+B-1(last elem)|pos=A+B(INT_END)|
 	//
 	// (pos < 0 || pos > A+B) == INT_NONE
-	
-	
+
+
 	// for empty stack (stack.empty() == true)
 	// pos == -1   INT_STARTDOC
 	// pos == A+B  INT_END
@@ -59,7 +59,7 @@ void XmlCursor::rememberAndSwap(ContentsPtr c) {
 		pos = 0;
 }
 
-	
+
 ElemDict::value_type& XmlCursor::getPos() const {
 		int A = countAttrs();
 		int B = countElems();
@@ -82,7 +82,7 @@ QName XmlCursor::getName() const {
 			return XmlBeans::xml_fragment();
 		}
 }
-	
+
 XmlCursor::TokenType XmlCursor::currentTokenType() const {
 		int A = countAttrs();
 		int B = countElems();
@@ -93,7 +93,7 @@ XmlCursor::TokenType XmlCursor::currentTokenType() const {
 		if(pos < 0 || pos > A+B) return INT_NONE;
 		if(pos == A + B)  return INT_END;
 		if(pos <  A) return getAttributeType(getName());
-		//pos >= A 
+		//pos >= A
 		return getElementType(getName());
 }
 
@@ -118,7 +118,7 @@ bool XmlCursor::hasNextToken() const {
 		if(stack.empty() && isFinish()) return false;
 		return true;
 }
-	
+
 bool XmlCursor::hasPrevToken() const {
 		if(stack.empty() && isContainer()) return false;
 		return true;
@@ -131,12 +131,12 @@ int XmlCursor::insertAttributeWithValue(const QName &name,const XmlAnySimpleType
 		contents->attrs.contents.insert(contents->attrs.contents.begin()+count,ElemDict::value_type(name,o.contents));
 		return count;
 }
-	
+
 int XmlCursor::insertAttributeWithValue(const QName &name,const std::string &value) {
 		return insertAttributeWithValue(name,XmlString(value));
 }
 
-int XmlCursor::insertElement(const QName &name,const XmlObject &o){ 
+int XmlCursor::insertElement(const QName &name,const XmlObject &o){
 		int A = countAttrs();
 		int B = countElems();
 		int count = pos - A;
@@ -148,17 +148,17 @@ int XmlCursor::insertElement(const QName &name,const XmlObject &o){
 int XmlCursor::insertDocument(const XmlObjectDocument &doc) {
 		if(!doc)
 			throw IllegalStateException("XmlCursor insertDocument: document is empty ");
-			
-		XmlCursor dCursor(doc);	
+
+		XmlCursor dCursor(doc);
 		if(!dCursor.toFirstChild())
                 	throw IllegalStateException("XmlCursor insertDocument: document is empty ");
-	
+
 		return insertElement(dCursor.getName(),dCursor.getObject());
-} 
+}
 
 int XmlCursor::insertNamespace(std::string prefix, std::string namespaceURI) {
 		return insertAttributeWithValue(QName(XmlBeans::xmlns(),prefix),namespaceURI);
-} 
+}
 /*	bool removeAttribute(const QName& attrName) {
 		if(contents->getAttr(attrName)) {
 			contents->setAttr(attrName,ContentsPtr());
@@ -169,7 +169,7 @@ int XmlCursor::insertNamespace(std::string prefix, std::string namespaceURI) {
 */
 void XmlCursor::setName(const QName &name) {
 		ElemDict::value_type &v = getPos();
-		if(v.name == XmlBeans::textElementName()) 
+		if(v.name == XmlBeans::textElementName())
 			throw IllegalStateException("XmlCursor: setName (INT_TEXT)");
 		v.name = name;
 }
@@ -198,11 +198,11 @@ bool XmlCursor::toChild(const QName &name, int index) {
 		pos=_pos;
 		return false;
 }
-	
+
 XmlCursor::TokenType XmlCursor::toEndToken() {
 		int A = countAttrs();
 		int B = countElems();
-	
+
 		pos = A+B;
 		return currentTokenType();
 }
@@ -216,7 +216,7 @@ bool XmlCursor::toFirstAttribute() {
 bool XmlCursor::toFirstChild() {
 		return toChild();
 }
-	
+
 XmlCursor::TokenType XmlCursor::toFirstContentToken() {
 		if(isStart() && !(getPos().value)) return INT_NONE;
 		if(isContainer()) {
@@ -264,7 +264,7 @@ bool XmlCursor::toNextSibling(int index) {
 			}
 		}
 		pos=_pos;
-		return false;	
+		return false;
 }
 
 bool XmlCursor::toNextSibling(const QName &name,int index) {
@@ -280,7 +280,7 @@ bool XmlCursor::toNextSibling(const QName &name,int index) {
 			}
 		}
 		pos=_pos;
-		return false;	
+		return false;
 }
 XmlCursor::TokenType XmlCursor::toNextToken() {
 		int A = countAttrs();
@@ -299,7 +299,7 @@ XmlCursor::TokenType XmlCursor::toNextToken() {
 			rememberAndSwap(getPos().value);
 		}
 		else pos++;
-	
+
 		return currentTokenType();
 }
 
@@ -315,11 +315,11 @@ XmlCursor::TokenType XmlCursor::toPrevToken() {
 			int B = countElems();
 			pos = A+B;
 		}
-	
+
 		return currentTokenType();
 }
 
-	
+
 bool XmlCursor::toParent() {
 		if(stack.empty()) return false;
 		restore();
@@ -331,7 +331,7 @@ bool XmlCursor::toPrevAttribute()  {
 		if(A <=0 || pos == 0) return false;
 		if(pos > A) pos = A;
 		pos --;
-		return true;		
+		return true;
 }
 
 bool XmlCursor::toPrevSibling(int index) {
@@ -347,14 +347,14 @@ bool XmlCursor::toPrevSibling(int index) {
 			}
 		}
 		pos=_pos;
-		return false;	
-		
+		return false;
+
 }
 void XmlCursor::toStartDoc() {
 		while(toParent()){}
 		pos=0;
 }
-	
+
 std::string XmlCursor::getTextValue() {
 		int A = countAttrs();
 		int B = countElems();
@@ -382,7 +382,7 @@ bool XmlCursor::removeXml() {
 		}
 		return true;
 }
-	
+
 
 
 

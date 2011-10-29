@@ -25,7 +25,7 @@ int main() {
         tab.cgetArray(1);
 		p.dsetTableArray(tab);
 		p.addNewTable();
-  
+
         p.xsetCar(CarType("2"));
         p.setCar2(CarType("3").getSimpleContent());
 
@@ -36,7 +36,7 @@ int main() {
 	cout << "\n";
 
 	Personinfo p2 = Personinfo::Factory::newInstance();
-	
+
         p2.xsetLastname(XmlString("Pawel"));
         p2.xsetFirstname(XmlString("Stawicki"));
 

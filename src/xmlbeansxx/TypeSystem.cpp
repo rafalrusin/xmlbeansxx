@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -55,19 +55,19 @@ static log4cxx::LoggerPtr log()
 {
 	XMLBEANSXX_STATIC_LOGGER_PTR_SET(slog,"xmlbeansxx.TypeSystem");
 	return slog;
-	
+
 }
 #endif
 
 
 XmlObjectPtr TypeSystem::createDocumentByName(const QName &typeName) const {
     TRACER(log(),"createByName");
-   
+
     const SchemaType * st=0;
     {
     	SYNC(mutex);
     	TypeCreators_type::const_iterator i = documentTypeCreators.find(typeName);
-	if(i != documentTypeCreators.end()) 
+	if(i != documentTypeCreators.end())
 		st=i->second;
     }
     if(!st) {
@@ -87,12 +87,12 @@ XmlObjectPtr TypeSystem::createDocumentByName(const QName &typeName) const {
 
 XmlObjectPtr TypeSystem::createByName(const QName &typeName) const{
     TRACER(log(),"createByName");
-    
+
     const SchemaType * st=0;
     {
     	SYNC(mutex);
     	TypeCreators_type::const_iterator i = typeCreators.find(typeName);
-	if(i != typeCreators.end()) 
+	if(i != typeCreators.end())
 		st=i->second;
     }
     if(!st) {
@@ -140,7 +140,7 @@ bool initialized=false;
 void initializeBeans() {
 
     if(initialized) return;
-    
+
     const char *locale=setlocale(LC_CTYPE, "");
     if (!locale) {
         throw XmlException( "Locale not specified. Check LANG, LC_CTYPE, LC_ALL." );
@@ -150,7 +150,7 @@ void initializeBeans() {
 	XMLPlatformUtils::Initialize(locale);
 //        XMLBEANSXX_INFO(log(),"Locale: " << locale);
     }
-    
+
     initialized=true;
 }
 
@@ -161,21 +161,21 @@ void terminateBeans() {
 class BeansExistence {
 private:
 //    XMLBEANSXX_STATIC_LOGGER_PTR(log);
-    
+
 public:
     BeansExistence() {
 //        XMLBEANSXX_DEBUG(log(),"Initializing xmlbeansxx");
         initializeBeans();
 //        XMLBEANSXX_DEBUG(log(),"Initialized xmlbeansxx");
     }
-    
+
     ~BeansExistence() {
 //        XMLBEANSXX_DEBUG(log(),"Terminating xmlbeansxx");
         terminateBeans();
 //        XMLBEANSXX_DEBUG(log(),"Terminated xmlbeansxx");
     }
 };
- 
+
 //XMLBEANSXX_LOGGER_PTR_SET(BeansExistence::log,"xmlbeansxx.BeansExistence");
 
 }

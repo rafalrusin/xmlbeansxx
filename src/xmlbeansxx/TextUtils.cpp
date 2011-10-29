@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -39,7 +39,7 @@
 #include <xercesc/util/XMLString.hpp>
 #include <xercesc/framework/MemBufFormatTarget.hpp>
 
-#define TRACER2(a,b) 
+#define TRACER2(a,b)
 #define XMLBEANSXX_DEBUG2(a,b)
 
 
@@ -60,7 +60,7 @@ static int precision = XMLBEANSXX_TEXTUTILS_DEFAULT_PRECISION;
   XMLBEANSXX_LOGGER_PTR_SET(TextUtils::log,"xmlbeansxx.TextUtils");
 
   TextUtils::TextUtils() {}
-  
+
   int TextUtils::getPrecision(){
   	return precision;
   }
@@ -109,24 +109,24 @@ std::string decimalToString(T f,int _p) {
   	return TextUtils::longDoubleToString(d,-1);
   }
   std::string TextUtils::mpfToString(const mpf_class & d) {
-  	return TextUtils::mpfToString(d,-1);  
+  	return TextUtils::mpfToString(d,-1);
   }
   std::string TextUtils::floatToString(float d,int _p) {
   	return decimalToString<float>(d,_p);
   }
-  
+
   std::string TextUtils::doubleToString(double d,int _p) {
   	return decimalToString<double>(d,_p);
   }
-  
+
   std::string TextUtils::longDoubleToString(long double d,int _p) {
   	return decimalToString<long double>(d,_p);
   }
 
   std::string TextUtils::mpfToString(const mpf_class & d,int _p) {
-  	return decimalToString<const mpf_class &>(d,_p);  
+  	return decimalToString<const mpf_class &>(d,_p);
   }
-  
+
 
   std::string TextUtils::ptrToString(const void *ptr) {
     char buf[100];
@@ -160,7 +160,7 @@ std::string decimalToString(T f,int _p) {
   }
 
     std::string TextUtils::exchangeEntities(const std::string& str, TextUtils::EscapeFlags escapeFlag) {
- 
+
 #ifndef XMLBEANSXX_WITH_LIBXERCES_C
 
     xmlChar *retu;
@@ -168,15 +168,15 @@ std::string decimalToString(T f,int _p) {
     if(escapeFlag == AttrEscapes)
 		retu = xmlEncodeSpecialChars(NULL,(xmlChar*)str.c_str());
     else	retu = xmlEncodeEntitiesReentrant(NULL,(xmlChar*)str.c_str());
-    	
+
     std::string s((char*)retu);
     xmlFree(retu);
     return s;
 
-#else    
+#else
 
         XMLCh* toFormat = XMLString::transcode (str.c_str ());
-        
+
         MemBufFormatTarget target;
 	XMLFormatter::EscapeFlags flags;
 	if(escapeFlag == AttrEscapes) {
@@ -186,15 +186,15 @@ std::string decimalToString(T f,int _p) {
 	}
         XMLFormatter formatter (XMLUni::fgXMLChEncodingString, &target, flags);
         formatter << toFormat;
-        
+
         XMLString::release(&toFormat);
-            
+
         const XMLByte* bytes = target.getRawBuffer ();
         char * s = XMLString::transcode ((XMLCh*) bytes);
         string res(s);
         XMLString::release(&s);
-        
-        return res; 
+
+        return res;
 #endif
 }
 
@@ -259,7 +259,7 @@ bool _inBase64(char c){
 	return 	(c>='0' && c<='9') ||
 		(c>='A' && c<='Z') ||
 		(c>='a' && c<='z') ||
-		 c=='+' || 
+		 c=='+' ||
 		 c=='/' ||
 		 c=='=' ;
 };
@@ -274,18 +274,18 @@ std::string _toCanolicalBase64(const std::string &s) {
 }
 
 xmlbeansxx::shared_array<unsigned char> TextUtils::base64Decode(const std::string &what2) {
-  
-    std::string what = _toCanolicalBase64(what2);    
+
+    std::string what = _toCanolicalBase64(what2);
     int size = what.size();
     int pads = 0;
     if(size>2){
 	for(int i=0;i<2;i++)
-		if(what[--size] == '=') { 
+		if(what[--size] == '=') {
 			pads++;
 			what[size]='0';
 		}
     }
-    
+
     string dec(binary_t(what.begin()),binary_t(what.end()));
     unsigned int outLen=dec.length();
     outLen -= pads;
@@ -301,7 +301,7 @@ xmlbeansxx::shared_array<unsigned char> TextUtils::base64Decode(const std::strin
     int pads = (3-((str.length())%3)) % 3;
     str.append(pads ,'\0');
     string enc(base64_t(str.begin()), base64_t(str.end()));
-    for(int i=1;i<=pads;i++){    
+    for(int i=1;i<=pads;i++){
     	enc[enc.size()-i]='=';
     }
     return enc;

@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -38,7 +38,7 @@ class TypeSystem {
     typedef std::map<QName,const SchemaType *> TypeCreators_type;
 #ifdef BOOST_HAS_THREADS
     mutable boost::recursive_mutex mutex;
-#endif    
+#endif
     TypeCreators_type typeCreators;
     TypeCreators_type documentTypeCreators;
 
@@ -50,9 +50,9 @@ public:
     XmlObjectPtr createDocumentByName(const QName &typeName) const;
     XmlObjectPtr createByName(const QName &typeName) const;
     const SchemaType * getSchemaType(const QName &typeName) const;
-    
+
 //    XmlObjectPtr createArrayByName(const QName &typeName) const;
-    
+
     void addDocumentType(const SchemaType *st);
     void addType(const SchemaType *st);
 };

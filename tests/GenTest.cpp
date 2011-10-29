@@ -57,15 +57,15 @@ void namespaceTests() {
 	XMLBEANSXX_DEBUG(logger, "--table4--");
 	p.addNewTable();
 		p.setTableArray(3,"mm");
-		
+
 		CPPUNIT_ASSERT(p.sizeOfTable()==4);
 		p.removeTable(2);
 		CPPUNIT_ASSERT(p.sizeOfTable()==3);
 		CPPUNIT_ASSERT(p.getTableArray(2)==std::string("mm"));
 		CPPUNIT_ASSERT(!p.xgetTableArray(20).hasContents());
 		CPPUNIT_ASSERT(!p.xgetTableArray(20));
-		
-		
+
+
         p.xsetCar(CarType("2"));
         p.setCar2(CarType("3").getSimpleContent());
 
@@ -89,8 +89,8 @@ void parsing() {
     opt.setValidation(true);
     LibXMLParser p(opt);
     p.loadGrammar("c.xsd");
-    
-    
+
+
     ContentDocument doc;
     {
         ifstream in("c.xml");
@@ -102,11 +102,11 @@ void parsing() {
           XMLBEANSXX_INFO(logger,std::string("Exception: ") + ex.getMessage());
           CPPUNIT_ASSERT(false);
         }
-		
+
         doc = docC;
     }
 
-    
+
     CPPUNIT_ASSERT(doc.getContent().getEmployee().getAge()==10);
     XMLBEANSXX_DEBUG(logger,doc.toString());
 
@@ -126,7 +126,7 @@ void parsing() {
 
     XMLBEANSXX_DEBUG(logger,std::string("cdata firstname:") + doc.getContent().getEmployee().getFirstname());
     CPPUNIT_ASSERT(doc.getContent().getEmployee().getFirstname() == std::string("Name1"));
-    
+
     XMLBEANSXX_DEBUG(logger,"--1--");
     CPPUNIT_ASSERT(doc.getContent().getEmployee().getChoice().getB()==20);
     XMLBEANSXX_DEBUG(logger,"B = " + doc.getContent().getEmployee().getChoice().xgetB().toString() );
@@ -134,7 +134,7 @@ void parsing() {
     CPPUNIT_ASSERT(doc.getContent().getEmployee().getChoice().xgetB().getSimpleContent()=="20");
     //LOG_DEBUG<<"--3--"<<doc->getContent()->getEmployee()->getChoice()->getA()<<LOG4CXX_ENDMSG;
     CPPUNIT_ASSERT(!doc.getContent().getEmployee().getChoice().xgetA().hasContents());
-    
+
     //LOG_DEBUG << doc->getContent()->getEmployee()->getDefault() << LOG4CXX_ENDMSG;
 //    CPPUNIT_ASSERT(doc.getContent().getEmployee().getDefault()==101);
 //    CPPUNIT_ASSERT(doc.getContent().getEmployee().xgetDefault().getSimpleContent()=="101");
@@ -146,7 +146,7 @@ void parsing() {
     doc.getContent().getEmployee().setDoubleElement("2e71");
     XMLBEANSXX_DEBUG(logger, doc.getContent().getEmployee().xgetFloatElement().toString());
     XMLBEANSXX_DEBUG(logger, doc.getContent().getEmployee().xgetDoubleElement().toString());
-    
+
 
     std::string d1, d2;
     doc.getContent().getEmployee().setAge(1000);
@@ -166,7 +166,7 @@ void parsing() {
     //LOG_DEBUG << "doc serialized: " << doc->toString().c_str() << LOG4CXX_ENDMSG;
     //doc->getContent()->getEmployee()->setDef("mydef");
     //CPPUNIT_ASSERT(doc->getContent()->getEmployee()->getDef() == std::string("mydef"));
-	
+
     //LOG_DEBUG << "docC serialized: " << doc->toString().c_str() << LOG4CXX_ENDMSG;
     //CPPUNIT_ASSERT(docC->getContent()->getEmployee()->getDef() == std::string("myval"));
 }

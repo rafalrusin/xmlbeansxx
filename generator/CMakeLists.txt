@@ -6,7 +6,7 @@
 SET(GENDIR ${PROJECT_BINARY_DIR}/generator/target/xmlbeansxx-gen/)
 
 SET(GEN_UNIX_BIN_LINKS scompxx xmlbeansxx-geninclude xmlbeansxx-gen xmlbeansxx-split)
-SET(GEN_BINFILES 
+SET(GEN_BINFILES
 	${GENDIR}/bin/acx_pthread.m4
 	${GENDIR}/bin/scompxx
 	${GENDIR}/bin/xmlbeansxx-geninclude
@@ -38,11 +38,11 @@ ADD_CUSTOM_COMMAND(OUTPUT ${GEN_BINFILES} ${GEN_LIBFILES} ${GEN_JAR}
 )
 
 ADD_CUSTOM_TARGET(generator
-	DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/pom.xml ${GEN_BINFILES} ${GEN_LIBFILES} ${GEN_JAR} 
+	DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/pom.xml ${GEN_BINFILES} ${GEN_LIBFILES} ${GEN_JAR}
 )
 
 
-INSTALL(FILES ${GEN_BINFILES} 
+INSTALL(FILES ${GEN_BINFILES}
 	DESTINATION share/xmlbeansxx/bin
 	PERMISSIONS 	OWNER_EXECUTE	OWNER_WRITE	OWNER_READ
               		GROUP_EXECUTE			GROUP_READ

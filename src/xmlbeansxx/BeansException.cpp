@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -11,7 +11,7 @@
     distributed under the License is distributed on an "AS IS" BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
-    limitations under the License. 
+    limitations under the License.
   */
 
 
@@ -29,7 +29,7 @@ namespace xmlbeansxx {
 
 XMLBEANSXX_LOGGER_PTR_SET(BeansException::log,"xmlbeansxx.BeansException");
 
-BeansException::BeansException(const std::string msg) throw() :msg(msg) { 
+BeansException::BeansException(const std::string msg) throw() :msg(msg) {
     XMLBEANSXX_DEBUG(log,msg);
 }
 
@@ -51,7 +51,7 @@ XmlParseException::XmlParseException(const std::string msg):XmlException(string(
 XmlSerializeException::XmlSerializeException(const std::string msg):XmlException(string("While serializing: ")+msg) {}
 XmlIllegalValueException::XmlIllegalValueException(std::string schemaTypeName,std::string setValue):XmlException("Setting invalid value '"+setValue+"' into object of type '"+schemaTypeName+"'") {}
 ClassCastException::ClassCastException(std::string msg): BeansException("Invalid Class Cast: "+msg) {}
-    
+
 XmlSimpleTypeException::XmlSimpleTypeException(std::string message,std::string simpleContent):XmlException(message+" in '"+simpleContent+"'") {}
 IllegalArgumentsException::IllegalArgumentsException(std::string msg): BeansException(std::string("Illegal arguments: ")+msg) {}
 IllegalStateException::IllegalStateException(std::string msg): BeansException(std::string("Illegal state ")+msg) {}

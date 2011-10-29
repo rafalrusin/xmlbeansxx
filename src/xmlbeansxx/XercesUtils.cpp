@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -83,12 +83,12 @@ Transcoder::Transcoder(const char *encoding): t(), f(encoding,"1.0",&t) {}
 
 std::string Transcoder::transcode(const XMLCh *s) {
     if (s==NULL) return std::string();
-/*    
+/*
     char *t=XMLString::transcode(s);
     String r(t);
     XMLString::release(&t);
     return r;
-*/    
+*/
     t.reset();
     f<<s;
     return t.getString();

@@ -62,7 +62,7 @@ public:
     static XmlObject parse(std::istream &in,xmlbeansxx::XmlOptions options=xmlbeansxx::XmlOptions());
     static XmlObject parse(const std::string &str,xmlbeansxx::XmlOptions options=xmlbeansxx::XmlOptions());
   };
-  
+
 };
 */
 };

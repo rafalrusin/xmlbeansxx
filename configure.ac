@@ -3,7 +3,7 @@
 AC_PREREQ(2.57)
 
 AC_INIT(XMLBEANSXX, 0.9.8, support@TouK.pl)
-#Before release, change library versions 
+#Before release, change library versions
 #Read http://www.gnu.org/software/libtool/manual.html#SEC32 before doing this
 AC_SUBST(library_version_info, 5:3:0)
 
@@ -59,7 +59,7 @@ AS_IF([test "x$enable_gmpxx"   != xno],	[AC_CHECK_LIB(gmp,main,,AC_MSG_ERROR([gm
 					 AC_CHECK_LIB(gmpxx,main,,AC_MSG_ERROR([gmpxx library not found. Please install gmp with gmpxx option enabled.]))],[])
 
 AS_IF([test "x$enable_libxml2" != xno],[
-		AS_IF([test "x$XML2_CONFIG" = "xno"], 
+		AS_IF([test "x$XML2_CONFIG" = "xno"],
 					[
 					 AC_CHECK_LIB([xml2], [main])
     					 AC_CHECK_HEADER([libxml/xmlversion.h])],

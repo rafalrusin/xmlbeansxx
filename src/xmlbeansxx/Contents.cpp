@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -66,7 +66,7 @@ struct three {
         else return first<other.first;
     }
 };
-    
+
 }
 
 //Contents::Contents() { }
@@ -83,7 +83,7 @@ void Contents::free() {
 
 
 
-ContentsPtr Contents::clone() 
+ContentsPtr Contents::clone()
 {
     SYNC(mutex)
     ContentsPtr clone(new Contents(st));
@@ -117,7 +117,7 @@ void Contents::setSimpleContent(const std::string &c) {
     removeElems(XmlBeans::textElementName());
     if(c.size() > 0)
 	setElem(XmlBeans::textElementName(), ContentsPtr (new StringContents(c)));
-    
+
 }
 std::string Contents::getSimpleContent() const {
     SYNC(mutex)
@@ -192,7 +192,7 @@ std::vector<ContentsPtr> Contents::getElemArray(const QName& elemName) const {
 void Contents::removeElemAt(const QName& elemName,int index) {
     SYNC(mutex)
     elems.removeAt(elemName,index);
-    
+
 }
 
 bool Contents::hasEmptyContent() const {
@@ -231,7 +231,7 @@ vector<pair<QName,ContentsPtr> > Contents::getAttrs2() const {
 
 std::string Contents::digest() const {
     std::string r;
-    
+
     Contents::Walker::ElemsType as=getAttrs2();
     Contents::Walker::ElemsType es=getElems();
 
@@ -247,7 +247,7 @@ std::string Contents::digest() const {
     }
     r+=">";
     r+=TextUtils::exchangeEntities(getCanonicalContent());
-    
+
     typedef std::map<std::pair<QName,int>, ContentsPtr> MType;
     MType m;
     std::map<std::string, int> counters;

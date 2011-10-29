@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -70,18 +70,18 @@ public:
     	if(v) setSerializeInnerTypes(true);
 	pers=v;
     }
-    
-    static XmlOptions serializeInnerTypes() { 
+
+    static XmlOptions serializeInnerTypes() {
     	XmlOptions o;
 	o.setSerializeInnerTypes(true);
 	return o;
     }
-    static XmlOptions serializePersistent() { 
+    static XmlOptions serializePersistent() {
     	XmlOptions o;
 	o.setSerializePersistent(true);
 	return o;
     }
-    static XmlOptions serializeTypes() { 
+    static XmlOptions serializeTypes() {
     	XmlOptions o;
 	o.setSerializeTypes(true);
 	return o;

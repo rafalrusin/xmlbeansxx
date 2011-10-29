@@ -1,6 +1,6 @@
 /*
  *  Copyright 2004-2008 TouK sp. z o.o. s.k.a.
- * 
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -28,7 +28,7 @@ public class Input {
 		h_gaps=readGaps(inputPath + name+".xh");
 		cpp_gaps=readGaps(inputPath + name+".xcpp");
 	}
-	
+
 	private Map readGaps(String fileName) {
 		Map gaps=new HashMap();
 		try {
@@ -64,7 +64,7 @@ public class Input {
 		}
 		return gaps;
 	}
-	
+
 	public String getHGap(String name) {
 		return (String)h_gaps.get(name);
 	}

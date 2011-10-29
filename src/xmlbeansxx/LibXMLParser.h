@@ -1,6 +1,6 @@
 /*
   Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
@@ -39,10 +39,10 @@
 namespace xmlbeansxx {
 class XmlObject;
 
-    /** 
+    /**
      * Parse XML documents using libxml2 parser.
      */
-     
+
 class LibXMLParser : public EmptyParser {
     private:
 
@@ -72,13 +72,13 @@ public:
         virtual void parse(const std::string &in, XmlObject &documentRoot);
 
 
-        /// Loads grammars into libxml2 parser from specified file names. 
+        /// Loads grammars into libxml2 parser from specified file names.
         void loadGrammars(const std::vector<std::string> &fileNames);
 
-        /// Loads grammar into libxml2 parser from specified file name. 
+        /// Loads grammar into libxml2 parser from specified file name.
         void loadGrammar(const std::string &fileName);
 
-        /// Unloads all grammars from libxml2 parser. 
+        /// Unloads all grammars from libxml2 parser.
         void unloadGrammars();
 
 

@@ -5,61 +5,61 @@
 I. What you need.
 
  --- REQURED ---
- a) cmake 
+ a) cmake
     http://www.cmake.org/
     http://www.cmake.org/HTML/Download.html
-    
- b) C++ compiler supported by cmake 
+
+ b) C++ compiler supported by cmake
 
  c) maven
     http://maven.apache.org/
 
- d) Boost C++ Libraries 
+ d) Boost C++ Libraries
     http://www.boost.org/
-    
- e) Xerces C++ Parser 
+
+ e) Xerces C++ Parser
     http://xerces.apache.org/xerces-c/
- 
- 
+
+
  --- not required but recommended ---
- 
+
  f) log4cxx (it is required for debuging)
     http://logging.apache.org/log4cxx/index.html
- 
-  
+
+
  --- not required ---
- 
- g) gmp, gmpxx 
+
+ g) gmp, gmpxx
     http://swox.com/gmp/
- 
- h) libxml2 
+
+ h) libxml2
     http://xmlsoft.org/
- 
+
  i) CppUnit - C++ port of JUnit - (required for testing)
     http://cppunit.sourceforge.net/
- 
+
 
 II. How to build and install.
 
   1. with nmake
     run:
       nmbootstrap.bat
-      nmake 
+      nmake
       nmake test
       nmake install
 
-  2. with MS Visual Studio C++ 
+  2. with MS Visual Studio C++
     run:
       vsbootstrap.bat
-           
+
     It should generate a Visual Studio project file:
       build/xmlbeansxx.sln
-    
+
     run the build/xmlbeansxx.sln
     Build the ALL_BUILD target.
     Build the RUN_TESTS target.
     Build the INSTALL target.
-  
+
 
 
 III. Library files.
@@ -68,7 +68,7 @@ You should make a "c:\usr\" directory, and there you should install (copy) all
 required libraries.
 
 There should be:
-1. for "log4cxx", CMAKE_BUILD_TYPE=DEBUG 
+1. for "log4cxx", CMAKE_BUILD_TYPE=DEBUG
         c:\usr\include\log4cxx\logger.h  - and other headers
         c:\usr\lib\log4cxxd.lib
         c:\usr\lib\log4cxxd.dll
@@ -77,22 +77,22 @@ There should be:
         c:\usr\include\log4cxx\logger.h  - and other headers
         c:\usr\lib\log4cxx.lib
         c:\usr\lib\log4cxx.dll
-        
-2. for "gmp" and "gmpxx", CMAKE_BUILD_TYPE=DEBUG 
-        c:\usr\include\gmpxx.h  
-        c:\usr\include\gmp.h 
+
+2. for "gmp" and "gmpxx", CMAKE_BUILD_TYPE=DEBUG
+        c:\usr\include\gmpxx.h
+        c:\usr\include\gmp.h
         c:\usr\lib\gmpd.lib
         c:\usr\lib\gmpd.dll
         c:\usr\lib\gmpxxd.lib
 
    for "gmp" and "gmpxx", CMAKE_BUILD_TYPE=Release
-        c:\usr\include\gmpxx.h  
-        c:\usr\include\gmp.h 
+        c:\usr\include\gmpxx.h
+        c:\usr\include\gmp.h
         c:\usr\lib\gmp.lib
         c:\usr\lib\gmp.dll
         c:\usr\lib\gmpxx.lib
 
-3. for "xerces", CMAKE_BUILD_TYPE=DEBUG 
+3. for "xerces", CMAKE_BUILD_TYPE=DEBUG
         c:\usr\include\xerces\util\PlatformUtils.hpp
         c:\usr\include\xerces\*  - other xerces headers
         c:\usr\lib\xerces-c_3D.lib
@@ -103,14 +103,14 @@ There should be:
         c:\usr\lib\xerces-c_3.lib
 
 if you have a different version of "xerces", change lines 3 and 5
-"set(LIB_SUF ???)" in the file FindXerces.cmake 
+"set(LIB_SUF ???)" in the file FindXerces.cmake
 
 
-4. for "boost", CMAKE_BUILD_TYPE=DEBUG 
+4. for "boost", CMAKE_BUILD_TYPE=DEBUG
         c:\usr\include\boost\config.hpp
         c:\usr\include\boost\*  - other boost headers
         c:\usr\lib\boost_*.lib  - boost libraries with "mt-gd-{version}" suffix
-	
+
  for "boost", CMAKE_BUILD_TYPE=Release
         c:\usr\include\boost\config.hpp
         c:\usr\include\boost\*  - other boost headers
@@ -137,4 +137,3 @@ if you use gmpxx the precision can by very large.
 
 
 
- 

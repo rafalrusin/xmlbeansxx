@@ -23,7 +23,7 @@
 using namespace xmlbeansxx;
 
 
-void XmlObjectDocument::_setXmlObject(const xmlbeansxx::XmlObject& p, bool castTest, const char* toString) {  
+void XmlObjectDocument::_setXmlObject(const xmlbeansxx::XmlObject& p, bool castTest, const char* toString) {
   XmlObject e = _setXmlObjectOrGetInnerElement(p,castTest,toString);
   if(e) {
       createContents();
@@ -34,7 +34,7 @@ void XmlObjectDocument::_setXmlObject(const xmlbeansxx::XmlObject& p, bool castT
 XmlObject XmlObjectDocument::_setXmlObjectOrGetInnerElement(const xmlbeansxx::XmlObject& p, bool castTest, const char* toString) {
   if(!castTest) {
     xmlbeansxx::Contents::Walker::ElemsType elements = xmlbeansxx::Contents::Walker::getElems(p);
-    if(elements.size()==1) { 
+    if(elements.size()==1) {
       XmlObject e = elements[0].second;
       return e;
     }
@@ -58,7 +58,7 @@ xmlbeansxx::SchemaType XmlObjectDocument::initSchemaType() {
   return st;
 }
 XmlObjectDocument::XmlObjectDocument():xmlbeansxx::XmlObject() {  }
-XmlObjectDocument::XmlObjectDocument(const xmlbeansxx::ContentsPtr& p):xmlbeansxx::XmlObject(p) { } 
+XmlObjectDocument::XmlObjectDocument(const xmlbeansxx::ContentsPtr& p):xmlbeansxx::XmlObject(p) { }
 
 XmlObjectDocument::XmlObjectDocument(const xmlbeansxx::XmlObject& p) {
   setXmlObject(p);
@@ -71,13 +71,13 @@ const xmlbeansxx::SchemaType *XmlObjectDocument::getOrginSchemaType() const {
 }
 const xmlbeansxx::SchemaType *XmlObjectDocument::type() {
   static xmlbeansxx::SchemaType schemaType=initSchemaType();
-  return &schemaType; 
+  return &schemaType;
 }
 xmlbeansxx::XmlObjectDocument XmlObjectDocument::Factory::newInstance() {
   xmlbeansxx::XmlObjectDocument obj;
   obj.createContents();
   return obj;
-} 
+}
 xmlbeansxx::XmlObjectPtr XmlObjectDocument::Factory::newInstanceXmlObject() {
   return xmlbeansxx::XmlObjectPtr(new XmlObjectDocument());
 }
@@ -88,7 +88,7 @@ XmlObjectDocument XmlObjectDocument::Factory::parse(std::istream &in,xmlbeansxx:
   return doc;
 }
 
-XmlObjectDocument XmlObjectDocument::Factory::parse(const std::string &str,xmlbeansxx::XmlOptions options) { 
+XmlObjectDocument XmlObjectDocument::Factory::parse(const std::string &str,xmlbeansxx::XmlOptions options) {
   std::istringstream in(str);
   return parse(in,options);
 }

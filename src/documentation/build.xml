@@ -3,7 +3,7 @@
 
         <property name="deploy.scp.server" value="touk.pl"/>
         <property name="deploy.scp.path" value="/var/www/xmlbeansxx/"/>
-	
+
 	<property name="getsrc.local.root-dir" value="/home/pb/TouK/touk/trunk/xmlbeansxx"/>
 	<property name="deploy.scp.dest" value="${deploy.scp.login}@${deploy.scp.server}:${deploy.scp.path}"/>
 

@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -122,7 +122,7 @@ bool StringStorage::isStored(const char *str) const {
 }
 
 StringStorage::IndexType StringStorage::get(const char *str) const {
-    SYNC(mutex);    
+    SYNC(mutex);
     StoreMap::const_iterator it=contents.find(str);
     if (it!=contents.end()) {
         return it->second;

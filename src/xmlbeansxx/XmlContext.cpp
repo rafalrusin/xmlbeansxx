@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -18,12 +18,12 @@
 #include "defs.h"
 
 
-	
+
 namespace xmlbeansxx {
 
 
 bool XmlContext::addNamespace(const std::string& shortcut, StoreString ns,bool force) {
-	if(isSetPrefix(shortcut)) {	
+	if(isSetPrefix(shortcut)) {
 		if(!force) return false;
     		restoreLinks.push_back(make_pair(shortcut, getNamespaceURI(shortcut)));
 	} else	restoreLinks.push_back(make_pair(shortcut, ""));
@@ -54,8 +54,8 @@ void XmlContext::restore() {
         restoreLinks.pop_back();
     }
 }
-XmlContext::XmlContext() { 
-	remember(); 
+XmlContext::XmlContext() {
+	remember();
 	addNamespace("","");
 	remember();
 }
@@ -83,11 +83,11 @@ std::string NSMapSerializer::printNewNS()  {
 
 std::string NSMapSerializer::cprintQName(const QName& n) {
 		if(n.first==StoreString("")) return n.second;
-		
+
 		std::string prefix=n.prefix;
         	XMLBEANSXX_DEBUG(log,std::string("printQName: ") + prefix + "{" + n.first + "}" + n.second);
 		try {
-			if(getNamespaceURI(prefix) == n.first) 
+			if(getNamespaceURI(prefix) == n.first)
 				return printPrefixName(prefix, n.second);
 		} catch(BeansException &e) {
 			//Prefix not set (getPrefix)
@@ -96,7 +96,7 @@ std::string NSMapSerializer::cprintQName(const QName& n) {
 			try {
 				prefix = getPrefix(n.first);
 				return printPrefixName(prefix, n.second);
-				
+
 			} catch (BeansException &e) {
 				prefix=getNextPrefix();
 			}
@@ -104,8 +104,8 @@ std::string NSMapSerializer::cprintQName(const QName& n) {
 		addNamespace(prefix,n.first);
 		return printPrefixName(prefix, n.second);
 };
-	
-	
+
+
 std::string NSMapSerializer::getNextPrefix() {
 		std::string myChar(1,'a'+current++);
 		std::string prefix=prefixPrefix + myChar;

@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -89,15 +89,15 @@ private:
     friend class MyHandler;
     friend class Contents;
     friend class Contents::Walker;
-    
+
     template<class T2>
     friend class XmlArray;
     friend class QueryAttribute;
     friend class QueryElement;
-    
+
 protected:
     XMLBEANSXX_STATIC_LOGGER_PTR(log);
-    
+
 public:
     ContentsPtr contents;
 
@@ -105,12 +105,12 @@ public:
     virtual ~XmlObject();
     //virtual functions
     virtual int documentElementNamespaceID() const;
-    
+
     /** Serializes object to stream */
     virtual void serialize(std::ostream &out,XmlOptions options=XmlOptions()) const;
     /** Serializes object to string */
     virtual std::string toString(XmlOptions options=XmlOptions()) const;
-    
+
 #ifdef BOOST_HAS_THREADS
     boost::recursive_mutex &mutex() const;
 #endif
@@ -132,7 +132,7 @@ public:
     virtual std::string digest() const;
     bool setAnyElement(const QName& elementName,const std::string& content);
     //~EWML extensions
-    
+
 public:
     virtual std::string exchangeEntities(const std::string& str) const;
 
@@ -153,13 +153,13 @@ private:
 protected:
     template<class T>
     boost::shared_ptr<T> defaultValue(boost::shared_ptr<T> value,std::string defaultText) const {
-        if (value==NULL) { 
+        if (value==NULL) {
             value=boost::shared_ptr<T>(new T());
             value->setSimpleContent(defaultText);
         }
         return value;
     }
-    
+
     template<class T>
     std::vector<boost::shared_ptr<T> > &defaultArrayValue(std::vector<boost::shared_ptr<T> > &array_value,std::string defaultText) const {
         typename std::vector<boost::shared_ptr<T> >::iterator it;
@@ -171,7 +171,7 @@ protected:
         }
         return array_value;
     }
-    
+
     virtual void _setXmlObject(const xmlbeansxx::XmlObject& p, bool castTest, const char* toString);
 
 public:
@@ -186,7 +186,7 @@ public:
     std::vector<XmlObject> cselectPath(const NSMap& ns,const std::string& path);
 
 
-    
+
 public:
     virtual void createContents();
     virtual bool hasContents() const;
@@ -200,7 +200,7 @@ public:
     void setElement(const QName & name,const XmlObject &element,int index = 0);
     void setAttribute(const QName & name,const XmlAnySimpleType &attribute );
     XmlCursor newCursor();
-        
+
 
 
 %%class xmlbeansxx::XmlAnySimpleType
@@ -223,7 +223,7 @@ public:
     void setBooleanValue(bool v);
 
     virtual std::string getCanonicalContent() const;
-    
+
     XmlBoolean operator==(const XmlBoolean &b) const;
     XmlBoolean operator !() const;
     XmlBoolean operator ||(const XmlBoolean &b) const;
@@ -397,7 +397,7 @@ public:
         setSimpleContent(value);
     }
     XmlInt(int v) { setSimpleContent(xmlbeansxx::TextUtils::intToString(v)); }
-    
+
 %%class xmlbeansxx::XmlDateTime
 public:
     XmlDateTime(const boost::posix_time::ptime &pt);
@@ -459,10 +459,10 @@ public:
     //specific methods
     boost::gregorian::date getDateValue() const;
     void setDateValue(const boost::gregorian::date &d);
-    
+
     virtual xmlbeansxx::Calendar getCalendarValue() const;
     virtual void setCalendarValue(const xmlbeansxx::Calendar& v);
-    
+
     XmlInteger daysFrom(const XmlDate &from) const;
 
 private:
@@ -475,31 +475,31 @@ private:
 %%class xmlbeansxx::XmlGDay
     virtual xmlbeansxx::Calendar getCalendarValue() const;
     virtual void setCalendarValue(const xmlbeansxx::Calendar &v);
-    
+
 %%class xmlbeansxx::XmlGMonth
     virtual xmlbeansxx::Calendar getCalendarValue() const;
     virtual void setCalendarValue(const xmlbeansxx::Calendar &v);
-    
+
 %%class xmlbeansxx::XmlGMonthDay
     virtual xmlbeansxx::Calendar getCalendarValue() const;
     virtual void setCalendarValue(const xmlbeansxx::Calendar &v);
-    
+
 %%class xmlbeansxx::XmlGYear
     virtual xmlbeansxx::Calendar getCalendarValue() const;
     virtual void setCalendarValue(const xmlbeansxx::Calendar &v);
-    
+
 %%class xmlbeansxx::XmlGYearMonth
     virtual xmlbeansxx::Calendar getCalendarValue() const;
     virtual void setCalendarValue(const xmlbeansxx::Calendar &v);
-    
+
 %%class xmlbeansxx::XmlBase64Binary
     virtual xmlbeansxx::shared_array<unsigned char> getByteArrayValue() const;
     virtual void setByteArrayValue(xmlbeansxx::shared_array<unsigned char> v);
-    
+
 %%class xmlbeansxx::XmlHexBinary
     virtual xmlbeansxx::shared_array<unsigned char> getByteArrayValue() const;
     virtual void setByteArrayValue(xmlbeansxx::shared_array<unsigned char> v);
-    
+
 %%class xmlbeansxx::XmlQName
     virtual boost::shared_ptr<xmlbeansxx::QName> getQNameValue() const;
     virtual void setQNameValue(boost::shared_ptr<xmlbeansxx::QName> v);
@@ -511,6 +511,6 @@ private:
 %%class xmlbeansxx::XmlDouble
     virtual double getDoubleValue() const;
     virtual void setDoubleValue(double v);
-    
+
 %%
 

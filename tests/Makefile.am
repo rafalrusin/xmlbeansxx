@@ -5,11 +5,11 @@ LIBADD =
 LDADD =
 
 if HAVE_CPPUNIT
-AM_CPPFLAGS = $(CPPUNIT_CFLAGS) -g 
+AM_CPPFLAGS = $(CPPUNIT_CFLAGS) -g
 LDADD += $(CPPUNIT_LIBS)
 endif
 
-INCLUDES = -I ${top_srcdir}/src -I ${top_builddir}/src -I ${top_builddir}/src/xmlbeansxx -I ${top_srcdir}/src/xmlbeansxx 
+INCLUDES = -I ${top_srcdir}/src -I ${top_builddir}/src -I ${top_builddir}/src/xmlbeansxx -I ${top_srcdir}/src/xmlbeansxx
 LDADD += ${top_builddir}/src/xmlbeansxx/libxmlbeansxx.la
 
 SCHEMAS_XSD = ${srcdir}/c.xsd ${srcdir}/entities.xsd ${srcdir}/pawel.xsd ${srcdir}/unqual.xsd
@@ -36,13 +36,13 @@ CalendarTest_SOURCES=TestApp.cpp CalendarTest.cpp CalendarTest.h
 ArrayTest_SOURCES=TestApp.cpp ArrayTest.cpp ArrayTest.h
 nodist_ArrayTest_SOURCES = c.cpp
 
-GenTest_SOURCES=TestApp.cpp GenTest.cpp GenTest.h 
+GenTest_SOURCES=TestApp.cpp GenTest.cpp GenTest.h
 nodist_GenTest_SOURCES = c.h c.cpp pawel.h pawel.cpp
 
-ParseTest_SOURCES=TestApp.cpp ParseTest.cpp ParseTest.h 
+ParseTest_SOURCES=TestApp.cpp ParseTest.cpp ParseTest.h
 nodist_ParseTest_SOURCES = c.h c.cpp pawel.h pawel.cpp
 
-UnqualTest_SOURCES=TestApp.cpp UnqualTest.cpp UnqualTest.h 
+UnqualTest_SOURCES=TestApp.cpp UnqualTest.cpp UnqualTest.h
 nodist_UnqualTest_SOURCES = unqual.h unqual.cpp
 
 EnumTest_SOURCES=TestApp.cpp EnumTest.cpp EnumTest.h
@@ -66,10 +66,10 @@ nodist_mem02_SOURCES = c.h c.cpp
 MOSTLYCLEANFILES = $(SCHEMAS_CPP) $(SCHEMAS_H)
 
 
-copy_data: 
-	if [ "x`readlink -f ${srcdir}`" != "x`readlink -f .`" ]; then for i in $(DATA_FILES); do   cp ${srcdir}/$$i  . ; done ; true ;  fi 
+copy_data:
+	if [ "x`readlink -f ${srcdir}`" != "x`readlink -f .`" ]; then for i in $(DATA_FILES); do   cp ${srcdir}/$$i  . ; done ; true ;  fi
 
-rm_data: 
+rm_data:
 	if [ "x`readlink -f ${srcdir}`" != "x`readlink -f .`"  ]; then  rm -f $(DATA_FILES) xmldsig-core-schema.h xmldsig-core-schema.cpp  ; true ;  fi
 
 check: copy_data

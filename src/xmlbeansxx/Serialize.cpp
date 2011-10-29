@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -53,7 +53,7 @@ namespace xmlbeansxx {
 namespace {
 bool shallPrintXsiType(const SchemaType *xsdDefined,const SchemaType * st) {
     static XmlObject src=XmlObject::Factory::newInstance();
-    return st->classTypeInfo != src.getSchemaType()->classTypeInfo 
+    return st->classTypeInfo != src.getSchemaType()->classTypeInfo
         && st->classTypeInfo != xsdDefined->classTypeInfo;
 }
 }
@@ -68,7 +68,7 @@ void Contents::serialize(bool printXsiType,const QName& elemName,std::ostream &o
 	if(elemName.first==StoreString("")) {
 		// if the element has a empty namespace then  it must have a "default namespace" (empty prefix)
 		ClearDefaultNamespace = true;
-		if(!(ns.getNamespaceURI("") == StoreString(""))) 
+		if(!(ns.getNamespaceURI("") == StoreString("")))
 			ns.addNamespace("","");
 	}
 	// add all namespace attribute to namespace map
@@ -93,9 +93,9 @@ void Contents::serialize(bool printXsiType,const QName& elemName,std::ostream &o
 	 		o << " " << ns.cprintQName(XmlBeans::xsi_type())  << "=\"" << ns.cprintQName(st->name) << "\"";
 		}
         }
-    
+
     	serializeAttrs(o,ns,options);
-	
+
 
       	if ( !hasElements()) {
       		o << "/>";
@@ -104,7 +104,7 @@ void Contents::serialize(bool printXsiType,const QName& elemName,std::ostream &o
        		serializeElems(o,ns,options);
        		o << "</" << name << ">";
       	}
-	
+
 	ns.restore();
 
 }
@@ -122,7 +122,7 @@ void Contents::serializeDocument(ostream &o,XmlOptions options) const {
 
     NSMapSerializer ns;
     if(options.getSerializePersistent()) ns.prefixPrefix=XmlBeans::persistentPrefix();
-    
+
     const std::map<QName,SchemaPropertyPtr> *order=&(st->elements);
     std::map<QName,SchemaPropertyPtr>::const_iterator propIt=order->find(it->name);
     SchemaPropertyPtr prop;
@@ -139,13 +139,13 @@ void Contents::serializeDocument(ostream &o,XmlOptions options) const {
     //----------
     it->value->serialize(printXsiType,it->name,o,ns,options);
     o<<"\n";
-    
+
 }
 
 void Contents::serializeAttrs(std::ostream &o,NSMapSerializer& ns,XmlOptions options) const {
 	SYNC(mutex)
 	XMLBEANSXX_FOREACH(ElemDict::ContentsType::const_iterator,it,attrs.contents) {
-		if(!(it->name.first == XmlBeans::xmlns())) {		
+		if(!(it->name.first == XmlBeans::xmlns())) {
 			o << " " << ns.cprintQName(it->name) << "=\"" << TextUtils::exchangeEntities(xmlbeansxx::Contents::Walker::getSimpleContent(it->value), TextUtils::AttrEscapes) << "\"";
 		}
 	}
@@ -183,27 +183,27 @@ void Contents::serializeElems(ostream &o,NSMapSerializer &ns, XmlOptions options
 
 		// order , element, expected element type
 	typedef vector< three < int ,  ElemDict::ContentsType::const_iterator , const SchemaType * > > SortType;
-	
-	SortType sort;
-	
 
-	//sort all elements 
+	SortType sort;
+
+
+	//sort all elements
 	int max_order = 0;
 	// calculate the element orders
 	XMLBEANSXX_FOREACH(ElemDict::ContentsType::const_iterator,it,elems.contents) {
 		const SchemaType::ElementsType::const_iterator st_it = st->elements.find(it->name);
 		if(st_it != st->elements.end()) {
 			sort.push_back(make_three(st_it->second->order,it, globalTypeSystem()->getSchemaType(st_it->second->schemaTypeName)));
-			max_order = MAX(max_order,st_it->second->order); 
+			max_order = MAX(max_order,st_it->second->order);
 		} else {
 			//this element  has no order
 			sort.push_back(make_three(max_order,it, XmlObject::type()));
 		}
 	}
 	std::sort(sort.begin(),sort.end());
-	
 
-	//print the elements	
+
+	//print the elements
 	XMLBEANSXX_FOREACH(SortType::const_iterator,it,sort) {
 		const ElemDict::ContentsType::const_iterator & el_it = it->second;
 		const SchemaType * st = it->third;
@@ -211,9 +211,9 @@ void Contents::serializeElems(ostream &o,NSMapSerializer &ns, XmlOptions options
 			// print the element
 			bool printXsiType= shallPrintXsiType(st,el_it->value->st);
 			el_it->value->serialize(printXsiType,el_it->name,o,ns,options);
-		}		
+		}
 	}
-	
+
 
 	ns.restore();
 }

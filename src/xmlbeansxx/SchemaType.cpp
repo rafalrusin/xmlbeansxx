@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -42,16 +42,16 @@ XmlObjectPtr SchemaType::createSubObject(const QName &name) const {
     	//searching for a Document type
 	XmlObjectPtr root = globalTypeSystem()->createDocumentByName(name);
 	//Document type not found (returning an XmlObject)
-	if(!root)  return XmlObject::Factory::newInstanceXmlObject(); 
+	if(!root)  return XmlObject::Factory::newInstanceXmlObject();
 
 	//Get the inner type of the document
 	QName documentElementName = root->getSchemaType()->documentElementName;
 	return root->getSchemaType()->createSubObject(documentElementName);
-	
-	
+
+
     }
 }
-    
+
 SchemaPropertyPtr SchemaType::findAttribute(const QName &name) const {
     Map_QName_SchemaPropertyPtr::const_iterator it=attributes.find(name);
     if (it==attributes.end()) return SchemaPropertyPtr();

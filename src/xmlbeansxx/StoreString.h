@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -82,7 +82,7 @@ class CStrLessFn {
 class CStrEqFn {
     public:
     bool operator()(const char *a,const char *b) const {
-        if (a==b) return true; 
+        if (a==b) return true;
         else return strcmp(a,b)==0;
     }
 };
@@ -103,7 +103,7 @@ public:
         const char *str;
         int hashCode;
     };
-    
+
     StringStorage();
     void add(const std::string &str);
     void add(const char * cs);
@@ -166,7 +166,7 @@ public:
     /** Remembers a string in collection, so it won't be allocated several times. */
     static StoreString store(const std::string &str);
     static StoreString store(const char *cs);
-    
+
     class Hash {
     public:
         unsigned int operator()(const StoreString &ss) const {
@@ -207,7 +207,7 @@ inline bool StoreString::isStored() const {
 
 inline const char *StoreString::c_str() const {
     if (isStored()) {
-        return getStorage()->getStr(buf); 
+        return getStorage()->getStr(buf);
     } else { return (char *)buf; }
 }
 

@@ -33,15 +33,15 @@ void ParseTest::parseTest() {
 
 	{
 // XercesParser
-	
+
 		XmlOptions opt;
 		opt.setValidation(true);
 		XercesParser p(opt);
 //		LibXMLParser p(opt);
 		p.loadGrammar("c.xsd");
-			    
+
 	       	ContentDocument doc=ContentDocument::Factory::newInstance();
-	
+
 
 		for(int i=0;i<2;i++) {
 			//Test 2 times
@@ -57,9 +57,9 @@ void ParseTest::parseTest() {
 				CPPUNIT_ASSERT_EQUAL(std::string(e.what()),cmp);
 			}
 		}
-	
-	
-	
+
+
+
 	       	{
 	        	ifstream in("c.xml");
 		        XMLBEANSXX_DEBUG(logger, "parsing c.xml");
@@ -68,7 +68,7 @@ void ParseTest::parseTest() {
 	    	}
 		std::string str=doc.toString();
 	        XMLBEANSXX_DEBUG(logger, "parsed c.xml:" + str);
-		std::string cmp = 
+		std::string cmp =
 		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 		"<test2:content xmlns:test2=\"http://mind.p4.com/mytest\" xmlns:test3=\"http://mind.p4.com/mytest\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
 		  "<test2:employee age=\"10\" xmlns=\"http://mind.p4.com/mytest\">"
@@ -83,7 +83,7 @@ void ParseTest::parseTest() {
 		  "</test2:employee>"
 		"</test2:content>\n";
 		CPPUNIT_ASSERT_EQUAL(cmp,str);
-		
+
 	}
 	{
 		XmlObject o = XmlObjectDocument::Factory::parse(
@@ -102,8 +102,8 @@ void ParseTest::parseTest() {
 		"	</info>"
 		"</zakupy>"
 		);
-		
-		
+
+
 		ZakupyDocument z = o;
 		std::string infoSchema=z.getZakupy().getInfo().getSchemaType()->name;
 	        XMLBEANSXX_DEBUG(logger, "z.getZakupy().getInfo().getSchemaType()->name: " + infoSchema);
@@ -117,13 +117,13 @@ void ParseTest::parseTest() {
 	        XMLBEANSXX_DEBUG(logger, "info element SchemaType name: " + infoESchema);
 		std::string cmp2 = "ala__ZakupyDocument_Zakupy@http://xmlbeansxx.touk.pl/xmlbeansxx/innerType";
 		CPPUNIT_ASSERT_EQUAL(cmp2,infoESchema);
-		
+
 		ZakupyDocument z2(info);
-	        XMLBEANSXX_DEBUG(logger, "zakupy: " + z2.toString());		
+	        XMLBEANSXX_DEBUG(logger, "zakupy: " + z2.toString());
 	}
 
 	// cast => serialize <-> parse of anyType
-	
+
 	{
 		XmlObject o = XmlObjectDocument::Factory::parse(
 		"<cos xmlns='http://ala' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>"
@@ -140,21 +140,21 @@ void ParseTest::parseTest() {
 		"		</zakupy>"
 		"	</info>"
 		"</cos>");
-		
+
 	        XMLBEANSXX_DEBUG(logger, "Document: " + o.toString(XmlOptions::serializeInnerTypes()));
 		XmlObject k = o.selectPath("/*/*:klient").front();
 		std::string k_str=k.toString();
 	        XMLBEANSXX_DEBUG(logger, "klient: " + k_str);
 		Klient k3 = Klient::Factory::newInstance();
 	        XMLBEANSXX_DEBUG(logger, "klient3: " + k3.toString());
-		
-		
+
+
 		Klient k2=Klient::Factory::parse(k_str);
 	        XMLBEANSXX_DEBUG(logger, "klient2: " + k2.toString());
 	}
 
-	// persistent => serialize <-> parse 
-	
+	// persistent => serialize <-> parse
+
 	{
 		XmlObject o = XmlObjectDocument::Factory::newInstance();
 		XMLBEANSXX_DEBUG(logger, "persistent string0:" + o.toString());
@@ -192,7 +192,7 @@ void ParseTest::parseTest() {
 		std::string s_equ=
 			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 			"<test> something </test>\n";
-	        		
+
 		XMLBEANSXX_DEBUG(logger, "something: " + s_str);
 		CPPUNIT_ASSERT_EQUAL(s_str,s_equ);
 	}
@@ -202,11 +202,11 @@ void ParseTest::parseTest() {
 		std::string s_equ=
 			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 			"<test2/>\n";
-	        		
+
 		XMLBEANSXX_DEBUG(logger, "something: " + s_str);
 		CPPUNIT_ASSERT_EQUAL(s_str,s_equ);
 	}
-	
+
 /*	{
 		XmlObject s=XmlToken::Factory::parse("<test> something \t a \n b   </test>");
 		std::string s_str=s.toString(XmlOptions::serializeTypes());
@@ -218,19 +218,19 @@ void ParseTest::parseTest() {
 		XMLBEANSXX_DEBUG(logger, "something: " + s_str);
 		CPPUNIT_ASSERT_EQUAL(s_str,s_equ);
 	}
-*/	
+*/
 	{ //Xercex
-		std::string cmp = 
+		std::string cmp =
 		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 		"<e xmlns=\"http://ala\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
 		" Jeden "
 		" <a/> \n "
 		" Dwa "
 		" <b/> "
-		" Trzy \n " 
+		" Trzy \n "
 		" <c/> "
 		"</e>\n";
-		
+
 		XmlObjectDocument o;
 		XercesParser p;
 		p.parse(cmp,o);
@@ -240,17 +240,17 @@ void ParseTest::parseTest() {
 		CPPUNIT_ASSERT_EQUAL(cmp,str);
 	}
 	{ //libxml
-		std::string cmp = 
+		std::string cmp =
 		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 		"<e xmlns=\"http://ala\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
 		" Jeden "
 		" <a/> \n "
 		" Dwa "
 		" <b/> "
-		" Trzy \n " 
+		" Trzy \n "
 		" <c/> "
 		"</e>\n";
-		
+
 		XmlObjectDocument o;
 		LibXMLParser p;
 		p.parse(cmp,o);
@@ -260,26 +260,26 @@ void ParseTest::parseTest() {
 		CPPUNIT_ASSERT_EQUAL(cmp,str);
 	}
 	{ //standart parser (xerces)
-		std::string cmp = 
+		std::string cmp =
 		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 		"<e xmlns=\"http://ala\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
 		" Jeden "
 		" <a/> \n "
 		" Dwa "
 		" <b/> "
-		" Trzy \n " 
+		" Trzy \n "
 		" <c/> "
 		"</e>\n";
-		
+
 		XmlObject o = XmlObjectDocument::Factory::parse(cmp);
 		XMLBEANSXX_DEBUG(logger, "dump: " + Contents::Walker::dump(o.contents));
 		std::string str = o.toString();
 	        XMLBEANSXX_DEBUG(logger, "Document: " + str);
 		CPPUNIT_ASSERT_EQUAL(cmp,str);
 	}
-	
+
 	{ //XmlObjectDocument cast test
-		std::string str = 
+		std::string str =
 			"<xml>"
 			"  <castTest xmlns='http://ala'>"
 			"     <digit>12</digit>"
@@ -287,7 +287,7 @@ void ParseTest::parseTest() {
 			"  </castTest>"
 			"</xml>";
 
-		std::string str2 = 
+		std::string str2 =
 			"<xml>"
 			"  <castTest2 xmlns='http://ala'>"
 			"     <digit>12</digit>"
@@ -299,13 +299,13 @@ void ParseTest::parseTest() {
 		try{
 			CastTestDocument d = CastTestDocument::Factory::parse(str);
 			CPPUNIT_ASSERT(false);
-		} catch(xmlbeansxx::ClassCastException &e){ } 
-		
+		} catch(xmlbeansxx::ClassCastException &e){ }
+
 		{ // casting the inner element of str (should work)
 			XmlObjectDocument doc = XmlObjectDocument::Factory::parse(str);
 			XmlCursor c(doc);
 			c.toFirstChild();
-			XmlObject e = c.getObject();		
+			XmlObject e = c.getObject();
 			XMLBEANSXX_DEBUG(logger, "castTest: " + e.toString());
 			CastTestDocument d(e);
 			XMLBEANSXX_DEBUG(logger, "castTest: " + d.toString());
@@ -314,14 +314,14 @@ void ParseTest::parseTest() {
 			XmlObjectDocument doc = XmlObjectDocument::Factory::parse(str2);
 			XmlCursor c(doc);
 			c.toFirstChild();
-			XmlObject e = c.getObject();		
+			XmlObject e = c.getObject();
 			XMLBEANSXX_DEBUG(logger, "castTest: " + e.toString());
 			try{
 				CastTestDocument d(e);
 				CPPUNIT_ASSERT(false);
-			} catch(xmlbeansxx::ClassCastException &e){ } 
+			} catch(xmlbeansxx::ClassCastException &e){ }
 		}
-		
+
 	}
 
 }

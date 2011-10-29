@@ -17,7 +17,7 @@ int main() {
         ContentDocument root=ContentDocument::Factory::parse(in);
         cout<<"firstname:"<<root.getContent().getEmployee().getFirstname()<<"\n";
         cout<<"lastname:"<<root.getContent().getEmployee().getLastname()<<"\n";
-        cout<<"age:"<<root.getContent().getEmployee().getAge()<<"\n";	
+        cout<<"age:"<<root.getContent().getEmployee().getAge()<<"\n";
         cout<<"firstname as xml:\n"<<root.getContent().getEmployee().xgetFirstname().toString()<<"\n";
 	cout<<"serializing:\n";
         root.serialize(cout);

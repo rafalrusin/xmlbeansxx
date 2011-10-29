@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -25,7 +25,7 @@ namespace xmlbeansxx {
 
 class StringContents : public Contents {
 private:
-	std::string value;	
+	std::string value;
 public:
 	StringContents(const SchemaType *st):Contents(st){}
 	StringContents(const std::string & str) ; //:Contents(xmlbeansxx::XmlString::type()),value(str){}
@@ -49,7 +49,7 @@ public:
 
 	virtual int countElems(const QName& elemName) const { return 0; }
 	virtual bool hasElements() const { return false; }
-	
+
 	virtual std::vector<ContentsPtr> getElemArray(const QName& elemName) const {return std::vector<ContentsPtr>(); };
 
 
@@ -57,7 +57,7 @@ public:
 	virtual bool hasEmptyContent() const { return true; };
 
 	virtual std::vector<std::pair<QName,ContentsPtr> > getElems(bool ) const { return std::vector<std::pair<QName,ContentsPtr> >(); }
-	virtual std::vector<std::pair<QName,std::string> > getAttrs() const { return std::vector<std::pair<QName,std::string> > (); } 
+	virtual std::vector<std::pair<QName,std::string> > getAttrs() const { return std::vector<std::pair<QName,std::string> > (); }
 	virtual std::vector<std::pair<QName,ContentsPtr> > getAttrs2() const { return std::vector<std::pair<QName,ContentsPtr> >(); }
 
 	virtual ContentsPtr clone(){  return ContentsPtr(new StringContents(st,value)); }
@@ -68,7 +68,7 @@ public:
 
 private:
 	virtual void serialize(bool printXsiType,const QName &elemName,std::ostream &o,NSMapSerializer &ns,XmlOptions options) const { o << TextUtils::exchangeEntities(value); }
-	
+
 	virtual void serializeAttrs(std::ostream &o,NSMapSerializer& ns,XmlOptions options) const { }
 	virtual void serializeElems(std::ostream &o,NSMapSerializer& ns,XmlOptions options) const { }
 
@@ -78,7 +78,7 @@ private:
 
 } //namespace xmlbenasxx
 
-	
+
 
 #endif //XMLBEANSPP_CONTENTS_IMPL_H_
 

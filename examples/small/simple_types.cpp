@@ -11,7 +11,7 @@ int main() {
         XmlInteger i(101),j(102),k(i+j);
         cout<<k.toString()<<"\n";
         */
-	
+
 	cout << "\n************************* TEST1 (XmlString) *************************\n";
 		XmlString sx(XmlAnySimpleType("xxx"));
 		XmlBoolean bx(std::string("0"));
@@ -48,9 +48,9 @@ int main() {
         cout<<"boolean1==boolean2:"<<(boolean1==boolean2).toString()<<"\n";
         cout<<"boolean1==!boolean2:"<<(boolean1==!boolean2).toString()<<"\n";
         cout<<"boolean1!=boolean2:"<<(boolean1==!boolean2).toString()<<"\n";
-	
 
-		
+
+
 	XmlObject obj=XmlPositiveInteger("10");
 	XmlInteger obj2=XmlInteger(obj);
 	cout<<"obj2:"<<obj2.toString()<<"\n";
@@ -93,7 +93,7 @@ int main() {
             cout<<"a>c:"<<XmlBoolean(a>c).getSimpleContent()<<"\n";
             cout<<"a>d:"<<XmlBoolean(a>d).getSimpleContent()<<"\n";
         }
-	
+
     } catch (BeansException ex) {
         cout<<"Exception: "<<ex.getMessage()<<"\n";
     }

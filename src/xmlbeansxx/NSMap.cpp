@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -64,7 +64,7 @@ StoreString NSMap::getNamespaceURI(const std::string& prefix) const {
 	PrefixMapType::const_iterator p=prefixMap.find(prefix);
 	if(p==prefixMap.end())
 		throw BeansException("Namespace prefix: " + prefix + " not set.");
-	
+
 	return p->second;
 }
 
