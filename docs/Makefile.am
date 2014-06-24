@@ -1,4 +1,4 @@
-SUBDIRS = 
+SUBDIRS =
 EXTRA_DIST = Doxyfile.in
 
 docdir  = $(DESTDIR)/$(prefix)/doc/@PACKAGE_TARNAME@-@PACKAGE_VERSION@

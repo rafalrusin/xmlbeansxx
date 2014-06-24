@@ -1,12 +1,12 @@
 /*
   Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
- 
+
   http://www.apache.org/licenses/LICENSE-2.0
- 
+
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,7 +31,7 @@
 #include "XmlBeans.h"
 
 #define XMLBEANSXX_DEBUG2(a,b) XMLBEANSXX_DEBUG(a, b)
-//#define XMLBEANSXX_DEBUG2(a,b) 
+//#define XMLBEANSXX_DEBUG2(a,b)
 
 namespace {
     const bool INSERT_INTO_CURSOR = true;
@@ -40,7 +40,7 @@ namespace {
 
 namespace xmlbeansxx {
 
-    
+
 // include class static objects in scope (else tests won't link)
 bool LibXMLParser::initialized = false;
 //boost::mutex LibXMLParser::mutex;
@@ -166,8 +166,8 @@ struct null_deleter
 {
 	template<class T> void operator()(T *) const{}
 };
-	    
-	    
+
+
 
 void LibXMLParser::parse(const std::string &doc, xmlbeansxx::XmlObject &documentRoot) {
 
@@ -180,15 +180,15 @@ void LibXMLParser::parse(const std::string &doc, xmlbeansxx::XmlObject &document
 
     // Set substitutes for entities
     xmlSubstituteEntitiesDefault (1);
-    
+
     while (!nodesStack.empty())
 	nodesStack.pop();
 
     documentRoot.createContents();
     XmlObjectPtr root_ptr=boost::shared_ptr<XmlObject>(&documentRoot,null_deleter());
-    
+
     nodesStack.push(StackEl(root_ptr,documentRoot.getSchemaType()->processContents,QName()));
-    
+
 
     int errNo;
     if ( validationCtxt == NULL )  {
@@ -216,7 +216,7 @@ void LibXMLParser::parse(const std::string &doc, xmlbeansxx::XmlObject &document
             throw XmlParseException(generateErrorMessage(error));
         }
     }
-    
+
 
 ///    cursor = Null();
 }
@@ -262,7 +262,7 @@ void LibXMLParser::loadGrammars(const vector<string>& files) {
  * Load schema and create internal representation.
  * Plug schema validation context to SAX parser.
  */
- 
+
 void LibXMLParser::loadGrammar(const string &filename) {
     {
         // prevent memory leak from previous load
@@ -331,7 +331,7 @@ void LibXMLParser::unloadGrammars() {
         xmlSchemaFreeParserCtxt(schemaParserCtxt);
 	schemaParserCtxt = NULL;
     }
-	
+
 }
 
 
@@ -401,8 +401,8 @@ void startElementNs(void *ctx,
         XMLBEANSXX_DEBUG2(LOG, string("localname: ") + (const char *) localname)
         XMLBEANSXX_DEBUG2(LOG, string("prefix   : ") + (prefix == NULL ? "" : (const char *) prefix))
         XMLBEANSXX_DEBUG2(LOG, string("URI      : ") + (URI == NULL ? "" : (const char *) URI))
-        
-        
+
+
         XMLBEANSXX_DEBUG2(LOG, "namespaces...");
         for(int i=0;i<nb_namespaces;i++) {
             XMLBEANSXX_DEBUG2(LOG, string("namespace: ")
@@ -448,17 +448,17 @@ void startElementNs(void *ctx,
             parser->xmlContext.addNamespace(prefix == NULL ? "" : prefix, ns);
         }
     }
-    
+
     QName name(parser->getQName((const char *) prefix, (const char *) localname));
     XMLBEANSXX_DEBUG2(LOG, std::string("begin element: ") + name)
-    
+
     if(parser->nodesStack.empty())
 	throw XmlException(string("no XmlObject on LibXMLParser stack"));
 
 
     XmlObjectPtr top=parser->nodesStack.top().obj;
     XmlObjectPtr n;
-    if(!top) throw XmlException(string("no XmlObjectPtr on LibXMLParser stack"));					   
+    if(!top) throw XmlException(string("no XmlObjectPtr on LibXMLParser stack"));
 
     if(parser->nodesStack.size()==1){
 	//hack for type casting. Runtime defined type
@@ -476,14 +476,14 @@ void startElementNs(void *ctx,
 	    root->createContents();
 	    top->setXmlObject(*root);
 	}
-	
+
     }
 
-    top->createContents();		
-    
+    top->createContents();
+
     {
 	if(!n) n=top->getSchemaType()->createSubObject(name);
-	
+
 	// test for xsi:type or create default XmlObject
         for (int current = 0; current < ATTRTABSIZE * nb_attributes; current += ATTRTABSIZE) {
 	    QName name(parser->getQName((const char *) attributes[current + ATTR_PREFIX], (const char *) attributes[current + ATTR_LOCALNAME], true));
@@ -491,31 +491,31 @@ void startElementNs(void *ctx,
 		QName value=parser->nsSplit(getAttrValue(attributes + current));
         	XMLBEANSXX_DEBUG2(LOG, std::string("xsi:type = ") + value)
 		n = globalTypeSystem()->createByName(value);
-		if (!n) throw XmlException(string("Xsd Type '")+value+string("' not defined in builtin type system"));					   
+		if (!n) throw XmlException(string("Xsd Type '")+value+string("' not defined in builtin type system"));
 	    } else if(name == XmlBeans::xsi_array()) {
 		QName value=parser->nsSplit(getAttrValue(attributes + current));
         	XMLBEANSXX_DEBUG2(LOG, std::string("xsi:array = ") + value)
 //		n = globalTypeSystem()->createArrayByName(value);
-		if (!n) throw XmlException(string("Xsd Type '")+value+string("' not defined in builtin type system"));					   
-	    
+		if (!n) throw XmlException(string("Xsd Type '")+value+string("' not defined in builtin type system"));
+
 	    }
 	}
-	
+
 	if(!n) throw XmlException(string("Cannot create subelement '")+name+string("' on object of class "+top->getSchemaType()->className));
 
 
 
-    }	
+    }
 
     n->createContents();
-    
+
 
     {
         XMLBEANSXX_DEBUG2(LOG, "add attributes")
         for (int current = 0; current < ATTRTABSIZE * nb_attributes; current += ATTRTABSIZE) {
             QName name(parser->getQName((const char *) attributes[current + ATTR_PREFIX], (const char *) attributes[current + ATTR_LOCALNAME], true));
     	    XMLBEANSXX_DEBUG2(LOG, std::string("attribute name (prefix): (") +  name.prefix + ")" + name)
-	    
+
 	    if (name == XmlBeans::xsi_type()) continue;
 	    if (name == XmlBeans::xsi_array()) continue;
 	    std::string value(getAttrValue(attributes + current));
@@ -535,7 +535,7 @@ void startElementNs(void *ctx,
     }
 
     parser->xmlContext.remember();
-    
+
     {
 	XMLBEANSXX_DEBUG2(LOG, std::string("append element name (prefix): (") +name.prefix+ ")"+ name  )
 
@@ -575,17 +575,17 @@ void characters(void *ctx, const xmlChar *ch, int length) {
 ///       parser->cursor->insertChars(s);
 
 	std::string str = TextUtils::applyContentTypeRules(s,parser->nodesStack.top().obj->getSchemaType());
-	
+
 	if(str.size()>0)
 		Contents::Walker::appendElem(*(parser->nodesStack.top().obj),XmlBeans::textElementName(),xmlbeansxx::ContentsPtr(new StringContents(str)));
 
     XMLBEANSXX_DEBUG2(LOG, "element content:" + str)
-    
+
 }
 
 void serror(void *ctx, xmlErrorPtr error) {
 	std::stringstream err;
-	
+
 	err << "serror:"	<< error->message;
     	err << ", line:"  	<< error->line;
 	err << ", column:" 	<< error->int2;

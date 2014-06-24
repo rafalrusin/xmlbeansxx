@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -29,7 +29,7 @@
 
 namespace xmlbeansxx {
 
-    
+
 XmlParserPtr XmlParser::Factory::newInstance() {
 /*#ifdef HAVE_LIBXML2
     return XmlParserPtr(new LibXMLParser());

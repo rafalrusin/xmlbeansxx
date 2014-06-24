@@ -2,7 +2,7 @@
 
 #
 #    Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-#    
+#
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
 #    You may obtain a copy of the License at
@@ -91,7 +91,7 @@ done
 for i in "${DIRS[@]}"; do
 	TMP_FILE=`mktemp`
 	find $i -name \*.xsd  > $TMP_FILE
-	while read -r xx ; do 
+	while read -r xx ; do
 		ARG_XSD[${#ARG_XSD[@]}]=$xx
 	done < $TMP_FILE
 	rm $TMP_FILE
@@ -110,7 +110,7 @@ for i in "${ARG_XSD[@]}"; do
 	esac
 	ORGIN_XSD[${#ORGIN_XSD[@]}]="$iesc"
 	ORGIN_BASENAME_XSD[${#ORGIN_BASENAME_XSD[@]}]=`basename "$iesc"`
-done 
+done
 
 
 
@@ -140,14 +140,14 @@ if ! $BIN/xmlbeansxx-gen $XMLBEANSXX_OPTS -Dincludes=xsd.txt "${XSD_FILES[@]}"; 
 
 TMP1_FILE=`mktemp`
 TMP2_FILE=`mktemp`
-cat xsd.txt > $TMP1_FILE 
+cat xsd.txt > $TMP1_FILE
 for i in "${ORGIN_BASENAME_XSD[@]}"; do
 	echo $i >> $TMP1_FILE
 done
 sort $TMP1_FILE | uniq > $TMP2_FILE
 
 #ALL_XSD=`cat $TMP2_FILE`
-while read -r xx ; do 
+while read -r xx ; do
 	ALL_XSD[${#ALL_XSD[@]}]=$xx
 done < $TMP2_FILE
 
@@ -160,7 +160,7 @@ for i in "${ALL_XSD[@]}"; do
 	COMP_XSD[${#COMP_XSD[@]}]="$base_esc.xsd"
 	COMP_H[${#COMP_H[@]}]="$base_esc.h"
 	CPPFILE="$base_esc.cpp"
-	if [ `du -s -b $CPPFILE | sed -e 's/^\([0-9]*\)[^0-9].*/\1/'` -ge $MAX_FILESIZE ] ; then 
+	if [ `du -s -b $CPPFILE | sed -e 's/^\([0-9]*\)[^0-9].*/\1/'` -ge $MAX_FILESIZE ] ; then
 		# split
 		TMP=`$BIN/xmlbeansxx-split  $CPPFILE `
 		unset CPPFILES
@@ -224,7 +224,7 @@ cd ..
 
 #############################
 
-if [ $COMPOSITE_SCHEMA ]; then 
+if [ $COMPOSITE_SCHEMA ]; then
 	if [ ! -e $COMPOSITE_SCHEMA ]; then
 		echo '<?xml version="1.0" encoding="UTF-8"?>
 		<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
@@ -245,7 +245,7 @@ fi
 cat <<EOF >Makefile.am
 
 ACLOCAL = aclocal -I m4
-EXTRA_DIST = bootstrap m4/acx_pthread.m4 
+EXTRA_DIST = bootstrap m4/acx_pthread.m4
 SUBDIRS = src
 
 schemasdir = \$(datadir)/${LIB_NAME}
@@ -268,7 +268,7 @@ AC_PREREQ(2.57)
 
 AC_INIT( $LIB_NAME, $PKG_VERSION, support@TouK.pl)
 # When changing version number make sure to change version-info argument in i
-#   Makefile.am 
+#   Makefile.am
 # according to libtool documentation
 
 AC_CONFIG_AUX_DIR([config])
@@ -341,7 +341,7 @@ RUN_BOOTSTRAP=1
 RUN_CONFIGURE=1
 
 ## Launching makefiles generation ##
-if [ ! $SRCONLY_FLAG ]; then 
+if [ ! $SRCONLY_FLAG ]; then
 	if [ "$RUN_BOOTSTRAP" = 1 ]; then ./bootstrap || exit 1; fi
 	if [ "$RUN_CONFIGURE" = 1 ]; then ./configure || exit 1; fi
 

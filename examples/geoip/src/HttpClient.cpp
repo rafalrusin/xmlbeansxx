@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -11,7 +11,7 @@
     distributed under the License is distributed on an "AS IS" BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
-    limitations under the License. 
+    limitations under the License.
   */
 #include "HttpClient.h"
 
@@ -34,12 +34,12 @@ size_t curl_stream_result(bool result, size_t requestedLength) {
 	}
 }
 
-size_t my_write_func(void *ptr, size_t size, size_t nmemb, std::ostream *stream)                                                                                             
+size_t my_write_func(void *ptr, size_t size, size_t nmemb, std::ostream *stream)
 {
 	stream->write((char *) ptr, size*nmemb);
 	return curl_stream_result(!stream->bad(), size*nmemb);
-}                                                                                                                                                                    
-                                                                                                                                                                     
+}
+
 size_t my_read_func(void *ptr, size_t size, size_t nmemb, std::istream *stream)
 {
 	if ((size * nmemb) == 0)
@@ -48,11 +48,11 @@ size_t my_read_func(void *ptr, size_t size, size_t nmemb, std::istream *stream)
 	stream->read((char *) ptr, size * nmemb);
 	int count = stream->gcount();
 	return count;
-}        
+}
 
 }
-	
-	
+
+
 HttpClient::HttpClient()
 {
 }
@@ -64,27 +64,27 @@ HttpClient::~HttpClient()
 class CurlHttpClient: public HttpClient {
     static log4cxx::LoggerPtr log;
 public:
-	
-	
+
+
 	CurlHttpClient() {
 	}
-	
+
 	virtual ~CurlHttpClient() {
 	}
-	
+
 	virtual std::string post(const Url &url, std::string _in,const headers_type &headers) {
 		ostringstream out;
 		istringstream in(_in);
         int inSize = _in.length();
-              
+
 		string ca;
 		{
 			ca = cacert;
 		}
-        
 
-		
-              
+
+
+
 		CURL *curl;
         struct curl_slist *slist=NULL;
 		char curl_errbuf[CURL_ERROR_SIZE];
@@ -93,10 +93,10 @@ public:
         for(headers_type::size_type i=0;i<headers.size();i++) {
             slist = curl_slist_append(slist, headers[i].c_str());
         }
-        
+
 
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist);
-        
+
 		curl_easy_setopt(curl, CURLOPT_URL, url.url.c_str());
 		curl_easy_setopt(curl, CURLOPT_POST, 1);
 		curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, curl_errbuf);
@@ -122,7 +122,7 @@ public:
 
 	    CURLcode result = curl_easy_perform(curl);
 
-         curl_slist_free_all(slist); /* free the list again */       
+         curl_slist_free_all(slist); /* free the list again */
 
         std::ostringstream s_result;
         s_result << result;

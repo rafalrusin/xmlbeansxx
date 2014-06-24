@@ -15,7 +15,7 @@ int main() {
         XmlOptions opt;
     	opt.setValidation(true);
     	LibXMLParser p(opt);
-	
+
         ContentDocument doc=ContentDocument::Factory::newInstance();
         p.loadGrammar("c.xsd");
         p.parse(
@@ -33,10 +33,10 @@ int main() {
 "  </lastname>  "
 "</employee>   "
 "</content>"
-*/		    
+*/
 	,doc);
         doc.serialize(cout);
-		
+
     } catch (BeansException ex) {
         cout<<"BeansException: "<<ex.getMessage()<<"\n";
     } catch (xmlbeansxx::XmlParseException* ex) {

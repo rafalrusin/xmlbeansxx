@@ -3,7 +3,7 @@
 
 
 #define XMLBEANSXX_WITHOUT_LOG4CXX
- 
+
 
 #endif
 

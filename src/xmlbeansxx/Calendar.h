@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -24,7 +24,7 @@
 #include "logger.h"
 
 namespace xmlbeansxx {
-			
+
 
 class Duration;
 
@@ -91,14 +91,14 @@ class Calendar {
 		Calendar& dstUnknown();
 		bool isDstOn() const;
 		bool isSetDst() const;
-		int getDst() const; 
-		
+		int getDst() const;
+
 		boost::gregorian::date getDate() const;
 		boost::posix_time::ptime getTime() const;
 		boost::posix_time::time_duration getTimeDuration() const;
 		boost::posix_time::ptime getUTCTime() const;
 		boost::posix_time::ptime getLocalTime() const;
-		
+
 		std::string dateToString() const;
 		std::string timeToString() const;
 		std::string utcTimeToString() const;
@@ -143,9 +143,9 @@ class Calendar {
 class Duration {
 	public:
 		Duration();
-		Duration(const std::string&); 
-		Duration(const boost::posix_time::time_duration&); 
-		
+		Duration(const std::string&);
+		Duration(const boost::posix_time::time_duration&);
+
 		Duration& setYears(int);
 		Duration& setYears(const std::string&);
 		int getYears();
@@ -155,7 +155,7 @@ class Duration {
 		Duration& setMonths(const std::string&);
 		int getMonths();
 		bool hasMonths();
-		
+
 		Duration& setDays(int);
 		Duration& setDays(const std::string&);
 		int getDays();
@@ -165,7 +165,7 @@ class Duration {
 		Duration& setHours(const std::string&);
 		int getHours();
 		bool hasHours();
-		
+
 		Duration& setMinutes(int);
 		Duration& setMinutes(const std::string&);
 		int getMinutes();
@@ -175,7 +175,7 @@ class Duration {
 		Duration& setSeconds(const std::string&);
 		int getSeconds();
 		bool hasSeconds();
-		
+
 		Duration& setFracSec(int);
 		Duration& setFracSec(const std::string&);
 		int getFracSec();
@@ -190,7 +190,7 @@ class Duration {
 
 		Duration &operator= (const Duration &);
 		//Duration &operator+ (const Duration &);
-		
+
 	private:
 		int years;
 		int months;

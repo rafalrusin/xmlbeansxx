@@ -31,6 +31,6 @@ int main()
 	a=XmlString::Factory::parse(s);
 */
 	do{
-	XMLBEANSXX_DEBUG(logger,"mem leak Test:");		
+	XMLBEANSXX_DEBUG(logger,"mem leak Test:");
 	} while(true);
 }

@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -47,20 +47,20 @@ struct tm {
 	int tm_year; 	//years since 1900
 	int tm_wday; 	//days since Sunday 		0-6
 	int tm_yday; 	//days since January 1 		0-365
-	int tm_isdst; 	//Daylight Saving Time flags  
-					//	tm_isdst is greater than zero if Daylight Saving Time is in effect, 
-					//	zero if Daylight Saving Time is not in effect, 
+	int tm_isdst; 	//Daylight Saving Time flags
+					//	tm_isdst is greater than zero if Daylight Saving Time is in effect,
+					//	zero if Daylight Saving Time is not in effect,
 					//	and less than zero if the information is not available.
-						
-	//Only in linux:				
-						
-	long int tm_gmtoff 
-					//This field describes the time zone that was used to compute this broken-down time value; 
-					//it is the amount you must add to the local time in that zone to get GMT, in units of seconds. 
-					//The value is like that of the variable timezone (see section Functions and Variables for Time Zones). 
+
+	//Only in linux:
+
+	long int tm_gmtoff
+					//This field describes the time zone that was used to compute this broken-down time value;
+					//it is the amount you must add to the local time in that zone to get GMT, in units of seconds.
+					//The value is like that of the variable timezone (see section Functions and Variables for Time Zones).
 					//You can also think of this as the "number of seconds west" of GMT. The tm_gmtoff field is a GNU library extension.
 	cnst char *tm_zone
-					//This field is the three-letter name for the time zone that was used to compute this broken-down time value. 
+					//This field is the three-letter name for the time zone that was used to compute this broken-down time value.
 					//It is a GNU library extension.
 }
 */
@@ -90,7 +90,7 @@ int getInt(std::string sint) {
 
 	if (!TextUtils::areDigits(tmp))
 		throw CalendarException("Not all requested signs are digits!");
-	
+
 	std::stringstream ss;
 	ss << tmp;
 	ss >> len;
@@ -136,13 +136,13 @@ Calendar::Calendar(const boost::posix_time::ptime &ptime) {
 		throw CalendarException("Bad time format");
 }
 
-Calendar::Calendar(const std::string &str) { 
+Calendar::Calendar(const std::string &str) {
 	//str = CCYY-MM-DDThh:mm:ss(.sss)(Z|(+|-)hh:mm)
 	XMLBEANSXX_DEBUG(Calendar_log, "creating Calendar from str: " + str);
 	flags = 0;
 	char sign = '?';
 	std::string pt, frac, tz;
-	
+
 	pt = TextUtils::collapse(str);
 
 	if (pt.rfind('+') != std::string::npos)
@@ -156,18 +156,18 @@ Calendar::Calendar(const std::string &str) {
 		tz = pt.substr(pt.rfind(sign), pt.length());
 		pt = pt.substr(0, pt.rfind(sign));
 	}
-	
+
 	if (pt.rfind('.') != std::string::npos) {
 		frac = pt.substr(pt.rfind('.') + 1, pt.length());
 		pt = pt.substr(0, pt.rfind('.'));
 	}
 
 	while (pt.find('-') != std::string::npos) //no B.C. ;-)
-		pt = pt.erase(pt.find('-'), 1); 
-	
-	while (pt.find(':') != std::string::npos) 
+		pt = pt.erase(pt.find('-'), 1);
+
+	while (pt.find(':') != std::string::npos)
 		pt = pt.erase(pt.find(':'), 1);
-	
+
 	boost::posix_time::ptime ptime(boost::posix_time::from_iso_string(pt));
 
 	if (!ptime.is_special()) {
@@ -179,12 +179,12 @@ Calendar::Calendar(const std::string &str) {
 		flags |= has_minutes;
 		flags |= has_seconds;
 		fixTm();
-	} 
+	}
 
 	if (!frac.empty()) {
 		int fsec = getInt(frac);
 		if (fsec >= 0 && fsec < 1000) {
-			frac_sec = fsec;	 
+			frac_sec = fsec;
 			flags |= has_fracsec;
 		} else
 			throw CalendarException("Bad FracSec value!");
@@ -192,20 +192,20 @@ Calendar::Calendar(const std::string &str) {
 
 	if (sign != '?') {
 		if (sign == 'Z') {
-			gmt_off_hours = 0; 
-			gmt_off_minutes = 0; 
+			gmt_off_hours = 0;
+			gmt_off_minutes = 0;
 		} else {
-			if (tz[3] != ':' || tz.length() != 6) 
+			if (tz[3] != ':' || tz.length() != 6)
 				throw CalendarException("Bad TimeZone format!");
 			if (sign == '+') {
-				gmt_off_hours = getInt(tz.substr(1,2)); 
-				gmt_off_minutes = getInt(tz.substr(4,5)); 
+				gmt_off_hours = getInt(tz.substr(1,2));
+				gmt_off_minutes = getInt(tz.substr(4,5));
 			} else {
-				gmt_off_hours = -getInt(tz.substr(1,2)); //- 
+				gmt_off_hours = -getInt(tz.substr(1,2)); //-
 				gmt_off_minutes = -getInt(tz.substr(4,5)); //-
 			}
 		}
-		cal_tm.tm_isdst = 0; 
+		cal_tm.tm_isdst = 0;
 		flags |= has_timezone;
 	}
 }
@@ -230,7 +230,7 @@ Calendar& Calendar::setDate(const std::string &str) {
 	}
 
 	while (pt.find('-') != std::string::npos) //no B.C. ;-)
-		pt = pt.erase(pt.find('-'), 1); 
+		pt = pt.erase(pt.find('-'), 1);
 
 	boost::gregorian::date date(boost::gregorian::from_undelimited_string(pt));
 
@@ -251,20 +251,20 @@ Calendar& Calendar::setDate(const std::string &str) {
 
 	if (sign != '?') {
 		if (sign == 'Z') {
-			gmt_off_hours = 0; 
-			gmt_off_minutes = 0; 
+			gmt_off_hours = 0;
+			gmt_off_minutes = 0;
 		} else {
-			if (tz[3] != ':' || tz.length() != 6) 
+			if (tz[3] != ':' || tz.length() != 6)
 				throw CalendarException("Bad TimeZone format!");
 			if (sign == '+') {
-				gmt_off_hours = getInt(tz.substr(1,2)); 
-				gmt_off_minutes = getInt(tz.substr(4,5)); 
+				gmt_off_hours = getInt(tz.substr(1,2));
+				gmt_off_minutes = getInt(tz.substr(4,5));
 			} else {
-				gmt_off_hours = -getInt(tz.substr(1,2)); //- 
+				gmt_off_hours = -getInt(tz.substr(1,2)); //-
 				gmt_off_minutes = -getInt(tz.substr(4,5)); //-
 			}
 		}
-		cal_tm.tm_isdst = 0; 
+		cal_tm.tm_isdst = 0;
 		flags |= has_timezone;
 	}
 
@@ -272,7 +272,7 @@ Calendar& Calendar::setDate(const std::string &str) {
 }
 
 
-Calendar& Calendar::setTime(const std::string &str) { 
+Calendar& Calendar::setTime(const std::string &str) {
 	//str = hh:mm:ss(.sss)(Z|(+|-)hh:mm)
 	XMLBEANSXX_DEBUG(Calendar_log, "setting Time from str: " + str);
 
@@ -299,7 +299,7 @@ Calendar& Calendar::setTime(const std::string &str) {
 		pt = pt.substr(0, pt.rfind('.'));
 	}
 
-	
+
 	boost::posix_time::time_duration td(boost::posix_time::duration_from_string(pt));
 
 	if (!td.is_special()) {
@@ -308,7 +308,7 @@ Calendar& Calendar::setTime(const std::string &str) {
 		flags |= has_hour;
 		flags |= has_minutes;
 		flags |= has_seconds;
-		
+
 		cal_tm.tm_mday = tmp.tm_mday;
 		cal_tm.tm_wday = tmp.tm_wday;
 		cal_tm.tm_yday = tmp.tm_yday;
@@ -320,7 +320,7 @@ Calendar& Calendar::setTime(const std::string &str) {
 	if (!frac.empty()) {
 		int fsec = getInt(frac);
 		if (fsec >= 0 && fsec < 1000) {
-			frac_sec = fsec;	 
+			frac_sec = fsec;
 			flags |= has_fracsec;
 		} else
 			throw CalendarException("Bad FracSec value!");
@@ -328,20 +328,20 @@ Calendar& Calendar::setTime(const std::string &str) {
 
 	if (sign != '?') {
 		if (sign == 'Z') {
-			gmt_off_hours = 0; 
-			gmt_off_minutes = 0; 
+			gmt_off_hours = 0;
+			gmt_off_minutes = 0;
 		} else {
-			if (tz[3] != ':' || tz.length() != 6) 
+			if (tz[3] != ':' || tz.length() != 6)
 				throw CalendarException("Bad TimeZone format!");
 			if (sign == '+') {
-				gmt_off_hours = getInt(tz.substr(1,2)); 
-				gmt_off_minutes = getInt(tz.substr(4,5)); 
+				gmt_off_hours = getInt(tz.substr(1,2));
+				gmt_off_minutes = getInt(tz.substr(4,5));
 			} else {
-				gmt_off_hours = -getInt(tz.substr(1,2)); //- 
+				gmt_off_hours = -getInt(tz.substr(1,2)); //-
 				gmt_off_minutes = -getInt(tz.substr(4,5)); //-
 			}
 		}
-		cal_tm.tm_isdst = 0; 
+		cal_tm.tm_isdst = 0;
 		flags |= has_timezone;
 	}
 	return *this;
@@ -374,20 +374,20 @@ Calendar& Calendar::setYearMonth(const std::string &str) {
 
 	if (sign != '?') {
 		if (sign == 'Z') {
-			gmt_off_hours = 0; 
-			gmt_off_minutes = 0; 
+			gmt_off_hours = 0;
+			gmt_off_minutes = 0;
 		} else {
-			if (tz[3] != ':' || tz.length() != 6) 
+			if (tz[3] != ':' || tz.length() != 6)
 				throw CalendarException("Bad TimeZone format!");
 			if (sign == '+') {
-				gmt_off_hours = getInt(tz.substr(1,2)); 
-				gmt_off_minutes = getInt(tz.substr(4,5)); 
+				gmt_off_hours = getInt(tz.substr(1,2));
+				gmt_off_minutes = getInt(tz.substr(4,5));
 			} else {
-				gmt_off_hours = -getInt(tz.substr(1,2)); //- 
+				gmt_off_hours = -getInt(tz.substr(1,2)); //-
 				gmt_off_minutes = -getInt(tz.substr(4,5)); //-
 			}
 		}
-		cal_tm.tm_isdst = 0; 
+		cal_tm.tm_isdst = 0;
 		flags |= has_timezone;
 	}
 	return *this;
@@ -418,20 +418,20 @@ Calendar& Calendar::setgYear(const std::string &str) {
 
 	if (sign != '?') {
 		if (sign == 'Z') {
-			gmt_off_hours = 0; 
-			gmt_off_minutes = 0; 
+			gmt_off_hours = 0;
+			gmt_off_minutes = 0;
 		} else {
-			if (tz[3] != ':' || tz.length() != 6) 
+			if (tz[3] != ':' || tz.length() != 6)
 				throw CalendarException("Bad TimeZone format!");
 			if (sign == '+') {
-				gmt_off_hours = getInt(tz.substr(1,2)); 
-				gmt_off_minutes = getInt(tz.substr(4,5)); 
+				gmt_off_hours = getInt(tz.substr(1,2));
+				gmt_off_minutes = getInt(tz.substr(4,5));
 			} else {
-				gmt_off_hours = -getInt(tz.substr(1,2)); //- 
+				gmt_off_hours = -getInt(tz.substr(1,2)); //-
 				gmt_off_minutes = -getInt(tz.substr(4,5)); //-
 			}
 		}
-		cal_tm.tm_isdst = 0; 
+		cal_tm.tm_isdst = 0;
 		flags |= has_timezone;
 	}
 	return *this;
@@ -455,7 +455,7 @@ Calendar& Calendar::setMonthDay(const std::string &str) {
 		tz = pt.substr(pt.rfind(sign), pt.length());
 		pt = pt.substr(0, pt.rfind(sign));
 	}
-	
+
 	setMonth(getInt(pt.substr(2, 2)));
 	flags |= has_month;
 	setDay(getInt(pt.substr(5, 6)));
@@ -464,20 +464,20 @@ Calendar& Calendar::setMonthDay(const std::string &str) {
 
 	if (sign != '?') {
 		if (sign == 'Z') {
-			gmt_off_hours = 0; 
-			gmt_off_minutes = 0; 
+			gmt_off_hours = 0;
+			gmt_off_minutes = 0;
 		} else {
-			if (tz[3] != ':' || tz.length() != 6) 
+			if (tz[3] != ':' || tz.length() != 6)
 				throw CalendarException("Bad TimeZone format!");
 			if (sign == '+') {
-				gmt_off_hours = getInt(tz.substr(1,2)); 
-				gmt_off_minutes = getInt(tz.substr(4,5)); 
+				gmt_off_hours = getInt(tz.substr(1,2));
+				gmt_off_minutes = getInt(tz.substr(4,5));
 			} else {
-				gmt_off_hours = -getInt(tz.substr(1,2)); //- 
+				gmt_off_hours = -getInt(tz.substr(1,2)); //-
 				gmt_off_minutes = -getInt(tz.substr(4,5)); //-
 			}
 		}
-		cal_tm.tm_isdst = 0; 
+		cal_tm.tm_isdst = 0;
 		flags |= has_timezone;
 	}
 	return *this;
@@ -508,20 +508,20 @@ Calendar& Calendar::setgMonth(const std::string &str) {
 
 	if (sign != '?') {
 		if (sign == 'Z') {
-			gmt_off_hours = 0; 
-			gmt_off_minutes = 0; 
+			gmt_off_hours = 0;
+			gmt_off_minutes = 0;
 		} else {
-			if (tz[3] != ':' || tz.length() != 6) 
+			if (tz[3] != ':' || tz.length() != 6)
 				throw CalendarException("Bad TimeZone format!");
 			if (sign == '+') {
-				gmt_off_hours = getInt(tz.substr(1,2)); 
-				gmt_off_minutes = getInt(tz.substr(4,5)); 
+				gmt_off_hours = getInt(tz.substr(1,2));
+				gmt_off_minutes = getInt(tz.substr(4,5));
 			} else {
-				gmt_off_hours = -getInt(tz.substr(1,2)); //- 
+				gmt_off_hours = -getInt(tz.substr(1,2)); //-
 				gmt_off_minutes = -getInt(tz.substr(4,5)); //-
 			}
 		}
-		cal_tm.tm_isdst = 0; 
+		cal_tm.tm_isdst = 0;
 		flags |= has_timezone;
 	}
 	return *this;
@@ -551,29 +551,29 @@ Calendar& Calendar::setgDay(const std::string &str) {
 
 	if (sign != '?') {
 		if (sign == 'Z') {
-			gmt_off_hours = 0; 
-			gmt_off_minutes = 0; 
+			gmt_off_hours = 0;
+			gmt_off_minutes = 0;
 		} else {
-			if (tz[3] != ':' || tz.length() != 6) 
+			if (tz[3] != ':' || tz.length() != 6)
 				throw CalendarException("Bad TimeZone format!");
 			if (sign == '+') {
-				gmt_off_hours = getInt(tz.substr(1,2)); 
-				gmt_off_minutes = getInt(tz.substr(4,5)); 
+				gmt_off_hours = getInt(tz.substr(1,2));
+				gmt_off_minutes = getInt(tz.substr(4,5));
 			} else {
-				gmt_off_hours = -getInt(tz.substr(1,2)); //- 
+				gmt_off_hours = -getInt(tz.substr(1,2)); //-
 				gmt_off_minutes = -getInt(tz.substr(4,5)); //-
 			}
 		}
-		cal_tm.tm_isdst = 0; 
+		cal_tm.tm_isdst = 0;
 		flags |= has_timezone;
 	}
 	return *this;
 }
 
 Calendar& Calendar::setYear(int year) {
-	if (year < -4713 || year > 9999999) 
+	if (year < -4713 || year > 9999999)
 		throw CalendarException("Bad year value!");
-	if (year == 0) 
+	if (year == 0)
 		throw CalendarException("There's no 0 year!");
 	cal_tm.tm_year = year - 1900;
 	flags |= has_year;
@@ -592,7 +592,7 @@ int Calendar::getYear() const {
 }
 
 bool Calendar::hasYear() const {
-	return ((flags & has_year) != 0); 
+	return ((flags & has_year) != 0);
 }
 
 Calendar& Calendar::setMonth(int month) {
@@ -610,7 +610,7 @@ Calendar& Calendar::setMonth(const std::string &month) {
 }
 
 int Calendar::getMonth() const {
-	if (hasMonth())	
+	if (hasMonth())
 		return cal_tm.tm_mon + 1;
 	return 0;
 }
@@ -621,7 +621,7 @@ bool Calendar::hasMonth() const {
 
 Calendar& Calendar::setDay(int day) {
 	if (day > 0 && day < 32) {
-		cal_tm.tm_mday = day;	 
+		cal_tm.tm_mday = day;
 		flags |= has_day;
 		fixTm();
 	} else
@@ -634,18 +634,18 @@ Calendar& Calendar::setDay(const std::string &day) {
 }
 
 int Calendar::getDay() const {
-	if (hasDay()) 
+	if (hasDay())
 		return cal_tm.tm_mday;
 	return 0;
 }
 
 bool Calendar::hasDay() const {
-	return ((flags & has_day) != 0);	
+	return ((flags & has_day) != 0);
 }
 
 Calendar& Calendar::setHour(int hour) {
 	if (hour >= 0 && hour < 25) {
-		cal_tm.tm_hour = hour;	 
+		cal_tm.tm_hour = hour;
 		flags |= has_hour;
 	} else
 		throw CalendarException("Bad hour value!");
@@ -657,18 +657,18 @@ Calendar& Calendar::setHour(const std::string &hour) {
 }
 
 int Calendar::getHour() const {
-	if (hasHour()) 
+	if (hasHour())
 		return cal_tm.tm_hour;
 	return 0;
 }
 
 bool Calendar::hasHour() const {
-	return ((flags & has_hour) != 0);	
+	return ((flags & has_hour) != 0);
 }
 
 Calendar& Calendar::setMinutes(int min) {
 	if (min >= 0 && min < 61) {
-		cal_tm.tm_min = min;	 
+		cal_tm.tm_min = min;
 		flags |= has_minutes;
 	} else
 		throw CalendarException("Bad minutes value!");
@@ -680,18 +680,18 @@ Calendar& Calendar::setMinutes(const std::string &min) {
 }
 
 int Calendar::getMinutes() const {
-	if (hasMinutes()) 
+	if (hasMinutes())
 		return cal_tm.tm_min;
 	return 0;
 }
 
 bool Calendar::hasMinutes() const {
-	return ((flags & has_minutes) != 0);	
+	return ((flags & has_minutes) != 0);
 }
 
 Calendar& Calendar::setSeconds(int sec) {
 	if (sec >= 0 && sec < 61) {
-		cal_tm.tm_sec = sec;	 
+		cal_tm.tm_sec = sec;
 		flags |= has_seconds;
 	} else
 		throw CalendarException("Bad seconds value!");
@@ -703,18 +703,18 @@ Calendar& Calendar::setSeconds(const std::string &sec) {
 }
 
 int Calendar::getSeconds() const {
-	if (hasSeconds()) 
+	if (hasSeconds())
 		return cal_tm.tm_sec;
 	return 0;
 }
 
 bool Calendar::hasSeconds() const {
-	return ((flags & has_seconds) != 0);	
+	return ((flags & has_seconds) != 0);
 }
 
 Calendar& Calendar::setFracSec(int fsec) {
 	if (fsec >= 0 && fsec < 1000) {
-		frac_sec = fsec;	 
+		frac_sec = fsec;
 		flags |= has_fracsec;
 	} else
 		throw CalendarException("Bad fracsec value!");
@@ -726,17 +726,17 @@ Calendar& Calendar::setFracSec(const std::string &fsec) {
 }
 
 int Calendar::getFracSec() const {
-	if (hasFracSec()) 
+	if (hasFracSec())
 		return frac_sec;
 	return 0;
 }
 
 bool Calendar::hasFracSec() const {
-	return ((flags & has_fracsec) != 0);	
+	return ((flags & has_fracsec) != 0);
 }
 
 bool Calendar::hasFullDateInfo() const {
-	return hasYear() && hasMonth() && hasDay();	 
+	return hasYear() && hasMonth() && hasDay();
 }
 
 bool Calendar::hasFullTimeInfo() const {
@@ -747,7 +747,7 @@ void Calendar::fixTm() {
 	tm tmp = cal_tm;
 	if (hasFullDateInfo()) {
 		boost::posix_time::ptime p(boost::gregorian::date(getYear(), getMonth(), getDay()));
-		cal_tm = to_tm(p); 
+		cal_tm = to_tm(p);
 		cal_tm.tm_sec = tmp.tm_sec;
 		cal_tm.tm_min = tmp.tm_min;
 		cal_tm.tm_hour = tmp.tm_hour;
@@ -757,17 +757,17 @@ void Calendar::fixTm() {
 
 boost::gregorian::date Calendar::getDate() const {
 	boost::gregorian::date ret = boost::gregorian::date(boost::gregorian::not_a_date_time);
-	if (hasFullDateInfo()) 
+	if (hasFullDateInfo())
 		ret = boost::gregorian::date(getYear(), getMonth(), getDay());
 	return ret;
 }
 
 std::string Calendar::dateToString() const {
-	return boost::gregorian::to_iso_extended_string(getDate()); 
+	return boost::gregorian::to_iso_extended_string(getDate());
 }
 
 boost::posix_time::ptime Calendar::getTime() const {
-	if (hasFullDateInfo() && hasFullTimeInfo()) 
+	if (hasFullDateInfo() && hasFullTimeInfo())
 		return boost::posix_time::ptime(
 				getDate(),
 				boost::posix_time::hours(getHour()) +
@@ -786,7 +786,7 @@ boost::posix_time::time_duration Calendar::getTimeDuration() const {
 				getMinutes(),
 				getSeconds(),
 				getFracSec()
-				);	 
+				);
 	}
 	return boost::posix_time::time_duration();
 };
@@ -795,16 +795,16 @@ boost::posix_time::time_duration Calendar::getTimeDuration() const {
 
 
 std::string Calendar::timeToString() const {
-	return boost::posix_time::to_iso_extended_string(getTime());	 
+	return boost::posix_time::to_iso_extended_string(getTime());
 }
 
 Calendar& Calendar::dstOn() {
-	cal_tm.tm_isdst = 1; 
+	cal_tm.tm_isdst = 1;
 	return *this;
 }
 
 Calendar& Calendar::dstOff() {
-	cal_tm.tm_isdst = 0; 
+	cal_tm.tm_isdst = 0;
 	return *this;
 }
 
@@ -817,8 +817,8 @@ int Calendar::getDst() const {
 	return cal_tm.tm_isdst;
 }
 
-bool Calendar::isDstOn() const { 
-	if (getDst() == 1) 
+bool Calendar::isDstOn() const {
+	if (getDst() == 1)
 		return true;
 	return false;
 }
@@ -829,31 +829,31 @@ bool Calendar::isSetDst() const {
 	return false;
 }
 
-Calendar& Calendar::setGmtOff(int hour, int minutes) { 
-	// setGmtOff(1,	1) 		-> +01:01 
+Calendar& Calendar::setGmtOff(int hour, int minutes) {
+	// setGmtOff(1,	1) 		-> +01:01
 	// setGmtOff(-2, -30) 	-> -2:30
 	// setGmtOff(0, 0) 		-> Z
-	if (hour * minutes < 0) 
+	if (hour * minutes < 0)
 		throw CalendarException("Bad GMT offset!");
-	gmt_off_hours = hour; 
-	gmt_off_minutes = minutes; 
+	gmt_off_hours = hour;
+	gmt_off_minutes = minutes;
 	flags |= has_timezone;
 	return *this;
 }
 
-std::string Calendar::timeZoneToString() const { 
+std::string Calendar::timeZoneToString() const {
 	std::string ret = "";
 	std::stringstream ss;
 
 	if (hasTimeZone()) {
-		if (gmt_off_hours == 0 && gmt_off_minutes == 0 && (getDst() == 0)) 
+		if (gmt_off_hours == 0 && gmt_off_minutes == 0 && (getDst() == 0))
 			ret += "Z";
 		else {
 			int tmp = gmt_off_hours;
 			int tmp2 = gmt_off_minutes;
-			if (isDstOn()) 
+			if (isDstOn())
 				tmp += 1;
-			if (tmp >= 0) 
+			if (tmp >= 0)
 				ss << "+";
 			else {
 				ss << "-";
@@ -877,9 +877,9 @@ boost::posix_time::ptime Calendar::getUTCTime() const {
 	if (hasFullDateInfo() && hasFullTimeInfo())
 		if (hasTimeZone()) {
 			tmp = getTime() - boost::posix_time::hours(gmt_off_hours) - boost::posix_time::minutes(gmt_off_minutes);
-			if (isDstOn()) 
+			if (isDstOn())
 				tmp = tmp - boost::posix_time::hours(1);
-		}  
+		}
 	return tmp;
 }
 
@@ -891,7 +891,7 @@ boost::posix_time::ptime Calendar::getLocalTime() const {
 	boost::posix_time::ptime tmp = boost::posix_time::ptime(boost::gregorian::not_a_date_time);
 
 	if (hasFullDateInfo() && hasFullTimeInfo())
-		if (hasTimeZone()) 
+		if (hasTimeZone())
 			tmp = getTime();
 
 	return tmp;
@@ -906,9 +906,9 @@ std::string Calendar::toXsdDateTime() const {
 	if (hasFullDateInfo() && hasFullTimeInfo()) {
 		ret = boost::gregorian::to_iso_extended_string(
 				boost::gregorian::date(getYear(), getMonth(), getDay()));
-	
+
 		ret += "T";
-		std::stringstream ss;	
+		std::stringstream ss;
 		std::string ret2;
 		ss << std::setw(2) << std::setfill('0') << getHour();
 		ss << ":";
@@ -926,20 +926,20 @@ std::string Calendar::toXsdDateTime() const {
 	return ret;
 }
 
-std::string Calendar::toXsdDate() const { 
+std::string Calendar::toXsdDate() const {
 	std::string ret("not-a-date-time");
 	if (hasFullDateInfo()) {
 		boost::gregorian::date tmp(getYear(), getMonth(), getDay());
-		ret = boost::gregorian::to_iso_extended_string(tmp);		 
+		ret = boost::gregorian::to_iso_extended_string(tmp);
 		if (hasTimeZone())
 			ret += timeZoneToString();
-	}		 
+	}
 
 	return ret;
 }
 
-std::string Calendar::toXsdTime() const { 
-	std::stringstream ss;	
+std::string Calendar::toXsdTime() const {
+	std::stringstream ss;
 	std::string ret("not-a-date-time");
 	if (hasFullTimeInfo()) {
 		ss << std::setw(2) << std::setfill('0') << getHour();
@@ -959,7 +959,7 @@ std::string Calendar::toXsdTime() const {
 }
 
 std::string Calendar::toXsdYearMonth() const {
-	std::stringstream ss;	
+	std::stringstream ss;
 	std::string ret("not-a-date-time");
 	if (hasYear() && hasMonth()) {
 		ss << getYear();
@@ -973,7 +973,7 @@ std::string Calendar::toXsdYearMonth() const {
 }
 
 std::string Calendar::toXsdYear() const {
-	std::stringstream ss;	
+	std::stringstream ss;
 	std::string ret("not-a-date-time");
 	if (hasYear()) {
 		ss << getYear();
@@ -985,7 +985,7 @@ std::string Calendar::toXsdYear() const {
 }
 
 std::string Calendar::toXsdDay() const {
-	std::stringstream ss;	
+	std::stringstream ss;
 	std::string ret("not-a-date-time");
 	if (hasDay()) {
 		ss << "---";
@@ -998,7 +998,7 @@ std::string Calendar::toXsdDay() const {
 }
 
 std::string Calendar::toXsdMonth() const {
-	std::stringstream ss;	
+	std::stringstream ss;
 	std::string ret("not-a-date-time");
 	if (hasMonth()) {
 		ss << "--";
@@ -1011,7 +1011,7 @@ std::string Calendar::toXsdMonth() const {
 }
 
 std::string Calendar::toXsdMonthDay() const {
-	std::stringstream ss;	
+	std::stringstream ss;
 	std::string ret("not-a-date-time");
 	if (hasMonth() && hasDay()) {
 		ss << "--";
@@ -1030,7 +1030,7 @@ boost::posix_time::ptime Calendar::timeZoneMagic(const boost::posix_time::ptime&
 	boost::posix_time::ptime time_t_start_time(time_t_start_day, boost::posix_time::time_duration(0, 0, 0));
 	if (t < time_t_start_time)
 		throw std::out_of_range("Cannot convert dates prior to Jan 1, 1970");
-	
+
 	boost::gregorian::date_duration dd = t.date() - time_t_start_day;
 	boost::posix_time::time_duration td = t.time_of_day();
 	std::time_t t2 = dd.days()*86400 + td.hours()*3600 + td.minutes()*60 + td.seconds();
@@ -1049,22 +1049,22 @@ boost::posix_time::ptime Calendar::timeZoneMagic(const boost::posix_time::ptime&
 
 	return boost::posix_time::ptime(d,td2);
 }
-	 
+
 Calendar& Calendar::timeZoneGuess() {
 	if (hasFullDateInfo() && hasFullTimeInfo() && !hasTimeZone()) {
 		//Guess time zone offset
 		xmlbeansxx::Calendar pom(timeZoneMagic(getTime()));
 		boost::posix_time::time_duration td = getTime() - pom.getTime();
 		setGmtOff(td.hours(), td.minutes()).dstOff();
-	} 
+	}
 	return *this;
 }
 
 Duration::Duration() {
-	flags = 0;	 
+	flags = 0;
 	neg = false;
 }
-	
+
 Duration::Duration(const std::string &dur) {
 	//(-)P(nY)(nM)(nD)T(nH)(nM)(nS)
 	flags = 0;
@@ -1076,12 +1076,12 @@ Duration::Duration(const std::string &dur) {
 	} else
 		neg = false;
 
-	if (tmp.find('P') == 0) 
+	if (tmp.find('P') == 0)
 		tmp = tmp.substr(1, tmp.length());
 	else
 		throw CalendarException("Bad duration format");
 
-	if (tmp.find('T') != 0) 
+	if (tmp.find('T') != 0)
 		if (tmp.find('Y') != std::string::npos) {
 			setYears(tmp.substr(0, tmp.find('Y')));
 			tmp = tmp.substr(tmp.find('Y') + 1, tmp.length());
@@ -1092,7 +1092,7 @@ Duration::Duration(const std::string &dur) {
 			setMonths(tmp.substr(0, tmp.find('M')));
 			tmp = tmp.substr(tmp.find('M') + 1, tmp.length());
 		}
-	
+
 	if (tmp.find('T') != 0)
 		if (tmp.find('D') != std::string::npos) {
 			setDays(tmp.substr(0, tmp.find('D')));
@@ -1145,7 +1145,7 @@ int Duration::getYears() {
 }
 
 bool Duration::hasYears() {
-	return ((flags & has_year) != 0);	 
+	return ((flags & has_year) != 0);
 }
 
 Duration& Duration::setMonths(int m) {
@@ -1165,7 +1165,7 @@ int Duration::getMonths() {
 }
 
 bool Duration::hasMonths() {
-	return ((flags & has_month) != 0);	 
+	return ((flags & has_month) != 0);
 }
 
 Duration& Duration::setDays(int d) {
@@ -1185,7 +1185,7 @@ int Duration::getDays() {
 }
 
 bool Duration::hasDays() {
-	return ((flags & has_day) != 0);	 
+	return ((flags & has_day) != 0);
 }
 
 Duration& Duration::setHours(int h) {
@@ -1205,7 +1205,7 @@ int Duration::getHours() {
 }
 
 bool Duration::hasHours() {
-	return ((flags & has_hour) != 0);	 
+	return ((flags & has_hour) != 0);
 }
 
 Duration& Duration::setMinutes(int m) {
@@ -1216,7 +1216,7 @@ Duration& Duration::setMinutes(int m) {
 
 Duration& Duration::setMinutes(const std::string &m) {
 	return setMinutes(getInt(m));
-	
+
 }
 
 int Duration::getMinutes() {
@@ -1226,7 +1226,7 @@ int Duration::getMinutes() {
 }
 
 bool Duration::hasMinutes() {
-	return ((flags & has_minutes) != 0);	 
+	return ((flags & has_minutes) != 0);
 }
 
 Duration& Duration::setSeconds(int s) {
@@ -1246,7 +1246,7 @@ int Duration::getSeconds() {
 }
 
 bool Duration::hasSeconds() {
-	return ((flags & has_seconds) != 0);	 
+	return ((flags & has_seconds) != 0);
 }
 
 Duration& Duration::setFracSec(int f) {
@@ -1267,7 +1267,7 @@ int Duration::getFracSec() {
 }
 
 bool Duration::hasFracSec() {
-	return ((flags & has_fracsec) != 0);	 
+	return ((flags & has_fracsec) != 0);
 }
 
 Duration& Duration::setNeg(bool n) {
@@ -1277,17 +1277,17 @@ Duration& Duration::setNeg(bool n) {
 
 
 bool Duration::isNeg() const {
-	return neg;	 
+	return neg;
 }
 
 bool Duration::hasFullDateInfo() {
-	if (hasYears() && hasMonths() && hasDays())	 
+	if (hasYears() && hasMonths() && hasDays())
 		return true;
 	return false;
 }
 
 bool Duration::hasFullTimeInfo() {
-	if (hasHours() && hasMinutes() && hasSeconds())	 
+	if (hasHours() && hasMinutes() && hasSeconds())
 		return true;
 	return false;
 }
@@ -1295,36 +1295,36 @@ bool Duration::hasFullTimeInfo() {
 std::string Duration::toString() {
 	std::stringstream ss;
 	std::string ret("");
-	
+
 	if (isNeg())
 		ss << "-";
 	ss << "P";
 	if (hasYears()) {
-		ss << getYears(); 
+		ss << getYears();
 		ss << "Y";
 	}
 	if (hasMonths()) {
-		ss << getMonths(); 
+		ss << getMonths();
 		ss << "M";
 	}
 	if (hasDays()) {
-		ss << getDays(); 
+		ss << getDays();
 		ss << "D";
 	}
 	if (hasHours() || hasMinutes() || hasSeconds()) {
 		ss << "T";
 		if (hasHours()) {
-			ss << getHours(); 
+			ss << getHours();
 			ss << "H";
 		}
 		if (hasMinutes()) {
-			ss << getMinutes(); 
+			ss << getMinutes();
 			ss << "M";
 		}
 		if (hasSeconds()) {
 			ss << getSeconds();
 			if (hasFracSec()) {
-				 ss << "."; 
+				 ss << ".";
 				 ss << std::setw(3);
 				 ss << std::setfill('0');
 				 ss << getFracSec();
@@ -1351,18 +1351,18 @@ Calendar &Calendar::applyDuration(Duration dur) {
 	boost::posix_time::ptime ret;
 	int year = 0, month = 0, fl = flags;
 
-	tmp = boost::posix_time::hours(dur.getHours()) 
-			+ boost::posix_time::minutes(dur.getMinutes()) 
+	tmp = boost::posix_time::hours(dur.getHours())
+			+ boost::posix_time::minutes(dur.getMinutes())
 			+ boost::posix_time::seconds(dur.getSeconds())
 			+ boost::posix_time::millisec(dur.getFracSec());
 
-	if (hasFracSec() || dur.hasFracSec()) 
+	if (hasFracSec() || dur.hasFracSec())
 		fl |= has_fracsec;
 
 	bool sign = true;
 	if (dur.isNeg())
 		sign = false;
-	
+
 	int tmpy = getYear();
 	int tmpm = getMonth();
 	int tmpd = getDay();
@@ -1373,7 +1373,7 @@ Calendar &Calendar::applyDuration(Duration dur) {
 		tmpm = 1;
 	if (tmpd == 0)
 		tmpd = 1;
-	
+
 	boost::gregorian::date d(tmpy, tmpm, tmpd);
 	boost::posix_time::time_duration td(getHour(), getMinutes(), getSeconds(), getFracSec());
 
@@ -1381,21 +1381,21 @@ Calendar &Calendar::applyDuration(Duration dur) {
 	//XMLBEANSXX_DEBUG(Calendar_log, "addDurr: date " + boost::gregorian::to_iso_extended_string(d));
 	//XMLBEANSXX_DEBUG(Calendar_log, "addDurr: td " + boost::posix_time::to_simple_string(td));
 
-	boost::posix_time::ptime pt(d, td); 
-	
+	boost::posix_time::ptime pt(d, td);
+
 	//XMLBEANSXX_DEBUG(Calendar_log, "addDurr: pt " + boost::posix_time::to_simple_string(pt));
 	//XMLBEANSXX_DEBUG(Calendar_log, "addDurr: tmp " + boost::posix_time::to_simple_string(tmp));
-	
+
 	if (sign)
 		ret = pt + tmp;
 	else
 		ret = pt - tmp;
-	
+
 	//XMLBEANSXX_DEBUG(Calendar_log, "addDurr: ret " + boost::posix_time::to_simple_string(ret));
-	
+
 	if (dur.hasDays()) {
 		//XMLBEANSXX_DEBUG(Calendar_log, "ret 10-> " + boost::posix_time::to_simple_string(ret));
-		if (sign) 
+		if (sign)
 			ret = ret + boost::gregorian::days(dur.getDays());
 		else
 			ret = ret - boost::gregorian::days(dur.getDays());
@@ -1411,13 +1411,13 @@ Calendar &Calendar::applyDuration(Duration dur) {
 			pom = (ret.date().month() - dur.getMonths());
 			//XMLBEANSXX_DEBUG(Calendar_log, "month --> " + TextUtils::intToString(ret.date().month()) + " - " + TextUtils::intToString(dur.getMonths()));
 		}
-	
+
 		//TODO ??????
 		if (pom < 0) {
 			pom = -pom;
 			month = pom % 12;
 			month = 12 - month;
-			year -= pom / 12 + 1; 
+			year -= pom / 12 + 1;
 		} else {
 			month += pom % 12;
 			year += pom / 12;
@@ -1442,7 +1442,7 @@ Calendar &Calendar::applyDuration(Duration dur) {
 			ret = ret - boost::gregorian::days(dur.getDays());
 			ret = ret + boost::gregorian::days(maximumDayInMonth(year, month));
 	}
-		 
+
 	//XMLBEANSXX_DEBUG(Calendar_log, "ret 1-> " + boost::posix_time::to_simple_string(ret));
 	//XMLBEANSXX_DEBUG(Calendar_log, "year 2-> " + TextUtils::intToString(year));
 	//XMLBEANSXX_DEBUG(Calendar_log, "month 3-> " + TextUtils::intToString(month));
@@ -1497,7 +1497,7 @@ std::string Calendar::toString() const {
 	ss >> ret;
 
 	//XMLBEANSXX_DEBUG(Calendar_log, "!!!!!!!!!!!!! " + ret);
-		
+
 
 	return ret;
 }
@@ -1514,7 +1514,7 @@ Calendar &Calendar::operator+ (const Duration &d) {
 Calendar &Calendar::operator- (const Duration &d) {
 	Duration pom = d;
 
-	if (pom.isNeg() == true) 
+	if (pom.isNeg() == true)
 		 pom.setNeg(false);
 	else
 		pom.setNeg(true);
@@ -1543,14 +1543,14 @@ Duration &Duration::operator= (const Duration &d) {
 /*
 Duration &Duration::operator+ (const Duration &d) {
 	if (!d.isNeg() && !isNeg())
-		return *(new Duration(years + d.years, months + d.months, days + d.days, 
-					hours + d.hours, minutes + d.minutes, seconds + d.seconds, frac_sec + d.frac_sec, 
+		return *(new Duration(years + d.years, months + d.months, days + d.days,
+					hours + d.hours, minutes + d.minutes, seconds + d.seconds, frac_sec + d.frac_sec,
 					d.neg, d.flags));
-	else if (d.isNeg() && isNeg()) 
-		return *(new Duration(years + d.years, months + d.months, days + d.days, 
-					hours + d.hours, minutes + d.minutes, seconds + d.seconds, frac_sec + d.frac_sec, 
+	else if (d.isNeg() && isNeg())
+		return *(new Duration(years + d.years, months + d.months, days + d.days,
+					hours + d.hours, minutes + d.minutes, seconds + d.seconds, frac_sec + d.frac_sec,
 					true, d.flags));
-	
+
 
 }*/
 

@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -31,8 +31,8 @@ typedef std::map<std::string,int> Map_String_Int;
 */
 /*
 #include <boost/shared_ptr.hpp>
- 
- 
+
+
 #define DECLARE_PTR(name,name_ptr,const_name_ptr) \
 struct name_ptr: boost::shared_ptr<name> { \
     name_ptr(); \
@@ -44,7 +44,7 @@ struct const_name_ptr: boost::shared_ptr<const name> { \
     const_name_ptr(const const_name_ptr &b); \
     const_name_ptr(const name *b); \
 };
- 
+
 #define DECLARE_PTR_CODE(name,name_ptr,const_name_ptr) \
 name_ptr::name_ptr() {} \
 name_ptr::name_ptr(const name_ptr &b): boost::shared_ptr<name>(b) {} \
@@ -56,7 +56,7 @@ const_name_ptr::const_name_ptr(const name *b): boost::shared_ptr<const name>(b) 
 */
 
 
-//#define DECLARE_PTR(name,name_ptr,const_name_ptr) 
+//#define DECLARE_PTR(name,name_ptr,const_name_ptr)
 //    typedef boost::shared_ptr<name> name_ptr;
 //    typedef boost::shared_ptr<const name> const_name_ptr;
 

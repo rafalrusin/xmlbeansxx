@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -113,7 +113,7 @@ static ContentsPtr findAttr(const XmlObject& o,const std::string& attrName)
 			if(name->second==attrName)
 				return i->second;
 		}
-	} 		
+	}
 	return ContentsPtr();
 }
 
@@ -133,7 +133,7 @@ static std::vector<ContentsPtr> findElems(const XmlObject& o,const std::string& 
 			if(name->second==elemName)
 				retu.push_back(i->second);
 		}
-	} 		
+	}
 	return retu;
 
 }
@@ -142,7 +142,7 @@ static std::vector<ContentsPtr> findElems(const XmlObject& o,const std::string& 
 XmlObject XmlObject::query(const std::string &elementName,QueryNodePtr queryExpr) const {
     TRACER(log,"query");
     std::vector<ContentsPtr> elems=findElems(*this,elementName);
-    
+
     XMLBEANSXX_FOREACH(std::vector<ContentsPtr>::iterator,it,elems) {
         if (*it) {
             if (queryExpr->getBooleanValue(XmlObject(*it))) {
@@ -155,14 +155,14 @@ XmlObject XmlObject::query(const std::string &elementName,QueryNodePtr queryExpr
 
 XmlObject XmlObject::cquery(const std::string & elementName,QueryNodePtr queryExpr,ObjectCreatorFn createFn) {
     TRACER(log,"cquery");
-    
+
     XmlObject r=query(elementName,queryExpr);
     if (!r.hasContents()) {
 	QName correctName=QName("",elementName);
 	// find the correct QName
 	XMLBEANSXX_FOREACH(SchemaType::ElementsType::const_iterator, i,getSchemaType()->elements) {
 	    QName name=i->first;
-	    if(name->second==elementName) 
+	    if(name->second==elementName)
 		correctName=name;
 	}
     	if(createFn != NULL) {
@@ -172,7 +172,7 @@ XmlObject XmlObject::cquery(const std::string & elementName,QueryNodePtr queryEx
 		objP->createContents();
 		r=*objP;
 	}
-	
+
         xmlbeansxx::Contents::Walker::appendElem(*this,correctName,r.contents);
     }
     return r;

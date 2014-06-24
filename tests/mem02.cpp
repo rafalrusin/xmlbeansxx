@@ -63,7 +63,7 @@ void namespaceTests() {
 //    p.getXmlOptions()->setValidation(true);
 
 	std::string xml = readXml("c.xml");
-	
+
     do {
         ContentDocument doc=ContentDocument::Factory::newInstance();
         try {
@@ -77,7 +77,7 @@ void namespaceTests() {
             //log4cxx::logstream s(logger, log4cxx::Level::DEBUG);
             //s << "xx";
             //log4cxx::logstream(logger, log4cxx::Level::DEBUG) << (ex.getMessage());
-            
+
 			throw;
         }
     } while(true);

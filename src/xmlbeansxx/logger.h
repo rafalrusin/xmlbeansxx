@@ -49,7 +49,7 @@
 #define XMLBEANSXX_ERROR(logger,string)  LOG4CXX_ERROR(logger,string)
 #define XMLBEANSXX_WARN(logger,string)  LOG4CXX_WARN(logger,string)
 
-    
+
 #else // XMLBEANSXX_WITH_LOG4CXX
 
 #undef XMLBEANSXX_LOGGING
@@ -62,9 +62,9 @@
 
 #define XMLBEANSXX_FATAL(logger,string)
 #define XMLBEANSXX_DEBUG(logger,string)
-#define XMLBEANSXX_INFO(logger,string) 
+#define XMLBEANSXX_INFO(logger,string)
 #define XMLBEANSXX_ERROR(logger,string)
-#define XMLBEANSXX_WARN(logger,string) 
+#define XMLBEANSXX_WARN(logger,string)
 
 
 

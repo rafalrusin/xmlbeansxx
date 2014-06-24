@@ -27,24 +27,24 @@ void BeansTest::beansTest() {
 
 void testBase64(std::string cmp,std::string cmp2)
 {	//base64
-		
+
 		xmlbeansxx::shared_array<unsigned char> cmp3(cmp2.size());
 		for(unsigned i=0;i<cmp2.size();i++) cmp3[i]=cmp2[i];
-		
-       		XMLBEANSXX_DEBUG(logger,"base64 string cmp:" +cmp);		
-       		XMLBEANSXX_DEBUG(logger,"base64 string cmp2:" +cmp2);		
+
+       		XMLBEANSXX_DEBUG(logger,"base64 string cmp:" +cmp);
+       		XMLBEANSXX_DEBUG(logger,"base64 string cmp2:" +cmp2);
 
 		xmlbeansxx::shared_array<unsigned char> a = TextUtils::base64Decode(cmp);
 		std::string b = TextUtils::base64Encode(cmp3);
 
 		std::string a_str= std::string((char*)a.get(),a.size());
-		
+
        		XMLBEANSXX_DEBUG(logger,"base64 string a:" +a_str);
-       		XMLBEANSXX_DEBUG(logger,"base64 string b:" +b);		
-		
+       		XMLBEANSXX_DEBUG(logger,"base64 string b:" +b);
+
 		CPPUNIT_ASSERT_EQUAL(cmp2,a_str);
 		CPPUNIT_ASSERT_EQUAL(cmp,b);
-		
+
 }
 
 
@@ -58,7 +58,7 @@ void namespaceTests() {
         CPPUNIT_ASSERT(std::string().c_str()!=NULL);
 
         StoreString str[100],str2[100];
-        
+
         for(int i=0;i<100;i++) {
             str[i]=StoreString(std::string("abc")+std::string("defgh"));
             str2[i]=StoreString(std::string("abc")+std::string("defghi"));
@@ -70,7 +70,7 @@ void namespaceTests() {
         }
         for(int i=1;i<100;i++) {
             CPPUNIT_ASSERT(str2[i-1].c_str()!=str2[i].c_str());
-            
+
             CPPUNIT_ASSERT(str[i].hashCode()==CStrHashFn()("abcdefgh"));
             CPPUNIT_ASSERT(str[i].hashCode()!=CStrHashFn()("abcdefghi"));
 
@@ -81,7 +81,7 @@ void namespaceTests() {
             StoreString s("abcdef");
             XMLBEANSXX_DEBUG(logger,std::string("HashCode for ") + s + "=" + TextUtils::intToString(s.hashCode()));
         }
-        
+
     }
     {
         /*
@@ -164,20 +164,20 @@ void namespaceTests() {
 	{
 		ptime pt(date(2002,Jan,10),time_duration(1,2,3));
 		XmlTime t(pt);
-		XMLBEANSXX_DEBUG(logger,std::string("time: ") + t.getSimpleContent()); 
+		XMLBEANSXX_DEBUG(logger,std::string("time: ") + t.getSimpleContent());
 		CPPUNIT_ASSERT(t.getSimpleContent()=="01:02:03");
 		CPPUNIT_ASSERT(t.getTimeValue()==time_duration(1,2,3));
 		CPPUNIT_ASSERT(t.getCalendarValue().getTime()==ptime(date(),time_duration(1,2,3)));
 	}
 	{
 		XmlTime t("	01:02:03  ");
-		XMLBEANSXX_DEBUG(logger,std::string("time: ") + t.getSimpleContent()); 
+		XMLBEANSXX_DEBUG(logger,std::string("time: ") + t.getSimpleContent());
 		CPPUNIT_ASSERT(t.getSimpleContent()=="01:02:03");
 		CPPUNIT_ASSERT(t.getTimeValue()==time_duration(1,2,3));
 		CPPUNIT_ASSERT(t.getCalendarValue().getTime()==ptime(date(),time_duration(1,2,3)));
 	}
-	
-	
+
+
     }
 
     {
@@ -244,7 +244,7 @@ void namespaceTests() {
         XMLBEANSXX_DEBUG(logger,"!a");
 /*        ar2=XmlObject::Factory::parse(ar.toString(XmlOptions::serializeTypes()));
         XMLBEANSXX_DEBUG(logger,"XmlArray ar2: " + ar2.toString());
-	
+
 	XMLBEANSXX_DEBUG(logger,"XmlArray ar2 dump: " + Contents::Walker::dump(ar2.contents));
         XMLBEANSXX_DEBUG(logger,"!b");
         CPPUNIT_ASSERT(ar2.getArray(0).getSimpleContent()=="102");
@@ -313,7 +313,7 @@ void namespaceTests() {
         CPPUNIT_ASSERT(b.getByteArrayValue()[1]=='b');
         CPPUNIT_ASSERT(b.getByteArrayValue()[2]=='c');
 
-	//TODO: 	
+	//TODO:
 /*	XmlBase64Binary b2=xmlbeansxx::XmlBase64Binary::Factory::parse("<a>OOOOOOOOOO&#xA;    \n \n \n \n  PPPP       PPPPPPPPPPP      </a>");
 	XMLBEANSXX_DEBUG(logger,b2.toString(XmlOptions::serializeTypes()));
 	XmlString s2=xmlbeansxx::XmlString::Factory::parse("<a>OOOOOOOOOO&#xA;    \n \n \n \n  PPPP       PPPPPPPPPPP      </a>");
@@ -324,12 +324,12 @@ void namespaceTests() {
     {
         //xmlbeansxx::shared_array
         shared_array<int> c = shared_array<int>();
-        
+
         shared_array<int> b = shared_array<int>(3);
         b[0] = 10;
         b[1] = 11;
         b[2] = 12;
-        
+
         shared_array<int> a(b);
         CPPUNIT_ASSERT(a[0] == 10);
         CPPUNIT_ASSERT(a[1] == 11);
@@ -337,70 +337,70 @@ void namespaceTests() {
     }
     {
     	//bool (==NULL)
-    
+
     	XmlString test;
     	XmlString test2("test");
         XMLBEANSXX_DEBUG(logger,"NULL ptr:" + std::string(bool(test)? "true" : "false"));
         CPPUNIT_ASSERT(!test);
         XMLBEANSXX_DEBUG(logger,"NULL ptr:" + std::string(bool(test2)? "true" : "false"));
         CPPUNIT_ASSERT(test2);
-	
+
     }
-    
+
     	{
-	       	XMLBEANSXX_DEBUG(logger,"testing Cast:");		
+	       	XMLBEANSXX_DEBUG(logger,"testing Cast:");
 		XmlBoolean b(true);
 		XmlString s1(b);
 		XmlObject o(b);
 		XmlString s2(o);
-	       	XMLBEANSXX_DEBUG(logger,"s1 string:" + s2.toString());		
+	       	XMLBEANSXX_DEBUG(logger,"s1 string:" + s2.toString());
 		CPPUNIT_ASSERT_EQUAL(s1.toString(),s2.toString());
 	}
 	{
-	       	XMLBEANSXX_DEBUG(logger,"testing boolean true:");		
+	       	XMLBEANSXX_DEBUG(logger,"testing boolean true:");
 		XmlString b("TruE");
 		XmlObject o(b);
 		XmlBoolean s2(o);
-	       	XMLBEANSXX_DEBUG(logger,"s1 string:" + s2.toString());		
+	       	XMLBEANSXX_DEBUG(logger,"s1 string:" + s2.toString());
 		CPPUNIT_ASSERT_EQUAL(bool(s2),true);
 	}
 	{
-	       	XMLBEANSXX_DEBUG(logger,"testing boolean false:");		
+	       	XMLBEANSXX_DEBUG(logger,"testing boolean false:");
 		XmlString b("FalSe");
 		XmlObject o(b);
 		XmlBoolean s2(o);
-	       	XMLBEANSXX_DEBUG(logger,"s1 string:" + s2.toString());		
+	       	XMLBEANSXX_DEBUG(logger,"s1 string:" + s2.toString());
 		CPPUNIT_ASSERT_EQUAL(bool(s2),false);
 	}
 
 	{ //Decimal
-		
+
 		{
 			TextUtils::setPrecision(13);
 			XmlDecimal d(0.1234567891234);
 			XmlDecimal d2=XmlDecimal::Factory::parse(d.toString());
-		       	XMLBEANSXX_DEBUG(logger,"decimal string:" + d2.toString());		
+		       	XMLBEANSXX_DEBUG(logger,"decimal string:" + d2.toString());
 			CPPUNIT_ASSERT_EQUAL(d2.getSimpleContent(),std::string("0.1234567891234"));
 		}
 
-	
+
 #ifdef XMLBEANSXX_WITH_GMPXX
 		{
 			TextUtils::setPrecision(100);
 			XmlDecimal d("1.000000000001");
 			XmlDecimal d2=d*d*d*d*d;
-	       		XMLBEANSXX_DEBUG(logger,"decimal string:" + d2.toString());		
+	       		XMLBEANSXX_DEBUG(logger,"decimal string:" + d2.toString());
 			CPPUNIT_ASSERT_EQUAL(d2.getSimpleContent(),std::string("1.000000000005000000000010000000000010000000000005000000000001"));
 		}
-#endif		
+#endif
 
 		XmlFloat f;
 		f.setFloatValue(1./3.);
-	       	XMLBEANSXX_DEBUG(logger,"decimal string:" + f.toString());		
-	
+	       	XMLBEANSXX_DEBUG(logger,"decimal string:" + f.toString());
+
 	}
 
-	{ //base64 
+	{ //base64
 		testBase64("UGF3ZWwgU3Rhd2lja2k=",     "Pawel Stawicki");
 		testBase64("UGF3ZWwgU3Rhd2lja2ky",     "Pawel Stawicki2");
 		testBase64("", "");
@@ -408,8 +408,8 @@ void namespaceTests() {
 		testBase64("YWE=", "aa");
 		testBase64("YWFh", "aaa");
 		testBase64("YWFhYQ==", "aaaa");
-		
-		
+
+
 
 	}
 

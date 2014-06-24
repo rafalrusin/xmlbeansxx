@@ -1,6 +1,6 @@
 /*
  *  Copyright 2004-2008 TouK sp. z o.o. s.k.a.
- * 
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -16,7 +16,7 @@
 
 /*
  * Created on Jul 12, 2004
- * 
+ *
  * TODO To change the template for this generated file go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
@@ -46,7 +46,7 @@ public class ClassGen {
 			//and their base class complement
 			"XmlAnySimpleType" };
 			*/
-	
+
 
 	static class Properties {
 		public static final int GET_ATTR = 0, SET_ATTR = 1, UNSET_ATTR = 2,
@@ -68,7 +68,7 @@ public class ClassGen {
 
 	/** returs true when given method should be generated */
 	private boolean haveToGen(int method) {
-		if (genProperties==Properties.HUMAN) return true; 
+		if (genProperties==Properties.HUMAN) return true;
 		else {
 			for (int i = 0; i < genProperties.length; i++) {
 				if (genProperties[i] == method) {
@@ -130,14 +130,14 @@ public class ClassGen {
 				dict.put(namespace, new String("NS_" + nr));
 				nr++;
 			}
-			
+
 			return nsFromTS(namespace);
 		}
 
 		private String nsFromTS(String namespace) {
 			return genString(namespace);
 		}
-		
+
 		public void printDefinitions(PrintWriter wt) {
 			Iterator it = dict.keySet().iterator();
 			wt.println("namespace {");
@@ -151,7 +151,7 @@ public class ClassGen {
 			}
 			wt.println("}");
 		}
-		
+
 		public void printDeclarations(PrintWriter wt) {
 			Iterator it = dict.keySet().iterator();
 			while (it.hasNext()) {
@@ -183,7 +183,7 @@ public class ClassGen {
 			out.cpp.println("#include <xmlbeansxx/TextUtils.h>");
 			out.h.println("#include <vector>");
 			out.h.println("#include <string>");
-			
+
 			if (!generatingBuiltin) {
 				out.h.println("#include <xmlbeansxx/xmlbeansxx.h>");
 			}
@@ -227,13 +227,13 @@ public class ClassGen {
 		idNr++;
 		return "tmp" + idNr;
 	}
-	
+
 	public static String dirName(String fileName) {
 		if (fileName.lastIndexOf('/') != -1) {
 			fileName = fileName.substring(0,fileName.lastIndexOf('/')+1);
 		} else return "./";
 		return fileName;
-		
+
 	}
 	public static String baseFileName(String fileName) {
 		if (fileName.lastIndexOf('.') != -1) {
@@ -317,15 +317,15 @@ public class ClassGen {
             	return "int";
 //                SchemaType sType = sProp.javaBasedOnType().getBaseEnumType();
 //                return findJavaType(sType).replace('$', '.') + ".Enum";
-                
+
             case SchemaProperty.JAVA_OBJECT:
             	return "std::string";
-            
+
             default:
             	return "<NOTHING>";
         }
 	}
-	
+
     static String cppTypeForProperty(SchemaProperty sProp) {
         // The type to use is the XML object....
         if (sProp.getJavaTypeCode() == SchemaProperty.XML_OBJECT)
@@ -333,64 +333,64 @@ public class ClassGen {
             SchemaType sType = sProp.javaBasedOnType();
             return fullClassName(sType);
         }
-        
+
 /*        if (sProp.getJavaTypeCode() == SchemaProperty.JAVA_ENUM)
         {
         	SchemaType sType = sProp.javaBasedOnType().getBaseEnumType();
           	return fullClassName(sType) + "::Enum";
         }
-  */      
+  */
     	return cppTypeForCode(sProp.getJavaTypeCode());
     }
-    
+
     static String genJGetName(int javaType) {
         switch (javaType)
         {
 	        case SchemaProperty.XML_OBJECT:
 	            return null;
-	
+
 	        case SchemaProperty.JAVA_BOOLEAN:
 	        	return "Boolean";
-	
+
 	        case SchemaProperty.JAVA_FLOAT:
 	            return "Float";
-	
+
 	        case SchemaProperty.JAVA_DOUBLE:
 	            return "Double";
-	
+
 	        case SchemaProperty.JAVA_BYTE:
 	            return "Byte";
-	
+
 	        case SchemaProperty.JAVA_SHORT:
 	            return "Short";
-	
+
 	        case SchemaProperty.JAVA_INT:
 	            return "Int";
-	
+
 	        case SchemaProperty.JAVA_LONG:
 	            return "Long";
-	
+
 	        case SchemaProperty.JAVA_BIG_DECIMAL:
 	            return "Mpf";
-	
+
 	        case SchemaProperty.JAVA_BIG_INTEGER:
 	            return "Mpz";
-	
+
 	        case SchemaProperty.JAVA_STRING:
 	            return "String";
-	
+
 	        case SchemaProperty.JAVA_BYTE_ARRAY:
 	            return "ByteArray";
-	
+
 	        case SchemaProperty.JAVA_GDATE:
 	            return "GDate";
-	
+
 	        case SchemaProperty.JAVA_GDURATION:
 	            return "Duration";
-	
+
 	        case SchemaProperty.JAVA_CALENDAR:
 	            return "Calendar";
-	
+
 	        case SchemaProperty.JAVA_DATE:
 	            return "Date";
 
@@ -426,8 +426,8 @@ public class ClassGen {
     	if (cppType.equals("unsigned char")) return "0";
     	else return cppType + "()";
 	}
-		
-    
+
+
     //~static methods
 	//-----------------------------------------------------------------------------------------------
 
@@ -437,7 +437,7 @@ public class ClassGen {
 
 	/**
 	 * Zwraca nazwe klasy w kodzie c++ tego typu
-	 * 
+	 *
 	 * @param attr
 	 */
 	public static String className(SchemaType sType) {
@@ -451,10 +451,10 @@ public class ClassGen {
 	 * StringTokenizer(sType.getFullJavaName(), "."); String last = ""; while
 	 * (t.hasMoreTokens()) { last = t.nextToken(); } return
 	 * javaToCpp(last.replace('$', '.')); }
-	 * 
+	 *
 	 * boolean isInner(SchemaType t) { String s=t.getFullJavaName(); return
 	 * (s.indexOf('$')>=0); }
-	 * 
+	 *
 	 * String getOuterClassName(SchemaType st) { String s=st.getFullJavaName();
 	 * return javaToCpp((s.substring(0,s.lastIndexOf('$'))).replace('$','.')); }
 	 */
@@ -478,7 +478,7 @@ public class ClassGen {
 			return "xmlbeansxx." + fullJavaName.substring(q.length());
 		} else return s;
 	}
-	
+
 	String nsClassName(SchemaType sType) {
 		StringTokenizer t = new StringTokenizer(getFullJavaName(sType), ".");
 		StringBuffer b = new StringBuffer();
@@ -511,7 +511,7 @@ public class ClassGen {
 	}
 	public static String cppToToken(String x) {
 		x = x.replace(':', '_');
-		return x; 
+		return x;
 	}
 	/**
 	 * Returns full C++ path of namespace keywords and a class name of given
@@ -525,10 +525,10 @@ public class ClassGen {
 	}
 	public static QName typeName(SchemaType st) {
 		QName qname = st.getName();
-				
-		if (qname == null) 
+
+		if (qname == null)
 		qname = innerTypeName(st);
-		return qname;				
+		return qname;
 	}
 
 	public static String genString(String s) {
@@ -578,8 +578,8 @@ public class ClassGen {
 				+ fromSharedArray + ")";
 	}
 
-	
-	
+
+
 	public static String genStaticArrayCast(String to, String fromSharedArray) {
 		return "xmlbeansxx::static_array_cast<" + to + " >("
 				+ fromSharedArray + ")";
@@ -599,7 +599,7 @@ public class ClassGen {
         return var;
         /*
 		String t=prop.getDefaultText();
-		if (t == null) t=""; 
+		if (t == null) t="";
 		return "defaultValue(" + var + ","
 				+ genString(t) + ")";*/
 	}
@@ -652,12 +652,12 @@ public class ClassGen {
 		}
 		return r;
 	}
-	
+
 	void genMethodNormalAndConst(String h_opts,String resultType,String className,String methodName,String params,String body) {
 		genMethodConst(h_opts, resultType, className, methodName, params, body);
-		genMethod(h_opts, resultType, className, methodName, params, body);		
+		genMethod(h_opts, resultType, className, methodName, params, body);
 	}
-		
+
 
 	void genMethod(String h_opts,String resultType,String className,String methodName,String params,String body) {
 	  genMethod(h_opts, resultType, className, methodName, params, body, false);
@@ -665,7 +665,7 @@ public class ClassGen {
 	void genMethodConst(String h_opts,String resultType,String className,String methodName,String params,String body) {
 		genMethodConst( h_opts, resultType, className, methodName, params, body, false) ;
 	}
-	
+
 	void genMethod(String h_opts,String resultType,String className,String methodName,String params,String body, boolean noInline) {
 		if(generatingInline && !noInline) {
 			out.h.println("  inline " + h_opts + " " + resultType + " " + methodName + "(" + params + ");");
@@ -678,14 +678,14 @@ public class ClassGen {
 	void genMethodConst(String h_opts,String resultType,String className,String methodName,String params,String body, boolean noInline) {
 		if(generatingInline && !noInline) {
 			out.h.println("  inline " + h_opts + " const " + resultType + " " + methodName + "(" + params + ") const;");
-			out.hEnd.println("inline const " + resultType + " " + className + "::" + methodName + "(" + cutAssigns(params) + ") const {\n" + body + "\n}" );			
+			out.hEnd.println("inline const " + resultType + " " + className + "::" + methodName + "(" + cutAssigns(params) + ") const {\n" + body + "\n}" );
 		} else {
 			out.h.println(" " + h_opts + " const " + resultType + " " + methodName + "(" + params + ") const;");
-			out.cpp.println("const " + resultType + " " + className + "::" + methodName + "(" + cutAssigns(params) + ") const {\n" + body + "\n}" );			
+			out.cpp.println("const " + resultType + " " + className + "::" + methodName + "(" + cutAssigns(params) + ") const {\n" + body + "\n}" );
 		}
 	}
 
-	
+
 	public static String genCreateFn(SchemaType st) {
 		return fullClassName(st)+"::Factory::newInstanceXmlObject";
 	}
@@ -693,25 +693,25 @@ public class ClassGen {
 	public static String genTypeFn(SchemaType st) {
 		return fullClassName(st)+"::type()";
 	}
-	
+
 	public static String genNewXmlObject(SchemaType st) {
 		return fullClassName(st)+"::Factory::newInstance()";
 	}
-	
+
 	public static String genCreateArrayFn(SchemaType st) {
 		return fullClassName(st)+"::Factory::newXmlArrayInstance";
 	}
-	
-	
+
+
 	private String genPropName2(SchemaProperty prop) {
 		return javaPropertyName(prop); // + (prop.isAttribute() ? "_ATTR" : "");
 	}
-	
+
     private String genPropName(SchemaProperty prop) {
         return className(currentType) + "::Names::" + genPropName2(prop);
     }
 
-    
+
 	public static String genQName(SchemaProperty elem) {
 		return "xmlbeansxx::QName(" + genString(elem.getName().getNamespaceURI()) + "," + genString(elem.getName().getLocalPart()) + ")";
 	}
@@ -727,39 +727,39 @@ public class ClassGen {
 		return "xmlbeansxx::QName::store(" + genString(elem.getName().getNamespaceURI()) + "," + genString(elem.getName().getLocalPart()) + ")";
 	}
 
-	
+
 	public void genRedirect(String fromMethod, String toMethod) {
 		//out.h.println("#define " + fromMethod + " " + toMethod);
 	}
-			
-	
+
+
 	/** Setters / Getters generator */
 	class PropGen {
 		SchemaProperty prop;
 		SchemaType st;
-		
+
 		/** xml type without pointer */
-		String btype; 
-		
+		String btype;
+
 		/** xml type with pointer */
 		String type;
 		/** xml array type with pointer */
 		String vtype;
-		
+
 		/** xml type with pointer or not xml type */
 		String userType;
 		/** xml array type with pointer or not xml array type */
 		String vuserType;
-		
+
 		/** dgetArray type */
 		String dvtype;
 		String dvbtype;
-		
+
 		String x;
 		int method;
-		
+
 		public static final int M_X=0,M_NORMAL=1,M_STRING=2;
-		
+
 		PropGen(SchemaProperty pr) {
 			prop=pr;
 			st=prop.getType();
@@ -767,17 +767,17 @@ public class ClassGen {
 			type= btype;
 
 			vtype = "std::vector<" + type + " >";
-			
+
 			dvbtype = "xmlbeansxx::XmlArray<" + btype + " >";
 			dvtype=dvbtype ;
 		}
-		
-		/** returns true iff property has a simple holder (eg. int) */ 
+
+		/** returns true iff property has a simple holder (eg. int) */
 		public boolean hasHolder() {
 			return prop.getJavaTypeCode()!=SchemaProperty.XML_OBJECT;
 		}
-		
-		
+
+
 		private String getReturnArray(String what) {
 			String d = "  return " + what + ";";
 			if (method==M_X) {
@@ -786,12 +786,12 @@ public class ClassGen {
 				if (hasHolder()) {
 					String len = nextTmpID();
 					String toVar = nextTmpID();
-					return 
-						  "  int " + len + "=" + what + ".size();\n" 
-						+ "  " + vuserType + " " + toVar + "(" + len + ");\n" 
-						+ "  for(int i=0; i<" + len + "; i++) \n" 
+					return
+						  "  int " + len + "=" + what + ".size();\n"
+						+ "  " + vuserType + " " + toVar + "(" + len + ");\n"
+						+ "  for(int i=0; i<" + len + "; i++) \n"
 						+ "    " + toVar + "[i]=" + what + "[i].get" + genJGetName(prop.getJavaTypeCode()) + "Value();\n"
-						
+
 						+ "  return " + toVar +";"
 						;
 				} else {
@@ -800,44 +800,44 @@ public class ClassGen {
 			} else throw new IllegalStateException();
 		}
 
-		
 
-		/** Accessor generation kind */ 
+
+		/** Accessor generation kind */
 		public void setGenMethod(int method) {
 			this.method=method;
 			if (method==M_X) {
 				x="x";
-				
+
 				userType = type;
-				vuserType = "std::vector<" + userType + " >"; 
+				vuserType = "std::vector<" + userType + " >";
 			} else if (method==M_NORMAL) {
 				x="";
-				
+
 				userType = cppTypeForProperty(prop);
-				vuserType = "std::vector<" + userType + " >"; 
+				vuserType = "std::vector<" + userType + " >";
 			} else if (method==M_STRING) {
 				x = "";
-				
+
 				userType = "std::string";
 				vuserType = "<NOTHING>";
 			}
 		}
-		
+
 		private String getReturn(String what) {
 			String d = "  return " + what + ";";
 			if (method==M_X) {
 				return d;
 			} else if (method==M_NORMAL) {
-				if (hasHolder()) {					
+				if (hasHolder()) {
 					return "  return " + what + ".get" + genJGetName(prop.getJavaTypeCode()) + "Value();";
 				} else return d;
 			} else throw new IllegalStateException();
 		}
-		
-		
+
+
 		public void genGet() {
-			genMethodNormalAndConst("", userType, className(currentType), 
-					x + "get" + javaPropertyName(prop), "", 
+			genMethodNormalAndConst("", userType, className(currentType),
+					x + "get" + javaPropertyName(prop), "",
 					"  " + type + " r="
 					+ "xmlbeansxx::Contents::Walker::getElem(*this,"
 							+ genPropName(prop)
@@ -847,7 +847,7 @@ public class ClassGen {
 		}
 
 		public void genCGet() {
-			genMethod("", userType, className(currentType), 
+			genMethod("", userType, className(currentType),
 					x + "cget" + javaPropertyName(prop),
 //					"xmlbeansxx::ObjectCreatorFn createFn=NULL",
 					"",
@@ -858,7 +858,7 @@ public class ClassGen {
 					);
 		}
 
-		
+
 		public void genGetArrayAt() {
 			//getArrayAt
 			genMethodNormalAndConst("", userType, className(currentType),
@@ -870,7 +870,7 @@ public class ClassGen {
 					+ getReturn("r")
 					);
 		}
-		
+
 		public void genCGetArrayAt() {
 			//cgetAt - for gentor xpath
 			genMethod("", userType, className(currentType),x + "cget" + javaPropertyName(prop) + "Array",
@@ -883,29 +883,29 @@ public class ClassGen {
 					);
 		}
 
-		
-		
+
+
 		public void genGetAttr() {
-			genMethodNormalAndConst("", userType, 
+			genMethodNormalAndConst("", userType,
 					className(currentType),
 					x + "get" + javaPropertyName(prop),
 					"",
 					"  " + type + " c=xmlbeansxx::Contents::Walker::getAttr(*this,"
 							+ genPropName(prop) + ");\n"
 					+ getReturn("c")
-					);			
+					);
 		}
-		
+
 
 		public void genGetArray() {
 			//get_array
-			genMethodNormalAndConst("", vuserType, className(currentType), 
+			genMethodNormalAndConst("", vuserType, className(currentType),
 					x + "get" + javaPropertyName(prop) + "Array",
 					"",
-					"  " + vtype + " a(" + genThrowingVectorConv(btype, 
+					"  " + vtype + " a(" + genThrowingVectorConv(btype,
 							"xmlbeansxx::Contents::Walker::getElemArray(*this,"
 							+ genPropName(prop)
-							+ "))" ) 
+							+ "))" )
 							+ ";\n"
 					+ getReturnArray("a")
 					);
@@ -913,14 +913,14 @@ public class ClassGen {
 
 		public void genDGetArray() {
 			//dget_array
-			genMethodNormalAndConst("", dvtype, className(currentType), 
+			genMethodNormalAndConst("", dvtype, className(currentType),
 					"dget" + javaPropertyName(prop) + "Array",
 					"",
 					"  return xmlbeansxx::Contents::Walker::getElemArray(*this," + genPropName(prop) + ");\n"
 					);
 		}
-		
-		
+
+
 
 		private String convertFromGivenArrayAndSet(String what) {
 			String def = "  xmlbeansxx::Contents::Walker::setElemArray(*this," + genPropName(prop) + "," + what + ");";
@@ -945,11 +945,11 @@ public class ClassGen {
 
 		private String convertFromGivenAndSet(String what) {
 			return convertFromGivenAnd(what,"xmlbeansxx::Contents::Walker::setElem","");
-		}		
-		
+		}
+
 		private String convertFromGivenAndSetAttr(String what) {
 			return convertFromGivenAnd(what,"xmlbeansxx::Contents::Walker::setAttr","");
-		}		
+		}
 		private String convertFromGivenAndAppend(String what) {
 			return convertFromGivenAnd(what,"xmlbeansxx::Contents::Walker::appendElem","");
 		}
@@ -957,7 +957,7 @@ public class ClassGen {
 			return convertFromGivenAnd(what,"xmlbeansxx::Contents::Walker::setElem",index);
 		}
 
-		
+
 		private String convertFromGivenAnd(String what,String how,String index) {
 			String indexStr="";
 			if(index.length() > 0) indexStr=","+index;
@@ -981,24 +981,24 @@ public class ClassGen {
 		}
 
 		public void genRemove() {
-			genMethodWithReturn("remove" + javaPropertyName(prop), "int index", 
+			genMethodWithReturn("remove" + javaPropertyName(prop), "int index",
 					"  xmlbeansxx::Contents::Walker::removeElemAt(*this," + genPropName(prop) + ",index);");
 		}
 		public void genSizeOf() {
 			genMethod("", "int", className(currentType), "sizeOf" + javaPropertyName(prop), "",
-					"  return xmlbeansxx::Contents::Walker::countElems(*this," + genPropName(prop) + ");");			
+					"  return xmlbeansxx::Contents::Walker::countElems(*this," + genPropName(prop) + ");");
 		}
-		
+
 		public void genIsSet() {
-			genMethod("", "bool", className(currentType), "isSet" + javaPropertyName(prop), "", 
+			genMethod("", "bool", className(currentType), "isSet" + javaPropertyName(prop), "",
 					"  return xmlbeansxx::Contents::Walker::isSetElem(*this," + genPropName(prop) + ");");
 
 		}
 		public void genIsSetAttr() {
-			genMethod("", "bool", className(currentType), "isSet" + javaPropertyName(prop), "", 
+			genMethod("", "bool", className(currentType), "isSet" + javaPropertyName(prop), "",
 					"return xmlbeansxx::Contents::Walker::getAttr(*this," + genPropName(prop) + ")!=NULL;");
 		}
-		
+
 		public void genUnSetArray() {
 			//unset_array
 			genMethodWithReturn("unset" + javaPropertyName(prop)+ "Array","",
@@ -1016,16 +1016,16 @@ public class ClassGen {
 					);
 		}
 
-		
+
 		public void genSet() {
 			//set
-			genMethodWithReturn( 
+			genMethodWithReturn(
 					x + "set" + javaPropertyName(prop),
 					"const " + refAmp(userType) + "value",
 					convertFromGivenAndSet("value")
 					);
 		}
-	
+
 		public void genSetArray() {
 			//set_array
 			genMethodWithReturn(
@@ -1034,7 +1034,7 @@ public class ClassGen {
 					convertFromGivenArrayAndSet("values")
 					);
 		}
-		
+
 		public void genDSetArray() {
 			//set_array
 			genMethodWithReturn(
@@ -1044,7 +1044,7 @@ public class ClassGen {
 					+ genPropName(prop)
 					+ ",values.getArray());");
 		}
-		
+
 		public void genAddNew() {
 			genMethod("",type,className(currentType),"addNew" + javaPropertyName(prop),"",
 					  "  " + type + " e=" + genNewXmlObject(st) + ";\n"
@@ -1053,12 +1053,12 @@ public class ClassGen {
 					);
 
 		}
-		
+
 		public String refAmp(String type){
 			if(type.equals("int")) return "int ";
 			return type + "& ";
 		}
-		
+
 		public void genMethodWithReturn(String methodName,String params,String body) {
 			genMethod("", className(currentType) + "&",
 					className(currentType),
@@ -1080,9 +1080,9 @@ public class ClassGen {
 					"int index, const " + refAmp(userType) + "value",
 					convertFromGivenAndSetAt("value","index"));
 		}
-		
-		
-		
+
+
+
 		public void genSetAttr() {
 			genMethodWithReturn(
 					x + "set" + javaPropertyName(prop),
@@ -1092,7 +1092,7 @@ public class ClassGen {
 		}
 	}
 
-	
+
 	void genAttrCode(SchemaProperty attr) {
 		PropGen pg=new PropGen(attr);
 
@@ -1101,7 +1101,7 @@ public class ClassGen {
 			if (haveToGen(Properties.GET_ATTR)) {
 				pg.setGenMethod(PropGen.M_NORMAL);
 				pg.genGetAttr();
-				
+
 				if (pg.hasHolder()) {
 					pg.setGenMethod(PropGen.M_X);
 					pg.genGetAttr();
@@ -1113,7 +1113,7 @@ public class ClassGen {
 				pg.genIsSetAttr();
 
 			}
-			
+
 		} else {
 			Utils.check(false);
 		}
@@ -1125,12 +1125,12 @@ public class ClassGen {
 				if (haveToGen(Properties.SET_ATTR)) {
 					pg.setGenMethod(PropGen.M_NORMAL);
 					pg.genSetAttr();
-					
+
 					if (pg.hasHolder()) {
 						pg.setGenMethod(PropGen.M_X);
 						pg.genSetAttr();
 					}
-					
+
 					if (!cppTypeForProperty(attr).equals("std::string")) {
 						pg.setGenMethod(PropGen.M_STRING);
 						pg.genSetAttr();
@@ -1150,16 +1150,16 @@ public class ClassGen {
 
 	void genElemCode(SchemaProperty elem) {
 		PropGen pg=new PropGen(elem);
-		
+
 		{
 			//getters
 			if (!elem.extendsJavaArray()) {
 				//Single Elem
-				
+
 				if (haveToGen(Properties.GET)) {
 					pg.setGenMethod(PropGen.M_NORMAL);
 					pg.genGet();
-					
+
 					if (pg.hasHolder()) {
 						pg.setGenMethod(PropGen.M_X);
 						pg.genGet();
@@ -1169,13 +1169,13 @@ public class ClassGen {
 				if (haveToGen(Properties.CGET)) {
 					pg.setGenMethod(PropGen.M_NORMAL);
 					pg.genCGet();
-					
+
 					if (pg.hasHolder()) {
 						pg.setGenMethod(PropGen.M_X);
 						pg.genCGet();
 					}
 				}
-			
+
 				if (haveToGen(Properties.ISSET)) {
 					pg.setGenMethod(PropGen.M_NORMAL);
 					pg.genIsSet();
@@ -1184,16 +1184,16 @@ public class ClassGen {
 
 			} else {
 				//Multi Elem
-				
+
 				if (haveToGen(Properties.SIZEOF)) {
 					pg.setGenMethod(PropGen.M_NORMAL);
-					pg.genSizeOf();					
+					pg.genSizeOf();
 				}
-				
+
 				if (haveToGen(Properties.GET_ARRAY)) {
 					pg.setGenMethod(PropGen.M_NORMAL);
 					pg.genGetArray();
-					
+
 					if (pg.hasHolder()) {
 						pg.setGenMethod(PropGen.M_X);
 						pg.genGetArray();
@@ -1206,13 +1206,13 @@ public class ClassGen {
 				}
 
 				if (haveToGen(Properties.GET_AT)) {
-					genRedirect("get" + javaPropertyName(elem) + "At", "get" + javaPropertyName(elem) + "Array"); 
+					genRedirect("get" + javaPropertyName(elem) + "At", "get" + javaPropertyName(elem) + "Array");
 				}
-				
+
 				if (haveToGen(Properties.GET_ARRAY_AT)) {
 					pg.setGenMethod(PropGen.M_NORMAL);
 					pg.genGetArrayAt();
-					
+
 					if (pg.hasHolder()) {
 						pg.setGenMethod(PropGen.M_X);
 						pg.genGetArrayAt();
@@ -1220,13 +1220,13 @@ public class ClassGen {
 				}
 
 				if (haveToGen(Properties.CGET_AT)) {
-					genRedirect("cget" + javaPropertyName(elem) + "At", "cget" + javaPropertyName(elem) + "Array"); 
+					genRedirect("cget" + javaPropertyName(elem) + "At", "cget" + javaPropertyName(elem) + "Array");
 				}
 
 				if (haveToGen(Properties.CGET_ARRAY)) {
 					pg.setGenMethod(PropGen.M_NORMAL);
 					pg.genCGetArrayAt();
-					
+
 					if (pg.hasHolder()) {
 						pg.setGenMethod(PropGen.M_X);
 						pg.genCGetArrayAt();
@@ -1238,15 +1238,15 @@ public class ClassGen {
 		if (!elem.isReadOnly()) {
 			if (!elem.extendsJavaArray()) {
 				//Single Elem
-				
+
 				if (haveToGen(Properties.SET)) {
 					pg.setGenMethod(PropGen.M_NORMAL);
 					pg.genSet();
-					
+
 					if (pg.hasHolder()) {
 						pg.setGenMethod(PropGen.M_X);
 						pg.genSet();
-						
+
 						if (!cppTypeForProperty(elem).equals("std::string")) {
 							pg.setGenMethod(PropGen.M_STRING);
 							pg.genSet();
@@ -1261,11 +1261,11 @@ public class ClassGen {
 
 			} else {
 				//Multi Elem
-				
+
 				if (haveToGen(Properties.SET_ARRAY)) {
 					pg.setGenMethod(PropGen.M_NORMAL);
 					pg.genSetArray();
-					
+
 					if (pg.hasHolder()) {
 						pg.setGenMethod(PropGen.M_X);
 						pg.genSetArray();
@@ -1280,7 +1280,7 @@ public class ClassGen {
 				if (haveToGen(Properties.ADD)) {
 					pg.setGenMethod(PropGen.M_NORMAL);
 					pg.genAdd();
-					
+
 					if (pg.hasHolder()) {
 						pg.setGenMethod(PropGen.M_X);
 						pg.genAdd();
@@ -1291,7 +1291,7 @@ public class ClassGen {
 						}
 					}
 				}
-				
+
 				if (haveToGen(Properties.ADD_NEW)) {
 					//addNew
 					pg.setGenMethod(PropGen.M_NORMAL);
@@ -1304,11 +1304,11 @@ public class ClassGen {
 				}
 
 				genRedirect("set" + javaPropertyName(elem) + "At", "set" + javaPropertyName(elem) + "Array");
-				
+
 				if (haveToGen(Properties.SET_ARRAY_AT)) {
 					pg.setGenMethod(PropGen.M_NORMAL);
 					pg.genSetArrayAt();
-					
+
 					if (pg.hasHolder()) {
 						pg.setGenMethod(PropGen.M_X);
 						pg.genSetArrayAt();
@@ -1319,12 +1319,12 @@ public class ClassGen {
 						}
 					}
 				}
-								
+
 				genRedirect("unset" + javaPropertyName(elem) + "At", "remove" + javaPropertyName(elem));
-				
+
 				if (haveToGen(Properties.REMOVE)) {
 					pg.setGenMethod(PropGen.M_NORMAL);
-					pg.genRemove();					
+					pg.genRemove();
 				}
 			}
 
@@ -1352,7 +1352,7 @@ public class ClassGen {
 			elemCreator(elems[i]);
 		}
 		out.cpp.println("  return xmlbeansxx::XmlObjectPtr(new xmlbeansxx::XmlObject());");
-		
+
 		//out.cpp
 		//		.println("  throw xmlbeansxx::XmlException(std::string(\"SubElement \")+elementName+\" not supported by "
 		//				+ fullClassName(currentType) + "\");");
@@ -1368,17 +1368,17 @@ public class ClassGen {
 
 	public static String genWsRule(int ws_rule) {
 		String p = "xmlbeansxx::SchemaType::";
-		
+
 		if (ws_rule==SchemaType.WS_COLLAPSE) { return p + "WS_COLLAPSE"; }
 		else if (ws_rule==SchemaType.WS_PRESERVE) { return p + "WS_PRESERVE"; }
 		else if (ws_rule==SchemaType.WS_REPLACE) { return p + "WS_REPLACE"; }
 		else if (ws_rule==SchemaType.WS_UNSPECIFIED) { return p + "WS_UNSPECIFIED"; }
 		else throw new IllegalStateException();
 	}
-	
+
 	public static String genContentType(int contentType) {
 		String p = "xmlbeansxx::SchemaType::";
-		
+
 		if (contentType==SchemaType.EMPTY_CONTENT) return p + "EMPTY_CONTENT";
 		else if (contentType==SchemaType.SIMPLE_CONTENT) return p + "SIMPLE_CONTENT";
 		else if (contentType==SchemaType.ELEMENT_CONTENT) return p + "ELEMENT_CONTENT";
@@ -1393,13 +1393,13 @@ public class ClassGen {
 				out.h.println("  public:");
 				out.h.println("  class Names {");
 				out.h.println("    public:");
-		
+
 				//String Storage
 				SchemaProperty[] properties = st.getProperties();
 				for (int i = 0; i < properties.length; i++) {
 					SchemaProperty p = properties[i];
 					out.h.println("    static const xmlbeansxx::QName " + genPropName2(p) + ";");
-					
+
 				}
 			}
 			out.h.println("  };");
@@ -1413,29 +1413,29 @@ public class ClassGen {
 				for (int i = 0; i < properties.length; i++) {
 					SchemaProperty p = properties[i];
 					out.cpp.println("const xmlbeansxx::QName "+ genPropName(p) + " = " + genQNameStore(p) +";");
-					
+
 				}
 				out.cpp.println("");
-				
+
 			}
 		}
-		
+
 	}
-	
+
 	private void genInitSchemaType(SchemaType st) {
 		genNames(st);
 		out.h.println("  private:");
 
-			
+
 		out.h.println("  static xmlbeansxx::SchemaType initSchemaType();");
 		out.cpp.println("xmlbeansxx::SchemaType "
 				+ className(st) + "::initSchemaType() {");
-	
-		
+
+
 		out.cpp.println("  xmlbeansxx::SchemaType st(typeid("+fullClassName(st)+"));");
 
 
-		
+
 		if(true)
 		{
 			{
@@ -1448,16 +1448,16 @@ public class ClassGen {
 						elemsLength = properties.length;
 						if(elemsLength > 0) {
 							out.cpp.print("  static const char * elems[] = { ");
-						
+
 							for (int i = 0; i < properties.length; i++) {
 								SchemaProperty p = properties[i];
 								out.cpp.print("\n        " + genQNameChar(p) + ", "  + genQNameChar(typeName(p.getType())) + ", " + genDefaultSingletonString(p) + ", " );
 							}
 							out.cpp.println("  }; ");
-						}											
+						}
 					}
 
-					
+
 					{
 						//SubProperties: Attributes with order
 						SchemaProperty[] properties = st.getAttributeProperties();
@@ -1469,26 +1469,26 @@ public class ClassGen {
 								out.cpp.print("\n        " + genQNameChar(p) + ", "  + genQNameChar(typeName(p.getType())) + ", " + genDefaultSingletonString(p) + ", " );
 							}
 							out.cpp.println("  }; ");
-							
+
 						}
 					}
-					if(elemsLength > 0) 
+					if(elemsLength > 0)
 						out.cpp.println("  st.propertyElem(" + elemsLength + ", elems);");
-					if(attrsLength > 0) 
+					if(attrsLength > 0)
 						out.cpp.println("  st.propertyAttr(" + attrsLength + ", attrs);");
-					
-				}	
+
+				}
 				out.cpp.println("  st.createFn="+genCreateFn(st)+";");
 //				out.cpp.println("  st.createArrayFn="+genCreateArrayFn(st)+";");
-				
+
 				out.cpp.println("  st.whitespaceRule="+genWsRule(st.getWhiteSpaceRule())+";");
 				out.cpp.println("  st.className="+genString(fullClassName(st))+";");
-				
+
 				out.cpp.println("  st.contentType=" + genContentType(st.getContentType()) + ";");
-					
+
 				if (st.isDocumentType()) {
 					 QName DEname = st.getDocumentElementName();
-					 out.cpp.println("  st.documentElementName = xmlbeansxx::QName::store(" 
+					 out.cpp.println("  st.documentElementName = xmlbeansxx::QName::store("
 							+ nsLinks.getVarName(DEname.getNamespaceURI()) + ", "
 							+ genString(DEname.getLocalPart())+");");
 				}
@@ -1496,27 +1496,27 @@ public class ClassGen {
 				if (fd!=null) {
 					out.cpp.println("  st.fractionDigits="+fd.getBigIntegerValue().toString()+";");
 				}
-				
-				QName qname = typeName(st);				
-				out.cpp.println("  st.name = xmlbeansxx::QName::store(" 
+
+				QName qname = typeName(st);
+				out.cpp.println("  st.name = xmlbeansxx::QName::store("
 							+ nsLinks.getVarName(qname.getNamespaceURI()) + ", "
 							+ genString(qname.getLocalPart())+");");
-				
-							
+
+
 				{
 					String r="true";
 					if (fullClassName(st).equals("xmlbeansxx::XmlObject")) r="false";
 					out.cpp.println("  st.processContents="+r+";");
 				}
 			}
-	
+
 /*			if (!st.isSimpleType()) {
 				{
 					//SubProperties: Elements with order
 					SchemaProperty[] properties = st.getElementProperties();
 					for (int i = 0; i < properties.length; i++) {
 						SchemaProperty p = properties[i];
-						out.cpp.println("  st.elements[" + 
+						out.cpp.println("  st.elements[" +
 								genQNameStore(p)
 								+ "]=xmlbeansxx::SchemaPropertyPtr(new xmlbeansxx::SchemaProperty(" + (i + 1) + ","+genTypeFn(p.getType())+", " + genDefaultSingletonStringPtr(p) + "));");
 					}
@@ -1526,8 +1526,8 @@ public class ClassGen {
 					SchemaProperty[] properties = st.getAttributeProperties();
 					for (int i = 0; i < properties.length; i++) {
 						SchemaProperty p = properties[i];
-						out.cpp.println("  st.attributes[" + 
-								genQNameStore(p)							
+						out.cpp.println("  st.attributes[" +
+								genQNameStore(p)
 								+ "]=xmlbeansxx::SchemaPropertyPtr(new xmlbeansxx::SchemaProperty(" + (i + 1) + ","+genTypeFn(p.getType())+", " + genDefaultSingletonStringPtr(p) + "));");
 					}
 				}
@@ -1541,7 +1541,7 @@ public class ClassGen {
 		out.cpp.println("  return st;");
 		out.cpp.println("}");
 	}
-	
+
     private static String genNewObjectCode(SchemaType st) {
         return genPointer(fullClassName(st)) + " obj = "
 						+ genPointer(fullClassName(st)) + "(new "
@@ -1552,24 +1552,24 @@ public class ClassGen {
 
     private static String parentConstructor(SchemaType st, String params) {
     	if(st.isDocumentType()) {
-			return ":xmlbeansxx::XmlObjectDocument("+ params +")";		
-		} 
-    	
-        if (st.getBaseType() != null) 
+			return ":xmlbeansxx::XmlObjectDocument("+ params +")";
+		}
+
+        if (st.getBaseType() != null)
             return ":" + fullClassName(st.getBaseType()) + "(" + params + ")";
         else return "";
     }
-    
+
     void printTypeEnum(SchemaType st){
 	{
-			
+
 		out.h.println("//enum");
 /*			final int [] array= getArray();
-			
+
 			for (int i= 0; i < array.length; i++) {
 				array[i];
 			}
-*/			
+*/
 		SchemaStringEnumEntry [] e = st.getStringEnumEntries();
 
 
@@ -1577,47 +1577,47 @@ public class ClassGen {
 		out.h.println("  public:");
 		out.h.println("    static const int length = "+ e.length + ";");
 		for(int i=0;i < e.length; i++) out.h.println("    static const int INT_"+ e[i].getEnumName() + " = " + i + ";");
-		
+
 		out.h.println("    static const Enum& forString(const std::string& s);");
 		out.h.println("    static const Enum& forInt(int i);");
 		out.h.println("    std::string toString() const { return str; }");
 		out.h.println("    operator int() const { return val; }");
-		
-		
+
+
 		out.h.println("    static const Enum * table[];");
 		out.h.println("    Enum() { throw xmlbeansxx::XmlIllegalValueException(\"" + st.getName() + "\",\"NONE\"); }");
 //		out.h.println("    Enum(const std::string& s):str(s){ val=forString(s).val; }");
-		
+
 		out.h.println("  private:");
 		out.h.println("    Enum(std::string s,int i):val(i), str(s) {};");
 		out.h.println("    int val;");
 		out.h.println("    std::string str;");
 		out.h.println("    friend class " + className(st) + ";");
 		out.h.println("  };");
-		
+
 		out.h.println("  operator Enum() const { return Enum::forString(this->getStringValue()); }");
 	    out.h.println("  int getEnumValue() const { return Enum(*this); } ");
 	    out.h.println("  void setEnumValue(int s) { setStringValue(Enum::forInt(s).toString()); }");
 
 		for(int i=0;i < e.length; i++) out.h.println("  static const Enum "+ e[i].getEnumName() + ";");
 		out.h.println();
-		
+
 		// methods
 //		out.cpp.println(className(st) + "::Enum table[] = {");
 		out.cpp.println("// Enum ");
-		for(int i=0;i < e.length; i++) 
-				out.cpp.println( 
+		for(int i=0;i < e.length; i++)
+				out.cpp.println(
 						"const " + className(st) + "::Enum " + className(st) + "::"  + e[i].getEnumName() + "(\"" + e[i].getString() + "\", " + i + ");");
 
 
 		out.cpp.println("const " + className(st) + "::Enum * " + className(st) + "::Enum::table[] = {");
-		for(int i=0;i < e.length; i++) 
-				out.cpp.println("            " + 
+		for(int i=0;i < e.length; i++)
+				out.cpp.println("            " +
 						"&" + className(st) + "::" + e[i].getEnumName() + ",");
-					
+
 		out.cpp.println("};");
-		
-		
+
+
 		out.cpp.println("const " + className(st) + "::Enum& " + className(st) + "::Enum::forInt(int i)");
 		out.cpp.println("{");
 		out.cpp.println("  if(i<0|| i>=length) throw  xmlbeansxx::XmlIllegalValueException(\"" + st.getName() + "\",\"\" + i);");
@@ -1631,14 +1631,14 @@ public class ClassGen {
 		out.cpp.println("  if(i==length) throw  xmlbeansxx::XmlIllegalValueException(\"" + st.getName() + "\",s);");
 		out.cpp.println("  return forInt(i);");
 		out.cpp.println("}");
-		
+
 
 		out.h.flush();
 		out.cpp.flush();
 		}	//~Enum
 
     }
-    
+
     void genConstructor(String className, String args, String init, String code) {
 		if(generatingInline) {
 			out.h.println("  inline " + className + args + init + code);
@@ -1647,20 +1647,20 @@ public class ClassGen {
 			out.cpp.println( className + "::" + className + args + init  + code);
 		}
     }
-    
+
     void genConstructors(SchemaType st) {
 		//----------------
     	String className = className(st);
-    	
+
 		out.h.println("  //Constructors");
 		out.h.println("  public:");
 		genConstructor(className, "()", parentConstructor(st, "") , "{}");
-		
+
 		if(!isXmlObject(st)){
 			genConstructor(className, "(const xmlbeansxx::ContentsPtr& p)", parentConstructor(st, "p") , "{}");
 			genConstructor(className, "(const xmlbeansxx::XmlObject& p)", "" , "{ setXmlObject(p); }");
 		}
-		
+
 		if (st.isSimpleType()) {
 			genConstructor(className, "(const std::string &value)", "" , "{ setSimpleContent(value); }");
 			if(!className(st).equals("XmlAnySimpleType")) {
@@ -1669,11 +1669,11 @@ public class ClassGen {
 		}
 		out.println("");
     }
-    
+
     boolean isXmlObject(SchemaType st){
     	return className(st).equals("XmlObject");
     }
-    
+
 	void printType(SchemaType st) {
 		{
 			if (classNumber > 200) {
@@ -1689,20 +1689,20 @@ public class ClassGen {
 		out.enterNamespace(nsClassName(st));
 		currentType = st;
 		out.h.print("class " + className(st));
-		
+
 		if(st.isDocumentType()) {
-			out.h.println(": public xmlbeansxx::XmlObjectDocument {");		
+			out.h.println(": public xmlbeansxx::XmlObjectDocument {");
 		} else  {
-			if (bt != null) 
+			if (bt != null)
 				out.h.println(": public " + fullClassName(bt) + " {");
 			else
 				out.h.println("{");
 		}
 		genInitSchemaType(st);
-		
+
 		genConstructors(st);
-		
-		
+
+
 		{
 			String body = "";
 			if(st.isDocumentType()) {
@@ -1716,9 +1716,9 @@ public class ClassGen {
 				body = "  XmlObject e = _setXmlObjectOrGetInnerElement(p, xmlbeansxx::_cast_test<" + className(st) + " >(p) , \"" + fullClassName(st) + "\"); \n"
 					+     "  if (e) {\n"
 					+     "    createContents();\n"
-					+     "    " + x + "set"+javaPropertyName(elemProp) + "(e);\n" 
+					+     "    " + x + "set"+javaPropertyName(elemProp) + "(e);\n"
 					+     "  }";
-			
+
 			} else {
 				body = "  _setXmlObject(p, xmlbeansxx::_cast_test<" + className(st) + " >(p) , \"" + fullClassName(st) + "\"); ";
 			}
@@ -1738,40 +1738,40 @@ public class ClassGen {
 		out.cpp.println("}");
 
 
-		
+
 		if(st.hasStringEnumValues())
 				printTypeEnum(st);// Enum
 
-		
+
 		{
 			//Factory
 			out.h.println("  class Factory : public xmlbeansxx::Factory {");
 			out.h.println("  public:");
-			
+
 			{
 				out.h.println("    //Empty Object Creation");
-				genMethod("static", className(st), className(st)+"::Factory", "newInstance", "", 
+				genMethod("static", className(st), className(st)+"::Factory", "newInstance", "",
 						"  " + className(st) + " obj;\n"
-					    +  "  obj.createContents();\n" 
+					    +  "  obj.createContents();\n"
                         +  "  return obj;\n " );
 				genMethod("static", "xmlbeansxx::XmlObjectPtr" , className(st)+"::Factory", "newInstanceXmlObject", "",
 					 "  return xmlbeansxx::XmlObjectPtr((xmlbeansxx::XmlObject *) new " + className(st) + "());" ,true);
 			}
 			//-------------
 			out.h.println("    //Object Creation using parsing");
-			
+
 			{
 				String body = "";
 				if (st.isDocumentType()) {
 					body += "  return _documentParse(in,options); ";
 				} else {
-					body += "  return _parse(in,options,Factory::newInstance()); ";					
+					body += "  return _parse(in,options,Factory::newInstance()); ";
 				}
 				genMethod("static", className(st) , className(st)+"::Factory", "parse", "std::istream &in,xmlbeansxx::XmlOptions options=xmlbeansxx::XmlOptions()", body);
-			} 
+			}
 			{
 				String body = "  std::istringstream in(str);\n" +
-							"  return parse(in,options);" ; 
+							"  return parse(in,options);" ;
 				genMethod("static", className(st) , className(st)+"::Factory", "parse", "const std::string &str,xmlbeansxx::XmlOptions options=xmlbeansxx::XmlOptions()", body);
 			}
 /*			out.h
@@ -1786,12 +1786,12 @@ public class ClassGen {
 			out.cpp.println("  std::istringstream in(str);\n" +
 							"  return parse(in,options);");
 			out.cpp.println("}");
-*/	
+*/
 			//~Factory
 			out.h.println("  };");
 		}
 		//-------------
-		
+
 
 		if (!st.isSimpleType()) {
 			//Generate methods for complex content
@@ -1814,12 +1814,12 @@ public class ClassGen {
 		} else {
 			/*
 			out.h.println("  //Holder:");
-			out.h.println("  //" + cppTypeForCode(st.getBuiltinTypeCode()) 
-					+ " get" + genJGetName(st.getBuiltinTypeCode()) + "Value() const;"); 
-			out.h.println("  //void" 
-					+ " set" + genJGetName(st.getBuiltinTypeCode()) + "Value(" 
+			out.h.println("  //" + cppTypeForCode(st.getBuiltinTypeCode())
+					+ " get" + genJGetName(st.getBuiltinTypeCode()) + "Value() const;");
+			out.h.println("  //void"
+					+ " set" + genJGetName(st.getBuiltinTypeCode()) + "Value("
 					+ cppTypeForCode(st.getBuiltinTypeCode()) + " v);");
- */			 
+ */
 		}
 
 		{
@@ -1865,11 +1865,11 @@ public class ClassGen {
 			out.println(it.next());
 		}
 	}
-	
+
 	List<String> dependList() {
 		final List<String> files = new ArrayList<String>();
-		
-		
+
+
 		traverseAllTypes(new TypeTraversor() {
 			public void fn(SchemaType st) {
 				String n = st.getSourceName();
@@ -1882,21 +1882,21 @@ public class ClassGen {
 				files.add(n.substring(n.lastIndexOf('/') + 1));
 			}
 		});
-		
+
 		return files;
 	}
 
 	void registration(SchemaType st) {
-	
-		
+
+
 		if (st.isDocumentType()) {
 			// i typy document
 			out.cpp.println("    xmlbeansxx::globalTypeSystem()->addDocumentType("+genTypeFn(st)+");");
 		} else {
-			//rejestrujemy tylko typy nie anonimowe 
+			//rejestrujemy tylko typy nie anonimowe
 			out.cpp.println("    xmlbeansxx::globalTypeSystem()->addType("+genTypeFn(st)+");");
 		}
-		//atualnie nie mamy anonimowych typow (serializacja <--> parsowanie) 
+		//atualnie nie mamy anonimowych typow (serializacja <--> parsowanie)
 /*		else {
 			//natomiast dla anonimowych wykonujemy statyczna inicjalizacje schemaType
 			out.cpp.println("    " + genTypeFn(st) + ";");
@@ -1920,11 +1920,11 @@ public class ClassGen {
 		 * String p=name+"Ptr"; out.h.println("struct "+p+": boost::shared_ptr
 		 * <"+name+" > {"); out.h.println(" "+p+"();");
 		 * out.cpp.println(p+"::"+p+"() {}");
-		 * 
+		 *
 		 * out.h.println(" "+p+"(const "+p+"& b);");
 		 * out.cpp.println(p+"::"+p+"(const "+p+"& b): boost::shared_ptr
 		 * <"+name+" >(b) {}");
-		 * 
+		 *
 		 * out.h.println(" "+p+"("+name+" *b);");
 		 * out.cpp.println(p+"::"+p+"("+name+" *b): boost::shared_ptr
 		 * <"+name+" >(b) {}"); out.h.println("};");
@@ -2002,7 +2002,7 @@ public class ClassGen {
 	}
 
 	private boolean isInGivenSchema(SchemaType st) {
-		if (generatingBuiltin) return true; 
+		if (generatingBuiltin) return true;
 		else return baseFileName(st.getSourceName()).equals(currentName);
 	}
 
@@ -2132,7 +2132,7 @@ public class ClassGen {
 				log.info("Generating methods for: " + m);
 			}
 		}
-		
+
 		in=new Input(currentName);
 		out = new Output(currentName);
 		includes = new Includes();
@@ -2163,7 +2163,7 @@ public class ClassGen {
 		});
 
 		includes.generate();
-		
+
 		{
 			//print preamble from .xh and .xcpp
 			String s=in.getHGap("preamble");
@@ -2182,7 +2182,7 @@ public class ClassGen {
 		out.cpp
 				.println("//-----------------------------------------------------------------");
 		out.cpp.println("//namespace links");
-		
+
 		traverseTypesWithDeps(new TypeTraversor() {
 			public void fn(SchemaType t) {
 				namespaceLink(t);
@@ -2254,7 +2254,7 @@ public class ClassGen {
 	}
 
 	public static void main(String[] args) throws Exception {
-				
+
 /*		//test
   		XmlString s=XmlString.Factory.parse("<s:bolek zosia=\"as\" xmlns=\"kura\" xmlns:s=\"zosia\" zuza=\"es\">"
   		 + "<s:zzz xmlns:s=\"zosia\"> dd </s:zzz> </s:bolek>");
@@ -2264,7 +2264,7 @@ public class ClassGen {
 			log.info("Generating inline methods");
 		}
 
-		
+
 		if (System.getProperty("genbuiltin") != null) {
 			log.info("Generating builtin types");
 			//currentName="XmlTypesGen";
@@ -2280,18 +2280,18 @@ public class ClassGen {
 				SchemaTypeSystem ts = loadTS(baseFileName(args[0]), args);
 				log.info("SchemaTypeSystem: " + args[0]);
 
-				
+
 				Set<String> xsds = new HashSet<String>();
-				
+
 				for (int i = 0; i < args.length; i++) {
 					String name = baseFileName(args[i]);
 					xsds.add(name);
 					ClassGen cg = new ClassGen(ts, name);
 					for (String name2 : cg.dependList()){
-						xsds.add(baseFileName(name2));	
+						xsds.add(baseFileName(name2));
 					}
-				} 
-				
+				}
+
 				for (String name : xsds) {
 
 					log.info("Processing " + name);
@@ -2318,7 +2318,7 @@ public class ClassGen {
 	private boolean generatingBuiltin; //am I generating builtin types
 
 	private boolean generatingInline; //am I generating inline methods
-	
+
 	private Includes includes;
 
 	private String currentName; //name of file beeing compiled
@@ -2344,7 +2344,7 @@ public class ClassGen {
 						out.cpp.println("}");
 					}
 
-					
+
 					if (haveToGen(Methods.SET_AT) && st.isSimpleType()) {
 						//setAt
 						out.h.println("  void set" + javaPropertyName(elem)
@@ -2357,7 +2357,7 @@ public class ClassGen {
 								+ ",index,"+type+"(new "+btype+"(value)));");
 						out.cpp.println("}");
 					}
-					
+
 				}*/
 				/*
 				if (!st.isSimpleType()) {
@@ -2374,7 +2374,7 @@ public class ClassGen {
 								+ genPropName(elem) + ",value);");
 						out.cpp.println("}");
 					}
-					
+
 					if (haveToGen(Methods.SET) && st.isSimpleType()) {
 						out.h.println("  void set" + javaPropertyName(elem)
 								+ "(std::string value);");
@@ -2384,7 +2384,7 @@ public class ClassGen {
 								+ genPropName(elem) + ","+type+"(new "+btype+"(value)));");
 						out.cpp.println("}");
 					}
-					
+
 				}*/
 				/*
 				if (haveToGen(Methods.SET_ATTR) && st.isSimpleType()) {
@@ -2397,4 +2397,4 @@ public class ClassGen {
 							+ genPropName(attr) + ",xmlbeansxx::StringPtr(new std::string("+fullClassName(st)+"(value).getSimpleContent())));");
 					out.cpp.println("}");
 				}*/
-				
+

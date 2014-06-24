@@ -1,12 +1,12 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
- 
+
     http://www.apache.org/licenses/LICENSE-2.0
- 
+
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,7 +41,7 @@ public:
 	virtual ~XmlParser() {}
 
     	/**
-    	 * Parses using some parser an xml document from std::istream to some XmlDocument. 
+    	 * Parses using some parser an xml document from std::istream to some XmlDocument.
     	 * If XmlOptions validation is set, then uses schema validator
     	 * (apropriate grammars should be loaded using eg. loadGrammar method).
     	 */
@@ -57,7 +57,7 @@ public:
     	virtual void loadGrammar(const std::string &fileName) = 0;
     	/** Unloads all grammars from parser. */
     	virtual void unloadGrammars() = 0;
-    
+
 	class Factory {
 	public:
 		static XmlParserPtr newInstance();
@@ -74,7 +74,7 @@ protected:
 
     public:
         XmlContext xmlContext;
-	
+
 	struct StackEl {
             xmlbeansxx::XmlObjectPtr obj;
 	    std::string str;

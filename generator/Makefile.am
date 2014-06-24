@@ -1,6 +1,6 @@
 #
 #    Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-#    
+#
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
 #    You may obtain a copy of the License at
@@ -15,17 +15,17 @@
 
 EXTRA_DIST = CMakeLists.txt
 
-all-local: stamp-build 
+all-local: stamp-build
 
 stamp-build: $(shell find . -regex '\./\(src\|pom\.xml\).*' -not -regex '.*/\..*' | grep -v stamp)
 	if [ "x`readlink -f ${srcdir}`" != "x`readlink -f .`" ]; then cp ${srcdir}/pom.xml . ; fi
-	${MVN} -U -Dbase=${srcdir} -Prelease package 
+	${MVN} -U -Dbase=${srcdir} -Prelease package
 	touch stamp-build
 
 clean-local:
 	${MVN} clean
 	rm -f stamp-build
-	if [ "x`readlink -f ${srcdir}`" != "x`readlink -f .`" ]; then rm -f pom.xml; true ; fi 
+	if [ "x`readlink -f ${srcdir}`" != "x`readlink -f .`" ]; then rm -f pom.xml; true ; fi
 
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(datadir)/xmlbeansxx

@@ -6,12 +6,12 @@ using namespace xmlbeansxx;
 int main() {
     //not typed document parsing
     try {
-    
+
 	string str= XmlInteger(10213).toString();
 	cout << "str:\n" << str << "\n";
     	XmlInteger i=XmlInteger::Factory::parse(str);
 	cout << "pased:\n" << i.toString() << "\n";
-	
+
         i=XmlInteger(i+XmlInteger(1));
 	cout << "after add:" << i.getSimpleContent() << "\n";
         i.serialize(cout);

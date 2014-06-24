@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -11,7 +11,7 @@
     distributed under the License is distributed on an "AS IS" BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
-    limitations under the License. 
+    limitations under the License.
   */
 #include "WsClient.h"
 #include <soapEnvelope.h>
@@ -26,7 +26,7 @@ using namespace std;
 
 class WsClientImpl: public WsClient {
     static log4cxx::LoggerPtr log;
-    
+
     virtual xmlbeansxx::XmlObject invoke(Url url, XmlObjectDocument request,const std::string &SOAPAction) {
 
         std::vector<std::string> headers(2);
@@ -36,7 +36,7 @@ class WsClientImpl: public WsClient {
 
 	EnvelopeDocument doc = EnvelopeDocument::Factory::newInstance();
 	Body body = doc.cgetEnvelope().cgetBody();
-	
+
 	try {
 		body.newCursor().insertDocument(request);
 	} catch (...) {
@@ -46,11 +46,11 @@ class WsClientImpl: public WsClient {
         string responseString;
         LOG4CXX_INFO(log,string("sending request String: ") + doc.toString() + " to url " + url.url );
         responseString = httpClient->post(url, doc.toString() ,headers);
-        
+
         LOG4CXX_INFO(log,string("response String: ") + responseString);
         try {
     		EnvelopeDocument outDocument(EnvelopeDocument::Factory::parse(responseString));
-            try {  //test for soap::fault answer 
+            try {  //test for soap::fault answer
                 FaultDocument fault(outDocument.getEnvelope().getBody());
                 LOG4CXX_ERROR(log,"SOAP fault answer:" + fault.toString());
                 std::string opis;
@@ -59,13 +59,13 @@ class WsClientImpl: public WsClient {
                 } catch(...){ }
                 throw SoapFaultException("SoapFaultException: " + opis,fault);
             } catch(xmlbeansxx::BeansException &e){}  //soap::fault not recognised
-            
+
             return outDocument.getEnvelope().getBody();
-            
+
         } catch(xmlbeansxx::BeansException &e) { //not a soap answer
             LOG4CXX_ERROR(log,"error in response parsing.");
             throw HttpClientException("HttpClientException: 'Got a not correct SOAP response'.");
-        } 
+        }
     }
 };
 

@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -27,7 +27,7 @@
 #include "QName.h"
 
 
-	
+
 namespace xmlbeansxx {
 class XmlObject;
 class Operator;
@@ -66,7 +66,7 @@ class QueryNode {
 class QueryExpr: public QueryNode {
     private:
     XMLBEANSXX_STATIC_LOGGER_PTR(log);
-    QueryNodePtr a,b; 
+    QueryNodePtr a,b;
     int oper;
     public:
     QueryExpr(QueryNodePtr a,int oper,QueryNodePtr b);
@@ -78,7 +78,7 @@ class QueryString: public QueryNode {
     private:
     XMLBEANSXX_STATIC_LOGGER_PTR(log);
     std::string str;
-    
+
     public:
     QueryString(const std::string& str);
     virtual std::vector<std::string> getValue(const XmlObject& object);

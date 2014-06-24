@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -47,7 +47,7 @@ static const std::string CDATA_PREFIX = "<![CDATA[";
 
 /**
  * CDATA suffix <pre>]]></pre>
- 
+
  */
 static const std::string CDATA_SUFFIX = "]]>";
 
@@ -63,7 +63,7 @@ public:
 	std::string setXPathNamespaces(const std::string& path) {
 		std::stringstream ss(path);
 		std::string s;
-		
+
 		ss >> s;
 		while (s == "declare") {
 			ss >> s;
@@ -80,7 +80,7 @@ private:
 		int p=ns.find("=");
 		if(p<0) addNamespace("",getURI(ns));
 		else addNamespace(ns.substr(0,p),getURI(ns.substr(p+1)));
-		
+
 	}
 	std::string getURI(const std::string& ns) {
 		return ns.substr(1,ns.size()-2);
@@ -97,12 +97,12 @@ public:
 	bool isAttr(const string& name) {
 		return name[0]=='@';
 	}
-    
-	
+
+
 	void addXmlObject(const XmlObject & o) {
 		if(o) obj.push_back(o);
 	}
-	
+
 	Path getPath(const std::string& path) {
 		if(path.size()<=0) return *this;
 		std::pair<std::string, std::string> part = getXPathPart(path);
@@ -116,10 +116,10 @@ public:
 		std::pair<std::string, std::string> pred = getXPathPredicat(part.first);
 
 		Path p = doPart(pred.first).doPredicat(pred.second);
-		
+
 		return p.getPath(part.second);
 	}
-	
+
 	pair<string,string> getXPathPart(const string& path) {
 		int p=path.find('/');
 		if(p<0)	return pair<string,string>(path,"");
@@ -131,7 +131,7 @@ public:
 		if(p<0)	return pair<string,string>(part,"");
 		else 	return pair<string,string>( part.substr(0,p), part.substr(p+1) );
 	}
-	
+
 	pair<string,int> decomposeElem(const std::string& name) {
 		int a,b;
 		if ((a=name.find('['))!=-1) {
@@ -146,7 +146,7 @@ public:
         		return pair<string,int>(name,0);
 	    	}
 	}
-	
+
 private:
 	std::string _getQNameString(const QName& name){
 		if(std::string(name.first).size()>0) return name.first + std::string(":") + name.second;
@@ -170,10 +170,10 @@ private:
 			sub = sub.substr(p+t.size());
 		}
 		XMLBEANSXX_DEBUG(log,"tokenize: " + sub);
-		retu.push_back(sub);		
+		retu.push_back(sub);
 		return retu;
 	}
-	
+
 	bool matchQNameString(const std::string& qn,const std::vector<std::string>&  tab){
 		BOOST_ASSERT(tab.size()>=1);
 		if(tab.size() == 1) {
@@ -193,7 +193,7 @@ private:
 			else return true;
 		 }
 		return true;
-		
+
 	}
 
 	Path doPredicat(const std::string& pred) {
@@ -201,9 +201,9 @@ private:
 		XMLBEANSXX_DEBUG(log,std::string("doPredicat: ") + pred);
 		Path p(ns,create);
 		stringstream s(pred);
-		int pos=0; 
+		int pos=0;
 		s >> pos;
-		XMLBEANSXX_DEBUG(log,std::string("selecting: ") + TextUtils::intToString(pos));		
+		XMLBEANSXX_DEBUG(log,std::string("selecting: ") + TextUtils::intToString(pos));
 		p.addXmlObject(obj[pos]);
 		return p;
 	}
@@ -212,7 +212,7 @@ private:
 		Path p(ns,create);
 
 		XMLBEANSXX_DEBUG(log,"doPart: " + part);
-		if (part.size()<=0) { 
+		if (part.size()<=0) {
 			return *this;
 		} else if (part == ".") {
 			return *this;
@@ -223,7 +223,7 @@ private:
 				selectAttr = true;
 				elem_name = part.substr(1);
 			} else 	elem_name = part;
-			
+
 			std::string partMatch = _getQNameStringWithStar(elem_name);
 			std::vector<std::string> tab=tokenize(partMatch,"*");
 			XMLBEANSXX_FOREACH(ObjType::iterator,i,obj) {
@@ -234,7 +234,7 @@ private:
 					QName elemName=e->first;
 					std::string elemMatch = _getQNameString(elemName);
 					XMLBEANSXX_DEBUG(log,"element matching: "  + elemMatch + " ~= " + partMatch);
-					
+
 					if(matchQNameString(elemMatch, tab)) {
 						XMLBEANSXX_DEBUG(log,"element matched: "   + elemMatch  + " ~= " + partMatch);
 						try {
@@ -242,17 +242,17 @@ private:
 						} catch(...) {}
 					}
 				}
-			}	
+			}
 		}
 		return p;
 	}
-	
+
 	typedef std::vector<XmlObject> ObjType;
 	ObjType obj;
 
 	const NSMap &ns;
 	bool create;
-	
+
 	friend class XmlObject;
 };
 
@@ -300,7 +300,7 @@ std::vector<XmlObject> XmlObject::cselectPath(const std::string& path) {
 }
 
 
-// Not implemented 
+// Not implemented
 std::vector<XmlObject> XmlObject::cselectPath(const NSMap& ns,const std::string& path) {
 	XMLBEANSXX_DEBUG(log,"cselectPath start:");
 	XMLBEANSXX_DEBUG(log,"cselectPath ns:"  + ns.toString());
@@ -310,7 +310,7 @@ std::vector<XmlObject> XmlObject::cselectPath(const NSMap& ns,const std::string&
 	Path retu = p.getPath(path);
 */
 	throw NotImplementedException("cselectPath not implemented.");
-//	XMLBEANSXX_DEBUG(log,"cselectPath end: "  + retu.obj.size());	
+//	XMLBEANSXX_DEBUG(log,"cselectPath end: "  + retu.obj.size());
 //	return retu.obj;
 }
 

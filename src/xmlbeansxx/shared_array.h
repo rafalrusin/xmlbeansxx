@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -23,12 +23,12 @@
 #include "macros.h"
 
 namespace xmlbeansxx {
-    
+
     template<typename T>
     class shared_array: public boost::shared_array<T> {
         int p_size;
         public:
-        
+
         class iterator {
             int p;
             shared_array<T> a;
@@ -57,10 +57,10 @@ namespace xmlbeansxx {
                 return p!=it2.p;
             }
         };
-        
+
         shared_array(): p_size(0) {}
-        shared_array(int n): boost::shared_array<T>(new T[n]), p_size(n) {} 
-        
+        shared_array(int n): boost::shared_array<T>(new T[n]), p_size(n) {}
+
         template<typename U>
         shared_array(const shared_array<U> &b): boost::shared_array<T>(b), p_size(b.size()) {}
 
@@ -73,7 +73,7 @@ namespace xmlbeansxx {
             }
             return v;
         }
-        
+
         /*
         operator std::vector<T>() const {
             return toVector();

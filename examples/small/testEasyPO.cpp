@@ -17,7 +17,7 @@ int main() {
         giftLineItem.setPrice(3);
         giftLineItem.setQuantity(6);
         giftLineItem.setPerUnitOunces(10);
-        
+
         vector<LineItem> arr = poDoc.getPurchaseOrder().getLineItemArray();
         for(unsigned i=0; i < arr.size() ; i++) {
             cout << "item: " << i << "\n";
@@ -26,9 +26,9 @@ int main() {
             cout << " - price:           " << arr[i].getPrice() << "\n";
             cout << " - amount:          " << arr[i].getQuantity() * arr[i].getPrice() << "\n";
         }
-        
+
 	cout << "Xml:\n" << poDoc.toString() << "\n";
-	
+
     } catch (BeansException &ex) {
         cout<<"BeansException: "<<ex.getMessage()<<"\n";
     }

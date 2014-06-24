@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -32,7 +32,7 @@
 //#include "XmlTypesGen.h"
 
 
-	
+
 namespace xmlbeansxx {
 
 
@@ -51,7 +51,7 @@ public:
 	static AnyXmlArray newInstance();
 	static xmlbeansxx::XmlObjectPtr newInstanceXmlObject();
     };
-    
+
     static SchemaType initSchemaType();
     virtual const xmlbeansxx::SchemaType *getOrginSchemaType() const;
     static const xmlbeansxx::SchemaType *type() ;
@@ -71,13 +71,13 @@ public:
 	static xmlbeansxx::XmlObjectPtr newInstanceXmlObject(){
 	    return xmlbeansxx::XmlObjectPtr(new XmlArray<T>());
 	}
-			
+
     };
 
 
     public:
     XmlArray() {}
-    
+
     XmlArray(const std::vector<T> &a) {
     	createContents();
         setArray(a);
@@ -94,9 +94,9 @@ public:
 		return ;
 	}
 
-	swapContents(p.contents);	
+	swapContents(p.contents);
     }
-    
+
     template<class T2>
     XmlArray(const XmlArray<T2> &p) {
     	if(!_cast_test<T>(T2::Factory::newInstance())) {
@@ -105,9 +105,9 @@ public:
 	if(!p.hasContents()) {
 		return ;
 	}
-	swapContents(p.contents);	
+	swapContents(p.contents);
    }
-    
+
     T getArray(int i) const {
         TRACER(XmlArray_log,"getArrayAt");
         return xmlbeansxx::Contents::Walker::getElem(*this,XmlArray::Names::elementName,i);
@@ -121,11 +121,11 @@ public:
         xmlbeansxx::Contents::Walker::setElem(*this,XmlArray::Names::elementName,value.contents,i);
 	return *this;
     }
-    
+
     T xgetArray(int i) const { return getArray(i); }
     T xcgetArray(int i) { return cgetArray(i); }
     XmlArray<T>& xsetArray(int i,const T &value) { return setArray(i,value); }
-    
+
     XmlArray<T>& append(const T &value) {
         TRACER(XmlArray_log,"append");
         xmlbeansxx::Contents::Walker::appendElem(*this,XmlArray::Names::elementName,value.contents);
@@ -136,7 +136,7 @@ public:
         xmlbeansxx::Contents::Walker::removeElems(*this,XmlArray::Names::elementName);
 	return *this;
     }
-    
+
     int size() const {
         TRACER(XmlArray_log,"size");
         return xmlbeansxx::Contents::Walker::countElems(*this,XmlArray::Names::elementName);

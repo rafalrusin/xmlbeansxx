@@ -26,7 +26,7 @@ void libXml() {
 	opt.setValidation(true);
 	LibXMLParser p(opt);
 	p.loadGrammar("unqual.xsd");
-    
+
        	ContentDocument doc=ContentDocument::Factory::newInstance();
 
 
@@ -43,7 +43,7 @@ void libXml() {
        		p.parse(str,doc);
     	}
 
-	std::string cmp = 
+	std::string cmp =
 	"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 	"<test2:content xmlns:aka=\"http://mind.p4.com/mytest/unqualified\" xmlns:test2=\"http://mind.p4.com/mytest/unqualified\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
 		"<employee age=\"10\"><firstname xmlns:test2=\"http://mind.p4.com/mytest\">Name1</firstname><lastname>Name2</lastname><dane>bleble</dane><def>myval</def><choice><b>20</b></choice>"
@@ -63,7 +63,7 @@ void UnqualTest::unqualTest() {
 //	LibXMLParser p(opt);
 	XercesParser p(opt);
 	p.loadGrammar("unqual.xsd");
-    
+
        	ContentDocument doc=ContentDocument::Factory::newInstance();
 
 
@@ -81,7 +81,7 @@ void UnqualTest::unqualTest() {
        		p.parse(str,doc);
     	}
 
-	std::string cmp = 
+	std::string cmp =
 	"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 	"<test2:content xmlns:aka=\"http://mind.p4.com/mytest/unqualified\" xmlns:test2=\"http://mind.p4.com/mytest/unqualified\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
 		"<employee age=\"10\"><firstname xmlns:test2=\"http://mind.p4.com/mytest\">Name1</firstname><lastname>Name2</lastname><dane>bleble</dane><def>myval</def><choice><b>20</b></choice>"
@@ -91,9 +91,9 @@ void UnqualTest::unqualTest() {
 	CPPUNIT_ASSERT_EQUAL(cmp,str);
         XMLBEANSXX_DEBUG(logger, "XercesParser OK");
 	libXml();
-		
 
-	
+
+
 }
 
 

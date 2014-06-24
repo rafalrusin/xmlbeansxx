@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -50,7 +50,7 @@ class MySAX2Handler;
 class XercesParser : public EmptyParser{
 private:
     XMLBEANSXX_STATIC_LOGGER_PTR(log);
-    
+
     std::auto_ptr<XERCES_CPP_NAMESPACE::SAX2XMLReader> sax2;
     friend class MySAX2Handler;
     std::auto_ptr<MySAX2Handler> handler;
@@ -87,13 +87,13 @@ private:
     XercesParser *parser;
 public:
     MySAX2Handler(XercesParser *p);
-    virtual void startElement(	const XMLCh* const uri, 
-    				const XMLCh* const localname, 
-				const XMLCh* const qname, 
+    virtual void startElement(	const XMLCh* const uri,
+    				const XMLCh* const localname,
+				const XMLCh* const qname,
 				const XERCES_CPP_NAMESPACE::Attributes& attrs);
-			
+
     virtual void startPrefixMapping(const XMLCh* const prefix, const XMLCh* const uri);
-#if (XERCES_VERSION_MAJOR == 3)             
+#if (XERCES_VERSION_MAJOR == 3)
     virtual void characters(const XMLCh* const chars, const XMLSize_t length);
 #else
     virtual void characters(const XMLCh* const chars, const unsigned int length);
@@ -103,7 +103,7 @@ public:
     virtual void warning(const XERCES_CPP_NAMESPACE::SAXParseException& exc);
     virtual void error(const XERCES_CPP_NAMESPACE::SAXParseException& exc);
     virtual void fatalError(const XERCES_CPP_NAMESPACE::SAXParseException& exc);
-    
+
     virtual std::string transcode(const XMLCh* const chars,const int length = -1);
 
 private:

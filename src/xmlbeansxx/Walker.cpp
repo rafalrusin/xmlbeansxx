@@ -1,6 +1,6 @@
 /*
     Copyright 2004-2008 TouK sp. z o.o. s.k.a.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -58,7 +58,7 @@ namespace xmlbeansxx {
 			XmlString v(y);
 			return obj.contents->setAttr(x,v.contents);
 		};
-		
+
 		ContentsPtr Contents::Walker::getElem(const XmlObject& obj,const QName& x,int index){
 			if(!obj.hasContents()) throw NullPtrException("Cannot get an element from a empty XmlObject: " + obj.getSchemaType()->className);
 			return obj.contents->getElem(x,index);
@@ -94,7 +94,7 @@ namespace xmlbeansxx {
 			if(!obj.hasContents()) throw NullPtrException("Cannot removeAt an element from a empty XmlObject: " + obj.getSchemaType()->className);
 			return obj.contents->removeElemAt(x,index);
 		};
-		
+
 		 int Contents::Walker::countElems(const XmlObject& obj,const QName& x){
 			if(!obj.hasContents()) throw NullPtrException("Cannot count elements on a empty XmlObject: " + obj.getSchemaType()->className);
 			return obj.contents->countElems(x);
@@ -103,7 +103,7 @@ namespace xmlbeansxx {
 			if(!obj.hasContents()) throw NullPtrException("Cannot test for elements on a empty XmlObject: " + obj.getSchemaType()->className);
 			return obj.contents->hasElements();
 		};
-		
+
 		 std::vector<std::pair<QName,ContentsPtr> > Contents::Walker::getElems(const XmlObject& obj) {
 			if(!obj.hasContents()) throw NullPtrException("Cannot get elements from a empty XmlObject: " + obj.getSchemaType()->className);
 			return obj.contents->getElems();
@@ -116,10 +116,10 @@ namespace xmlbeansxx {
 			if(!obj.hasContents()) throw NullPtrException("Cannot get attributes from a empty XmlObject: " + obj.getSchemaType()->className);
 			return obj.contents->getAttrs2();
 		}
-		
+
 		 std::vector<ContentsPtr> Contents::Walker::getElemArray(const XmlObject& obj,const QName& elemName) {
 			if(!obj.hasContents()) throw NullPtrException("Cannot get ElementArray from a empty XmlObject: " + obj.getSchemaType()->className);
-			return obj.contents->getElemArray(elemName);		
+			return obj.contents->getElemArray(elemName);
 		};
 
 		 void Contents::Walker::setElemArray(XmlObject& obj,const QName& elemName,const std::vector<ContentsPtr>& v) {
@@ -146,28 +146,28 @@ namespace xmlbeansxx {
 			if(!obj.hasContents()) return true;
 			return obj.contents->hasEmptyContent();
 		}
-		
+
 		std::string Contents::Walker::dump(const ContentsPtr& p){
 		    if(!p) return " NULL ";
 		    std::string s("{");
 		    XMLBEANSXX_FOREACH(ElemDict::ContentsType::iterator,i,p->attrs.contents){
-			s+= "@("+i->name.prefix +")"+i->name +"=" + dump(i->value); 
+			s+= "@("+i->name.prefix +")"+i->name +"=" + dump(i->value);
 		    };
 		    XMLBEANSXX_FOREACH(ElemDict::ContentsType::iterator,i,p->elems.contents){
 			s+= "("+i->name.prefix +")"+ i->name +"=";
-			if(i->name == XmlBeans::textElementName()) 
-				s += i->value->getSimpleContent(); 	
+			if(i->name == XmlBeans::textElementName())
+				s += i->value->getSimpleContent();
 			else 	s += dump(i->value);
 		    };
 		    s+= "}";
 		    return s;
 		}
-		
+
 		std::string Contents::Walker::digest(const XmlObject& obj){
 			if(!obj.contents) return std::string("NULL");
 			return obj.contents->digest();
 		}
-		
+
 		XmlObjectPtr Contents::Walker::OrginalXmlObject(const ContentsPtr &p){
 			if(!p) return XmlObjectPtr(new XmlObject);
 			if(p->st->createFn==NULL) XmlObjectPtr(new XmlObject(p));
@@ -175,7 +175,7 @@ namespace xmlbeansxx {
 			retu->swapContents(p);
 			return retu;
 		}
-				
+
 };
 
 

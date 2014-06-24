@@ -1,6 +1,6 @@
 /*
  *  Copyright 2004-2008 TouK sp. z o.o. s.k.a.
- * 
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -25,15 +25,15 @@ public class Graph {
 
     public HashMap nodes=new HashMap();
 
-    
+
     void addNode(Object key) {
         if (((Node)nodes.get(key))==null) {
             nodes.put(key,new Node());
             //System.out.println("New node "+key.toString());
         }
     }
-    
-    /** 
+
+    /**
      * Pobiera 2 klucze, tworzy krawedz z k1 do k2.
      * Wezly musza istniec w grafie.
      */
@@ -42,7 +42,7 @@ public class Graph {
         ((Node)nodes.get(k2)).inner.add(k1);
         //System.out.println(k1.toString()+" -> "+k2.toString());
     }
-    
+
     ArrayList topologicalSort() {
         int ile=nodes.size();
         ArrayList ret=new ArrayList();
